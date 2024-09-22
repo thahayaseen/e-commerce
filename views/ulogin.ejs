@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0"
+    />
+    <title>Sign In</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+  </head>
+  <body class="bg-white py-5">
+    <div class="container d-flex flex-column mx-auto bg-white py-5">
+      <div class="row justify-content-center">
+        <div class="col-lg-6 col-md-8">
+          <div class="d-flex justify-content-center">
+            <div class="card p-5 shadow-sm rounded-3 w-100">
+              <form class="text-center " action="/signin" method="post">
+                <h3 class="mb-3 display-5 fw-bold">Sign In</h3>
+                <p class="mb-4 text-muted">Enter your username and password</p>
+                
+                <div class="d-flex flex-row justify-content-between mb-3">
+                    <!-- Google Sign-In -->
+                    <a href="/glogin"
+                      type="button" 
+                      class="btn btn-secondary d-flex justify-content-center align-items-center me-2 flex-fill">
+                      <img
+                        src="https://raw.githubusercontent.com/Loopple/loopple-public-assets/main/motion-tailwind/img/logos/logo-google.png"
+                        alt="Google"
+                        class="me-2"
+                        style="height: 20px;"
+                      />
+                      Sign in with Google
+                </a>
+                  
+                    <!-- Facebook Sign-In -->
+                    <button 
+                      type="button"
+                      class="btn btn-primary d-flex justify-content-center align-items-center ms-2 flex-fill"
+                    >
+                      Sign in with Facebook
+                    </button>
+                  </div>
+                  
+
+                <!-- Divider -->
+                <div class="d-flex align-items-center my-3">
+                  <hr class="flex-grow-1 border-secondary" />
+                  <p class="mx-2 text-muted">or</p>
+                  <hr class="flex-grow-1 border-secondary" />
+                </div>
+
+                <!-- Username Input -->
+                <div class="form-floating mb-3">
+                  <input
+                    name="username"
+                    type="text"
+                    id="username"
+                    class="form-control"
+                    placeholder="Username"
+                  />
+                  <label name= for="username">Username*</label>
+                  <div class="error ms-0 align-items-start text-start text-danger"></div>
+
+                </div>
+
+                <!-- Password Input -->
+                <div class="form-floating mb-3">
+                  <input
+                  name="password"
+                    type="text"
+                    id="password"
+                    class="form-control"
+                    placeholder="Enter your password"
+                  />
+                  <label for="password">Password*</label>
+                  <div class="error ms-0 align-items-start text-danger text-start"></div>
+
+                </div>
+
+                <div class="d-flex justify-content-between mb-4">
+                  <div class="form-check">
+                    <input
+                      class="form-check-input"
+                      type="checkbox"
+                      id="rememberMe"
+                      checked
+                    />
+                    <label class="form-check-label" for="rememberMe">
+                      Keep me logged in
+                    </label>
+                  </div>
+                  <a href="#" class="text-primary">Forget password?</a>
+                </div>
+
+                <button
+                  type="submit"
+                  id="butten"
+                  class="btn btn-primary w-100 mb-4"
+                >
+                  Sign In
+                </button>
+                <p class="text-muted">
+                  Not registered yet?
+                  <a href="/signup" class="text-primary fw-bold">Create an Account</a>
+                </p>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"
+    ></script>
+    <script src="/js/ulogin.js"></script>
+  </body>
+</html>
