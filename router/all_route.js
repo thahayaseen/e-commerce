@@ -3,6 +3,7 @@ const{register,login,otp}=require('../controller/render')
 const plogin=require('../controller/ulogin')
 const {pregister}=require('../middleware/redirect')
 const otps=require('../middleware/otpvarify')
+const resendotp=require('../middleware/resendotp')
 // const potp=require('../controller/sendotp')
 const express=require('express')
 const router=express.Router()
@@ -17,6 +18,11 @@ router.post('/signin',plogin)
 // otp 
 router.get('/otp',otp)
 router.post('/otp',otps)
+
+
+
+// resendotp 
+router.post('/resendotp',resendotp)
 
 
 
