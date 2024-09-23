@@ -10,7 +10,9 @@ const register= (req,res)=>{
 
 //login---------------------------------------------------------------
 const login=async(req,res)=>{
-    res.render('ulogin')
+    const invalid=req.session.login||''
+    delete req.session.login
+    res.render('ulogin',{mesasge:invalid})
 }
 //adminlogin
 const adminlogin=(req,res)=>{

@@ -12,6 +12,7 @@ const varifylogin=async (req,res,next)=>{
         res.redirect('/dashbord')
     }
     else{
+        req.session.login="invalid username or password"
         res.redirect('/signin')
     }
 
