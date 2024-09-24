@@ -1,4 +1,4 @@
-const User=require('../model/user_scema')
+const User=require('../../model/user_scema')
 
 
 const alluser= async (req,res,next)=>{

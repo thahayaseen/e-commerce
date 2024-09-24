@@ -1,4 +1,4 @@
-const Users = require("../model/user_scema");
+const Users = require("../../model/user_scema");
 const otpvarify = async (req, res, next) => {
     try {
         // fetch data from usets

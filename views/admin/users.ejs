@@ -53,7 +53,6 @@
                           <th>#</th>
                           <th>Username</th>
                           <th>Email</th>
-                          <th>Role</th>
                           <th>Status</th>
                           <th>Action</th>
                         </tr>
@@ -64,19 +63,19 @@
                             <td><%= index + 1 %></td>
                             <td><%= User.user_name %></td>
                             <td><%= User.email %></td>
-                            <td><%= User.role %></td>
+                          
                             <td>
-                              <% if (User.isBlocked) { %>
-                                <label class="badge badge-danger">Blocked</label>
-                              <% } else { %>
+                              <% if (User.status) { %>
                                 <label class="badge badge-success">Active</label>
+                                <% } else { %>
+                                  <label class="badge badge-danger">Blocked</label>
                               <% } %>
                             </td>
                             <td>
-                              <% if (User.isBlocked) { %>
-                                <a href="/Users/unblock/<%= User._id %>" class="btn btn-success btn-sm">Unblock</a>
-                              <% } else { %>
-                                <a href="/Users/block/<%= User._id %>" class="btn btn-danger btn-sm">Block</a>
+                              <% if (User.status) { %>
+                                <a href="/admin/users/block/<%= User._id %>" class="btn btn-danger btn-sm">Block</a>
+                                <% } else { %>
+                                  <a href="/admin/users/unblock/<%= User._id %>" class="btn btn-success btn-sm">Unblock</a>
                               <% } %>
                             </td>
                           </tr>

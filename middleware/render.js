@@ -26,30 +26,35 @@ const otp = (req, res) => {
         delete req.session.username; // Remove username after rendering
     } else {
         // User is not signed in, redirect to signup
-        res.redirect('/signup');
+        return res.redirect('/signup');
     }
 };
 
 //admin section----------------------------------------------------------------------------------------
 //adminlogin
 const adminlogin=(req,res)=>{
-   const notadmin=  req.session.admin||''
-   delete req.session.admin
-   res.render('auth/admin',{ans:notadmin})
+    const notadmin=  req.session.admin||''
+    const islogin =req.session.ladmin
+    delete req.session.admin
+    islogin?res.redirect('/admin/dashbord'):res.render('auth/admin',{ans:notadmin})
 }
 
 // admin html rendering 
+// LADMIN MEANS LOGIN ADMIN 
 const admin=(req,res)=>{
-    res.render('admin/dashbord')
+    const islogin =req.session.ladmin
+    islogin?res.render('admin/dashbord'):res.redirect('/admin')
 }
 
 
 
 //user 
 const user=(req,res)=>{
+    const islogin =req.session.ladmin
     const users=req.session.users
     delete req.session.users
-    res.render('admin/users',{Users:users})
+    islogin?res.render('admin/users',{Users:users}):res.redirect('/admin')
 }
+    
 
 module.exports={register,login,adminlogin,otp,admin,user}

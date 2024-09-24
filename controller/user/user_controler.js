@@ -1,8 +1,8 @@
-const Uschema = require('../model/user_scema')
-const getotp = require('../middleware/getotp')
+const Uschema = require('../../model/user_scema')
+const getotp = require('../../middleware/getotp')
 
 
-const signin = async (req, res, next) => {
+const signup = async (req, res, next) => {
     try {
         const otp = Math.round(100000 + Math.random() * 90000)
         const { username, email, password } = req.body
@@ -46,4 +46,4 @@ const signin = async (req, res, next) => {
 
 }
 
-module.exports = signin
+module.exports = signup

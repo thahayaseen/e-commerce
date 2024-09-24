@@ -1,5 +1,5 @@
-const User = require('../model/user_scema')
-const getotp = require('../middleware/getotp')
+const User = require('../../model/user_scema')
+const getotp = require('../../middleware/getotp')
 
 const resent = async (req, res, next) => {
     const username = req.session.username
