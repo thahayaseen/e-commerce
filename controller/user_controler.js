@@ -30,6 +30,7 @@ const signin = async (req, res, next) => {
 
                 getotp(email, otp)
                 req.session.username = username
+                req.session.status=a.status
                 next()
                 console.log(a);
 

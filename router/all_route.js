@@ -29,6 +29,4 @@ router.post('/resendotp',resendotp)
 
 
 
-
-
 module.exports=router
