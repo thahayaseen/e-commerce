@@ -91,16 +91,16 @@ const list = async (req, res, next) => {
       return res.status(404).json({ message: 'Product not found' });
     }
 
-    product.status = !product.status;
+    product.unlist = !product.unlist;
     
-    // Save the updated product status
+    // Save the updated product list
     await product.save();
     
     // Return success response with the updated status
     return res.status(200).json({
       success: true,
-      newStatus: product.status,
-      message: `Product ${product.status ? 'listed' : 'unlisted'} successfully.`,
+      newStatus: product.unlist,
+      message: `Product ${product.unlist ? 'listed' : 'unlisted'} successfully.`,
     });
   } catch (error) {
     console.error('Error updating product status:', error);

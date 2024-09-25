@@ -51,8 +51,8 @@ const admin=(req,res)=>{
 
 //user 
 const user=(req,res)=>{
-    // req.session.ladmin 
-    const islogin =true
+    req.session.ladmin 
+    const islogin =req.session.ladmin 
     const users=req.session.users
     delete req.session.users
     islogin?res.render('admin/users',{Users:users}):res.redirect('/admin')
@@ -62,7 +62,7 @@ const user=(req,res)=>{
 
 
 const product =(req,res,next)=>{
-    const islogin =true
+    const islogin =req.session.ladmin 
     const products=req.session.products
     delete req.session.products
     islogin?res.render('admin/product',{Products:products}):res.redirect('/admin')

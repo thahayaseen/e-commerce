@@ -13,7 +13,7 @@ const productSchema = new mongoose.Schema({
         type: String, // Consider changing to Number if it's numerical
         required: true
     },
-    status: {
+    unlist: {
         type: Boolean, // Consider changing to Number if it's numerical
         default:true
     },

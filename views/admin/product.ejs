@@ -71,10 +71,10 @@
                                                 <% } %>
                                             </td>
                                             <td>
-                                                <button class="btn btn-info btn-sm edit-btn" data-id="<%= Product._id %>">Edit</button>
+                                                <button class="btn btn-info btn-md edit-btn" data-id="<%= Product._id %>">Edit</button>
                                                 
-                                                <button class="btn btn-sm <%= Product.status ? 'btn-danger' : 'btn-success' %> unlist-btn" data-id="<%= Product._id %>">
-                                                    <%= Product.status ? 'Unlist' : 'Listed' %>
+                                                <button class="btn btn-md <%= Product.unlist ? 'btn-danger' : 'btn-success' %> unlist-btn" data-id="<%= Product._id %>">
+                                                    <%= Product.unlist ? 'Unlist' : 'Listed' %>
                                                 </button>
                                             </td>
                                             
