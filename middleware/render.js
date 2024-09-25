@@ -65,6 +65,6 @@ const product =(req,res,next)=>{
     const islogin =req.session.ladmin 
     const products=req.session.products
     delete req.session.products
-    islogin?res.render('admin/product',{Products:products}):res.redirect('/admin')
+    islogin?res.render('admin/product',{Products:products,categories:products}):res.redirect('/admin')
 }
 module.exports={register,login,adminlogin,otp,admin,user,product}
