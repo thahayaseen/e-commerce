@@ -4,7 +4,7 @@
   <!-- Required meta tags -->
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-  <title>Corona Admin</title>
+  <title>User Managment Admin</title>
   
   <!-- Bootstrap CSS -->
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
@@ -28,6 +28,26 @@
     </div>
 
     <!-- Main content -->
+     <!-- Confirmation Modal -->
+     <div class="modal fade" id="confirmationModal" tabindex="-1" aria-labelledby="confirmationModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered">
+          <div class="modal-content border-0 shadow-lg">
+              <div class="modal-header bg-primary text-white">
+                  <h5 class="modal-title" id="confirmationModalLabel">Confirm Action</h5>
+                  <!-- <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label></button> -->
+              </div>
+              <div class="modal-body">
+                  <p class="fs-5 mb-0">Are you sure you want to <span id="actionType" class="fw-bold"></span> this user?</p>
+              </div>
+              <div class="modal-footer border-top-0">
+                  <button type="button" class="btn btn-outline-secondary" id="cancel" data-bs-dismiss="modal">Cancel</button>
+                  <button type="button" class="btn btn-primary" id="confirmButton">Confirm</button>
+              </div>
+          </div>
+      </div>
+    </div>
+    
+
     <div class="container-fluid page-body-wrapper">
       <!-- Header section -->
       <div class="header">
@@ -65,18 +85,18 @@
                             <td><%= User.email %></td>
                           
                             <td>
-                              <% if (User.status) { %>
-                                <label class="badge badge-success">Active</label>
-                                <% } else { %>
-                                  <label class="badge badge-danger">Blocked</label>
-                              <% } %>
-                            </td>
+                              <label class="badge <%= User.status ?  'badge-danger':'badge-success'  %> user-status">
+                                  <%= User.status ?  'Blocked': 'Active' %>
+                              </label>
+                          </td>
+                          
                             <td>
-                              <% if (User.status) { %>
-                                <a href="/admin/users/block/<%= User._id %>" class="btn btn-danger btn-sm">Block</a>
-                                <% } else { %>
-                                  <a href="/admin/users/unblock/<%= User._id %>" class="btn btn-success btn-sm">Unblock</a>
-                              <% } %>
+                              
+                              <button class="btn p-2 btn-sm <%= User.status ? 'btn-success' : 'btn-danger' %> accses" userid="<%= User._id %>">
+                                <%= User.status ?  'Unblock':'Block'  %>
+                            </button>
+                                                        
+                                  
                             </td>
                           </tr>
                         <% }) %>
@@ -93,8 +113,8 @@
     </div>
     <!-- Page body wrapper ends -->
   </div>
-  <!-- Container scroller -->
-
+<!-- clicking actions  -->
+<script src="/js/admin/users.js"></script>
   <!-- Plugins JS -->
   <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>

@@ -32,6 +32,7 @@ const otp = (req, res) => {
 
 //admin section----------------------------------------------------------------------------------------
 //adminlogin
+
 const adminlogin=(req,res)=>{
     const notadmin=  req.session.admin||''
     const islogin =req.session.ladmin
@@ -50,11 +51,20 @@ const admin=(req,res)=>{
 
 //user 
 const user=(req,res)=>{
-    const islogin =req.session.ladmin
+    // req.session.ladmin 
+    const islogin =true
     const users=req.session.users
     delete req.session.users
     islogin?res.render('admin/users',{Users:users}):res.redirect('/admin')
 }
     
+//product
 
-module.exports={register,login,adminlogin,otp,admin,user}
+
+const product =(req,res,next)=>{
+    const islogin =true
+    const products=req.session.products
+    delete req.session.products
+    islogin?res.render('admin/product',{Products:products}):res.redirect('/admin')
+}
+module.exports={register,login,adminlogin,otp,admin,user,product}
