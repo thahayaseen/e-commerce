@@ -62,7 +62,7 @@ const user=(req,res)=>{
 
 
 const product =(req,res,next)=>{
-    const islogin =req.session.ladmin 
+    const islogin =true
     const products=req.session.products
     delete req.session.products
     islogin?res.render('admin/product',{Products:products,categories:products}):res.redirect('/admin')

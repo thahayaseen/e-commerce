@@ -1,4 +1,8 @@
 const User=require('../../model/user_scema')
+const Product = require('../../model/product_schema');
+const path = require('path');
+const fs=require('fs')
+
 // admin authentication 
 const auth=async (req,res,next)=>{
     try {
@@ -59,26 +63,6 @@ const accses = async (req, res, next) => {
 
 
 
-
-// const unblock=async (req,res,next)=>{
-//     try {
-//         user_id=req.params.id
-//     const detials=await User.findById(user_id)
-
-//     detials.status=true
-//     await detials.save()
-
-
-//     return  res.redirect('/admin/users')
-
-//     } catch (error) {
-//        console.log(error);
-        
-//     }
-   
-// }
-const Product = require('../../model/product_schema');
-
 const list = async (req, res, next) => {
   try {
     const id = req.params.id;
@@ -108,4 +92,68 @@ const list = async (req, res, next) => {
   }
 };
 
-module.exports={auth,accses,list}
+
+const edit = async (req, res, next) => {
+    try {
+        const id = req.params.id;
+        const data = await Product.findById(id);
+        
+        const files = req.files; // Get uploaded files from 'multer'
+
+        if (files.length > 0) {
+            files.forEach(file => {
+                data.images.push(file.filename); // Push new image filenames into the array
+            });
+        }
+        await data.save(); // Save the updated product
+        next();
+    } catch (error) {
+        console.error('Error in edit section:', error);
+        res.status(500).json({ success: false, message: 'Failed to update images.' });
+    }
+};
+
+const deletion = async (req, res) => {
+    const productId = req.params.id;
+    const { productName, productCategory, productDescription } = req.body; // Get other form fields
+
+    try {
+        // Find the product by ID
+        const product = await Product.findById(productId);
+        const deletedImages = JSON.parse(req.body.deletedImages); // Parse deleted images
+
+        // Update the product fields
+        product.name = productName;
+        product.category = productCategory;
+        product.description = productDescription;
+
+        // Remove deleted images from product's image array
+        if (deletedImages && deletedImages.length > 0) {
+            product.images = product.images.filter(image => !deletedImages.includes(image));
+
+            // Delete the images from the server's file system
+            deletedImages.forEach(image => {
+                const imagePath = path.join(__dirname, '..','..', 'public', 'uploads', image);
+                // console.log(imagePath);
+                
+                fs.unlink(imagePath, (err) => {
+                    if (err) {
+                        console.error(`Failed to delete image file: ${imagePath}`);
+                    }
+                });
+            });
+        }
+
+        // Save the updated product back to the database
+        await product.save();
+        // res.redirect('/admin/product')
+
+        res.json({ success: true });
+    } catch (error) {
+        console.error('Error updating product:', error);
+        res.status(500).json({ success: false, message: 'Failed to update product.' });
+    }
+}
+
+
+module.exports={auth,accses,list,edit,deletion}

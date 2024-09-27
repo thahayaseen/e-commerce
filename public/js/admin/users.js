@@ -1,11 +1,9 @@
 const btns = document.querySelectorAll('.accses');
-let currentBtn; // To hold the reference of the button being clicked
-let currentStatus; // To hold the status action (Block/Unblock)
-
+let  currentBtn
 btns.forEach((btn) => {
     btn.addEventListener('click', function () {
-        currentBtn = btn; // Store the current button reference
-        currentStatus = btn.textContent.toLowerCase(); // Get the current status
+         currentBtn = btn; // Store the current button reference
+        const currentStatus = btn.textContent.toLowerCase(); // Get the current status
 
         // Set the action type in the modal
         document.getElementById('actionType').textContent = currentStatus === 'block' ? 'block' : 'unblock';
