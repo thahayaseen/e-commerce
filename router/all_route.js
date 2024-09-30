@@ -1,11 +1,9 @@
-const {signup,otpvarify,resent,varifylogin,logout}=require("../controller/user/user")
-const{register,login,otp}=require('../middleware/render')
+const {signup,otpvarify,resent,varifylogin,logout,viewproduct}=require("../controller/user/user")
+const{register,login,otp,userhome}=require('../middleware/render')
 // const plogin=require('../controller/user/ulogin')
 const {pregister}=require('../middleware/redirect')
-// const otps=require('../controller/user/otpvarify')
-// const resendotp=require('../controller/user/resendotp')
-// const logout=require('../controller/logout')
-// const potp=require('../controller/sendotp')
+const {allproducts}=require('../controller/finding_all_admin')
+
 const express=require('express')
 const router=express.Router()
 
@@ -24,6 +22,14 @@ router.post('/otp',otpvarify)
 
 // resendotp 
 router.post('/resendotp',resent)
+
+// user side 
+
+router.get('/home',allproducts,userhome)
+
+router.get('/product/:ids',viewproduct)
+
+
 
 
 //logout

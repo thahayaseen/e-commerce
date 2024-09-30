@@ -1,7 +1,8 @@
 const User=require('../../model/user_scema')
 const Product = require('../../model/product_schema');
 const path = require('path');
-const fs=require('fs')
+const fs=require('fs');
+const categories = require('../../model/categories');
 
 // admin authentication 
 const auth=async (req,res,next)=>{
@@ -91,41 +92,65 @@ const list = async (req, res, next) => {
     return res.status(500).json({ message: 'Internal server error', error });
   }
 };
+//add product
+const padd= async (req,res,next)=>{
+    const {newProductName,newProductCategory,newProductDescription,newProductPrice,newProductStock}=req.body
+    const fiels=req.files
+    console.log(fiels);
+    let image=[]
+    fiels.forEach(num=>{
+        image.push(num.filename)
+    })
+    console.log(image);
+    console.log(newProductCategory);
+    
+    const newProduct = new Product({
+        name: newProductName,
+        category_id: newProductCategory,
+        description: newProductDescription,
+        price: newProductPrice,
+        stock: newProductStock,
+        images:image
+       
+    });
+     image=[]
+    await newProduct.save()
+   
+    res.status(200).json({succses:true})
+     
+}
 
-
-const edit = async (req, res, next) => {
-    try {
-        const id = req.params.id;
-        const data = await Product.findById(id);
-        
-        const files = req.files; // Get uploaded files from 'multer'
-
-        if (files.length > 0) {
-            files.forEach(file => {
-                data.images.push(file.filename); // Push new image filenames into the array
-            });
-        }
-        await data.save(); // Save the updated product
-        next();
-    } catch (error) {
-        console.error('Error in edit section:', error);
-        res.status(500).json({ success: false, message: 'Failed to update images.' });
-    }
-};
 
 const deletion = async (req, res) => {
     const productId = req.params.id;
-    const { productName, productCategory, productDescription } = req.body; // Get other form fields
+    const { productName, productCategory, productDescription,productStock,productPrice } = req.body; // Get other form fields
 
     try {
         // Find the product by ID
+                const files = req.files; 
+
+       
+        
+        
         const product = await Product.findById(productId);
         const deletedImages = JSON.parse(req.body.deletedImages); // Parse deleted images
+        console.log('stock'+productStock);
+        
+        // add images 
+        if (files.length > 0) {
+            files.forEach(file => {
+                product.images.push(file.filename); // Push new image filenames into the array
+            });
+
+        }
+
 
         // Update the product fields
         product.name = productName;
-        product.category = productCategory;
+        product.category_id = productCategory;
         product.description = productDescription;
+        product.stock = productStock;
+        product.price = productPrice;
 
         // Remove deleted images from product's image array
         if (deletedImages && deletedImages.length > 0) {
@@ -155,5 +180,55 @@ const deletion = async (req, res) => {
     }
 }
 
+// dave categories 
+const savecat= async (req,res)=>{
+   try {
+    const {newCategoryName,newProductDescription}=req.body
+    const newcategories= new categories({
+        name:newCategoryName,
+        description:newProductDescription
+    })
+    await newcategories.save()
+    // console.log(req.body);
+    
+    res.status(200).json({success:true})
+   } catch (error) {
+    console.log('in save categosy rout'+error);
+    
+   }
+}
 
-module.exports={auth,accses,list,edit,deletion}
+const useredit= async(req,res,next)=>{
+    const {CategoryName,ProductDescription}=req.body
+
+    const catid=req.params.id
+    // console.log(catid);
+    const category=await categories.findById(catid)
+
+    category.name=CategoryName
+    category.description=ProductDescription
+
+   await category.save()
+
+   res.status(200).json({success:true})
+    
+}
+const userdelete= async(req,res,next)=>{
+    
+try {
+    
+    const catid=req.params.id
+    // console.log(catid);
+    await categories.deleteOne({_id:catid})
+
+
+   
+
+   res.status(200).json({success:true})
+} catch (error) {
+    console.log('error in delete route'+error);
+    
+}
+    
+}
+module.exports={auth,accses,list,padd,deletion,savecat,useredit,userdelete}

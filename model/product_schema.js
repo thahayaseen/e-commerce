@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const { catagory } = require('../middleware/render');
 
 const productSchema = new mongoose.Schema({
     name: {
@@ -6,28 +7,28 @@ const productSchema = new mongoose.Schema({
         required: true
     },
     price: {
-        type: String, // Consider changing to Number if it's numerical
+        type: Number, // Consider changing to Number if it's numerical
         required: true
     },
     stock: {
-        type: String, // Consider changing to Number if it's numerical
+        type: Number, // Consider changing to Number if it's numerical
         required: true
     },
     unlist: {
-        type: Boolean, // Consider changing to Number if it's numerical
-        default:true
+        type: Boolean, 
+        default:false
     },
     images: {
-        type: [String], // Array of strings to store multiple image URLs or paths
-        required: true,
+        type: [String], 
     },
     description: {
         type: String,
         required: true
     },
     category_id: {
-        type: mongoose.Schema.Types.ObjectId, // Reference to a category
-        
+        type: mongoose.Schema.Types.ObjectId, 
+        ref: 'Category', 
+        // required: true 
     }
 },{timestamps:true});
 

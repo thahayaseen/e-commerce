@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <!-- Required meta tags -->
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <title>Category Management</title>
+
+  <!-- Bootstrap CSS -->
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+
+  <!-- Plugins CSS -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@mdi/font/css/materialdesignicons.min.css">
+  <link rel="stylesheet" href="/assets/vendors/css/vendor.bundle.base.css">
+
+  <!-- Layout styles -->
+  <link rel="stylesheet" href="/assets/css/style.css">
+</head>
+
+<body>
+
+  <div class="container-scroller">
+    <div class="sidebar bg-light">
+      <%- include('./admin_parts/sidebar') %>
+    </div>
+    <div class="container-fluid page-body-wrapper">
+        <%-include("./admin_parts/hedder")%>
+      <div class="main-panel">
+        <div class="content-wrapper">
+          <div class="page-header">
+            <h3 class="page-title">Category Management</h3>
+          </div>
+
+          <!-- Add Category Button -->
+          <div class="row mb-3">
+            <div class="col-12">
+              <button class="btn btn-primary" data-toggle="modal" data-target="#addCategoryModal">Add Category</button>
+            </div>
+          </div>
+
+          <!-- Main content list of categories -->
+          <div class="row">
+            <div class="col-12 grid-margin">
+              <div class="card">
+                <div class="card-body">
+                  <h4 class="card-title">Manage Categories</h4>
+                  <div class="table-responsive">
+                    <table class="table table-hover">
+                      <thead>
+                        <tr>
+                          <th>#</th>
+                          <th>Category Name</th>
+                          <th>Discription</th>
+                          <th>Action</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <% categories.forEach((category, index) => { %>
+                          <tr>
+                            <td><%= index + 1 %></td>
+                            <td style="max-width: 200px; word-wrap: break-word; white-space: normal;">
+                              <p style="line-height: 1.5;"><%= category.name %></p>
+                            </td>
+                            <td style="max-width: 200px; word-wrap: break-word; white-space: normal;">
+                              <p style="line-height: 1.5;"><%= category.description %></p>
+                            </td>
+                            
+                            <td>
+                              <button class="btn btn-info btn-md edit-btn" 
+                               
+                                data-id="<%= category._id %>" 
+                                data-name="<%= category.name %>"
+                                data-discription="<%= category.description %>">
+                                Edit
+                              </button>
+                              <button class="btn btn-danger btn-md delete-btn deletebutton"
+                                data-cid="<%= category._id %>">Delete
+                              </button>
+                            </td>
+                          </tr>
+                        <% }) %>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Add Category Modal -->
+          <div class="modal fade" id="addCategoryModal" tabindex="-1" role="dialog" aria-labelledby="addCategoryModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title" id="addCategoryModalLabel">Add Category</h5>
+                </div>
+                <div class="modal-body">
+                  <form id="addCategoryForm">
+                    <!-- Category Name -->
+                    <div class="form-group">
+                      <label for="newCategoryName">Category Name</label>
+                      <input type="text" class="form-control bg-dark text-light" id="newCategoryName" name="newCategoryName" placeholder="Category Name" required>
+                    </div>
+                    <div class="form-group">
+                      <label for="Categorydiscription">Category Discription</label>
+                      <textarea class="form-control bg-dark text-light" id="Categorydiscription"
+                      name="newProductDescription" rows="4" placeholder="Product Description" required></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-primary mr-2">Add Category</button>
+                    <button type="reset" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                  </form>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Edit Category Modal -->
+          <div class="modal fade" id="editCategoryModal" tabindex="-1" role="dialog" aria-labelledby="editCategoryModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="dialog">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title" id="editCategoryModalLabel">Edit Category</h5>
+                </div>
+                <div class="modal-body">
+                  <form id="editCategoryForm">
+                    <!-- Category Name -->
+                    <div class="form-group">
+                      <label for="CategoryName">Category Name</label>
+                      <input type="text" class="form-control bg-dark text-light" id="CategoryName" name="CategoryName" placeholder="Category Name" required>
+                    </div>
+                    <div class="form-group">
+                      <label for="categoriesdiscription">Category Discription</label>
+                      <textarea class="form-control bg-dark text-light" id="categoriesdiscription"
+                      name="ProductDescription" rows="4" placeholder="Product Description" required></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-primary mr-2">Save Changes</button>
+                    <button type="reset" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                  </form>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Scripts -->
+   <script src="/js/admin/category.js"></script>
+  <script src="/assets/vendors/js/vendor.bundle.base.js"></script>
+  <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+
+</html>

@@ -1,8 +1,8 @@
-const express = require('express');
+
 const multer = require('multer');
 const path = require('path');
 
-const app = express();
+
 
 // Set storage for the uploaded files
 const storage = multer.diskStorage({

@@ -1,92 +1,6 @@
 const unlistButtons = document.querySelectorAll('.unlist-btn');
 const editButtons = document.querySelectorAll('.edit-btn');
 let imagedata=''
-
-
-
-document.addEventListener('DOMContentLoaded', function () {
-    const imageContainer = document.getElementById('currentImages');
-  
-    editButtons.forEach(button => {
-      button.addEventListener('click', function () {
-        // Get product data from button attributes
-        const productImages = JSON.parse(this.getAttribute('data-images'));
-  
-        // Clear any previous images in the modal
-        imageContainer.innerHTML = '';
-  
-        // Populate the modal with the product images
-        productImages.forEach(image => {
-          const imageWrapper = document.createElement('div');
-          imageWrapper.classList.add('position-relative', 'm-2');
-          imageWrapper.innerHTML = `
-            <img src="/uploads/${image}" class="product-image img-thumbnail" style="width: 100px; height: 100px;" alt="Product Image">
-            <button type="button" class="btn btn-danger btn-sm delete-image-btn position-absolute" style="top: 5px; right: 5px;" data-image="${image}">&times;</button>
-          `;
-          imageContainer.appendChild(imageWrapper);
-        });
-      });
-    });
-  
-    // Handle image deletion inside modal
-    imageContainer.addEventListener('click', function (event) {
-      if (event.target.classList.contains('delete-image-btn')) {
-        let imageToDelete = event.target.getAttribute('data-image');
-        
-        // Remove the file extension
-        imageToDelete = imageToDelete.replace(/\.[^/.]+$/, '');
-  
-        // Confirmation before deletion
-        const confirmed = window.confirm('Are you sure you want to delete this image?');
-        if (confirmed) {
-          // Make a fetch request to delete the image
-          fetch(`/product/image/delete/${imageToDelete}`, {
-            method: 'PATCH'
-          })
-          .then(response => response.json())
-          .then(data => {
-            if (data.success) {
-              // Remove the image from the modal
-              event.target.closest('.position-relative').remove();
-            } else {
-              console.error('Failed to delete the image.');
-            }
-          })
-          .catch(error => {
-            console.error('Error:', error);
-          });
-        }
-      }
-    });
-  });
-// Function to handle the edit modal
-function showEditModal(button) {
-    imagedata=button.dataset
-   const productId = button.dataset.id;
-    const productName = button.dataset.name;
-    const productCategory = button.dataset.category;
-    const productDescription = button.dataset.description;
-    const productImages = JSON.parse(button.dataset.images); // Assuming images are passed as JSON array
-    const form = document.getElementById('editProductForm');
-
-    // Populate the modal fields
-    document.getElementById('productName').value = productName;
-    document.getElementById('productCategory').value = productCategory;
-    document.getElementById('productDescription').value = productDescription;
-    form.action = `/admin/product/images/${productId}`;
-
-    // Display current images
-    const currentImagesDiv = document.getElementById('currentImages');
-    currentImagesDiv.innerHTML = ''; // Clear existing images
-
-  
-
-    // Show the modal
-    $('#editProductModal').modal('show');
-}
-
-
-
 // Handle unlist button clicks
 unlistButtons.forEach((btn) => {
     btn.addEventListener('click', function () {
@@ -129,7 +43,31 @@ unlistButtons.forEach((btn) => {
             });
     });
 });
+//add product
+document.addEventListener('DOMContentLoaded',function(){
+    const addform= document.getElementById('addProductForm')
+     addform.action="/admin/product/add"
+     addform.addEventListener('submit',(e)=>{
+        const formdata=new FormData(addform)
+        e.preventDefault()
+        fetch(addform.action,{
+            method:'POST',
+            body:formdata
+        })
+        .then(res=>res.json())
+        .then((res)=>{
+            console.log(res);
+            
+            if (res.succses===true) {
+                window.location.href='/admin/product'
+            }
+        })
+        .catch(cat=>console.log(cat)
+        )
+     })
+    // fetch('addform')
 
+})
 //edit section 
 document.addEventListener('DOMContentLoaded', function () {
     const editButtons = document.querySelectorAll('.edit-btn');
@@ -154,12 +92,14 @@ document.addEventListener('DOMContentLoaded', function () {
         const productImages = JSON.parse(this.getAttribute('data-images'));
         productId = this.getAttribute('data-id');
         const productName = this.getAttribute('data-name');
-        const productCategory = this.getAttribute('data-category');
+        const productCategoryId = this.getAttribute('data-category'); // Get category ID
         const productDescription = this.getAttribute('data-description');
-
+        const stock = this.dataset.stock;
+        const price = this.dataset.price;
+    
         // Clear previous images from the modal
         imageContainer.innerHTML = '';
-
+    
         // Populate the modal with product images
         productImages.forEach(image => {
             const imageWrapper = document.createElement('div');
@@ -170,28 +110,36 @@ document.addEventListener('DOMContentLoaded', function () {
             `;
             imageContainer.appendChild(imageWrapper);
         });
-
+    
         // Clear the deletedImages array when modal opens
         deletedImages = [];
-
+    
         // Set the form fields with product info
         document.getElementById('productName').value = productName;
-        document.getElementById('productCategory').value = productCategory;
         document.getElementById('productDescription').value = productDescription;
-
+        document.getElementById('productStock').value = stock;
+        document.getElementById('productprice').value = price;
+    
+        // Set the correct category in the dropdown
+        const categorySelect = document.getElementById('productCategory');
+        categorySelect.value = productCategoryId;  // This sets the selected option based on the product's category ID
+    
         // Set form action to the correct product ID
         const form = document.getElementById('editProductForm');
         form.action = `/admin/product/images/edit/${productId}`;
-
+    
         // Show the modal
         $('#editProductModal').modal('show');
     }
-
+    
+    
     function handleImageDeletion(event) {
         if (event.target.classList.contains('delete-image-btn')) {
             const imageToDelete = event.target.getAttribute('data-image');
-            deletedImages.push(imageToDelete); // Add image to the list of deleted images
-            event.target.closest('.position-relative').remove(); // Remove image from the modal
+            const confomdelete=confirm('do you wnat to delete the image')
+            if(confomdelete)
+                {deletedImages.push(imageToDelete); // Add image to the list of deleted images
+            event.target.closest('.position-relative').remove()} // Remove image from the modal
         }
     }
 
@@ -206,7 +154,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // Submit the form data via fetch
     fetch(url, {
-        method: 'POST',
+        method: 'PATCH',
         body: formData, // Do not convert to JSON; keep it as FormData
     })
     .then(response => response.json())

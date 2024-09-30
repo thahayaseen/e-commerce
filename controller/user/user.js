@@ -87,6 +87,7 @@ const otpvarify = async (req, res, next) => {
     }
 };
 const getotp = require('../../middleware/getotp')
+const product_schema = require('../../model/product_schema')
 
 // resend otp 
 
@@ -143,6 +144,15 @@ const varifylogin=async (req,res,next)=>{
     
 }
 
+const viewproduct=async (req,res,next)=>{
+    const id=req.params.ids
+    const productdata=await product_schema.findById(id).populate('category_id')
+    res.render('userside/product_over_view',{product:productdata})
+    console.log(productdata);
+    // res.status(200).json({success:true,
+    //     data:productdata
+    // }).
+    
+}
 
-
-module.exports={signup,otpvarify,resent,varifylogin,logout}
+module.exports={signup,otpvarify,resent,varifylogin,viewproduct,logout}

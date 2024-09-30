@@ -62,9 +62,27 @@ const user=(req,res)=>{
 
 
 const product =(req,res,next)=>{
+    const products=req.session.products||''
+    const cat=req.session.categories||''
+
     const islogin =true
-    const products=req.session.products
     delete req.session.products
-    islogin?res.render('admin/product',{Products:products,categories:products}):res.redirect('/admin')
+    islogin?res.render('admin/product',{Products:products,categories:cat}):res.redirect('/admin')
 }
-module.exports={register,login,adminlogin,otp,admin,user,product}
+
+// catogory 
+const catagory =(req,res,next)=>{
+    categ=req.session.categories||''
+    delete req.session.categories
+    delete req.session.products
+
+    res.render('admin/catogory',{categories:categ})
+
+}
+
+const userhome=async (req,res)=>{
+   const product=req.session.products
+    delete req.session.products
+    res.render('userside/dashbord',{products:product})
+}
+module.exports={register,login,adminlogin,otp,admin,user,product,catagory,userhome}
