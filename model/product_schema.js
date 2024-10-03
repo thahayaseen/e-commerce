@@ -4,15 +4,15 @@ const { catagory } = require('../middleware/render');
 const productSchema = new mongoose.Schema({
     name: {
         type: String,
-        required: true
+        // required: true
     },
     price: {
         type: Number, // Consider changing to Number if it's numerical
-        required: true
+        // required: true
     },
     stock: {
         type: Number, // Consider changing to Number if it's numerical
-        required: true
+        // required: true
     },
     unlist: {
         type: Boolean, 
@@ -23,7 +23,7 @@ const productSchema = new mongoose.Schema({
     },
     description: {
         type: String,
-        required: true
+        // required: true
     },
     category_id: {
         type: mongoose.Schema.Types.ObjectId, 

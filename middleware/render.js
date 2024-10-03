@@ -3,8 +3,10 @@
 //register-------------------------------------------------------
 const register= (req,res)=>{
     const registerMessage =  req.session.register || '';
+    const ulogined=req.session.ulogin
+
     delete req.session.register
-    res.render('auth/signup.ejs',{msg:registerMessage})
+    ulogined?res.redirect('/home'):res.render('auth/signup.ejs',{msg:registerMessage})
 }
 
 
@@ -12,16 +14,17 @@ const register= (req,res)=>{
 const login=async(req,res)=>{
     const invalid=req.session.login||''
     delete req.session.login
-    res.render('auth/ulogin',{mesasge:invalid})
+    const ulogined=req.session.ulogin
+    ulogined?res.redirect('/home'):res.render('auth/ulogin',{mesasge:invalid})
 }
 //otp
 const otp = (req, res) => {
     const signin = req.session.username;
+
     const errorotp = req.session.otperror || '';
     delete req.session.otperror;
-
     if (signin) {
-        // User is signed in, render the OTP page
+      
         res.render('auth/otp', { error: errorotp });
         delete req.session.username; // Remove username after rendering
     } else {
@@ -29,6 +32,13 @@ const otp = (req, res) => {
         return res.redirect('/signup');
     }
 };
+const userhome=async (req,res)=>{
+   const product=req.session.products
+   const ulogined=req.session.ulogin
+   const glogin= req.session.glogin
+    delete req.session.products
+    ulogined?res.render('userside/dashbord',{products:product}):res.redirect('/signin')
+}
 
 //admin section----------------------------------------------------------------------------------------
 //adminlogin
@@ -64,25 +74,30 @@ const user=(req,res)=>{
 const product =(req,res,next)=>{
     const products=req.session.products||''
     const cat=req.session.categories||''
+    const islogin =req.session.ladmin 
 
-    const islogin =true
+    
     delete req.session.products
     islogin?res.render('admin/product',{Products:products,categories:cat}):res.redirect('/admin')
 }
 
 // catogory 
 const catagory =(req,res,next)=>{
-    categ=req.session.categories||''
+   const categ=req.session.categories||''
+   const islogin =req.session.ladmin 
+
     delete req.session.categories
     delete req.session.products
 
-    res.render('admin/catogory',{categories:categ})
+    islogin?res.render('admin/catogory',{categories:categ}):res.redirect('/admin')
 
 }
 
-const userhome=async (req,res)=>{
-   const product=req.session.products
+const productlist=async (req,res)=>{
+    const product=req.session.products
+  const  categ=req.session.categories||''
+    delete req.session.categories
     delete req.session.products
-    res.render('userside/dashbord',{products:product})
+    res.render('userside/productlist',{products:product,categories:categ})
 }
-module.exports={register,login,adminlogin,otp,admin,user,product,catagory,userhome}
+module.exports={register,login,adminlogin,otp,admin,user,product,catagory,userhome,productlist}

@@ -5,8 +5,9 @@ deletebtn.forEach((categories)=>{
     // const deletebnt=document.getElementById('deletebutton')
     categories.addEventListener('click',function(e){
         const id= this.dataset.cid
-        fetch(`/admin/category/delete/${id}`,{
-            method:'DELETE'
+        fetch(`/admin/category/unlist/${id}`,{
+            method:'PATCH',
+            
         })
         .then((res)=>res.json()
         )

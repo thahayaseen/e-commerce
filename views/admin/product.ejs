@@ -19,6 +19,12 @@
   <link rel="stylesheet" href="/assets/vendors/owl-carousel-2/owl.carousel.min.css">
   <link rel="stylesheet" href="/assets/vendors/owl-carousel-2/owl.theme.default.min.css">
 
+  <!-- croper js  -->
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.css">
+
+
+
   <!-- Layout styles -->
   <link rel="stylesheet" href="/assets/css/style.css">
 </head>
@@ -114,168 +120,160 @@
             </div>
           </div>
           <!-- edit  -->
-          <div class="modal fade" id="editProductModal" tabindex="-1" role="dialog"
-            aria-labelledby="editProductModalLabel" aria-hidden="true">
+          <div class="modal fade" id="editProductModal" tabindex="-1" role="dialog" aria-labelledby="editProductModalLabel" aria-hidden="true">
             <div class="modal-dialog" role="document">
-              <div class="modal-content">
-                <div class="modal-header">
-                  <h5 class="modal-title" id="editProductModalLabel">Edit Product</h5>
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="editProductModalLabel">Edit Product</h5>
+                    </div>
+                    <div class="modal-body">
+                      <form class="forms-sample" id="editProductForm" enctype="multipart/form-data">
+                        <!-- Product Name -->
+                        <div class="form-group">
+                            <label for="productName">Product Name</label>
+                            <input type="text" class="form-control bg-dark text-light" id="productName" name="productName" placeholder="Product Name">
+                        </div>
+                    
+                        <!-- Category -->
+                        <div class="form-group">
+                            <label for="productCategory">Category</label>
+                            <select class="form-control bg-dark text-light" id="productCategory" name="productCategory">
+                                <option value="">Select Category</option>
+                                <% categories.forEach(category => { %>
+                                    <option value="<%= category._id %>"><%= category.name %></option>
+                                <% }) %>
+                            </select>
+                        </div>
+                    
+                        <!-- Description -->
+                        <div class="form-group">
+                            <label for="productDescription">Description</label>
+                            <textarea class="form-control bg-dark text-light" id="productDescription" name="productDescription" rows="4" placeholder="Product Description"></textarea>
+                        </div>
+                    
+                        <!-- Price and Stock -->
+                        <div class="form-row">
+                            <div class="form-group col-md-6">
+                                <label for="productPrice">Price</label>
+                                <input type="number" min="0" class="form-control bg-dark text-light" id="productprice" name="productPrice" placeholder="Product Price">
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label for="productStock">Stock</label>
+                                <input type="number" min="0" class="form-control bg-dark text-light" id="productStock" name="productStock" placeholder="Product Stock">
+                            </div>
+                        </div>
+                    
+                        <!-- Image Upload -->
+                        <div class="form-group">
+                            <label for="productImages">Upload New Images</label>
+                            <input type="file" class="form-control-file bg-dark text-light" id="productImageInput" name="productImages" multiple>
+                        </div>
+                    
+                        <!-- Cropping Section -->
+                        <div class="form-group">
+                            <label for="currentImages">Crop Uploaded Images</label>
+                            <div id="cropperContainer" class="d-flex flex-wrap">
+                                <img id="cropperImage" src="" alt="Image to crop" style="max-width: 300px; max-height: 300px; display: none;" />
+                            </div>
+                    
+                            <!-- Crop Control Buttons -->
+                            <div id="cropControls" style="display:none;">
+                                
+                                <button type="button" class="btn btn-success" id="saveCroppedImage">Save Cropped Image</button>
+                            </div>
+                        </div>
+                    
+                        <!-- Cropped Images Preview -->
+                        <div id="croppedImagesPreview" class="d-flex flex-wrap">
+                            <!-- Cropped images will be shown here -->
+                        </div>
+                    
+                        <!-- Current Images -->
+                        <div class="form-group">
+                            <label for="currentImages" class="d-none">Current Images</label>
+                            <div id="currentImages" class="d-flex flex-wrap">
+                                <!-- Images will be dynamically loaded here -->
+                            </div>
+                        </div>
+                    
+                        <button type="submit" class="btn btn-primary mr-2">Submit</button>
+                        <button type="reset" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                    </form>
+                    
+                    </div>
                 </div>
-                <div class="modal-body">
-                  <form class="forms-sample" id="editProductForm" enctype="multipart/form-data">
-
-                    <!-- Product Name -->
-                    <div class="form-group">
-                      <label for="productName">Product Name</label>
-                      <input type="text" class="form-control bg-dark text-light" id="productName" name="productName"
-                        placeholder="Product Name">
-                    </div>
-
-                    <!-- Category -->
-                    <div class="form-group">
-                      <label for="productCategory">Category</label>
-                      <select class="form-control bg-dark text-light" id="productCategory" name="productCategory">
-                        <option value="">Select Category</option>
-                        <% categories.forEach(category=> { %>
-                          <option value="<%= category._id %>">
-                            <%= category.name %>
-                          </option>
-                          <% }) %>
-                      </select>
-
-
-                    </div>
-
-                    <!-- Description -->
-                    <div class="form-group">
-                      <label for="productDescription">Description</label>
-                      <textarea class="form-control bg-dark text-light" id="productDescription"
-                        name="productDescription" rows="4" placeholder="Product Description"></textarea>
-                    </div>
-
-                    <!-- Price and Stock (in same row) -->
-                    <div class="form-row">
-                      <div class="form-group col-md-6">
-                        <label for="productPrice">Price</label>
-                        <input type="number" min="0" data-price class="form-control  bg-dark text-light"
-                          id="productprice" name="productPrice" placeholder="Product Price">
-                      </div>
-                      <div class="form-group col-md-6">
-                        <label for="productStock">Stock</label>
-                        <input type="number" min="0" class="form-control bg-dark text-light" id="productStock"
-                          name="productStock" placeholder="Product Stock">
-                      </div>
-                    </div>
-
-
-                    <div class="form-group">
-                      <label for="productImages">Upload New Images</label>
-                      <input type="file" class="form-control-file bg-dark text-light" id="productImages"
-                        name="productImages" multiple>
-                    </div>
-                    <!-- Images -->
-                    <div class="form-group">
-                      <label for="currentImages" class="d-none">Current Images</label>
-                      <div id="currentImages" class="d-flex flex-wrap">
-                        <!-- Images will be dynamically loaded here -->
-                      </div>
-                    </div>
-
-                    <button type="submit" class="btn btn-primary mr-2">Submit</button>
-                    <button type="reset" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-                  </form>
-                </div>
-              </div>
             </div>
-          </div>
-          <!-- Crop Image Modal
-          <div class="modal fade" id="cropImageModal" tabindex="-1" role="dialog" aria-hidden="true">
-            <div class="modal-dialog modal-lg" role="document">
-              <div class="modal-content">
-                <div class="modal-header">
-                  <h5 class="modal-title">Crop Image</h5>
-                </div>
-                <div class="modal-body">
-                  <div class="img-container">
-                    <img id="image" src="" alt="Image for cropping" style="max-width: 100%;">
-                  </div>
-                </div>
-                <div class="modal-footer">
-                  <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-                  <button type="button" id="cropImageBtn" class="btn btn-primary">Crop</button>
-                </div>
-              </div>
-            </div>
-          </div> -->
-
+        </div>
+        
+        
 
           <!-- Add Product Modal Section -->
-          <div class="modal fade" id="addProductModal" tabindex="-1" role="dialog"
-            aria-labelledby="addProductModalLabel" aria-hidden="true">
+          <div class="modal fade" id="addProductModal" tabindex="-1" role="dialog" aria-labelledby="addProductModalLabel" aria-hidden="true">
             <div class="modal-dialog" role="document">
-              <div class="modal-content">
-                <div class="modal-header">
-                  <h5 class="modal-title" id="addProductModalLabel">Add Product</h5>
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="addProductModalLabel">Add Product</h5>
+                    </div>
+                    <div class="modal-body">
+                        <form class="forms-sample" id="addProductForm" enctype="multipart/form-data">
+                            <!-- Product Name -->
+                            <div class="form-group">
+                                <label for="newProductName">Product Name</label>
+                                <input type="text" class="form-control bg-dark text-light" id="newProductName" name="newProductName" placeholder="Product Name" required>
+                            </div>
+        
+                            <!-- Category -->
+                            <div class="form-group">
+                                <label for="newProductCategory">Category</label>
+                                <select class="form-control bg-dark text-light" id="newProductCategory" name="newProductCategory" required>
+                                    <option value="">Select Category</option>
+                                    <% categories.forEach(category => { %>
+                                        <option value="<%= category._id %>">
+                                            <%= category.name %>
+                                        </option>
+                                    <% }) %>
+                                </select>
+                            </div>
+        
+                            <!-- Description -->
+                            <div class="form-group">
+                                <label for="newProductDescription">Description</label>
+                                <textarea class="form-control bg-dark text-light" id="newProductDescription" name="newProductDescription" rows="4" placeholder="Product Description" required></textarea>
+                            </div>
+        
+                            <!-- Price and Stock (in same row) -->
+                            <div class="form-row">
+                                <div class="form-group col-md-6">
+                                    <label for="newProductPrice">Price</label>
+                                    <input type="number" class="form-control bg-dark text-light" min="0" id="newProductPrice" name="newProductPrice" placeholder="Product Price" required>
+                                </div>
+                                <div class="form-group col-md-6">
+                                    <label for="newProductStock">Stock</label>
+                                    <input type="number" class="form-control bg-dark text-light" min="0" id="newProductStock" name="newProductStock" placeholder="Product Stock" required>
+                                </div>
+                            </div>
+        
+                            <!-- Images -->
+                            <div class="form-group">
+                                <label for="newProductImages">Upload Images</label>
+                                <input type="file" id="addproductImageInput" multiple accept="image/*" required>
+                            </div>
+        
+                            <!-- Cropping Controls -->
+                            <div id="addcropControls" style="display: none;">
+                                <img id="addcropperImage" style="display: none; width: 100%; height: auto;" />
+                                <button type="button" id="nextButton" class="btn btn-secondary">Next Image</button>
+                                <button type="submit" id="addproductbtn" class="btn btn-primary mr-2" style="display: none;">Add Product</button>
+                            </div>
+                            
+                            <button type="reset" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                        </form>
+                    </div>
                 </div>
-                <div class="modal-body">
-                  <form class="forms-sample" id="addProductForm" enctype="multipart/form-data">
-
-                    <!-- Product Name -->
-                    <div class="form-group">
-                      <label for="newProductName">Product Name</label>
-                      <input type="text" class="form-control bg-dark text-light" id="newProductName"
-                        name="newProductName" placeholder="Product Name" required>
-                    </div>
-
-                    <!-- Category -->
-                    <div class="form-group">
-                      <label for="newProductCategory">Category</label>
-                      <select class="form-control bg-dark text-light" id="newProductCategory" name="newProductCategory"
-                        required>
-                        <option value="">Select Category</option>
-                        <% categories.forEach(category=> { %>
-                          <option value="<%= category._id %>">
-                            <%= category.name %>
-                          </option>
-                          <% }) %>
-                      </select>
-                    </div>
-
-                    <!-- Description -->
-                    <div class="form-group">
-                      <label for="newProductDescription">Description</label>
-                      <textarea class="form-control bg-dark text-light" id="newProductDescription"
-                        name="newProductDescription" rows="4" placeholder="Product Description" required></textarea>
-                    </div>
-
-                    <!-- Price and Stock (in same row) -->
-                    <div class="form-row">
-                      <div class="form-group col-md-6">
-                        <label for="newProductPrice">Price</label>
-                        <input type="number" class="form-control bg-dark text-light" min="0" id="newProductPrice"
-                          name="newProductPrice" placeholder="Product Price" required>
-                      </div>
-                      <div class="form-group col-md-6">
-                        <label for="newProductStock">Stock</label>
-                        <input type="number" class="form-control bg-dark text-light" min="0" id="newProductStock"
-                          name="newProductStock" placeholder="Product Stock" required>
-                      </div>
-                    </div>
-
-                    <!-- Images -->
-                    <div class="form-group">
-                      <label for="newProductImages">Upload Images</label>
-                      <input type="file" class="form-control-file bg-dark text-light" id="newProductImages"
-                        name="newProductImages" multiple>
-                    </div>
-
-                    <button type="submit" id="addproductbtn" class="btn btn-primary mr-2">Add Product</button>
-                    <button type="reset" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-                  </form>
-                </div>
-              </div>
             </div>
-          </div>
+        </div>
+        
+        
 
         </div>
       </div>
@@ -284,7 +282,10 @@
     <!-- Page body wrapper ends -->
   </div>
 
+
+
   <!-- Scripts -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.js"></script>
   <script src="/js/admin/product.js"></script>
   <script src="https://unpkg.com/cropperjs"></script>
   <script src="/assets/vendors/js/vendor.bundle.base.js"></script>

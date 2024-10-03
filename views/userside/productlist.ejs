@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <meta http-equiv="x-ua-compatible" content="ie=edge" />
+    <title>Material Design for Bootstrap</title>
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.11.2/css/all.css" />
+    <!-- Google Fonts Roboto -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" />
+    <!-- Bootstrap CSS -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
+    <!-- MDB -->
+    <link rel="stylesheet" href="css/mdb.min.css" />
+    <!-- Custom styles -->
+    <link rel="stylesheet" href="css/style.css" />
+    <style>
+      .navbar {
+          background-color: #1a1a1a;
+          padding: 15px 0;
+      }
+      .navbar-brand {
+          font-weight: bold;
+          font-size: 24px;
+          color: white !important;
+      }
+      .nav-link {
+          color: white !important;
+          margin-right: 20px;
+      }
+      .navbar-nav .nav-item:last-child .nav-link {
+          margin-right: 0;
+      }
+      .navbar-icons {
+          display: flex;
+          align-items: center;
+      }
+      .navbar-icons .nav-link {
+          padding: 0 10px;
+      }
+  </style>
+
+</head>
+<body>
+    <!--Main Navigation-->
+    <nav class="navbar navbar-expand-lg">
+      <div class="container">
+          <a class="navbar-brand" href="#">NZXT</a>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+              <span class="navbar-toggler-icon"></span>
+          </button>
+          <div class="collapse navbar-collapse" id="navbarNav">
+              <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                  <li class="nav-item">
+                      <a class="nav-link" href="#">All Products</a>
+                  </li>
+                  <li class="nav-item">
+                      <a class="nav-link" href="#">Components</a>
+                  </li>
+                  <li class="nav-item">
+                      <a class="nav-link" href="#">Gaming Gear</a>
+                  </li>
+                  <li class="nav-item">
+                      <a class="nav-link" href="#">Monitors</a>
+                  </li>
+                  <li class="nav-item">
+                      <a class="nav-link" href="#">Software</a>
+                  </li>
+                  <li class="nav-item">
+                      <a class="nav-link" href="#">Community</a>
+                  </li>
+              </ul>
+              <div class="navbar-icons">
+                  <a class="nav-link" href="#">❔</a>
+                  <a class="nav-link" href="#">👤</a>
+                  <a class="nav-link" href="#">🛒</a>
+                  <a href="/logout"><?xml version="1.0" ?><svg fill="none" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M17 16L21 12M21 12L17 8M21 12L7 12M13 16V17C13 18.6569 11.6569 20 10 20H6C4.34315 20 3 18.6569 3 17V7C3 5.34315 4.34315 4 6 4H10C11.6569 4 13 5.34315 13 7V8" stroke="#374151" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/></svg></a>
+              </div>
+          </div>
+      </div>
+  </nav>
+
+
+<!-- sidebar + content -->
+<section class="">
+  <div class="container">
+    <div class="row">
+      <!-- sidebar -->
+      <div class="col-lg-3">
+        <!-- Toggle button -->
+        <button
+                class="btn btn-outline-secondary mb-3 w-100 d-lg-none"
+                type="button"
+                data-mdb-toggle="collapse"
+                data-mdb-target="#navbarSupportedContent"
+                aria-controls="navbarSupportedContent"
+                aria-expanded="false"
+                aria-label="Toggle navigation"
+                >
+          <span>Show filter</span>
+        </button>
+        <!-- Collapsible wrapper -->
+        <div class="collapse card d-lg-block mb-5" id="navbarSupportedContent">
+          <div class="accordion" id="accordionPanelsStayOpenExample">
+            <div class="accordion-item">
+              <h2 class="accordion-header" id="headingOne">
+                <button
+                        class="accordion-button text-dark bg-light"
+                        type="button"
+                        data-mdb-toggle="collapse"
+                        data-mdb-target="#panelsStayOpen-collapseOne"
+                        aria-expanded="true"
+                        aria-controls="panelsStayOpen-collapseOne"
+                        >
+                  Related items
+                </button>
+              </h2>
+              <div id="panelsStayOpen-collapseOne" class="accordion-collapse collapse show" aria-labelledby="headingOne">
+                <div class="accordion-body">
+                  <ul class="list-unstyled">
+                    <% categories.forEach((cate)=>{ %>
+                      <% if(cate.list){ %>
+                    <li><a href="#" class="text-dark"><%=cate.name %> </a></li>
+                    <% } %>
+                    <% }) %>
+                  </ul>
+                </div>
+              </div>
+            </div>
+            
+            <div class="accordion-item">
+              <h2 class="accordion-header" id="headingThree">
+                <button
+                        class="accordion-button text-dark bg-light"
+                        type="button"
+                        data-mdb-toggle="collapse"
+                        data-mdb-target="#panelsStayOpen-collapseThree"
+                        aria-expanded="false"
+                        aria-controls="panelsStayOpen-collapseThree"
+                        >
+                  Price
+                </button>
+              </h2>
+              <div id="panelsStayOpen-collapseThree" class="accordion-collapse collapse show" aria-labelledby="headingThree">
+                <div class="accordion-body">
+                  <div class="range">
+                    <input type="range" class="form-range" id="customRange1" />
+                  </div>
+                  <div class="row mb-3">
+                    <div class="col-6">
+                      <p class="mb-0">
+                        Min
+                      </p>
+                      <div class="form-outline">
+                        <input type="number" id="typeNumber" class="form-control" />
+                        <label class="form-label" for="typeNumber">$0</label>
+                      </div>
+                    </div>
+                    <div class="col-6">
+                      <p class="mb-0">
+                        Max
+                      </p>
+                      <div class="form-outline">
+                        <input type="number" id="typeNumber" class="form-control" />
+                        <label class="form-label" for="typeNumber">$1,0000</label>
+                      </div>
+                    </div>
+                  </div>
+                  <button type="button" class="btn btn-white w-100 border border-secondary">apply</button>
+                </div>
+              </div>
+            </div>
+            
+            <div class="accordion-item">
+              <h2 class="accordion-header" id="headingThree">
+                <button
+                        class="accordion-button text-dark bg-light"
+                        type="button"
+                        data-mdb-toggle="collapse"
+                        data-mdb-target="#panelsStayOpen-collapseFive"
+                        aria-expanded="false"
+                        aria-controls="panelsStayOpen-collapseFive"
+                        >
+                  Ratings
+                </button>
+              </h2>
+              <div id="panelsStayOpen-collapseFive" class="accordion-collapse collapse show" aria-labelledby="headingThree">
+                <div class="accordion-body">
+                  <!-- Default checkbox -->
+                  <div class="form-check">
+                    <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault" checked />
+                    <label class="form-check-label" for="flexCheckDefault">
+                      <i class="fas fa-star text-warning"></i><i class="fas fa-star text-warning"></i><i class="fas fa-star text-warning"></i><i class="fas fa-star text-warning"></i>
+                      <i class="fas fa-star text-warning"></i>
+                    </label>
+                  </div>
+                  <!-- Default checkbox -->
+                  <div class="form-check">
+                    <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault" checked />
+                    <label class="form-check-label" for="flexCheckDefault">
+                      <i class="fas fa-star text-warning"></i><i class="fas fa-star text-warning"></i><i class="fas fa-star text-warning"></i><i class="fas fa-star text-warning"></i>
+                      <i class="fas fa-star text-secondary"></i>
+                    </label>
+                  </div>
+                  <!-- Default checkbox -->
+                  <div class="form-check">
+                    <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault" checked />
+                    <label class="form-check-label" for="flexCheckDefault">
+                      <i class="fas fa-star text-warning"></i><i class="fas fa-star text-warning"></i><i class="fas fa-star text-warning"></i><i class="fas fa-star text-secondary"></i>
+                      <i class="fas fa-star text-secondary"></i>
+                    </label>
+                  </div>
+                  <!-- Default checkbox -->
+                  <div class="form-check">
+                    <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault" checked />
+                    <label class="form-check-label" for="flexCheckDefault">
+                      <i class="fas fa-star text-warning"></i><i class="fas fa-star text-warning"></i><i class="fas fa-star text-secondary"></i><i class="fas fa-star text-secondary"></i>
+                      <i class="fas fa-star text-secondary"></i>
+                    </label>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- sidebar -->
+      <!-- content -->
+      <div class="col-lg-9">
+        <header class="d-sm-flex align-items-center border-bottom mb-4 pb-3">
+    
+          <div class="ms-auto">
+            <select class="form-select d-inline-block w-auto border pt-1">
+              <option value="0">Best match</option>
+              <option value="1">Recommended</option>
+              <option value="2">High rated</option>
+              <option value="3">Randomly</option>
+            </select>
+            <div class="btn-group shadow-0 border">
+              <a href="#" class="btn btn-light" title="List view">
+                <i class="fa fa-bars fa-lg"></i>
+              </a>
+              <a href="#" class="btn btn-light active" title="Grid view">
+                <i class="fa fa-th fa-lg"></i>
+              </a>
+            </div>
+          </div>
+        </header>
+        <% products.forEach((products)=>{ %>
+            <% if (!products.unlist) {%>
+                
+           
+
+        <div class="row justify-content-center mb-3">
+          <div class="col-md-12">
+            <div class="card shadow-0 border rounded-3">
+              <div class="card-body">
+                <div class="row g-0">
+                  <div class="col-xl-3 col-md-4 d-flex justify-content-center">
+                    <div class="bg-image hover-zoom ripple rounded ripple-surface me-md-3 mb-3 mb-md-0">
+                      <img src="/uploads/<%=products.images[0]  %>" class="w-100" />
+                      <a href="#!">
+                        <div class="hover-overlay">
+                          <div class="mask" style="background-color: rgba(253, 253, 253, 0.15);"></div>
+                        </div>
+                      </a>
+                    </div>
+                  </div>
+                  <div class="col-xl-6 col-md-5 col-sm-7">
+                    <h5><%=products.name  %></h5>
+                    <div class="d-flex flex-row">
+                      <div class="text-warning mb-1 me-2">
+                        <i class="fa fa-star"></i>
+                        <i class="fa fa-star"></i>
+                        <i class="fa fa-star"></i>
+                        <i class="fa fa-star"></i>
+                        <i class="fas fa-star-half-alt"></i>
+                        <span class="ms-1">
+                          4.5
+                        </span>
+                      </div>
+                      <!-- <span class="text-muted">154 orders</span> -->
+                    </div>
+                  </div>
+                  <div class="col-xl-3 col-md-3 col-sm-5">
+                    <div class="d-flex flex-row align-items-center mb-1">
+                      <h4 class="mb-1 me-1">$<%= products.price %></h4>
+                      <!-- <span class="text-danger"><s>$49.99</s></span> -->
+                    </div>
+                    <h6 class="text-success">Free shipping</h6>
+                    <div class="mt-4">
+                      <a class="btn btn-primary shadow-0" href="/product/<%=products._id  %>" type="button">Buy this</a>
+                      <a  class="btn btn-light border px-2 pt-2 icon-hover"><i class="fas fa-heart fa-lg px-1"></i></a>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+    <%} %>
+  <% }) %>
+        
+
+      </div>
+    </div>
+  </div>
+</section>
+
+<link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- MDB -->
+    <script type="text/javascript" src="js/mdb.min.js"></script>
+    <!-- Custom scripts -->
+    <script type="text/javascript" src="js/script.js"></script>
+</body>
+</html>
+

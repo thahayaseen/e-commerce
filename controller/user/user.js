@@ -1,4 +1,5 @@
 const User = require('../../model/user_scema')
+const bcrypt = require('bcrypt')
 // register and send otp 
 const signup = async (req, res, next) => {
     try {
@@ -17,10 +18,12 @@ const signup = async (req, res, next) => {
             return res.redirect('/signup')
         }
         else {
-            const users = await User({
+            const saltRound=10;
+            const hashed_pass=await bcrypt.hash(password,saltRound)
+            const users = new User({
                 user_name: username,
                 email: email,
-                password: password,
+                password: hashed_pass,
                 uotp: otp
             })
             const a = await users.save()
@@ -62,8 +65,8 @@ const otpvarify = async (req, res, next) => {
         const created_date = data.updatedAt;
         const now_time = new Date();
         const time = now_time.getTime() - created_date.getTime();
-        // otp expaireing
-        if (time > 1000000) {
+        // otp expaire
+        if (time > 60000) {
             req.session.otperror = "otp expaired";
             data.uotp = 0;
             await data.save();
@@ -72,9 +75,12 @@ const otpvarify = async (req, res, next) => {
         const rotp = Number(otp);
 
         if (data.uotp === rotp) {
-            // alert('done')
+           
             console.log("done");
-            next();
+            data.varify=true
+            data.uotp=null
+            await data.save()
+            res.redirect('/signin')
             // delete req.session.username
             // res.send("gdfgsdgsdsjhd")
         } else {
@@ -113,30 +119,42 @@ const resent = async (req, res, next) => {
 }
 
 // login and varifing 
-const varifylogin=async (req,res,next)=>{
-    try{
-     const {username,password}=req.body
-     console.log(username,password);
-     
-     const check=await User.findOne({user_name:username,password:password})
- 
-     console.log(check);
-     // console.log(check.status);
-     if (!check) {
-         req.session.login = "Invalid username or password";
-         res.redirect('/signin');
-     } else if (!check.status) {
-         req.session.login = "You have been blocked";
-         res.redirect('/signin');
-     } else {
-         res.redirect('/dashboard');
-     }
+
+const varifylogin = async (req, res, next) => {
+    try {
+        const { username, password } = req.body;
+        console.log(username, password);
+        
+        const check = await User.findOne({ user_name: username, varify: true });
+
+        console.log(check);
+
+        if (!check) {
+            req.session.login = "Invalid username or password";
+            return res.redirect('/signin');
+        }
+
+        const isMatch = await bcrypt.compare(password, check.password);
+
+        if (!isMatch) {
+            req.session.login = "Invalid username or password";
+            return res.redirect('/signin');
+        }
+
+        if (check.status) {
+            req.session.login = "You have been blocked";
+            return res.redirect('/signin');
+        }
+
+        req.session.ulogin = true;
+        return res.redirect('/home');
+        
+    } catch (error) {
+        console.error(error);
+        res.status(500).send('An error occurred during login');
     }
-    catch(error){
-     console.log(error);
-     
-    }
- }
+};
+
  const logout=async(req,res,next)=>{
     req.session.destroy();
     console.log("the user logouted");
@@ -154,5 +172,6 @@ const viewproduct=async (req,res,next)=>{
     // }).
     
 }
+
 
 module.exports={signup,otpvarify,resent,varifylogin,viewproduct,logout}

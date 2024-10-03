@@ -1,58 +1,58 @@
 const express = require('express');
-const app = express();
-const session = require('express-session')
-const mongoose = require('mongoose')
+const passport = require('passport');
+const session = require('express-session');
+const mongoose = require('mongoose');
+const adminrout = require('./router/adminrout');
+const router = require('./router/all_route');
+require('dotenv').config();
 
-require('dotenv').config()
-app.set('view engine', 'ejs')
-app.use(express.static('public'))
-app.use(express.urlencoded({ extended: true }))
-app.use(express.json())
-const adminrout = require('./router/adminrout')
-const router = require('./router/all_route')
-//sessrion
+const app = express();
+
+app.set('view engine', 'ejs');
+app.use(express.static('public'));
+app.use(express.urlencoded({ extended: true }));
+app.use(express.json());
+
+// Session setup
 app.use(session({
-    secret: 'your_secret_key',
+    secret: 'thaha',
     resave: false,
     saveUninitialized: true,
-    cookie: { secure: false }
-}));
-//clear catch
-const noCacheMiddleware = (req, res, next) => {
-    res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate'); // HTTP 1.1.
-    res.setHeader('Pragma', 'no-cache'); // HTTP 1.0.
-    res.setHeader('Expires', '0'); // Proxies.
+    cookie: { secure: false } 
+  }));
+
+// Middleware to prevent caching
+//for cache handling
+app.use((req, res, next) => {
+    res.set(
+      "Cache-Control",
+      "no-store, no-cache, must-revalidate, proxy-revalidate"
+    );
+    res.set("Pragma", "no-cache");
+    res.set("Expires", "0");
+    res.set("Surrogate-Control", "no-store");
     next();
-};
+  });
 
 
-
-app.use(noCacheMiddleware)
-
-module.exports = noCacheMiddleware;
-
-// mongodb connect 
-mongoose.connect('mongodb://localhost:27017/ecommewrs').then((dat) => {
-    console.log('mongo connected sucsses fully');
-})
-    .catch((err) => {
-        console.log(err);
+app.use(passport.initialize());
+app.use(passport.session());
+// MongoDB connection
+mongoose.connect('mongodb://localhost:27017/ecommewrs')
+    .then(() => {
+        console.log('MongoDB connected successfully');
     })
+    .catch((err) => {
+        console.error('MongoDB connection error:', err);
+    });
 
-//connect routes
+// Use routes
 
+app.use('/admin', adminrout);
+app.use('/', router);
 
-const PORT = process.env.PORT;
+// Start the server
+const PORT = 1000; // Default to 1000 if not set
 app.listen(PORT, () => {
-    console.log('port running', PORT)
-})
-
-
-
-
-
-
-app.use('/admin', adminrout)
-
-app.use('/', router)
-
+    console.log(`Server is running on port ${PORT}`);
+});

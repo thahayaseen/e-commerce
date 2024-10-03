@@ -4,15 +4,19 @@ const User=new mongoose.Schema({
 
     user_name:{
         type:String,
-        required:true
+        // required:true
     },
     email:{
         type:String,
-        required:true
+        // required:true
     },
+    googleId:{
+        type:String
+    }
+    ,
     password:{
         type:String,
-        required:true
+        // required:true
     },
     phone:{
         type:Number,
@@ -27,7 +31,8 @@ const User=new mongoose.Schema({
         default:''
     },
     varify:{
-        type:Boolean
+        type:Boolean,
+        default:false
     },
     isadmin:{
         type:Boolean,

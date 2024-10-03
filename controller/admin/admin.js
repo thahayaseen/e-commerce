@@ -116,51 +116,74 @@ const padd= async (req,res,next)=>{
      image=[]
     await newProduct.save()
    
-    res.status(200).json({succses:true})
+    res.status(200).json({success:true})
      
 }
-
-
-const deletion = async (req, res) => {
+const submitedit=async (req,res)=>{
     const productId = req.params.id;
-    const { productName, productCategory, productDescription,productStock,productPrice } = req.body; // Get other form fields
+    const product = await Product.findById(productId);
 
-    try {
-        // Find the product by ID
-                const files = req.files; 
-
-       
-        
-        
-        const product = await Product.findById(productId);
-        const deletedImages = JSON.parse(req.body.deletedImages); // Parse deleted images
-        console.log('stock'+productStock);
-        
-        // add images 
-        if (files.length > 0) {
-            files.forEach(file => {
-                product.images.push(file.filename); // Push new image filenames into the array
-            });
-
-        }
-
-
-        // Update the product fields
+    const { productName, productCategory, productDescription, productStock, productPrice } = req.body;
+      
+    if(productName&&productCategory&&productDescription&&productStock&&productPrice){
         product.name = productName;
         product.category_id = productCategory;
         product.description = productDescription;
         product.stock = productStock;
         product.price = productPrice;
+        product.save()
+       return res.status(200).json({success:true})
+    }
+   
+}
 
-        // Remove deleted images from product's image array
-        if (deletedImages && deletedImages.length > 0) {
+const imageadding = async function updateProduct(req, res) {
+    const productId = req.params.id;
+ 
+    try {
+        const files = req.files; // Get uploaded files (new images)
+        const croppedImages = req.body.croppedImages ? JSON.parse(req.body.croppedImages) : []; // Get cropped image data
+        const deletedImages = req.body.deletedImages ? JSON.parse(req.body.deletedImages) : []; // Parse deleted images
+
+        // Find the product by ID
+        const product = await Product.findById(productId);
+
+        // Handle new uploaded files (add new images)
+        if (files && files.length > 0) {
+            files.forEach(file => {
+                if (!product.images.includes(file.filename)) { // Check if the image is not already in the product's image array
+                    product.images.push(file.filename); // Push the new image filenames into the array
+                }
+            });
+        }
+
+        // Handle cropped images
+        if (croppedImages.length > 0) {
+            for (const croppedImage of croppedImages) {
+                const { base64, name } = croppedImage;
+
+                // Convert base64 image data to a buffer
+                const buffer = Buffer.from(base64, 'base64');
+
+                // Define the upload path and save the cropped image
+                const uploadPath = path.join(__dirname, '..', '..', 'public', 'uploads', name);
+
+                // Save the cropped image using sharp (you can adjust dimensions as needed)
+                await sharp(buffer)
+                    .resize(300, 300) // Resize or crop (adjust as needed)
+                    .toFile(uploadPath);
+
+                // Add the cropped image to the product's images array
+                product.images.push(name);
+            }
+        }
+        // Remove deleted images from the product's image array
+        if (deletedImages.length > 0) {
             product.images = product.images.filter(image => !deletedImages.includes(image));
 
             // Delete the images from the server's file system
             deletedImages.forEach(image => {
-                const imagePath = path.join(__dirname, '..','..', 'public', 'uploads', image);
-                // console.log(imagePath);
-                
+                const imagePath = path.join(__dirname, '..', '..', 'public', 'uploads', image);
                 fs.unlink(imagePath, (err) => {
                     if (err) {
                         console.error(`Failed to delete image file: ${imagePath}`);
@@ -169,17 +192,16 @@ const deletion = async (req, res) => {
             });
         }
 
-        // Save the updated product back to the database
+        // Save the updated product to the database
         await product.save();
-        // res.redirect('/admin/product')
 
+        // Send a success response
         res.json({ success: true });
     } catch (error) {
         console.error('Error updating product:', error);
         res.status(500).json({ success: false, message: 'Failed to update product.' });
     }
 }
-
 // dave categories 
 const savecat= async (req,res)=>{
    try {
@@ -213,15 +235,17 @@ const useredit= async(req,res,next)=>{
    res.status(200).json({success:true})
     
 }
-const userdelete= async(req,res,next)=>{
+const categoryunlist= async(req,res,next)=>{
     
 try {
     
     const catid=req.params.id
     // console.log(catid);
-    await categories.deleteOne({_id:catid})
+    const catagory=await categories.findById(catid)
+    catagory.list=!catagory.list
+console.log(catagory);
 
-
+    await catagory.save()
    
 
    res.status(200).json({success:true})
@@ -231,4 +255,4 @@ try {
 }
     
 }
-module.exports={auth,accses,list,padd,deletion,savecat,useredit,userdelete}
+module.exports={auth,accses,list,padd,imageadding,submitedit,savecat,useredit,categoryunlist}
