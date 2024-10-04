@@ -23,7 +23,8 @@
           user = new User({
             googleId: profile.id,
             user_name: profile.displayName,    // Get the user's name
-            email: profile.emails[0].value // Get the user's email (Google returns an array)
+            email: profile.emails[0].value,
+          
           });
         
           
@@ -33,7 +34,7 @@
        
 
         
-        // Pass the user object to be stored in the session
+       
         return cb(null, user);
       } catch (err) {
         return cb(err, null);

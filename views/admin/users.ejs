@@ -85,15 +85,15 @@
                             <td><%= User.email %></td>
                           
                             <td>
-                              <label class="badge <%= User.status ?  'badge-danger':'badge-success'  %> user-status">
-                                  <%= User.status ?  'Blocked': 'Active' %>
+                              <label class="badge <%= User.blocked ?  'badge-danger':'badge-success'  %> user-status">
+                                  <%= User.blocked ?  'Blocked': 'Active' %>
                               </label>
                           </td>
                           
                             <td>
                               
-                              <button class="btn p-2 btn-sm <%= User.status ? 'btn-success' : 'btn-danger' %> accses" userid="<%= User._id %>">
-                                <%= User.status ?  'Unblock':'Block'  %>
+                              <button class="btn p-2 btn-sm <%= User.blocked ?  'btn-success':'btn-danger' %> accses" userid="<%= User._id %>">
+                                <%= User.blocked ? 'Unblock' : 'Block' %>
                             </button>
                                                         
                                   

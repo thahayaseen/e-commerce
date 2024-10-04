@@ -39,7 +39,7 @@ const User=new mongoose.Schema({
         default:false
     }
     ,
-    status:{
+    blocked:{
         type:Boolean,
         default:false
     }

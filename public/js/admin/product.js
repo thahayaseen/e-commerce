@@ -123,9 +123,7 @@ document.addEventListener('DOMContentLoaded', function () {
         fetch(addform.action, {
             method: 'POST',
             body: formdata,
-            headers:{
-                'Content-Type':'multipart/form-data'
-            }
+           
         })
         .then(res => res.json())
         .then((res) => {

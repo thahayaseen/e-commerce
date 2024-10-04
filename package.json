@@ -13,7 +13,8 @@
     "nodemon": "^3.1.6",
     "passport": "^0.7.0",
     "passport-google-oauth20": "^2.0.0",
-    "path": "^0.12.7"
+    "path": "^0.12.7",
+    "typescript": "^5.6.2"
   },
   "name": "e-commers_website",
   "version": "1.0.0",

@@ -1,4 +1,6 @@
 const User = require('../../model/user_scema')
+const passport = require('passport');
+
 const bcrypt = require('bcrypt')
 // register and send otp 
 const signup = async (req, res, next) => {
@@ -31,7 +33,7 @@ const signup = async (req, res, next) => {
 
                 getotp(email, otp)
                 req.session.username = username
-                req.session.status=a.status
+                req.session.blocked=a.blocked
                 next()
                 console.log(a);
 
@@ -45,6 +47,29 @@ const signup = async (req, res, next) => {
         res.status(500).send('An error ocupied')
     }
 
+}
+
+const blockuser=async(req,res,next)=>{
+    if(req.session.ulogin){
+        const userdata=  req.session.ulogin
+        const data=await User.findById(userdata)
+    if(!data){
+        console.log('not'+userdata);
+        
+        return res.redirect('/signin')
+    }
+  if (!data.blocked) {
+    console.log(data);
+
+   return  next()
+  }
+  else {
+  return  res.redirect('/logout')
+  }
+  }
+  else {
+    next()
+  }
 }
 
 // otp varifing 
@@ -141,12 +166,12 @@ const varifylogin = async (req, res, next) => {
             return res.redirect('/signin');
         }
 
-        if (check.status) {
+        if (check.blocked) {
             req.session.login = "You have been blocked";
             return res.redirect('/signin');
         }
 
-        req.session.ulogin = true;
+        req.session.ulogin = check._id;
         return res.redirect('/home');
         
     } catch (error) {
@@ -156,22 +181,76 @@ const varifylogin = async (req, res, next) => {
 };
 
  const logout=async(req,res,next)=>{
+   try {
     req.session.destroy();
     console.log("the user logouted");
     return res.redirect('/signin')
+   } catch (error) {
+    console.log(error);
+    
+   }
     
 }
 
-const viewproduct=async (req,res,next)=>{
-    const id=req.params.ids
-    const productdata=await product_schema.findById(id).populate('category_id')
-    res.render('userside/product_over_view',{product:productdata})
-    console.log(productdata);
-    // res.status(200).json({success:true,
-    //     data:productdata
-    // }).
-    
+const viewproduct = async (req, res, next) => {
+    try {
+      const id = req.params.ids;
+      
+      // Fetch the product by its ID
+      const productdata = await product_schema.findById(id).populate('category_id');
+      
+      if (!productdata) {
+        return res.status(404).json({ success: false, message: 'Product not found' });
+      }
+  
+      // Get products from the same category, excluding the current product
+      const sameProducts = await product_schema.find({
+        category_id: productdata.category_id._id,
+        _id: { $ne: id } 
+      });
+  
+      res.render('userside/product_over_view', {
+        product: productdata,
+        sameProducts: sameProducts
+      });
+  
+      console.log('Product:', productdata);
+      console.log('Same category products:', sameProducts);
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ success: false, message: 'Server error' });
+    }
+  };
+  
+
+const glogincb= (req, res, next) => {
+    passport.authenticate('google', (err, user, info) => {
+        if (err) { 
+            return next(err); 
+        }
+        if (!user) { 
+            // req.session.login=''
+            return res.redirect('/signin'); 
+        }
+        req.logIn(user, (err) => {
+            if (err) { 
+                return next(err); 
+            }
+            // console.log(user);
+            if(!user.blocked){
+                req.session.ulogin=user._id
+           
+            return res.redirect('/home')
+        }
+        if(user.blocked){
+            console.log('notok');
+            
+            req.session.login=`your google account ${user.user_name} has been blocked`
+            return res.redirect('/signin')
+        }
+        });
+    })(req, res, next);
 }
 
 
-module.exports={signup,otpvarify,resent,varifylogin,viewproduct,logout}
+module.exports={signup,otpvarify,resent,varifylogin,viewproduct,logout,blockuser,glogincb}

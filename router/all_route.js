@@ -1,4 +1,4 @@
-const {signup,otpvarify,resent,varifylogin,logout,viewproduct}=require("../controller/user/user")
+const {signup,otpvarify,resent,varifylogin,logout,viewproduct,blockuser,glogincb}=require("../controller/user/user")
 const{register,login,otp,userhome,productlist}=require('../middleware/render')
 // const plogin=require('../controller/user/ulogin')
 const {pregister}=require('../middleware/redirect')
@@ -26,11 +26,11 @@ router.post('/resendotp',resent)
 
 // user side 
 
-router.get('/home',allproducts,userhome)
+router.get('/home',blockuser,allproducts,userhome)
 
-router.get('/product/:ids',viewproduct)
+router.get('/product/:ids',blockuser,allproducts,viewproduct)
 
-router.get('/allproduct',allproducts,productlist)
+router.get('/product',blockuser,allproducts,productlist)
 
 //google validation
 router.get('/glogin', 
@@ -38,24 +38,7 @@ router.get('/glogin',
 );
 
 
-router.get('/glogin/callback', (req, res, next) => {
-    passport.authenticate('google', (err, user, info) => {
-        if (err) { 
-            return next(err); 
-        }
-        if (!user) { 
-            return res.redirect('/signin'); 
-        }
-        req.logIn(user, (err) => {
-            if (err) { 
-                return next(err); 
-            }
-            
-            req.session.ulogin = true; // or any value you want
-            return res.redirect('/home');
-        });
-    })(req, res, next);
-});
+router.get('/glogin/callback',glogincb);
 
 
 //logout

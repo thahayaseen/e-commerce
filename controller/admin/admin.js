@@ -1,37 +1,45 @@
-const User=require('../../model/user_scema')
+const User = require('../../model/user_scema')
 const Product = require('../../model/product_schema');
+const bcrypt = require('bcrypt')
 const path = require('path');
-const fs=require('fs');
+const fs = require('fs');
 const categories = require('../../model/categories');
+const { check } = require('express-validator');
 
 // admin authentication 
-const auth=async (req,res,next)=>{
+const auth = async (req, res, next) => {
     try {
-        const { username,password }= req.body
-    console.log(username+ password);
-    
-    const exsist=await User.findOne({
-        $and:[
-            {user_name:username},
-            {password:password},
-        ]
-    })
-    if(exsist){
-        req.session.ladmin=true
-        if(exsist.isadmin){
-           return res.redirect('/admin/dashbord')
+        const { username, password } = req.body
+
+
+        const exsist = await User.findOne({ user_name: username })
+        if (!exsist) {
+            return res.redirect('/admin')
         }
-        else {
-        req.session.admin='The entered usename and password not a admin'
-        return res.redirect('/admin')
+        const adminverigfy = bcrypt.compare(password,exsist.password)
+
+        if (!adminverigfy) {
+            return res.redirect('/admin')
         }
-    }
-    
+
+        if (!exsist.isadmin) {
+            return res.redirect('/admin')
+        }
+        if(exsist.isadmin===true){
+            req.session.ladmin = true
+            return res.redirect('/admin/dashbord')
+
+        }
+
+
+
+       
+
     } catch (error) {
         console.log(error);
-        
+
     }
-    
+
 
 }
 
@@ -40,19 +48,19 @@ const auth=async (req,res,next)=>{
 const accses = async (req, res, next) => {
     try {
         const user_id = req.params.id
-        console.log(user_id+'userid');
-        
+        console.log(user_id + 'userid');
+
         const detials = await User.findById(user_id)
-        if(!detials){
-            return res.status(404).json({message:'user not found'})
+        if (!detials) {
+            return res.status(404).json({ message: 'user not found' })
         }
-        detials.status = !detials.status
+        detials.blocked = !detials.blocked
         await detials.save()
-        
+
         res.status(200).json({
-            success:true,
-            udata:detials.status,
-            message:'user status updated successfully'
+            success: true,
+            udata: detials.blocked,
+            message: 'user status updated successfully'
         })
 
     }
@@ -65,81 +73,81 @@ const accses = async (req, res, next) => {
 
 
 const list = async (req, res, next) => {
-  try {
-    const id = req.params.id;
-    
-    // Find the product by ID
-    const product = await Product.findById(id);
-    
-    // Check if the product exists
-    if (!product) {
-      return res.status(404).json({ message: 'Product not found' });
-    }
+    try {
+        const id = req.params.id;
 
-    product.unlist = !product.unlist;
-    
-    // Save the updated product list
-    await product.save();
-    
-    // Return success response with the updated status
-    return res.status(200).json({
-      success: true,
-      newStatus: product.unlist,
-      message: `Product ${product.unlist ? 'listed' : 'unlisted'} successfully.`,
-    });
-  } catch (error) {
-    console.error('Error updating product status:', error);
-    return res.status(500).json({ message: 'Internal server error', error });
-  }
+        // Find the product by ID
+        const product = await Product.findById(id);
+
+        // Check if the product exists
+        if (!product) {
+            return res.status(404).json({ message: 'Product not found' });
+        }
+
+        product.unlist = !product.unlist;
+
+        // Save the updated product list
+        await product.save();
+
+        // Return success response with the updated status
+        return res.status(200).json({
+            success: true,
+            newStatus: product.unlist,
+            message: `Product ${product.unlist ? 'listed' : 'unlisted'} successfully.`,
+        });
+    } catch (error) {
+        console.error('Error updating product status:', error);
+        return res.status(500).json({ message: 'Internal server error', error });
+    }
 };
 //add product
-const padd= async (req,res,next)=>{
-    const {newProductName,newProductCategory,newProductDescription,newProductPrice,newProductStock}=req.body
-    const fiels=req.files
+const padd = async (req, res, next) => {
+    const { newProductName, newProductCategory, newProductDescription, newProductPrice, newProductStock } = req.body
+    const fiels = req.files
     console.log(fiels);
-    let image=[]
-    fiels.forEach(num=>{
+    let image = []
+    fiels.forEach(num => {
         image.push(num.filename)
     })
     console.log(image);
     console.log(newProductCategory);
-    
+
     const newProduct = new Product({
         name: newProductName,
         category_id: newProductCategory,
         description: newProductDescription,
         price: newProductPrice,
         stock: newProductStock,
-        images:image
-       
+        images: image
+
     });
-     image=[]
+    image = []
     await newProduct.save()
-   
-    res.status(200).json({success:true})
-     
+
+    res.status(200).json({ success: true })
+
 }
-const submitedit=async (req,res)=>{
+const submitedit = async (req, res) => {
     const productId = req.params.id;
     const product = await Product.findById(productId);
 
     const { productName, productCategory, productDescription, productStock, productPrice } = req.body;
-      
-    if(productName&&productCategory&&productDescription&&productStock&&productPrice){
+
+    if (productName && productCategory && productDescription && productStock && productPrice) {
         product.name = productName;
         product.category_id = productCategory;
         product.description = productDescription;
         product.stock = productStock;
         product.price = productPrice;
         product.save()
-       return res.status(200).json({success:true})
+        return res.status(200).json({ success: true })
     }
-   
+
 }
 
 const imageadding = async function updateProduct(req, res) {
     const productId = req.params.id;
- 
+
     try {
         const files = req.files; // Get uploaded files (new images)
         const croppedImages = req.body.croppedImages ? JSON.parse(req.body.croppedImages) : []; // Get cropped image data
@@ -203,56 +211,56 @@ const imageadding = async function updateProduct(req, res) {
     }
 }
 // dave categories 
-const savecat= async (req,res)=>{
-   try {
-    const {newCategoryName,newProductDescription}=req.body
-    const newcategories= new categories({
-        name:newCategoryName,
-        description:newProductDescription
-    })
-    await newcategories.save()
-    // console.log(req.body);
-    
-    res.status(200).json({success:true})
-   } catch (error) {
-    console.log('in save categosy rout'+error);
-    
-   }
+const savecat = async (req, res) => {
+    try {
+        const { newCategoryName, newProductDescription } = req.body
+        const newcategories = new categories({
+            name: newCategoryName,
+            description: newProductDescription
+        })
+        await newcategories.save()
+        // console.log(req.body);
+
+        res.status(200).json({ success: true })
+    } catch (error) {
+        console.log('in save categosy rout' + error);
+
+    }
 }
 
-const useredit= async(req,res,next)=>{
-    const {CategoryName,ProductDescription}=req.body
+const useredit = async (req, res, next) => {
+    const { CategoryName, ProductDescription } = req.body
 
-    const catid=req.params.id
+    const catid = req.params.id
     // console.log(catid);
-    const category=await categories.findById(catid)
+    const category = await categories.findById(catid)
 
-    category.name=CategoryName
-    category.description=ProductDescription
+    category.name = CategoryName
+    category.description = ProductDescription
 
-   await category.save()
+    await category.save()
 
-   res.status(200).json({success:true})
-    
+    res.status(200).json({ success: true })
+
 }
-const categoryunlist= async(req,res,next)=>{
-    
-try {
-    
-    const catid=req.params.id
-    // console.log(catid);
-    const catagory=await categories.findById(catid)
-    catagory.list=!catagory.list
-console.log(catagory);
+const categoryunlist = async (req, res, next) => {
 
-    await catagory.save()
-   
+    try {
 
-   res.status(200).json({success:true})
-} catch (error) {
-    console.log('error in delete route'+error);
-    
+        const catid = req.params.id
+        // console.log(catid);
+        const catagory = await categories.findById(catid)
+        catagory.list = !catagory.list
+        console.log(catagory);
+
+        await catagory.save()
+
+
+        res.status(200).json({ success: true })
+    } catch (error) {
+        console.log('error in delete route' + error);
+
+    }
+
 }
-    
-}
-module.exports={auth,accses,list,padd,imageadding,submitedit,savecat,useredit,categoryunlist}
+module.exports = { auth, accses, list, padd, imageadding, submitedit, savecat, useredit, categoryunlist }
