@@ -229,24 +229,9 @@
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.1/dist/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-    <script>
-        // Clear cache on page load to avoid going back to the login page after successful login
-        if (window.performance && window.performance.navigation.type === window.performance.navigation.TYPE_BACK_FORWARD) {
-            window.location.href = '/signin'; // Redirect to home
-        }
-    </script>
+   
 
-    <script>
-        // Prevent navigating back to the previous page
-        window.onload = function () {
-            if (window.history && window.history.pushState) {
-                window.history.pushState(null, null, window.location.href);
-                window.onpopstate = function () {
-                    window.history.go(1); // Stay on the current page
-                };
-            }
-        };
-    </script>
+   
 </body>
 
 </html>

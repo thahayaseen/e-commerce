@@ -34,12 +34,7 @@ router.patch('/product/images/edit/:id',upload.array('croppedImage'), imageaddin
 
 //add product
 router.post('/product/add',upload.array('addimage'),padd)
-// router.post('/product/add', upload.array('addimage'), (req, res) => {
-//     // Access uploaded images via req.files
-//     console.log(req.files); // This will log all the uploaded images
-//     // Handle the uploaded files here
-//     res.json({ success: true });
-// });
+
 
 router.get('/category',allproducts,catagory)
 

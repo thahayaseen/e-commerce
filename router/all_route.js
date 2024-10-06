@@ -1,5 +1,5 @@
-const {signup,otpvarify,resent,varifylogin,logout,viewproduct,blockuser,glogincb}=require("../controller/user/user")
-const{register,login,otp,userhome,productlist}=require('../middleware/render')
+const {signup,otpvarify,resent,varifylogin,logout,viewproduct,blockuser,glogincb,}=require("../controller/user/user")
+const{register,login,otp,userhome,productlist,myaccount,userdash,useraddress,oredrs}=require('../middleware/render')
 // const plogin=require('../controller/user/ulogin')
 const {pregister}=require('../middleware/redirect')
 const {allproducts}=require('../controller/finding_all_admin')
@@ -31,6 +31,11 @@ router.get('/home',blockuser,allproducts,userhome)
 router.get('/product/:ids',blockuser,allproducts,viewproduct)
 
 router.get('/product',blockuser,allproducts,productlist)
+//user dashbord 
+router.get('/user/myaccount',myaccount)
+router.get('/user/mydash',userdash)
+router.get('/user/address',useraddress)
+router.get('/user/oredrs',oredrs)
 
 //google validation
 router.get('/glogin', 

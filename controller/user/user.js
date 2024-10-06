@@ -6,10 +6,10 @@ const bcrypt = require('bcrypt')
 const signup = async (req, res, next) => {
     try {
         const otp = Math.round(100000 + Math.random() * 90000)
-        const { username, email, password } = req.body
+        const { name, email, password } = req.body
         const exsist = await User.find({
             $or: [
-                { user_name: username },
+                { user_name: name },
                 { email: email }
             ]
         })
@@ -20,10 +20,17 @@ const signup = async (req, res, next) => {
             return res.redirect('/signup')
         }
         else {
+            function generateUsername(name) {
+                const baseUsername = name.toLowerCase().replace(/\s+/g, ''); // Remove spaces and make lowercase
+                const randomNumber = Math.floor(Math.random() * 1000); // Add random number to make it more unique
+                return `${baseUsername}${randomNumber}`;
+              }
             const saltRound=10;
             const hashed_pass=await bcrypt.hash(password,saltRound)
+            const userid=generateUsername(name)
             const users = new User({
-                user_name: username,
+                name:name,
+                user_name:userid ,
                 email: email,
                 password: hashed_pass,
                 uotp: otp
@@ -31,8 +38,8 @@ const signup = async (req, res, next) => {
             const a = await users.save()
             if (a) {
 
-                getotp(email, otp)
-                req.session.username = username
+                getotp(email, otp,userid)
+                req.session.username = name
                 req.session.blocked=a.blocked
                 next()
                 console.log(a);
@@ -43,7 +50,7 @@ const signup = async (req, res, next) => {
             }
         }
     } catch (error) {
-        console.log(error);
+        console.log("error in signin"+error);
         res.status(500).send('An error ocupied')
     }
 
@@ -79,7 +86,7 @@ const otpvarify = async (req, res, next) => {
         const email = req.session.username;
         const otp = req.body.otp;
         // find user data
-        const data = await User.findOne({ user_name: email });
+        const data = await User.findOne({ name: email });
         // cheking user exist or not
         if (!data) {
             req.session.otperror = "otp not match";

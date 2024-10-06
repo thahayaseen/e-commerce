@@ -1,7 +1,7 @@
     const passport = require('passport');
     const GoogleStrategy = require('passport-google-oauth20').Strategy;
     const User = require('../model/user_scema'); 
-
+  
 
     passport.use(new GoogleStrategy({
       clientID: "1085020479396-efpdp6e3crilkcgauk7qutddailrjoi5.apps.googleusercontent.com",
@@ -17,28 +17,43 @@
         let user = await User.findOne({ googleId: profile.id,email:profile.emails[0].value });
 
         if (!user) {
-          // If not, create a new user
-          console.log('new user');
+          function generateUsername(name) {
+            console.log('dfassdgdfgsdfhgs');
+            
+            const baseUsername = name.toLowerCase().replace(/\s+/g, ''); // Remove spaces and make lowercase
+            const randomNumber = Math.floor(Math.random() * 1000); // Add random number to make it more unique
+            return `${baseUsername}${randomNumber}`;
+          }
+      
+          console.log('new user'+profile.displayName);
+          const uname=generateUsername(profile.displayName);
+          console.log(uname);
           
-          user = new User({
+          users = new User({
             googleId: profile.id,
-            user_name: profile.displayName,    // Get the user's name
+            name:profile.displayName,
+            user_name: uname,
             email: profile.emails[0].value,
           
-          });
-        
+          })
+         
           
-          await user.save(); // Save the user in the database
+          const x=await users.save();
+          if(x){
+          console.log(x);
+          }
+          else{
+            console.log("error saving");
+            
+          }
         }
-      
-       
-
-        
-       
+    
         return cb(null, user);
-      } catch (err) {
+      }  catch (err) {
+        console.error('Error during authentication:', err);
         return cb(err, null);
       }
+      
     }
     ));
 

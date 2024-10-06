@@ -1,6 +1,6 @@
 const nodemailer = require("nodemailer");
 require('dotenv').config()
-const getotp = async (email, otp) => {
+const getotp = async (email, otp,userid) => {
     try {
 
 
@@ -17,7 +17,7 @@ const getotp = async (email, otp) => {
             from: process.env.EMAIL,
             to: email,
             subject: 'OTP',
-            text: `OTP is ${otp}`,
+            text: `OTP is ${otp}`, 
             html: `
             <div style="font-family: Arial, sans-serif; max-width: 600px; margin: auto; padding: 20px; border: 1px solid #ddd; background-color: #f4f4f9;">
             <h2 style="color: #007bff; text-align: center;">Your OTP Code</h2>
@@ -25,7 +25,7 @@ const getotp = async (email, otp) => {
             <p style="text-align: center;">Use the following OTP to complete your login process:</p>
             
             <h1 style="color: #28a745; text-align: center; font-size: 48px; letter-spacing: 5px;">${otp}</h1>
-            
+            <h3>your username is ${userid}</h3>
             <p style="text-align: center;">This OTP is valid for the next 10 minutes.</p>
             
             <div style="text-align: center;">
