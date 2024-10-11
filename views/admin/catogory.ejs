@@ -59,7 +59,7 @@
                       <tbody>
                         <% categories.forEach((category, index) => { %>
                           <tr>
-                            <td><%= index + 1 %></td>
+                            <td><%= index + 1 + (pagination.currentPage - 1) * pagination.limit %></td>
                             <td style="max-width: 200px; word-wrap: break-word; white-space: normal;">
                               <p style="line-height: 1.5;"><%= category.name %></p>
                             </td>
@@ -99,7 +99,17 @@
               </div>
             </div>
           </div>
-
+          <div class="pagination ">
+            <% if (pagination.currentPage > 1) { %>
+              <a href="?page=<%= pagination.currentPage - 1 %>&limit=<%= pagination.limit %>" class="btn  btn-secondary"> Previous </a>
+          <% } %>
+        
+          <span class="mx-5" >Page <%= pagination.currentPage %> of <%= pagination.totalPages %></span>
+        
+          <% if (pagination.currentPage < pagination.totalPages) { %>
+              <a href="?page=<%= pagination.currentPage + 1 %>&limit=<%= pagination.limit %>" class="btn  btn-secondary"> Next </a>
+          <% } %>
+        </div> 
           <!-- Add Category Modal -->
           <div class="modal fade" id="addCategoryModal" tabindex="-1" role="dialog" aria-labelledby="addCategoryModalLabel" aria-hidden="true">
             <div class="modal-dialog" role="document">

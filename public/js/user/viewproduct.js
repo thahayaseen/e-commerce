@@ -16,3 +16,71 @@ imagediv.addEventListener('mousemove', function(e) {
 imagediv.addEventListener('mouseleave', function() {
     imagediv.style.setProperty('--display', 'none'); 
 });
+
+// quantity adjest 
+
+const id=window.location.pathname.split('/')[2]
+
+let quantity = 1; 
+
+document.getElementById('minusBtn').addEventListener('click', function() {
+  if (quantity > 1) {
+    quantity--; 
+    document.getElementById('quantityDisplay').textContent = quantity; 
+  }
+});
+
+document.getElementById('plusBtn').addEventListener('click', function() {
+    console.log(id);
+    
+    fetch(`/productstock/${id}`,{
+        method:'GET'
+    })
+    .then(res=>res.json())
+    .then(res=>{
+        if(res.stock>=quantity){
+            console.log(res.stock);
+             return alert('cannot add more quantity')
+        }
+       
+
+        quantity++
+    })
+  document.getElementById('quantityDisplay').textContent = quantity; 
+});
+// add to cart btn
+const addtobtn=document.getElementById('addtocart')
+
+
+addtobtn.addEventListener('click',(e)=>{
+    e.preventDefault()
+    console.log('clicked');
+    console.log(quantity)
+    
+    const priductisdata=addtobtn.dataset.product
+    const price=addtobtn.dataset.price
+   const dataset={priductisdata,quantity,price}    
+
+    
+    fetch('/cart',{
+        method:'POST',
+        body:JSON.stringify(dataset),
+        headers: {
+            'Content-Type':'application/json'
+        }
+    })
+    .then(res=>res.json())
+    .then(res=>{
+        
+        if (res.success==true) {
+            console.log('ok');
+            alert('product successfully added to cart')
+        }
+
+        else{
+            window.location.href='/signin'
+        }
+        
+    })
+    
+})

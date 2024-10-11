@@ -5,7 +5,7 @@ const categorySchema = new mongoose.Schema({
     name: {
         type: String,
         required: true,
-        unique: true // Ensures category names are unique
+        unique: true 
     },
     description: {
         type: String,
@@ -16,5 +16,5 @@ const categorySchema = new mongoose.Schema({
     }
 }, { timestamps: true });
 
-// Export the category model
+
 module.exports = mongoose.model('Category', categorySchema);

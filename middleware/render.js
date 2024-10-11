@@ -43,9 +43,10 @@ const userhome = async (req, res) => {
 const productlist = async (req, res) => {
     const product = req.session.products
     const categ = req.session.categories || ''
+    const pagination = req.session.pagination || { totalPages: 1, currentPage: 1 };
     delete req.session.categories
     delete req.session.products
-    res.render('userside/productlist', { products: product, categories: categ })
+    res.render('userside/productlist', { products: product, categories: categ,pagination })
 }
 
 //admin section----------------------------------------------------------------------------------------
@@ -71,39 +72,49 @@ const admin = (req, res) => {
 const user = (req, res) => {
     req.session.ladmin
     const islogin = req.session.ladmin
-    const users = req.session.users
+    const {user,totalPages, currentPage, limit} = req.session.users
+    console.log(limit);
+    
     delete req.session.users
-    islogin ? res.render('admin/users', { Users: users }) : res.redirect('/admin')
+    islogin ? res.render('admin/users', { Users: user, totalPages, currentPage, limit }) : res.redirect('/admin')
 }
 
 //product
 
 
 const product = (req, res, next) => {
-    const products = req.session.products || ''
-    const cat = req.session.categories || ''
-    const islogin = req.session.ladmin
+    const products = req.session.products || '';
+    const cat = req.session.categories || '';
+    const pagination = req.session.pagination || { totalPages: 1, currentPage: 1 }; // Default pagination info
 
+    delete req.session.products;
+    delete req.session.pagination; 
 
-    delete req.session.products
-    islogin ? res.render('admin/product', { Products: products, categories: cat }) : res.redirect('/admin')
-}
+    const islogin = req.session.ladmin;
+
+    islogin ? res.render('admin/product', { Products: products, categories: cat, pagination }) : res.redirect('/admin');
+};
+
 
 // catogory 
 const catagory = (req, res, next) => {
     const categ = req.session.categories || ''
     const islogin = req.session.ladmin
+    const pagination = req.session.pagination || { totalPages: 1, currentPage: 1 }; 
 
     delete req.session.categories
     delete req.session.products
 
-    islogin ? res.render('admin/catogory', { categories: categ }) : res.redirect('/admin')
+    islogin ? res.render('admin/catogory', { categories: categ,pagination }) : res.redirect('/admin')
 
 }
 
+const cartschema = require('../model/cart');
 //user section account
 
 const user_scema = require('../model/user_scema')
+const address=require('../model/address')
+const ordersshema=require('../model/orders')
 
 
 
@@ -128,13 +139,103 @@ const userdash = (req, res) => {
     }
 }
 
-const useraddress = (req, res) => {
-    res.render('userside/user dashbord/address')
+const useraddress = async (req, res) => {
+    try {
+    
+   const userid=req.session.ulogin
+        const addres= await user_scema.findById(userid).populate('address')
+
+        console.log(addres);
+        
+
+
+
+    res.render('userside/user dashbord/address',{address:addres.address})
+        
+    } catch (error) {
+        console.log(error);
+        
+    }
+}
+const oredrs = async (req, res) => {
+try {
+       
+    const userid=req.session.ulogin
+const orders=await ordersshema.find({user:userid}).populate('products.productid')
+    
+    // console.log('\n datas \n'+orders)
+    const aaa=JSON.stringify({orders})
+
+    console.log(aaa);
+    
+    res.render('userside/user dashbord/orders',{orders:orders}) 
+} catch (error) {
+    console.log(error);
+    
+}
 
 }
-const oredrs = (req, res) => {
-    res.render('userside/user dashbord/orders')
 
+const cartrender=async(req,res)=>{
+  if (req.session.ulogin) {
+    const ulogin=req.session.ulogin
+
+    let cart = await cartschema.findOne({ userid: ulogin })
+    if (!cart) {
+
+        cart = new cartschema({ userid: ulogin, product: [] });
+        await cart.save()
+    }
+      const ucart = await cartschema.findOne({userid:ulogin}).populate('product.productid').exec()
+  res.render('userside/cart',{cart:ucart})
+
+    }
+   
+   
+   
+//    console.log(ucart.product[0])
+//    console.log(JSON.stringify(ucart));
+   
+   
+  else{
+    res.redirect('/signin')
+  }
 }
 
-module.exports = { register, login, adminlogin, otp, admin, user, product, catagory, userhome, productlist, myaccount, userdash, useraddress, oredrs }
+const checkout=async (req,res)=>{
+    const login=req.session.ulogin
+    
+    if(req.session.ulogin){
+       const popuser= await user_scema.findById(login).populate('address')
+        console.log(popuser);
+        const uid=req.session.ulogin
+        const cart=await cartschema.findOne({userid:uid}).populate('product.productid')
+        console.log(cart);
+        // console.log(JSON.stringify(cart))
+        
+      
+    res.render('userside/checkout',{savedAddresses:popuser.address,cart:cart})
+    }
+    else{
+        res.redirect('/signin')
+    }
+}
+
+const orders=async(req,res)=>{
+    const page = parseInt(req.query.page) || 1;
+    const limit = parseInt(req.query.limit) || 5; 
+    const skip = (page - 1) * limit;
+    
+    const orders=await ordersshema.find({}).populate('user').skip(skip).limit(limit)
+
+    const totalProducts = await ordersshema.countDocuments(); 
+    const countedorders =  orders.length; 
+    console.log(countedorders);
+    
+    const totalPages = Math.ceil(totalProducts / limit); 
+    pagination = { totalPages, currentPage: page,limit:limit };
+
+    
+    res.render('admin/orders',{Orders:orders,pagination})
+}
+module.exports = { register, login, adminlogin, otp, admin, user, product, catagory, userhome, productlist, myaccount, userdash, useraddress, oredrs,cartrender,checkout,orders }

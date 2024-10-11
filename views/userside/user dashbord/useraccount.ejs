@@ -1,20 +1,23 @@
 <!DOCTYPE html>
-<html>
-
+<html lang="en">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profile Page</title>
+    
+    <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet">
-
+    
     <!-- Font Awesome CSS -->
     <link href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" rel="stylesheet">
 
+    <!-- Custom CSS -->
     <link rel="stylesheet" href="/css/myprofile.css">
     <style>
         .profile-header {
             background-color: #dfdfdf;
             padding: 20px;
             border-radius: 10px;
-
-
         }
 
         .userdtls {
@@ -23,14 +26,6 @@
             background-color: #8f8f8f;
             padding: 30px;
             padding-bottom: 95px;
-
-        }
-
-        .user-stats {
-            display: flex;
-            justify-content: space-between;
-            flex-wrap: wrap;
-            gap: 20px;
         }
 
         .edit-button {
@@ -45,7 +40,6 @@
 
 <body>
 
-
     <nav class="navbar navbar-expand-sm">
         <div class="container">
             <a class="navbar-brand" href="/home">NZXT</a>
@@ -54,92 +48,69 @@
             </button>
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">All Products</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">Components</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">Gaming Gear</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">Monitors</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">Software</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">Community</a>
-                    </li>
+                    <li class="nav-item"><a class="nav-link" href="#">All Products</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#">Components</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#">Gaming Gear</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#">Monitors</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#">Software</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#">Community</a></li>
                 </ul>
                 <div class="navbar-icons">
                     <a class="nav-link" href="#">❔</a>
                     <a class="nav-link" href="#">👤</a>
                     <a class="nav-link" href="#">🛒</a>
                     <a href="/logout">
-                        <?xml version="1.0" ?><svg fill="none" height="24" viewBox="0 0 24 24" width="24"
-                            xmlns="http://www.w3.org/2000/svg">
-                            <path
-                                d="M17 16L21 12M21 12L17 8M21 12L7 12M13 16V17C13 18.6569 11.6569 20 10 20H6C4.34315 20 3 18.6569 3 17V7C3 5.34315 4.34315 4 6 4H10C11.6569 4 13 5.34315 13 7V8"
-                                stroke="#374151" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" />
+                        <svg fill="none" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M17 16L21 12M21 12L17 8M21 12L7 12M13 16V17C13 18.6569 11.6569 20 10 20H6C4.34315 20 3 18.6569 3 17V7C3 5.34315 4.34315 4 6 4H10C11.6569 4 13 5.34315 13 7V8"
+                                stroke="#374151" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/>
                         </svg>
                     </a>
                 </div>
             </div>
         </div>
     </nav>
-    <div class="container mt-4">
 
+    <div class="container mt-4">
         <div class="row">
             <!-- Sidebar -->
             <div class="col-lg-3 my-lg-0 my-md-1">
-                <%-include('./sidebar',{activePage:"myprofile"}) %>
-
-
-
+                <%- include('./sidebar', { activePage: "myprofile" }) %>
             </div>
 
             <!-- Main Content -->
             <div class="col-md-9 col-lg-9 px-4 pb-4">
-                <div class=" userdtls  position-relative">
-                    <button class="btn btn-primary edit-button" data-bs-toggle="modal"
-                        data-bs-target="#editProfileModal">
+                <div class="userdtls position-relative">
+                    <button class="btn btn-primary edit-button" data-bs-toggle="modal" data-bs-target="#editProfileModal">
                         <i class="fas fa-edit"></i> Edit Profile
                     </button>
 
                     <div class="profile-header">
-                        <div class="d-flex align-items-center ">
-                            <img src="https://cdn.pixabay.com/photo/2016/11/08/15/21/user-1808597_1280.png"
-                                alt="User Logo" class="w-10 h-10 userimage rounded-circle me-3" <div>
-                            <h4 class="mb-1"><%= user.name %></h4>
-                            <p class="text-muted mb-0"> @<%= user.user_name %></p>
+                        <div class="d-flex align-items-center">
+                            <img src="https://cdn.pixabay.com/photo/2016/11/08/15/21/user-1808597_1280.png" alt="User Logo"
+                                class="w-10 h-10 userimage rounded-circle me-3">
+                            <div>
+                                <h4 class="mb-1"><%= user.name %></h4>
+                                <p class="text-muted mb-0">@<%= user.user_name %></p>
+                            </div>
                         </div>
                     </div>
+
                     <div class="row mt-3">
                         <div class="col-md-6">
-                            <p><i class="fas fa-envelope me-2"></i>
-                                <%=user.email %>
-                            </p>
-                           <% if(user.phone) {%>
-                            <p><i class="fas fa-phone me-2"></i><%= user.number %></p>
-                            <% }else{ %>
-                            <p><i class="fas fa-phone me-2"></i>000000000</p>
-                            <% } %>
-                        </div>
-                        <div class="col-md-6">
-                            <p><i class="fas fa-calendar me-2"> <%= new Date(user.createdAt).toLocaleDateString('en-GB') %></i> </p>
+                            <p><i class="fas fa-envelope me-2"></i> <%= user.email %></p>
                             <p><i class="fas fa-map-marker-alt me-2"></i> New York, USA</p>
                         </div>
+                        <div class="col-md-6">
+                            <p><i class="fas fa-calendar me-2"></i> <%= new Date(user.createdAt).toLocaleDateString('en-GB') %></p>
+                        </div>
                     </div>
-                    <button class="btn btn-secondary mt-3" data-bs-toggle="modal" data-bs-target="#changePasswordModal">
-                        <i class="fas fa-key"></i> Change Password
+
+                    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#changePasswordModal">
+                        Change Password
                     </button>
                 </div>
-
             </div>
         </div>
-    </div>
     </div>
 
     <!-- Edit Profile Modal -->
@@ -151,33 +122,22 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                 </div>
                 <div class="modal-body">
-                    <form>
+                    <form id="profileedit">
                         <div class="mb-3">
                             <label class="form-label">Name</label>
-                            <input type="text" class="form-control" placeholder="<%= user.name %>" value="">
+                            <input type="text" class="form-control" id="ename" value="<%= user.name %>">
                         </div>
                         <div class="mb-3">
                             <label class="form-label">Username</label>
                             <input type="text" class="form-control" value="<%= user.user_name %>" readonly>
                         </div>
-                        
                         <div class="mb-3">
                             <label class="form-label">Email</label>
-                            <input type="email" class="form-control" value="<%= user.email %> "readonly>
+                            <input type="email" class="form-control" value="<%= user.email %>" readonly>
                         </div>
-                        <div class="mb-3">
-                            <label class="form-label">Phone</label>
-                            <input type="tel" class="form-control" value="<%= user.phone %>">
-                        </div>
-                        <div class="mb-3">
-                            <label class="form-label">Location</label>
-                            <input type="text" class="form-control" value="<%= user.address %>">
-                        </div>
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                        <button type="submit" class="btn btn-primary">Save Changes</button>
                     </form>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                    <button type="button" class="btn btn-primary">Save Changes</button>
                 </div>
             </div>
         </div>
@@ -192,33 +152,93 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                 </div>
                 <div class="modal-body">
-                    <form>
+                    <form id="changepass">
                         <div class="mb-3">
                             <label class="form-label">Current Password</label>
-                            <input type="password" class="form-control">
+                            <input type="password" name="oldpass" class="form-control">
                         </div>
                         <div class="mb-3">
                             <label class="form-label">New Password</label>
-                            <input type="password" class="form-control">
+                            <input type="password" name="newpass" class="form-control">
                         </div>
                         <div class="mb-3">
                             <label class="form-label">Confirm New Password</label>
-                            <input type="password" class="form-control">
+                            <input type="password" name="newpass2" class="form-control">
                         </div>
+                      
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                            <button type="submit" class="btn btn-primary">Change Password</button>
                     </form>
                 </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                    <button type="button" class="btn btn-primary">Change Password</button>
                 </div>
             </div>
         </div>
     </div>
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script>
+        const changepass=document.getElementById('changepass')
+        const form = document.getElementById('profileedit');
+        form.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const ename = document.getElementById('ename').value;
 
-    <!-- Bootstrap JS Bundle (includes Popper) -->
+            fetch('/userupdate', {
+                method: 'PATCH',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ ename }),
+            })
+            .then(res => res.json())
+            .then(res => {
+                if (res.success) {
+                    alert('The name has been successfully changed');
+                    const modalElement = document.getElementById('editProfileModal');
+                    const modalInstance = bootstrap.Modal.getInstance(modalElement);
+                    modalInstance.hide();
+
+                    window.location.href = '/user/myaccount';
+                }
+            });
+        });
+        changepass.addEventListener('submit', (e) => {
+        e.preventDefault(); // Prevent the default form submission
+
+        // Get the form values
+        const currentPassword = changepass.oldpass.value.trim();
+        const newPassword = changepass.newpass.value.trim();
+        const confirmPassword = changepass.newpass2.value.trim();
+
+        // Basic validation
+        if (!currentPassword) {
+            alert('Please enter your current password.');
+            return;
+        }
+        if (!newPassword) {
+            alert('Please enter a new password.');
+            return;
+        }
+        if (newPassword.length < 6) {
+            alert('New password must be at least 6 characters long.');
+            return;
+        }
+        if (newPassword !== confirmPassword) {
+            alert('New password and confirm password do not match!');
+            return;
+        }
+        fetch('/changepass',{
+            method:'PATCH',
+            headers:{
+                'Content-Type':'application/json'
+            },
+            body:JSON.stringify({
+                currentPassword,newPassword
+            })
+        })
+    })
+    </script>
+
+    <!-- jQuery and Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.bundle.min.js"></script>
 </body>
-
 </html>

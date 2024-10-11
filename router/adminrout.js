@@ -1,7 +1,7 @@
 const express=require('express')
 const router=express.Router()
-const {auth,accses,list,padd,savecat,imageadding,submitedit,useredit,categoryunlist}=require('../controller/admin/admin')
-const{adminlogin,admin,user,product,catagory}=require('../middleware/render')
+const {auth,accses,list,padd,savecat,imageadding,submitedit,useredit,categoryunlist,updateorder,getiingorderdetials}=require('../controller/admin/admin')
+const{adminlogin,admin,user,product,catagory,orders}=require('../middleware/render')
 const {alluser,allproducts}=require('../controller/finding_all_admin')
 const nocach=require('../middleware/nocach')
 const upload=require('../middleware/uplodimage')
@@ -44,5 +44,12 @@ router.get('/category',allproducts,catagory)
 router.post('/category/add',savecat)
 router.patch('/category/edit/:id',useredit)
 router.patch('/category/unlist/:id',categoryunlist)
+
+
+// orders section 
+router.get('/orders',orders)
+router.patch('/orders',updateorder)
+router.get('/orderlist/:id',getiingorderdetials)
+
 
 module.exports=router

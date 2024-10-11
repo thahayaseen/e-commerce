@@ -34,9 +34,7 @@ const getotp = async (email, otp,userid) => {
             
             <hr style="border-top: 1px solid #ddd;">
             
-            <div style="text-align: center; padding-top: 10px;">
-            <img src="https://cdn.pixabay.com/photo/2016/11/14/03/16/qr-code-1820325_1280.png" alt="QR Code" style="width: 150px; height: 150px;"/>
-            </div>
+            
             
             <p style="text-align: center; color: #6c757d;">If you did not request this, please ignore this email.</p>
             </div>

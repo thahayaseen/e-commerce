@@ -26,8 +26,9 @@ const User=new mongoose.Schema({
         default:''
     },
     address:{
-        type:Array,
-        default:''
+        type:[mongoose.Schema.ObjectId],
+        ref:'Address',
+        
     },
     uotp:{
         type:Number,
@@ -40,8 +41,11 @@ const User=new mongoose.Schema({
     isadmin:{
         type:Boolean,
         default:false
-    }
-    ,
+    },
+    orders:{
+        type:[mongoose.Types.ObjectId]
+        
+    },
     blocked:{
         type:Boolean,
         default:false

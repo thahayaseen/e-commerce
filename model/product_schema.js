@@ -7,11 +7,11 @@ const productSchema = new mongoose.Schema({
         // required: true
     },
     price: {
-        type: Number, // Consider changing to Number if it's numerical
+        type: Number,
         // required: true
     },
     stock: {
-        type: Number, // Consider changing to Number if it's numerical
+        type: Number, 
         // required: true
     },
     unlist: {

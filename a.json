@@ -1,0 +1,92 @@
+{
+    "shippingAddress": {
+        "fullname": "Afnan",
+        "addressline1": "nellikaparambu",
+        "addressline2": "",
+        "city": "Kozhikode",
+        "state": "Kerala",
+        "zipcode": "673602",
+        "country": "US",
+        "phone": "9846480440"
+    },
+    "_id": "670772b7c9e888cfc945f842",
+    "user": {
+        "_id": "6707727ec9e888cfc945f802",
+        "name": "THAHA",
+        "user_name": "weebscorner649",
+        "email": "weebscorner01@gmail.com",
+        "googleId": "115650112839497589475",
+        "phone": null,
+        "address": [
+            "670772b3c9e888cfc945f833",
+            "67077301c9e888cfc945f883"
+        ],
+        "uotp": null,
+        "varify": true,
+        "isadmin": true,
+        "orders": [
+            "670772b7c9e888cfc945f842",
+            "67077304c9e888cfc945f890",
+            "67077326c9e888cfc945f8c2",
+            "670774e64ea896dc0b537a8c",
+            "670774ff4ea896dc0b537ac6"
+        ],
+        "blocked": false,
+        "createdAt": "2024-10-10T06:21:50.553Z",
+        "updatedAt": "2024-10-10T09:07:43.596Z",
+        "__v": 7,
+        "password": "$2b$10$nA.DawbuXT84Fre1O1dfU.OvKRlTG5bbcSoxOUBFOVrwB85Ll6QMO"
+    },
+    "products": [
+        {
+            "productid": {
+                "_id": "66fd08496988d06040bdc7c3",
+                "name": "ZEBRONICS New Launch N24A 24\"(60.4 cm) Gaming Monitor",
+                "price": 8499,
+                "stock": 6,
+                "unlist": false,
+                "images": [
+                    "1727858761291.jpg",
+                    "1727858761295.jpg",
+                    "1727858761297.jpg"
+                ],
+                "description": "Anti-glare screen: The 60.4cm screen of the ZEB-N24A is treated with an anti-glare coating, which reduces reflections and minimizes eye strain during prolonged gaming sessions.\r\nBuilt-in Speakers: Equipped with built-in speakers, the ZEB-N24A offers a convenient audio solution without the need for external speakers.\r\nBezel-Less Design: The ZEB-N24A boasts a sleek, bezel-less design, providing an expansive viewing area that enhances the sense of immersion. Its 16:9 aspect ratio offers a wider viewing experience.\r\nRefresh Rate: The monitor's 180Hz refresh rate and 1ms MPRT ensure smooth gameplay with reduced motion blur and more frames per second.",
+                "category_id": "66fa26a5e8f8b40366d3d0e9",
+                "createdAt": "2024-10-02T08:46:01.317Z",
+                "updatedAt": "2024-10-03T11:06:41.453Z",
+                "__v": 0
+            },
+            "quantity": 4,
+            "price": 8499,
+            "_id": "670772b7c9e888cfc945f843"
+        },
+        {
+            "productid": {
+                "_id": "6704c22606c6a6f8b1d33e54",
+                "name": "ZXFDGASDG",
+                "price": 42,
+                "stock": 424,
+                "unlist": false,
+                "images": [
+                    "1728365094568.jpg"
+                ],
+                "description": "GASDGASDGASD",
+                "category_id": "66fa26a5e8f8b40366d3d0e9",
+                "createdAt": "2024-10-08T05:24:54.579Z",
+                "updatedAt": "2024-10-08T05:24:54.579Z",
+                "__v": 0
+            },
+            "quantity": 1,
+            "price": 42,
+            "_id": "670772b7c9e888cfc945f844"
+        }
+    ],
+    "totalAmount": 34038,
+    "status": "Cancelled",
+    "paymentMethod": "Cash on Delivery",
+    "paymentStatus": "Pending",
+    "orderDate": "2024-10-10T06:22:47.483Z",
+    "createdAt": "2024-10-10T06:22:47.485Z",
+    "updatedAt": "2024-10-10T09:36:03.445Z",
+    "__v": 0
+}

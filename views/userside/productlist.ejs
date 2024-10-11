@@ -1,22 +1,17 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
-    <meta http-equiv="x-ua-compatible" content="ie=edge" />
-    <title>Material Design for Bootstrap</title>
-    <!-- Font Awesome -->
-    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.11.2/css/all.css" />
-    <!-- Google Fonts Roboto -->
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" />
-    <!-- Bootstrap CSS -->
-    <link href="https://stackpath.bootstrapcdn.com/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
-    <!-- MDB -->
-    <link rel="stylesheet" href="css/mdb.min.css" />
-    <!-- Custom styles -->
-    <link rel="stylesheet" href="css/style.css" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>NZXT - Product Catalog</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-      .navbar {
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: #f8f9fa;
+        }
+        .navbar {
           background-color: #1a1a1a;
           padding: 15px 0;
       }
@@ -39,296 +34,257 @@
       .navbar-icons .nav-link {
           padding: 0 10px;
       }
-      .breadcrumbp{
-        padding-left: 115px;
-        padding-top: 10px;
-      }
-  </style>
-
+        .breadcrumb {
+            background-color: transparent;
+            padding: 1rem 0;
+        }
+        .card {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 4px 15px rgba(0,0,0,.1);
+        }
+        .btn-primary {
+            background-color: #007bff;
+            border-color: #007bff;
+        }
+        .btn-primary:hover {
+            background-color: #0056b3;
+            border-color: #0056b3;
+        }
+        .icon-hover:hover {
+            color: #007bff !important;
+        }
+    </style>
 </head>
 <body>
-    <!--Main Navigation-->
-    <nav class="navbar navbar-expand-lg">
-      <div class="container">
-          <a class="navbar-brand" href="/home">NZXT</a>
-          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-              <span class="navbar-toggler-icon"></span>
-          </button>
-          <div class="collapse navbar-collapse" id="navbarNav">
-              <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                  <li class="nav-item">
-                      <a class="nav-link" href="#">All Products</a>
-                  </li>
-                  <li class="nav-item">
-                      <a class="nav-link" href="#">Components</a>
-                  </li>
-                  <li class="nav-item">
-                      <a class="nav-link" href="#">Gaming Gear</a>
-                  </li>
-                  <li class="nav-item">
-                      <a class="nav-link" href="#">Monitors</a>
-                  </li>
-                  <li class="nav-item">
-                      <a class="nav-link" href="#">Software</a>
-                  </li>
-                  <li class="nav-item">
-                      <a class="nav-link" href="#">Community</a>
-                  </li>
-              </ul>
-              <div class="navbar-icons">
-                  <a class="nav-link" href="#">❔</a>
-                  <a class="nav-link" href="#">👤</a>
-                  <a class="nav-link" href="#">🛒</a>
-                  <a href="/logout"><?xml version="1.0" ?><svg fill="none" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M17 16L21 12M21 12L17 8M21 12L7 12M13 16V17C13 18.6569 11.6569 20 10 20H6C4.34315 20 3 18.6569 3 17V7C3 5.34315 4.34315 4 6 4H10C11.6569 4 13 5.34315 13 7V8" stroke="#374151" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/></svg></a>
-              </div>
-          </div>
-      </div>
-  </nav>
- 
-  
-
-<!-- sidebar + content -->
-<section class="">
-  <nav aria-label="breadcrumb " class="breadcrumbp">
-    <ol class="breadcrumb">
-      <li class="breadcrumb-item">
-        <a href="/home" class="text-primary">Home</a>
-      </li>
-      <li class="breadcrumb-item">
-        <a href="/product" class="text-primary">Product</a>
-      </li>
-    </ol>
-  </nav>
-  <div class="container">
-    <div class="row">
-      <!-- sidebar -->
-      <div class="col-lg-3">
-        <!-- Toggle button -->
-        <button
-                class="btn btn-outline-secondary mb-3 w-100 d-lg-none"
-                type="button"
-                data-mdb-toggle="collapse"
-                data-mdb-target="#navbarSupportedContent"
-                aria-controls="navbarSupportedContent"
-                aria-expanded="false"
-                aria-label="Toggle navigation"
-                >
-          <span>Show filter</span>
-        </button>
-        <!-- Collapsible wrapper -->
-        <div class="collapse card d-lg-block mb-5" id="navbarSupportedContent">
-          <div class="accordion" id="accordionPanelsStayOpenExample">
-            <div class="accordion-item">
-              <h2 class="accordion-header" id="headingOne">
-                <button
-                        class="accordion-button text-dark bg-light"
-                        type="button"
-                        data-mdb-toggle="collapse"
-                        data-mdb-target="#panelsStayOpen-collapseOne"
-                        aria-expanded="true"
-                        aria-controls="panelsStayOpen-collapseOne"
-                        >
-                  Related items
-                </button>
-              </h2>
-              <div id="panelsStayOpen-collapseOne" class="accordion-collapse collapse show" aria-labelledby="headingOne">
-                <div class="accordion-body">
-                  <ul class="list-unstyled">
-                    <% categories.forEach((cate)=>{ %>
-                      <% if(cate.list){ %>
-                    <li><a href="#" class="text-dark"><%=cate.name %> </a></li>
-                    <% } %>
-                    <% }) %>
-                  </ul>
+    <nav class="navbar navbar-expand-lg navbar-dark">
+        <div class="container">
+            <a class="navbar-brand" href="/home">NZXT</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">All Products</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Components</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Gaming Gear</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Monitors</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Software</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Community</a>
+                    </li>
+                </ul>
+                <div class="navbar-icons">
+                    <a class="nav-link" href="#"><i class="fas fa-question-circle"></i></a>
+                    <a class="nav-link" href="#"><i class="fas fa-user"></i></a>
+                    <a class="nav-link" href="#"><i class="fas fa-shopping-cart"></i></a>
+                    <a class="nav-link" href="/logout"><i class="fas fa-sign-out-alt"></i></a>
                 </div>
-              </div>
             </div>
-            
-            <div class="accordion-item">
-              <h2 class="accordion-header" id="headingThree">
-                <button
-                        class="accordion-button text-dark bg-light"
-                        type="button"
-                        data-mdb-toggle="collapse"
-                        data-mdb-target="#panelsStayOpen-collapseThree"
-                        aria-expanded="false"
-                        aria-controls="panelsStayOpen-collapseThree"
-                        >
-                  Price
-                </button>
-              </h2>
-              <div id="panelsStayOpen-collapseThree" class="accordion-collapse collapse show" aria-labelledby="headingThree">
-                <div class="accordion-body">
-                  <div class="range">
-                    <input type="range" class="form-range" id="customRange1" />
-                  </div>
-                  <div class="row mb-3">
-                    <div class="col-6">
-                      <p class="mb-0">
-                        Min
-                      </p>
-                      <div class="form-outline">
-                        <input type="number" id="typeNumber" class="form-control" />
-                        <label class="form-label" for="typeNumber">$0</label>
-                      </div>
-                    </div>
-                    <div class="col-6">
-                      <p class="mb-0">
-                        Max
-                      </p>
-                      <div class="form-outline">
-                        <input type="number" id="typeNumber" class="form-control" />
-                        <label class="form-label" for="typeNumber">$1,0000</label>
-                      </div>
-                    </div>
-                  </div>
-                  <button type="button" class="btn btn-white w-100 border border-secondary">apply</button>
-                </div>
-              </div>
-            </div>
-            
-            <div class="accordion-item">
-              <h2 class="accordion-header" id="headingThree">
-                <button
-                        class="accordion-button text-dark bg-light"
-                        type="button"
-                        data-mdb-toggle="collapse"
-                        data-mdb-target="#panelsStayOpen-collapseFive"
-                        aria-expanded="false"
-                        aria-controls="panelsStayOpen-collapseFive"
-                        >
-                  Ratings
-                </button>
-              </h2>
-              <div id="panelsStayOpen-collapseFive" class="accordion-collapse collapse show" aria-labelledby="headingThree">
-                <div class="accordion-body">
-                  <!-- Default checkbox -->
-                  <div class="form-check">
-                    <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault" checked />
-                    <label class="form-check-label" for="flexCheckDefault">
-                      <i class="fas fa-star text-warning"></i><i class="fas fa-star text-warning"></i><i class="fas fa-star text-warning"></i><i class="fas fa-star text-warning"></i>
-                      <i class="fas fa-star text-warning"></i>
-                    </label>
-                  </div>
-                  <!-- Default checkbox -->
-                  <div class="form-check">
-                    <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault" checked />
-                    <label class="form-check-label" for="flexCheckDefault">
-                      <i class="fas fa-star text-warning"></i><i class="fas fa-star text-warning"></i><i class="fas fa-star text-warning"></i><i class="fas fa-star text-warning"></i>
-                      <i class="fas fa-star text-secondary"></i>
-                    </label>
-                  </div>
-                  <!-- Default checkbox -->
-                  <div class="form-check">
-                    <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault" checked />
-                    <label class="form-check-label" for="flexCheckDefault">
-                      <i class="fas fa-star text-warning"></i><i class="fas fa-star text-warning"></i><i class="fas fa-star text-warning"></i><i class="fas fa-star text-secondary"></i>
-                      <i class="fas fa-star text-secondary"></i>
-                    </label>
-                  </div>
-                  <!-- Default checkbox -->
-                  <div class="form-check">
-                    <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault" checked />
-                    <label class="form-check-label" for="flexCheckDefault">
-                      <i class="fas fa-star text-warning"></i><i class="fas fa-star text-warning"></i><i class="fas fa-star text-secondary"></i><i class="fas fa-star text-secondary"></i>
-                      <i class="fas fa-star text-secondary"></i>
-                    </label>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
         </div>
-      </div>
-      <!-- sidebar -->
-      <!-- content -->
-      <div class="col-lg-9">
-        <header class="d-sm-flex align-items-center border-bottom mb-4 pb-3">
-    
-          <div class="ms-auto">
-            <select class="form-select d-inline-block w-auto border pt-1">
-              <option value="0">Best match</option>
-              <option value="1">Recommended</option>
-              <option value="2">High rated</option>
-              <option value="3">Randomly</option>
-            </select>
-            <div class="btn-group shadow-0 border">
-              <a href="#" class="btn btn-light" title="List view">
-                <i class="fa fa-bars fa-lg"></i>
-              </a>
-              <a href="#" class="btn btn-light active" title="Grid view">
-                <i class="fa fa-th fa-lg"></i>
-              </a>
-            </div>
-          </div>
-        </header>
-        <% products.forEach((products)=>{ %>
-            <% if (!products.unlist) {%>
-                
-           
+    </nav>
 
-        <div class="row justify-content-center mb-3">
-          <div class="col-md-12">
-            <div class="card shadow-0 border rounded-3">
-              <div class="card-body">
-                <div class="row g-0">
-                  <div class="col-xl-3 col-md-4 d-flex justify-content-center">
-                    <div class="bg-image hover-zoom ripple rounded ripple-surface me-md-3 mb-3 mb-md-0">
-                      <img src="/uploads/<%=products.images[0]  %>" class="w-100" />
-                      <a href="#!">
-                        <div class="hover-overlay">
-                          <div class="mask" style="background-color: rgba(253, 253, 253, 0.15);"></div>
+    <div class="container mt-4">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="/home">Home</a></li>
+                <li class="breadcrumb-item active" aria-current="page">Product</li>
+            </ol>
+        </nav>
+
+        <div class="row">
+            <div class="col-lg-3">
+                <div class="card mb-4">
+                    <div class="card-body">
+                        <h5 class="card-title">Filters</h5>
+                        <hr>
+                        <form id="filterForm" action="/product" method="GET">
+                            <h6 class="mb-3">Categories</h6>
+                            <div class="mb-3">
+                                <% categories.forEach((cate) => { %>
+                                    <% if(cate.list) { %>
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" name="category" value="<%= cate.name %>" id="<%= cate.name %>">
+                                            <label class="form-check-label" for="<%= cate.name %>">
+                                                <%= cate.name %>
+                                            </label>
+                                        </div>
+                                    <% } %>
+                                <% }) %>
+                            </div>
+                            <h6 class="mb-3">Price Range</h6>
+                           
+                            <h6 class="mb-3">Ratings</h6>
+                            <div class="mb-3">
+                                <% for(let i = 5; i > 0; i--) { %>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" name="rating" value="<%= i %>" id="rating<%= i %>">
+                                        <label class="form-check-label" for="rating<%= i %>">
+                                            <% for(let j = 0; j < i; j++) { %>
+                                                <i class="fas fa-star text-warning"></i>
+                                            <% } %>
+                                            <% for(let j = i; j < 5; j++) { %>
+                                                <i class="far fa-star text-warning"></i>
+                                            <% } %>
+                                        </label>
+                                    </div>
+                                <% } %>
+                            </div>
+                            <button type="submit" class="btn btn-primary w-100">Apply Filters</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-9">
+                <div class="card mb-4">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <h5 class="mb-0">Products</h5>
+                            <div>
+                                <form id="sortForm" method="GET">
+                                    <select class="form-select" name="sort" >
+                                        <option value="">Sort By</option>
+                                        <option value="priceLowToHigh">Price: Low to High</option>
+                                        <option value="priceHighToLow">Price: High to Low</option>
+                                        <option value="averageRating">Average Ratings</option>
+                                        <option value="featured">Featured</option>
+                                        <option value="newArrivals">New Arrivals</option>
+                                        <option value="aToZ">A-Z</option>
+                                        <option value="zToA">Z-A</option>
+                                    </select>
+                                </form>
+                            </div>
                         </div>
-                      </a>
+                        <div class="row">
+                            <% products.forEach((product) => { %>
+                                <% if (!product.unlist) { %>
+                                    <div class="col-md-6 col-lg-4 mb-4">
+                                        <div class="card h-100">
+                                            <img src="/uploads/<%= product.images[0] %>" class="card-img-top" alt="<%= product.name %>">
+                                            <div class="card-body d-flex flex-column">
+                                                <h5 class="card-title"><%= product.name %></h5>
+                                               
+                                               
+                                                <div class="d-flex justify-content-between align-items-center">
+                                                    <h4 class="mb-0">$<%= product.price.toFixed(2 ) %></h4>
+                                                    <a href="/product/<%= product._id %>" class="btn btn-primary">View Details</a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                <% } %>
+                            <% }) %>
+                        </div>
+                        <nav aria-label="Page navigation">
+                          <ul class="pagination justify-content-center">
+                              <% if (pagination.currentPage > 1) { %>
+                                  <li class="page-item">
+                                      <a class="page-link" href="#" data-page="<%= pagination.currentPage - 1 %>" aria-label="Previous">
+                                          <span aria-hidden="true">&laquo;</span>
+                                      </a>
+                                  </li>
+                              <% } %>
+                              <li class="page-item disabled">
+                                  <span class="page-link">Page <%= pagination.currentPage %> of <%= pagination.totalPages %></span>
+                              </li>
+                              <% if (pagination.currentPage < pagination.totalPages) { %>
+                                  <li class="page-item">
+                                      <a class="page-link" href="#" data-page="<%= pagination.currentPage + 1 %>" aria-label="Next">
+                                          <span aria-hidden="true">&raquo;</span>
+                                      </a>
+                                  </li>
+                              <% } %>
+                          </ul>
+                      </nav>
+                  
+                   
+                     
                     </div>
-                  </div>
-                  <div class="col-xl-6 col-md-5 col-sm-7">
-                    <h5><%=products.name  %></h5>
-                    <div class="d-flex flex-row">
-                      <div class="text-warning mb-1 me-2">
-                        <i class="fa fa-star"></i>
-                        <i class="fa fa-star"></i>
-                        <i class="fa fa-star"></i>
-                        <i class="fa fa-star"></i>
-                        <i class="fas fa-star-half-alt"></i>
-                        <span class="ms-1">
-                          4.5
-                        </span>
-                      </div>
-                      <!-- <span class="text-muted">154 orders</span> -->
-                    </div>
-                  </div>
-                  <div class="col-xl-3 col-md-3 col-sm-5">
-                    <div class="d-flex flex-row align-items-center mb-1">
-                      <h4 class="mb-1 me-1">$<%= products.price %></h4>
-                      <!-- <span class="text-danger"><s>$49.99</s></span> -->
-                    </div>
-                    <h6 class="text-success">Free shipping</h6>
-                    <div class="mt-4">
-                      <a class="btn btn-primary shadow-0" href="/product/<%=products._id  %>" type="button">Buy this</a>
-                      <a  class="btn btn-light border px-2 pt-2 icon-hover"><i class="fas fa-heart fa-lg px-1"></i></a>
-                    </div>
-                  </div>
                 </div>
-              </div>
             </div>
-          </div>
         </div>
-    <%} %>
-  <% }) %>
-        
-
-      </div>
     </div>
-  </div>
-</section>
+    <script>
+      document.addEventListener('DOMContentLoaded', function() {
+    const filterForm = document.getElementById('filterForm');
+    const sortForm = document.getElementById('sortForm');
+    const paginationLinks = document.querySelectorAll('.pagination .page-link');
 
-<link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
+    function getUrlParams() {
+        return new URLSearchParams(window.location.search);
+    }
 
-    <!-- MDB -->
-    <script type="text/javascript" src="js/mdb.min.js"></script>
-    <!-- Custom scripts -->
-    <script type="text/javascript" src="js/script.js"></script>
+    function updateQueryString(formData) {
+        const params = new URLSearchParams(formData);
+        return params.toString();
+    }
+
+    function applyFiltersAndSort(page = null) {
+        const filterData = new FormData(filterForm);
+        const sortData = new FormData(sortForm);
+        const currentParams = getUrlParams();
+        
+      
+        const limit = currentParams.get('limit') || '6'; 
+        filterData.append('limit', limit);
+
+       
+        const currentSort = currentParams.get('sort');
+        if (currentSort && !sortData.get('sort')) {
+            sortData.set('sort', currentSort);
+        }
+
+        if (page) {
+            filterData.append('page', page);
+        }
+
+        const queryString = updateQueryString(filterData) + '&' + updateQueryString(sortData);
+        window.location.href = `${window.location.pathname}?${queryString}`;
+    }
+
+    filterForm.addEventListener('submit', function(e) {
+        e.preventDefault();
+        applyFiltersAndSort();
+    });
+
+    sortForm.querySelector('select[name="sort"]').addEventListener('change', function() {
+        applyFiltersAndSort();
+    });
+
+    paginationLinks.forEach(link => {
+        link.addEventListener('click', function(e) {
+            e.preventDefault();
+            const page = this.getAttribute('data-page');
+            applyFiltersAndSort(page);
+        });
+    });
+
+    // Set initial values based on URL parameters
+    const urlParams = getUrlParams();
+    urlParams.forEach((value, key) => {
+        const element = filterForm.elements[key] || sortForm.elements[key];
+        if (element) {
+            if (element.type === 'checkbox') {
+                element.checked = (value === 'on' || value === 'true');
+            } else {
+                element.value = value;
+            }
+        }
+    });
+});
+      </script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
-

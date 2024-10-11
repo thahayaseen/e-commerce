@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <!-- Required meta tags -->
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <title>Product Management</title>
+
+  <!-- Bootstrap CSS -->
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+
+  <!-- Plugins CSS -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@mdi/font/css/materialdesignicons.min.css">
+  <link rel="stylesheet" href="/assets/vendors/css/vendor.bundle.base.css">
+  <link href="https://unpkg.com/cropperjs/dist/cropper.css" rel="stylesheet">
+  <link rel="stylesheet" href="/assets/vendors/jvectormap/jquery-jvectormap.css">
+  <link rel="stylesheet" href="/assets/vendors/flag-icon-css/css/flag-icon.min.css">
+  <link rel="stylesheet" href="/assets/vendors/owl-carousel-2/owl.carousel.min.css">
+  <link rel="stylesheet" href="/assets/vendors/owl-carousel-2/owl.theme.default.min.css">
+
+  <!-- croper js  -->
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.css">
+
+
+
+  <!-- Layout styles -->
+  <link rel="stylesheet" href="/assets/css/style.css">
+</head>
+
+<body>
+    <div class="container-scroller">
+      <!-- Sidebar section -->
+      <div class="sidebar bg-light">
+        <%- include('./admin_parts/sidebar') %>
+      </div>
+  
+      <div class="container-fluid page-body-wrapper">
+        <!-- Header section -->
+        <div class="header">
+          <%- include("./admin_parts/hedder") %>
+        </div>
+  
+        <div class="main-panel">
+          <div class="content-wrapper">
+            
+            <!-- Add Product Button -->
+            <div class="row mb-3">
+              <div class="col-12">
+                <button class="btn btn-primary" data-toggle="modal" data-target="#addProductModal">Add Product</button>
+              </div>
+            </div>
+            
+            <!-- Main content list of orders and options area -->
+            <div class="row">
+              <div class="col-12 grid-margin">
+                <div class="card">
+                  <div class="card-body">
+                    <h4 class="card-title">Manage Orders</h4>
+                    <div class="table-responsive">
+                      <table class="table table-hover">
+                        <thead>
+                          <tr>
+                            <th>#</th>
+                            <th>Order ID</th>
+                            <th>Customer</th>
+                            <th>Total Price</th>
+                            <th>Status</th>
+                            <th>Action</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <% Orders.forEach((order, index)=> { %>
+                          <tr>
+                            <td><%= index + 1 + (pagination.currentPage - 1) * pagination.limit %> 
+                            </td>
+                            <td><%= order._id %></td>
+                            <td><%= order.user.name %></td>
+                            <td>$<%= order.totalAmount %></td>
+                            <td>
+                              <select class="form-control status-select actionbtn" data-id="<%= order._id %>">
+                                <option value="Pending" <%= order.status === 'Pending' ? 'selected' : '' %>>Pending</option>
+                                <option value="Processing" <%= order.status === 'Processing' ? 'selected' : '' %>>Processing</option>
+                                <option value="Shipped" <%= order.status === 'Shipped' ? 'selected' : '' %>>Shipped</option>
+                                <option value="Delivered" <%= order.status === 'Delivered' ? 'selected' : '' %>>Delivered</option>
+                                <option value="Cancelled" <%= order.status === 'Cancelled' ? 'selected' : '' %>>Cancelled</option>
+                              </select>
+                            </td>
+                            <td>
+                              <button class="btn btn-info btn-sm view-btn vieworder" data-toggle="modal" data-target="#viewOrderModal" data-id="<%= order._id %>">View</button>
+                            </td>
+                          </tr>
+                          <% }) %>
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="pagination ">
+                <% if (pagination.currentPage > 1) { %>
+                    <a href="?page=<%= pagination.currentPage - 1 %>&limit=<%= pagination.limit %>" class="btn  btn-secondary"> Previous </a>
+                <% } %>
+              
+                <span class="mx-5" >Page <%= pagination.currentPage %> of <%= pagination.totalPages %></span>
+              
+                <% if (pagination.currentPage < pagination.totalPages) { %>
+                    <a href="?page=<%= pagination.currentPage + 1 %>&limit=<%= pagination.limit %>" class="btn  btn-secondary"> Next </a>
+                <% } %>
+          </div>
+        </div>
+      </div>
+      <!-- Page body wrapper ends -->
+    </div>
+  
+    <!-- View Order Modal -->
+ 
+<div class="modal fade" id="viewOrderModal" tabindex="-1" role="dialog" aria-labelledby="viewOrderModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl" role="document">
+      <div class="modal-content">
+        <div class="modal-header bg-primary text-white">
+          <h5 class="modal-title" id="viewOrderModalLabel">Order Details</h5>
+          <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+    
+        <div class="modal-body">
+          <div class="row mb-4">
+            <div class="col-md-6">
+              <div class="card">
+                <div class="card-body">
+                  <h5 class="card-title">Order Summary</h5>
+                  <p><strong>Order ID:</strong> <span id="orderId"></span></p>
+                  <p><strong>Customer:</strong> <span id="customerName"></span></p>
+                  <p><strong>Order Date:</strong> <span id="orderDate"></span></p>
+                  <p><strong>Status:</strong> <span id="orderStatus" class="badge badge-pill badge-info"></span></p>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="card">
+                <div class="card-body">
+                  <h5 class="card-title">Shipping Address</h5>
+                  <address id="shippingAddress"></address>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <h5 class="mb-3">Order Items</h5>
+          <div id="orderItems" class="row"></div>
+          
+          <div class="row mt-4">
+            <div class="col-md-6 offset-md-6">
+              <table class="table table-bordered">
+                <tr>
+                  <td><strong>Subtotal:</strong></td>
+                  <td class="text-right">$<span id="orderSubtotal"></span></td>
+                </tr>
+                <tr>
+                  <td><strong>Shipping:</strong></td>
+                  <td class="text-right">$<span id="orderShipping"></span></td>
+                </tr>
+                <tr>
+                  <td><strong>Total:</strong></td>
+                  <td class="text-right"><h4>$<span id="orderTotal"></span></h4></td>
+                </tr>
+              </table>
+            </div>
+          </div>
+        </div>
+    
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  
+  
+    <!-- Scripts -->
+     <script src="/js/admin/orders.js"></script>
+     <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js"></script>
+     
+
+  
+    
+  </body>
+  
+  </html>

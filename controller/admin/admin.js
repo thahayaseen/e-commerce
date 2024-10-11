@@ -4,7 +4,7 @@ const bcrypt = require('bcrypt')
 const path = require('path');
 const fs = require('fs');
 const categories = require('../../model/categories');
-const { check } = require('express-validator');
+const orders=require('../../model/orders')
 
 // admin authentication 
 const auth = async (req, res, next) => {
@@ -12,12 +12,15 @@ const auth = async (req, res, next) => {
         const { username, password } = req.body
 
 
-        const exsist = await User.findOne({ user_name: username })
+        const exsist = await User.findOne({ name: username })
+       
+        
         if (!exsist) {
             return res.redirect('/admin')
         }
-        const adminverigfy = bcrypt.compare(password,exsist.password)
-
+        const adminverigfy = await bcrypt.compare(password,exsist.password)
+        console.log(adminverigfy);
+        
         if (!adminverigfy) {
             return res.redirect('/admin')
         }
@@ -263,4 +266,21 @@ const categoryunlist = async (req, res, next) => {
     }
 
 }
-module.exports = { auth, accses, list, padd, imageadding, submitedit, savecat, useredit, categoryunlist }
+const updateorder=async(req,res)=>{
+  const {action,orderid}=  req.body
+  const orderdata=await orders.findById(orderid)
+    orderdata.status=action
+    await orderdata.save()
+    res.status(200).json({success:true,message:'the action changed success'})
+    
+}
+const getiingorderdetials=async (req,res)=>{
+    
+  const orderid=  req.params.id
+  const orderdata=await orders.findById(orderid).populate('user').populate('products.productid')
+  console.log(JSON.stringify(orderdata));
+  
+    res.status(200).json({success:true,data:orderdata})
+    
+}
+module.exports = { auth, accses, list, padd, imageadding, submitedit, savecat, useredit, categoryunlist ,updateorder,getiingorderdetials}

@@ -107,12 +107,23 @@
               </div>
             </div>
           </div>
+          <div class="pagination ">
+            <% if (currentPage > 1) { %>
+                <a href="?page=<%= currentPage - 1 %>&limit=<%= limit %>" class="btn  btn-secondary"> Previous </a>
+            <% } %>
+          
+            <span class="mx-5" >Page <%=currentPage %> of <%=totalPages %></span>
+          
+            <% if (currentPage < totalPages) { %>
+                <a href="?page=<%= currentPage + 1 %>&limit=<%= limit %>" class="btn  btn-secondary"> Next </a>
+            <% } %>
+        </div> 
         </div>
       </div>
       <!-- Main panel ends -->
     </div>
-    <!-- Page body wrapper ends -->
   </div>
+  
 <!-- clicking actions  -->
 <script src="/js/admin/users.js"></script>
   <!-- Plugins JS -->
