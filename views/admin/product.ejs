@@ -178,7 +178,7 @@
                         <!-- Image Upload -->
                         <div class="form-group">
                             <label for="productImages">Upload New Images</label>
-                            <input type="file" class="form-control-file bg-dark text-light" id="productImageInput" name="productImages" multiple>
+                            <input type="file" class="form-control-file bg-dark text-light" id="productImageInput" name="productImages" accept="image/*"   multiple>
                         </div>
                     
                         <!-- Cropping Section -->
@@ -273,7 +273,7 @@
         
                             <!-- Cropping Controls -->
                             <div id="addcropControls" style="display: none;">
-                                <img id="addcropperImage" style="display: none; width: 100%; height: auto;" />
+                                <img id="addcropperImage" style="display: none;  width: 100%; height: auto;" />
                                 <button type="button" id="nextButton" class="btn btn-secondary">Next Image</button>
                                 <button type="submit" id="addproductbtn" class="btn btn-primary mr-2" style="display: none;">Add Product</button>
                             </div>
