@@ -251,17 +251,23 @@ const categoryunlist = async (req, res, next) => {
     try {
 
         const catid = req.params.id
+        const product=await Product.find({category_id:catid})
         // console.log(catid);
+       for( data of  product){
+            data.unlist=!data.unlist
+            await data.save()
+       }
+        
         const catagory = await categories.findById(catid)
         catagory.list = !catagory.list
-        console.log(catagory);
-
+        // console.log(catagory);
+   
         await catagory.save()
 
 
         res.status(200).json({ success: true })
     } catch (error) {
-        console.log('error in delete route' + error);
+        console.log('error in unlist route' + error);
 
     }
 

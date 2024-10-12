@@ -1,92 +1,878 @@
 {
-    "shippingAddress": {
-        "fullname": "Afnan",
-        "addressline1": "nellikaparambu",
-        "addressline2": "",
-        "city": "Kozhikode",
-        "state": "Kerala",
-        "zipcode": "673602",
-        "country": "US",
-        "phone": "9846480440"
-    },
-    "_id": "670772b7c9e888cfc945f842",
-    "user": {
-        "_id": "6707727ec9e888cfc945f802",
-        "name": "THAHA",
-        "user_name": "weebscorner649",
-        "email": "weebscorner01@gmail.com",
-        "googleId": "115650112839497589475",
-        "phone": null,
-        "address": [
-            "670772b3c9e888cfc945f833",
-            "67077301c9e888cfc945f883"
-        ],
-        "uotp": null,
-        "varify": true,
-        "isadmin": true,
-        "orders": [
-            "670772b7c9e888cfc945f842",
-            "67077304c9e888cfc945f890",
-            "67077326c9e888cfc945f8c2",
-            "670774e64ea896dc0b537a8c",
-            "670774ff4ea896dc0b537ac6"
-        ],
-        "blocked": false,
-        "createdAt": "2024-10-10T06:21:50.553Z",
-        "updatedAt": "2024-10-10T09:07:43.596Z",
-        "__v": 7,
-        "password": "$2b$10$nA.DawbuXT84Fre1O1dfU.OvKRlTG5bbcSoxOUBFOVrwB85Ll6QMO"
-    },
-    "products": [
+    "orders": [
         {
-            "productid": {
-                "_id": "66fd08496988d06040bdc7c3",
-                "name": "ZEBRONICS New Launch N24A 24\"(60.4 cm) Gaming Monitor",
-                "price": 8499,
-                "stock": 6,
-                "unlist": false,
-                "images": [
-                    "1727858761291.jpg",
-                    "1727858761295.jpg",
-                    "1727858761297.jpg"
-                ],
-                "description": "Anti-glare screen: The 60.4cm screen of the ZEB-N24A is treated with an anti-glare coating, which reduces reflections and minimizes eye strain during prolonged gaming sessions.\r\nBuilt-in Speakers: Equipped with built-in speakers, the ZEB-N24A offers a convenient audio solution without the need for external speakers.\r\nBezel-Less Design: The ZEB-N24A boasts a sleek, bezel-less design, providing an expansive viewing area that enhances the sense of immersion. Its 16:9 aspect ratio offers a wider viewing experience.\r\nRefresh Rate: The monitor's 180Hz refresh rate and 1ms MPRT ensure smooth gameplay with reduced motion blur and more frames per second.",
-                "category_id": "66fa26a5e8f8b40366d3d0e9",
-                "createdAt": "2024-10-02T08:46:01.317Z",
-                "updatedAt": "2024-10-03T11:06:41.453Z",
-                "__v": 0
+            "shippingAddress": {
+                "fullname": "Afnan",
+                "addressline1": "nellikaparambu",
+                "addressline2": "",
+                "city": "Kozhikode",
+                "state": "Kerala",
+                "zipcode": "673602",
+                "country": "US",
+                "phone": "9846480440"
             },
-            "quantity": 4,
-            "price": 8499,
-            "_id": "670772b7c9e888cfc945f843"
+            "_id": "670772b7c9e888cfc945f842",
+            "user": "6707727ec9e888cfc945f802",
+            "products": [
+                {
+                    "productid": {
+                        "_id": "66fd08496988d06040bdc7c3",
+                        "name": "ZEBRONICS New Launch N24A 24\"(60.4 cm) Gaming Monitor",
+                        "price": 8499,
+                        "stock": 0,
+                        "unlist": false,
+                        "images": [
+                            "1727858761291.jpg",
+                            "1727858761295.jpg",
+                            "1727858761297.jpg"
+                        ],
+                        "description": "Anti-glare screen: The 60.4cm screen of the ZEB-N24A is treated with an anti-glare coating, which reduces reflections and minimizes eye strain during prolonged gaming sessions.\r\nBuilt-in Speakers: Equipped with built-in speakers, the ZEB-N24A offers a convenient audio solution without the need for external speakers.\r\nBezel-Less Design: The ZEB-N24A boasts a sleek, bezel-less design, providing an expansive viewing area that enhances the sense of immersion. Its 16:9 aspect ratio offers a wider viewing experience.\r\nRefresh Rate: The monitor's 180Hz refresh rate and 1ms MPRT ensure smooth gameplay with reduced motion blur and more frames per second.",
+                        "category_id": "66fa26a5e8f8b40366d3d0e9",
+                        "createdAt": "2024-10-02T08:46:01.317Z",
+                        "updatedAt": "2024-10-11T13:59:43.490Z",
+                        "__v": 0
+                    },
+                    "quantity": 4,
+                    "price": 8499,
+                    "_id": "670772b7c9e888cfc945f843"
+                },
+                {
+                    "productid": {
+                        "_id": "6704c22606c6a6f8b1d33e54",
+                        "name": "ZXFDGASDG",
+                        "price": 42,
+                        "stock": 424,
+                        "unlist": false,
+                        "images": [
+                            "1728365094568.jpg"
+                        ],
+                        "description": "GASDGASDGASD",
+                        "category_id": "66fa26a5e8f8b40366d3d0e9",
+                        "createdAt": "2024-10-08T05:24:54.579Z",
+                        "updatedAt": "2024-10-11T13:59:43.494Z",
+                        "__v": 0
+                    },
+                    "quantity": 1,
+                    "price": 42,
+                    "_id": "670772b7c9e888cfc945f844"
+                }
+            ],
+            "totalAmount": 34038,
+            "status": "Delivered",
+            "paymentMethod": "Cash on Delivery",
+            "paymentStatus": "Pending",
+            "orderDate": "2024-10-10T06:22:47.483Z",
+            "createdAt": "2024-10-10T06:22:47.485Z",
+            "updatedAt": "2024-10-10T10:38:13.512Z",
+            "__v": 0
         },
         {
-            "productid": {
-                "_id": "6704c22606c6a6f8b1d33e54",
-                "name": "ZXFDGASDG",
-                "price": 42,
-                "stock": 424,
-                "unlist": false,
-                "images": [
-                    "1728365094568.jpg"
-                ],
-                "description": "GASDGASDGASD",
-                "category_id": "66fa26a5e8f8b40366d3d0e9",
-                "createdAt": "2024-10-08T05:24:54.579Z",
-                "updatedAt": "2024-10-08T05:24:54.579Z",
-                "__v": 0
+            "shippingAddress": {
+                "fullname": "ajeet yadav",
+                "addressline1": "grount floor,plot no.30,mauja road,jagdhmba blood bank,mauja naraich,mahal etmadpur madra,agra,utrapredesh",
+                "addressline2": "",
+                "city": "Agra",
+                "state": "Uttar Pradesh",
+                "zipcode": "282006",
+                "country": "US",
+                "phone": "9120073022"
             },
-            "quantity": 1,
-            "price": 42,
-            "_id": "670772b7c9e888cfc945f844"
+            "_id": "67077304c9e888cfc945f890",
+            "user": "6707727ec9e888cfc945f802",
+            "products": [
+                {
+                    "productid": {
+                        "_id": "66fd08496988d06040bdc7c3",
+                        "name": "ZEBRONICS New Launch N24A 24\"(60.4 cm) Gaming Monitor",
+                        "price": 8499,
+                        "stock": 0,
+                        "unlist": false,
+                        "images": [
+                            "1727858761291.jpg",
+                            "1727858761295.jpg",
+                            "1727858761297.jpg"
+                        ],
+                        "description": "Anti-glare screen: The 60.4cm screen of the ZEB-N24A is treated with an anti-glare coating, which reduces reflections and minimizes eye strain during prolonged gaming sessions.\r\nBuilt-in Speakers: Equipped with built-in speakers, the ZEB-N24A offers a convenient audio solution without the need for external speakers.\r\nBezel-Less Design: The ZEB-N24A boasts a sleek, bezel-less design, providing an expansive viewing area that enhances the sense of immersion. Its 16:9 aspect ratio offers a wider viewing experience.\r\nRefresh Rate: The monitor's 180Hz refresh rate and 1ms MPRT ensure smooth gameplay with reduced motion blur and more frames per second.",
+                        "category_id": "66fa26a5e8f8b40366d3d0e9",
+                        "createdAt": "2024-10-02T08:46:01.317Z",
+                        "updatedAt": "2024-10-11T13:59:43.490Z",
+                        "__v": 0
+                    },
+                    "quantity": 10,
+                    "price": 8499,
+                    "_id": "67077304c9e888cfc945f891"
+                }
+            ],
+            "totalAmount": 84990,
+            "status": "Cancelled",
+            "paymentMethod": "Cash on Delivery",
+            "paymentStatus": "Pending",
+            "orderDate": "2024-10-10T06:24:04.674Z",
+            "createdAt": "2024-10-10T06:24:04.675Z",
+            "updatedAt": "2024-10-10T08:53:35.435Z",
+            "__v": 0
+        },
+        {
+            "shippingAddress": {
+                "fullname": "ajeet yadav",
+                "addressline1": "grount floor,plot no.30,mauja road,jagdhmba blood bank,mauja naraich,mahal etmadpur madra,agra,utrapredesh",
+                "addressline2": "",
+                "city": "Agra",
+                "state": "Uttar Pradesh",
+                "zipcode": "282006",
+                "country": "US",
+                "phone": "9120073022"
+            },
+            "_id": "67077326c9e888cfc945f8c2",
+            "user": "6707727ec9e888cfc945f802",
+            "products": [
+                {
+                    "productid": {
+                        "_id": "66fd0b19dc87a29804163f65",
+                        "name": "GIGABYTE Geforce RTX 4060 Eagle Oc 8G Graphics Card",
+                        "price": 2799,
+                        "stock": 0,
+                        "unlist": false,
+                        "images": [
+                            "1727859481254.jpg",
+                            "1727859541764.jpg",
+                            "1727859552740.jpg"
+                        ],
+                        "description": "Powered by NVIDIA DLSS 3, ultra-efficient Ada Lovelace architechture, and full ray tracing\r\n4th Generation Tensor Cores: Up to 4x performance with DLSS 3\r\n3rd Generation RT Cores: Up to 2x ray tracing performance\r\nIntegrated with 8GB GDDR6 128-bit memory interface",
+                        "category_id": "66fa515cda7aa084c07f54d7",
+                        "createdAt": "2024-10-02T08:58:01.261Z",
+                        "updatedAt": "2024-10-11T13:58:46.002Z",
+                        "__v": 3
+                    },
+                    "quantity": 5,
+                    "price": 2799,
+                    "_id": "67077326c9e888cfc945f8c3"
+                }
+            ],
+            "totalAmount": 13995,
+            "status": "Cancelled",
+            "paymentMethod": "Cash on Delivery",
+            "paymentStatus": "Pending",
+            "orderDate": "2024-10-10T06:24:38.333Z",
+            "createdAt": "2024-10-10T06:24:38.334Z",
+            "updatedAt": "2024-10-10T10:36:33.659Z",
+            "__v": 0
+        },
+        {
+            "shippingAddress": {
+                "fullname": "ajeet yadav",
+                "addressline1": "grount floor,plot no.30,mauja road,jagdhmba blood bank,mauja naraich,mahal etmadpur madra,agra,utrapredesh",
+                "addressline2": "",
+                "city": "Agra",
+                "state": "Uttar Pradesh",
+                "zipcode": "282006",
+                "country": "US",
+                "phone": "9120073022"
+            },
+            "_id": "670774e64ea896dc0b537a8c",
+            "user": "6707727ec9e888cfc945f802",
+            "products": [
+                {
+                    "productid": {
+                        "_id": "66fd08496988d06040bdc7c3",
+                        "name": "ZEBRONICS New Launch N24A 24\"(60.4 cm) Gaming Monitor",
+                        "price": 8499,
+                        "stock": 0,
+                        "unlist": false,
+                        "images": [
+                            "1727858761291.jpg",
+                            "1727858761295.jpg",
+                            "1727858761297.jpg"
+                        ],
+                        "description": "Anti-glare screen: The 60.4cm screen of the ZEB-N24A is treated with an anti-glare coating, which reduces reflections and minimizes eye strain during prolonged gaming sessions.\r\nBuilt-in Speakers: Equipped with built-in speakers, the ZEB-N24A offers a convenient audio solution without the need for external speakers.\r\nBezel-Less Design: The ZEB-N24A boasts a sleek, bezel-less design, providing an expansive viewing area that enhances the sense of immersion. Its 16:9 aspect ratio offers a wider viewing experience.\r\nRefresh Rate: The monitor's 180Hz refresh rate and 1ms MPRT ensure smooth gameplay with reduced motion blur and more frames per second.",
+                        "category_id": "66fa26a5e8f8b40366d3d0e9",
+                        "createdAt": "2024-10-02T08:46:01.317Z",
+                        "updatedAt": "2024-10-11T13:59:43.490Z",
+                        "__v": 0
+                    },
+                    "quantity": 2,
+                    "price": 8499,
+                    "_id": "670774e64ea896dc0b537a8d"
+                }
+            ],
+            "totalAmount": 16998,
+            "status": "Pending",
+            "paymentMethod": "Cash on Delivery",
+            "paymentStatus": "Pending",
+            "orderDate": "2024-10-10T06:32:06.940Z",
+            "createdAt": "2024-10-10T06:32:06.946Z",
+            "updatedAt": "2024-10-10T06:32:06.946Z",
+            "__v": 0
+        },
+        {
+            "shippingAddress": {
+                "fullname": "ajeet yadav",
+                "addressline1": "grount floor,plot no.30,mauja road,jagdhmba blood bank,mauja naraich,mahal etmadpur madra,agra,utrapredesh",
+                "addressline2": "",
+                "city": "Agra",
+                "state": "Uttar Pradesh",
+                "zipcode": "282006",
+                "country": "US",
+                "phone": "9120073022"
+            },
+            "_id": "670774ff4ea896dc0b537ac6",
+            "user": "6707727ec9e888cfc945f802",
+            "products": [
+                {
+                    "productid": {
+                        "_id": "66fd0b19dc87a29804163f65",
+                        "name": "GIGABYTE Geforce RTX 4060 Eagle Oc 8G Graphics Card",
+                        "price": 2799,
+                        "stock": 0,
+                        "unlist": false,
+                        "images": [
+                            "1727859481254.jpg",
+                            "1727859541764.jpg",
+                            "1727859552740.jpg"
+                        ],
+                        "description": "Powered by NVIDIA DLSS 3, ultra-efficient Ada Lovelace architechture, and full ray tracing\r\n4th Generation Tensor Cores: Up to 4x performance with DLSS 3\r\n3rd Generation RT Cores: Up to 2x ray tracing performance\r\nIntegrated with 8GB GDDR6 128-bit memory interface",
+                        "category_id": "66fa515cda7aa084c07f54d7",
+                        "createdAt": "2024-10-02T08:58:01.261Z",
+                        "updatedAt": "2024-10-11T13:58:46.002Z",
+                        "__v": 3
+                    },
+                    "quantity": 5,
+                    "price": 2799,
+                    "_id": "670774ff4ea896dc0b537ac7"
+                },
+                {
+                    "productid": {
+                        "_id": "67039abeb90a3ab56834b204",
+                        "name": "ASFSDSAGAADGVAGASD",
+                        "price": 434,
+                        "stock": 3242,
+                        "unlist": false,
+                        "images": [
+                            "1728289470047.jpg"
+                        ],
+                        "description": "ASDFASGAFASDFAFEW",
+                        "category_id": "66fd0bcfdc87a29804163f91",
+                        "createdAt": "2024-10-07T08:24:30.055Z",
+                        "updatedAt": "2024-10-07T08:24:30.055Z",
+                        "__v": 0
+                    },
+                    "quantity": 4,
+                    "price": 434,
+                    "_id": "670774ff4ea896dc0b537ac8"
+                }
+            ],
+            "totalAmount": 15731,
+            "status": "Pending",
+            "paymentMethod": "Cash on Delivery",
+            "paymentStatus": "Pending",
+            "orderDate": "2024-10-10T06:32:31.783Z",
+            "createdAt": "2024-10-10T06:32:31.785Z",
+            "updatedAt": "2024-10-10T06:32:31.785Z",
+            "__v": 0
+        },
+        {
+            "shippingAddress": {
+                "fullname": "ajeet yadav",
+                "addressline1": "grount floor,plot no.30,mauja road,jagdhmba blood bank,mauja naraich,mahal etmadpur madra,agra,utrapredesh",
+                "addressline2": "",
+                "city": "Agra",
+                "state": "Uttar Pradesh",
+                "zipcode": "282006",
+                "country": "US",
+                "phone": "9120073022"
+            },
+            "_id": "6707bec9e8ee3a6cf8854d51",
+            "user": "6707727ec9e888cfc945f802",
+            "products": [
+                {
+                    "productid": {
+                        "_id": "66fd08e66988d06040bdc7cd",
+                        "name": "Acer EK220Q 21.5 Inch ",
+                        "price": 4799,
+                        "stock": 5,
+                        "unlist": false,
+                        "images": [
+                            "1727858918097.jpg",
+                            "1727858918099.jpg",
+                            "1727858918101.jpg"
+                        ],
+                        "description": "💥Full HD💥21.5 Inch Full HD 1920 x 1080 Resolution VA Panel Monitor I 250 Nits Brightness I 178 / 178 Degree View Angle I Edge to Edge Zero Frame Design\r\n💥1 MS💥 VRB Respose time helps Reduces Ghost & smearing effect also Elimination blur on fast moving object I 💥100 Hz💥 Refresh Rate for Outstanding fluidity of images & also provide gamers an excellent in-game experience",
+                        "category_id": "66fa26a5e8f8b40366d3d0e9",
+                        "createdAt": "2024-10-02T08:48:38.112Z",
+                        "updatedAt": "2024-10-11T13:59:43.492Z",
+                        "__v": 0
+                    },
+                    "quantity": 1,
+                    "price": 4799,
+                    "_id": "6707bec9e8ee3a6cf8854d52"
+                }
+            ],
+            "totalAmount": 4799,
+            "status": "Pending",
+            "paymentMethod": "Cash on Delivery",
+            "paymentStatus": "Pending",
+            "orderDate": "2024-10-10T11:47:21.273Z",
+            "createdAt": "2024-10-10T11:47:21.274Z",
+            "updatedAt": "2024-10-10T11:47:21.274Z",
+            "__v": 0
+        },
+        {
+            "shippingAddress": {
+                "fullname": "ajeet yadav",
+                "addressline1": "grount floor,plot no.30,mauja road,jagdhmba blood bank,mauja naraich,mahal etmadpur madra,agra,utrapredesh",
+                "addressline2": "",
+                "city": "Agra",
+                "state": "Uttar Pradesh",
+                "zipcode": "282006",
+                "country": "US",
+                "phone": "9120073022"
+            },
+            "_id": "6708ebe5a3c2986cfef7b997",
+            "user": "6707727ec9e888cfc945f802",
+            "products": [
+                {
+                    "productid": {
+                        "_id": "66fd097f6988d06040bdc7d8",
+                        "name": "METHEI Gaming Desktop",
+                        "price": 159999,
+                        "stock": 0,
+                        "unlist": false,
+                        "images": [
+                            "1727859071613.jpg",
+                            "1727859071614.jpg",
+                            "1727859071617.jpg"
+                        ],
+                        "description": "Powerful Performance: Equipped with an Core i7-3770 processor clocked at 3.4 GHz.\r\n16 GB DDR3 RAM, this gaming CPU delivers blazing-fast speeds for seamless multitasking and intense gaming sessions.\r\nAmple Storage: Enjoy lightning-quick boot times and rapid data access with a 512 GB solid-state drive (SSD), providing ample space for your games, applications, and files.\r\nDedicated Graphics: The 4 GB NVIDIA GeForce GT 730 graphics card ensures smooth rendering of high-resolution visuals and immersive gaming experiences.",
+                        "category_id": "66fa4cc1da7aa084c07f546d",
+                        "createdAt": "2024-10-02T08:51:11.625Z",
+                        "updatedAt": "2024-10-11T14:03:38.619Z",
+                        "__v": 0
+                    },
+                    "quantity": 3,
+                    "price": 159999,
+                    "_id": "6708ebe5a3c2986cfef7b998"
+                }
+            ],
+            "totalAmount": 479997,
+            "status": "Pending",
+            "paymentMethod": "Cash on Delivery",
+            "paymentStatus": "Pending",
+            "orderDate": "2024-10-11T09:12:05.699Z",
+            "createdAt": "2024-10-11T09:12:05.706Z",
+            "updatedAt": "2024-10-11T09:12:05.706Z",
+            "__v": 0
+        },
+        {
+            "shippingAddress": {
+                "fullname": "ajeet yadav",
+                "addressline1": "grount floor,plot no.30,mauja road,jagdhmba blood bank,mauja naraich,mahal etmadpur madra,agra,utrapredesh",
+                "addressline2": "",
+                "city": "Agra",
+                "state": "Uttar Pradesh",
+                "zipcode": "282006",
+                "country": "US",
+                "phone": "9120073022"
+            },
+            "_id": "6708ec0e9e3fc97d6f0cf500",
+            "user": "6707727ec9e888cfc945f802",
+            "products": [
+                {
+                    "productid": {
+                        "_id": "66fd097f6988d06040bdc7d8",
+                        "name": "METHEI Gaming Desktop",
+                        "price": 159999,
+                        "stock": 0,
+                        "unlist": false,
+                        "images": [
+                            "1727859071613.jpg",
+                            "1727859071614.jpg",
+                            "1727859071617.jpg"
+                        ],
+                        "description": "Powerful Performance: Equipped with an Core i7-3770 processor clocked at 3.4 GHz.\r\n16 GB DDR3 RAM, this gaming CPU delivers blazing-fast speeds for seamless multitasking and intense gaming sessions.\r\nAmple Storage: Enjoy lightning-quick boot times and rapid data access with a 512 GB solid-state drive (SSD), providing ample space for your games, applications, and files.\r\nDedicated Graphics: The 4 GB NVIDIA GeForce GT 730 graphics card ensures smooth rendering of high-resolution visuals and immersive gaming experiences.",
+                        "category_id": "66fa4cc1da7aa084c07f546d",
+                        "createdAt": "2024-10-02T08:51:11.625Z",
+                        "updatedAt": "2024-10-11T14:03:38.619Z",
+                        "__v": 0
+                    },
+                    "quantity": 3,
+                    "price": 159999,
+                    "_id": "6708ec0e9e3fc97d6f0cf501"
+                }
+            ],
+            "totalAmount": 479997,
+            "status": "Pending",
+            "paymentMethod": "Cash on Delivery",
+            "paymentStatus": "Pending",
+            "orderDate": "2024-10-11T09:12:46.355Z",
+            "createdAt": "2024-10-11T09:12:46.361Z",
+            "updatedAt": "2024-10-11T09:12:46.361Z",
+            "__v": 0
+        },
+        {
+            "shippingAddress": {
+                "fullname": "Afnan",
+                "addressline1": "nellikaparambu",
+                "addressline2": "",
+                "city": "Kozhikode",
+                "state": "Kerala",
+                "zipcode": "673602",
+                "country": "US",
+                "phone": "9846480440"
+            },
+            "_id": "6708ec522d05375fbfa82086",
+            "user": "6707727ec9e888cfc945f802",
+            "products": [
+                {
+                    "productid": {
+                        "_id": "66fd097f6988d06040bdc7d8",
+                        "name": "METHEI Gaming Desktop",
+                        "price": 159999,
+                        "stock": 0,
+                        "unlist": false,
+                        "images": [
+                            "1727859071613.jpg",
+                            "1727859071614.jpg",
+                            "1727859071617.jpg"
+                        ],
+                        "description": "Powerful Performance: Equipped with an Core i7-3770 processor clocked at 3.4 GHz.\r\n16 GB DDR3 RAM, this gaming CPU delivers blazing-fast speeds for seamless multitasking and intense gaming sessions.\r\nAmple Storage: Enjoy lightning-quick boot times and rapid data access with a 512 GB solid-state drive (SSD), providing ample space for your games, applications, and files.\r\nDedicated Graphics: The 4 GB NVIDIA GeForce GT 730 graphics card ensures smooth rendering of high-resolution visuals and immersive gaming experiences.",
+                        "category_id": "66fa4cc1da7aa084c07f546d",
+                        "createdAt": "2024-10-02T08:51:11.625Z",
+                        "updatedAt": "2024-10-11T14:03:38.619Z",
+                        "__v": 0
+                    },
+                    "quantity": 3,
+                    "price": 159999,
+                    "_id": "6708ec522d05375fbfa82087"
+                }
+            ],
+            "totalAmount": 479997,
+            "status": "Pending",
+            "paymentMethod": "Cash on Delivery",
+            "paymentStatus": "Pending",
+            "orderDate": "2024-10-11T09:13:54.552Z",
+            "createdAt": "2024-10-11T09:13:54.553Z",
+            "updatedAt": "2024-10-11T09:13:54.553Z",
+            "__v": 0
+        },
+        {
+            "shippingAddress": {
+                "fullname": "ajeet yadav",
+                "addressline1": "grount floor,plot no.30,mauja road,jagdhmba blood bank,mauja naraich,mahal etmadpur madra,agra,utrapredesh",
+                "addressline2": "",
+                "city": "Agra",
+                "state": "Uttar Pradesh",
+                "zipcode": "282006",
+                "country": "US",
+                "phone": "9120073022"
+            },
+            "_id": "6708ecd3eb85e8be7b0a6233",
+            "user": "6707727ec9e888cfc945f802",
+            "products": [
+                {
+                    "productid": {
+                        "_id": "66fd097f6988d06040bdc7d8",
+                        "name": "METHEI Gaming Desktop",
+                        "price": 159999,
+                        "stock": 0,
+                        "unlist": false,
+                        "images": [
+                            "1727859071613.jpg",
+                            "1727859071614.jpg",
+                            "1727859071617.jpg"
+                        ],
+                        "description": "Powerful Performance: Equipped with an Core i7-3770 processor clocked at 3.4 GHz.\r\n16 GB DDR3 RAM, this gaming CPU delivers blazing-fast speeds for seamless multitasking and intense gaming sessions.\r\nAmple Storage: Enjoy lightning-quick boot times and rapid data access with a 512 GB solid-state drive (SSD), providing ample space for your games, applications, and files.\r\nDedicated Graphics: The 4 GB NVIDIA GeForce GT 730 graphics card ensures smooth rendering of high-resolution visuals and immersive gaming experiences.",
+                        "category_id": "66fa4cc1da7aa084c07f546d",
+                        "createdAt": "2024-10-02T08:51:11.625Z",
+                        "updatedAt": "2024-10-11T14:03:38.619Z",
+                        "__v": 0
+                    },
+                    "quantity": 2,
+                    "price": 159999,
+                    "_id": "6708ecd3eb85e8be7b0a6234"
+                }
+            ],
+            "totalAmount": 319998,
+            "status": "Pending",
+            "paymentMethod": "Cash on Delivery",
+            "paymentStatus": "Pending",
+            "orderDate": "2024-10-11T09:16:03.382Z",
+            "createdAt": "2024-10-11T09:16:03.386Z",
+            "updatedAt": "2024-10-11T09:16:03.386Z",
+            "__v": 0
+        },
+        {
+            "shippingAddress": {
+                "fullname": "ajeet yadav",
+                "addressline1": "grount floor,plot no.30,mauja road,jagdhmba blood bank,mauja naraich,mahal etmadpur madra,agra,utrapredesh",
+                "addressline2": "",
+                "city": "Agra",
+                "state": "Uttar Pradesh",
+                "zipcode": "282006",
+                "country": "US",
+                "phone": "9120073022"
+            },
+            "_id": "6708ed13eb85e8be7b0a6258",
+            "user": "6707727ec9e888cfc945f802",
+            "products": [
+                {
+                    "productid": {
+                        "_id": "66fd097f6988d06040bdc7d8",
+                        "name": "METHEI Gaming Desktop",
+                        "price": 159999,
+                        "stock": 0,
+                        "unlist": false,
+                        "images": [
+                            "1727859071613.jpg",
+                            "1727859071614.jpg",
+                            "1727859071617.jpg"
+                        ],
+                        "description": "Powerful Performance: Equipped with an Core i7-3770 processor clocked at 3.4 GHz.\r\n16 GB DDR3 RAM, this gaming CPU delivers blazing-fast speeds for seamless multitasking and intense gaming sessions.\r\nAmple Storage: Enjoy lightning-quick boot times and rapid data access with a 512 GB solid-state drive (SSD), providing ample space for your games, applications, and files.\r\nDedicated Graphics: The 4 GB NVIDIA GeForce GT 730 graphics card ensures smooth rendering of high-resolution visuals and immersive gaming experiences.",
+                        "category_id": "66fa4cc1da7aa084c07f546d",
+                        "createdAt": "2024-10-02T08:51:11.625Z",
+                        "updatedAt": "2024-10-11T14:03:38.619Z",
+                        "__v": 0
+                    },
+                    "quantity": 1,
+                    "price": 159999,
+                    "_id": "6708ed13eb85e8be7b0a6259"
+                }
+            ],
+            "totalAmount": 159999,
+            "status": "Pending",
+            "paymentMethod": "Cash on Delivery",
+            "paymentStatus": "Pending",
+            "orderDate": "2024-10-11T09:17:07.903Z",
+            "createdAt": "2024-10-11T09:17:07.906Z",
+            "updatedAt": "2024-10-11T09:17:07.906Z",
+            "__v": 0
+        },
+        {
+            "shippingAddress": {
+                "fullname": "ajeet yadav",
+                "addressline1": "grount floor,plot no.30,mauja road,jagdhmba blood bank,mauja naraich,mahal etmadpur madra,agra,utrapredesh",
+                "addressline2": "",
+                "city": "Agra",
+                "state": "Uttar Pradesh",
+                "zipcode": "282006",
+                "country": "US",
+                "phone": "9120073022"
+            },
+            "_id": "6708ed2feb85e8be7b0a6285",
+            "user": "6707727ec9e888cfc945f802",
+            "products": [
+                {
+                    "productid": {
+                        "_id": "66fd097f6988d06040bdc7d8",
+                        "name": "METHEI Gaming Desktop",
+                        "price": 159999,
+                        "stock": 0,
+                        "unlist": false,
+                        "images": [
+                            "1727859071613.jpg",
+                            "1727859071614.jpg",
+                            "1727859071617.jpg"
+                        ],
+                        "description": "Powerful Performance: Equipped with an Core i7-3770 processor clocked at 3.4 GHz.\r\n16 GB DDR3 RAM, this gaming CPU delivers blazing-fast speeds for seamless multitasking and intense gaming sessions.\r\nAmple Storage: Enjoy lightning-quick boot times and rapid data access with a 512 GB solid-state drive (SSD), providing ample space for your games, applications, and files.\r\nDedicated Graphics: The 4 GB NVIDIA GeForce GT 730 graphics card ensures smooth rendering of high-resolution visuals and immersive gaming experiences.",
+                        "category_id": "66fa4cc1da7aa084c07f546d",
+                        "createdAt": "2024-10-02T08:51:11.625Z",
+                        "updatedAt": "2024-10-11T14:03:38.619Z",
+                        "__v": 0
+                    },
+                    "quantity": 1,
+                    "price": 159999,
+                    "_id": "6708ed2feb85e8be7b0a6286"
+                }
+            ],
+            "totalAmount": 159999,
+            "status": "Pending",
+            "paymentMethod": "Cash on Delivery",
+            "paymentStatus": "Pending",
+            "orderDate": "2024-10-11T09:17:35.155Z",
+            "createdAt": "2024-10-11T09:17:35.159Z",
+            "updatedAt": "2024-10-11T09:17:35.159Z",
+            "__v": 0
+        },
+        {
+            "shippingAddress": {
+                "fullname": "ajeet yadav",
+                "addressline1": "grount floor,plot no.30,mauja road,jagdhmba blood bank,mauja naraich,mahal etmadpur madra,agra,utrapredesh",
+                "addressline2": "",
+                "city": "Agra",
+                "state": "Uttar Pradesh",
+                "zipcode": "282006",
+                "country": "US",
+                "phone": "9120073022"
+            },
+            "_id": "6708ed7e7e4e5277f0e5e244",
+            "user": "6707727ec9e888cfc945f802",
+            "products": [
+                {
+                    "productid": {
+                        "_id": "66fd08496988d06040bdc7c3",
+                        "name": "ZEBRONICS New Launch N24A 24\"(60.4 cm) Gaming Monitor",
+                        "price": 8499,
+                        "stock": 0,
+                        "unlist": false,
+                        "images": [
+                            "1727858761291.jpg",
+                            "1727858761295.jpg",
+                            "1727858761297.jpg"
+                        ],
+                        "description": "Anti-glare screen: The 60.4cm screen of the ZEB-N24A is treated with an anti-glare coating, which reduces reflections and minimizes eye strain during prolonged gaming sessions.\r\nBuilt-in Speakers: Equipped with built-in speakers, the ZEB-N24A offers a convenient audio solution without the need for external speakers.\r\nBezel-Less Design: The ZEB-N24A boasts a sleek, bezel-less design, providing an expansive viewing area that enhances the sense of immersion. Its 16:9 aspect ratio offers a wider viewing experience.\r\nRefresh Rate: The monitor's 180Hz refresh rate and 1ms MPRT ensure smooth gameplay with reduced motion blur and more frames per second.",
+                        "category_id": "66fa26a5e8f8b40366d3d0e9",
+                        "createdAt": "2024-10-02T08:46:01.317Z",
+                        "updatedAt": "2024-10-11T13:59:43.490Z",
+                        "__v": 0
+                    },
+                    "quantity": 5,
+                    "price": 8499,
+                    "_id": "6708ed7e7e4e5277f0e5e245"
+                }
+            ],
+            "totalAmount": 42495,
+            "status": "Pending",
+            "paymentMethod": "Cash on Delivery",
+            "paymentStatus": "Pending",
+            "orderDate": "2024-10-11T09:18:54.967Z",
+            "createdAt": "2024-10-11T09:18:54.969Z",
+            "updatedAt": "2024-10-11T09:18:54.969Z",
+            "__v": 0
+        },
+        {
+            "shippingAddress": {
+                "fullname": "ajeet yadav",
+                "addressline1": "grount floor,plot no.30,mauja road,jagdhmba blood bank,mauja naraich,mahal etmadpur madra,agra,utrapredesh",
+                "addressline2": "",
+                "city": "Agra",
+                "state": "Uttar Pradesh",
+                "zipcode": "282006",
+                "country": "US",
+                "phone": "9120073022"
+            },
+            "_id": "6708ed917e4e5277f0e5e269",
+            "user": "6707727ec9e888cfc945f802",
+            "products": [
+                {
+                    "productid": {
+                        "_id": "66fd08496988d06040bdc7c3",
+                        "name": "ZEBRONICS New Launch N24A 24\"(60.4 cm) Gaming Monitor",
+                        "price": 8499,
+                        "stock": 0,
+                        "unlist": false,
+                        "images": [
+                            "1727858761291.jpg",
+                            "1727858761295.jpg",
+                            "1727858761297.jpg"
+                        ],
+                        "description": "Anti-glare screen: The 60.4cm screen of the ZEB-N24A is treated with an anti-glare coating, which reduces reflections and minimizes eye strain during prolonged gaming sessions.\r\nBuilt-in Speakers: Equipped with built-in speakers, the ZEB-N24A offers a convenient audio solution without the need for external speakers.\r\nBezel-Less Design: The ZEB-N24A boasts a sleek, bezel-less design, providing an expansive viewing area that enhances the sense of immersion. Its 16:9 aspect ratio offers a wider viewing experience.\r\nRefresh Rate: The monitor's 180Hz refresh rate and 1ms MPRT ensure smooth gameplay with reduced motion blur and more frames per second.",
+                        "category_id": "66fa26a5e8f8b40366d3d0e9",
+                        "createdAt": "2024-10-02T08:46:01.317Z",
+                        "updatedAt": "2024-10-11T13:59:43.490Z",
+                        "__v": 0
+                    },
+                    "quantity": 1,
+                    "price": 8499,
+                    "_id": "6708ed917e4e5277f0e5e26a"
+                }
+            ],
+            "totalAmount": 8499,
+            "status": "Pending",
+            "paymentMethod": "Cash on Delivery",
+            "paymentStatus": "Pending",
+            "orderDate": "2024-10-11T09:19:13.692Z",
+            "createdAt": "2024-10-11T09:19:13.695Z",
+            "updatedAt": "2024-10-11T09:19:13.695Z",
+            "__v": 0
+        },
+        {
+            "shippingAddress": {
+                "fullname": "ajeet yadav",
+                "addressline1": "grount floor,plot no.30,mauja road,jagdhmba blood bank,mauja naraich,mahal etmadpur madra,agra,utrapredesh",
+                "addressline2": "",
+                "city": "Agra",
+                "state": "Uttar Pradesh",
+                "zipcode": "282006",
+                "country": "US",
+                "phone": "9120073022"
+            },
+            "_id": "6708edcdbc0cf3dacf413ebc",
+            "user": "6707727ec9e888cfc945f802",
+            "products": [
+                {
+                    "productid": {
+                        "_id": "66fd0b19dc87a29804163f65",
+                        "name": "GIGABYTE Geforce RTX 4060 Eagle Oc 8G Graphics Card",
+                        "price": 2799,
+                        "stock": 0,
+                        "unlist": false,
+                        "images": [
+                            "1727859481254.jpg",
+                            "1727859541764.jpg",
+                            "1727859552740.jpg"
+                        ],
+                        "description": "Powered by NVIDIA DLSS 3, ultra-efficient Ada Lovelace architechture, and full ray tracing\r\n4th Generation Tensor Cores: Up to 4x performance with DLSS 3\r\n3rd Generation RT Cores: Up to 2x ray tracing performance\r\nIntegrated with 8GB GDDR6 128-bit memory interface",
+                        "category_id": "66fa515cda7aa084c07f54d7",
+                        "createdAt": "2024-10-02T08:58:01.261Z",
+                        "updatedAt": "2024-10-11T13:58:46.002Z",
+                        "__v": 3
+                    },
+                    "quantity": 4,
+                    "price": 2799,
+                    "_id": "6708edcdbc0cf3dacf413ebd"
+                }
+            ],
+            "totalAmount": 11196,
+            "status": "Pending",
+            "paymentMethod": "Cash on Delivery",
+            "paymentStatus": "Pending",
+            "orderDate": "2024-10-11T09:20:13.670Z",
+            "createdAt": "2024-10-11T09:20:13.676Z",
+            "updatedAt": "2024-10-11T09:20:13.676Z",
+            "__v": 0
+        },
+        {
+            "shippingAddress": {
+                "fullname": "ajeet yadav",
+                "addressline1": "grount floor,plot no.30,mauja road,jagdhmba blood bank,mauja naraich,mahal etmadpur madra,agra,utrapredesh",
+                "addressline2": "",
+                "city": "Agra",
+                "state": "Uttar Pradesh",
+                "zipcode": "282006",
+                "country": "US",
+                "phone": "9120073022"
+            },
+            "_id": "6708edf6bc0cf3dacf413ee4",
+            "user": "6707727ec9e888cfc945f802",
+            "products": [
+                {
+                    "productid": {
+                        "_id": "66fd0b19dc87a29804163f65",
+                        "name": "GIGABYTE Geforce RTX 4060 Eagle Oc 8G Graphics Card",
+                        "price": 2799,
+                        "stock": 0,
+                        "unlist": false,
+                        "images": [
+                            "1727859481254.jpg",
+                            "1727859541764.jpg",
+                            "1727859552740.jpg"
+                        ],
+                        "description": "Powered by NVIDIA DLSS 3, ultra-efficient Ada Lovelace architechture, and full ray tracing\r\n4th Generation Tensor Cores: Up to 4x performance with DLSS 3\r\n3rd Generation RT Cores: Up to 2x ray tracing performance\r\nIntegrated with 8GB GDDR6 128-bit memory interface",
+                        "category_id": "66fa515cda7aa084c07f54d7",
+                        "createdAt": "2024-10-02T08:58:01.261Z",
+                        "updatedAt": "2024-10-11T13:58:46.002Z",
+                        "__v": 3
+                    },
+                    "quantity": 1,
+                    "price": 2799,
+                    "_id": "6708edf6bc0cf3dacf413ee5"
+                }
+            ],
+            "totalAmount": 2799,
+            "status": "Pending",
+            "paymentMethod": "Cash on Delivery",
+            "paymentStatus": "Pending",
+            "orderDate": "2024-10-11T09:20:54.359Z",
+            "createdAt": "2024-10-11T09:20:54.360Z",
+            "updatedAt": "2024-10-11T09:20:54.360Z",
+            "__v": 0
+        },
+        {
+            "shippingAddress": {
+                "fullname": "ajeet yadav",
+                "addressline1": "grount floor,plot no.30,mauja road,jagdhmba blood bank,mauja naraich,mahal etmadpur madra,agra,utrapredesh",
+                "addressline2": "",
+                "city": "Agra",
+                "state": "Uttar Pradesh",
+                "zipcode": "282006",
+                "country": "US",
+                "phone": "9120073022"
+            },
+            "_id": "6708ee18bc0cf3dacf413f3a",
+            "user": "6707727ec9e888cfc945f802",
+            "products": [
+                {
+                    "productid": {
+                        "_id": "66fd08e66988d06040bdc7cd",
+                        "name": "Acer EK220Q 21.5 Inch ",
+                        "price": 4799,
+                        "stock": 5,
+                        "unlist": false,
+                        "images": [
+                            "1727858918097.jpg",
+                            "1727858918099.jpg",
+                            "1727858918101.jpg"
+                        ],
+                        "description": "💥Full HD💥21.5 Inch Full HD 1920 x 1080 Resolution VA Panel Monitor I 250 Nits Brightness I 178 / 178 Degree View Angle I Edge to Edge Zero Frame Design\r\n💥1 MS💥 VRB Respose time helps Reduces Ghost & smearing effect also Elimination blur on fast moving object I 💥100 Hz💥 Refresh Rate for Outstanding fluidity of images & also provide gamers an excellent in-game experience",
+                        "category_id": "66fa26a5e8f8b40366d3d0e9",
+                        "createdAt": "2024-10-02T08:48:38.112Z",
+                        "updatedAt": "2024-10-11T13:59:43.492Z",
+                        "__v": 0
+                    },
+                    "quantity": 1,
+                    "price": 4799,
+                    "_id": "6708ee18bc0cf3dacf413f3b"
+                },
+                {
+                    "productid": null,
+                    "quantity": 1,
+                    "price": 1111,
+                    "_id": "6708ee18bc0cf3dacf413f3c"
+                }
+            ],
+            "totalAmount": 5910,
+            "status": "Pending",
+            "paymentMethod": "Cash on Delivery",
+            "paymentStatus": "Pending",
+            "orderDate": "2024-10-11T09:21:28.140Z",
+            "createdAt": "2024-10-11T09:21:28.143Z",
+            "updatedAt": "2024-10-11T09:21:28.143Z",
+            "__v": 0
+        },
+        {
+            "shippingAddress": {
+                "fullname": "Afnan",
+                "addressline1": "nellikaparambu",
+                "addressline2": "",
+                "city": "Kozhikode",
+                "state": "Kerala",
+                "zipcode": "673602",
+                "country": "US",
+                "phone": "9846480440"
+            },
+            "_id": "6709303a9d94fbd6c3e09a08",
+            "user": "6707727ec9e888cfc945f802",
+            "products": [
+                {
+                    "productid": {
+                        "_id": "66fd097f6988d06040bdc7d8",
+                        "name": "METHEI Gaming Desktop",
+                        "price": 159999,
+                        "stock": 0,
+                        "unlist": false,
+                        "images": [
+                            "1727859071613.jpg",
+                            "1727859071614.jpg",
+                            "1727859071617.jpg"
+                        ],
+                        "description": "Powerful Performance: Equipped with an Core i7-3770 processor clocked at 3.4 GHz.\r\n16 GB DDR3 RAM, this gaming CPU delivers blazing-fast speeds for seamless multitasking and intense gaming sessions.\r\nAmple Storage: Enjoy lightning-quick boot times and rapid data access with a 512 GB solid-state drive (SSD), providing ample space for your games, applications, and files.\r\nDedicated Graphics: The 4 GB NVIDIA GeForce GT 730 graphics card ensures smooth rendering of high-resolution visuals and immersive gaming experiences.",
+                        "category_id": "66fa4cc1da7aa084c07f546d",
+                        "createdAt": "2024-10-02T08:51:11.625Z",
+                        "updatedAt": "2024-10-11T14:03:38.619Z",
+                        "__v": 0
+                    },
+                    "quantity": 1,
+                    "price": 159999,
+                    "_id": "6709303a9d94fbd6c3e09a09"
+                }
+            ],
+            "totalAmount": 159999,
+            "status": "Pending",
+            "paymentMethod": "Cash on Delivery",
+            "paymentStatus": "Pending",
+            "orderDate": "2024-10-11T14:03:38.623Z",
+            "createdAt": "2024-10-11T14:03:38.626Z",
+            "updatedAt": "2024-10-11T14:03:38.626Z",
+            "__v": 0
         }
-    ],
-    "totalAmount": 34038,
-    "status": "Cancelled",
-    "paymentMethod": "Cash on Delivery",
-    "paymentStatus": "Pending",
-    "orderDate": "2024-10-10T06:22:47.483Z",
-    "createdAt": "2024-10-10T06:22:47.485Z",
-    "updatedAt": "2024-10-10T09:36:03.445Z",
-    "__v": 0
+    ]
 }

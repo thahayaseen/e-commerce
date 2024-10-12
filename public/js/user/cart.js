@@ -52,7 +52,10 @@ quantities.forEach((quantity, index) => {
 
   
     plusButton.addEventListener('click', () => {
+       if(number<5){
         checkAndUpdateQuantity(true);  
+       }
+       else alert('the maximum quantity reached')
     });
 
     updateDisplay();  
