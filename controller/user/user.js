@@ -184,7 +184,7 @@ const varifylogin = async (req, res, next) => {
         }
 
         req.session.ulogin = check._id;
-        return res.redirect('/home');
+        return res.redirect('/');
 
     } catch (error) {
         console.error(error);
@@ -241,18 +241,16 @@ const glogincb = (req, res, next) => {
             return next(err);
         }
         if (!user) {
-            // req.session.login=''
             return res.redirect('/signin');
         }
         req.logIn(user, (err) => {
             if (err) {
                 return next(err);
             }
-            // console.log(user);
+        
             if (!user.blocked) {
                 req.session.ulogin = user._id
-
-                return res.redirect('/home')
+                return res.redirect('/')
             }
             if (user.blocked) {
                 console.log('notok');
@@ -530,4 +528,21 @@ const productstockdata=async (req,res)=>{
     res.status(200).json({success:true,stock:productdata.stock})
     
 }
-module.exports = { signup, otpvarify, resent, varifylogin, viewproduct, logout, blockuser, glogincb, cartitemspush, cartupdata, cartitemdelete, addaddress, placeorder, deleteaddress, cancelorder, editname, changepass,productstockdata }     
+const cancelitem=async (req,res)=>{
+    console.log(req.body);
+   const {orderId,productId}= req.body
+   const orderdata=await orderchema.findById(orderId)
+   const index = orderdata.products.findIndex(product => product.productid == productId);
+
+    console.log(index);
+    orderdata.products[index].status=false
+    const change=await orderdata.save()
+    if (change) {
+        res.status(201).json({success:true})
+    }
+    else{
+        res.status(204)
+    }
+}
+
+module.exports = { signup, otpvarify, resent, varifylogin, viewproduct, logout, blockuser, glogincb, cartitemspush, cartupdata, cartitemdelete, addaddress, placeorder, deleteaddress, cancelorder, editname, changepass,productstockdata,cancelitem }     

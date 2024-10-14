@@ -10,7 +10,7 @@ btn.addEventListener('click',(e)=>{
 })
 
 const setError=(id,massage)=>{
-    const input=id.parentElement
+    const input=id.parentElement.parentElement
     const err=input.querySelector('.error')
 
     err.innerText=massage

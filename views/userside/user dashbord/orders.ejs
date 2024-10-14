@@ -3,27 +3,23 @@
 
 <head>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet">
-
-    <!-- Font Awesome CSS -->
     <link href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" rel="stylesheet">
-
     <link rel="stylesheet" href="/css/myprofile.css">
     <style>
         .profile-header {
             background-color: #dfdfdf;
             padding: 20px;
             border-radius: 10px;
-            
-            
         }
-        .userdtls{
-            border: #1a1a1a solid 1px ;
-            border-radius:10px ;
+
+        .userdtls {
+            border: #1a1a1a solid 1px;
+            border-radius: 10px;
             background-color: #8f8f8f;
             padding: 30px;
-padding-bottom: 95px;
-            
+            padding-bottom: 95px;
         }
+
         .user-stats {
             display: flex;
             justify-content: space-between;
@@ -39,16 +35,71 @@ padding-bottom: 95px;
             font-size: 14px;
         }
 
-      
+        .product-modal .modal-content {
+            border-radius: 15px;
+            overflow: hidden;
+        }
+
+        .product-modal .modal-header {
+            background-color: #f8f9fa;
+            border-bottom: none;
+        }
+
+        .product-modal .modal-body {
+            padding: 2rem;
+        }
+
+        .product-modal .product-image-container {
+            position: relative;
+            overflow: hidden;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .product-modal .product-image {
+            width: 100%;
+            height: 300px;
+            object-fit: cover;
+            transition: transform 0.3s ease;
+        }
+
+        .product-modal .product-image:hover {
+            transform: scale(1.05);
+        }
+
+        .product-modal .product-details {
+            margin-top: 1.5rem;
+        }
+
+        .product-modal .product-name {
+            font-size: 1.5rem;
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+        }
+
+        .product-modal .product-description {
+            font-size: 1rem;
+            color: #6c757d;
+            margin-bottom: 1rem;
+        }
+
+        .product-modal .product-price {
+            font-size: 1.25rem;
+            font-weight: bold;
+            color: #28a745;
+        }
+
+        .product-modal .modal-footer {
+            border-top: none;
+            padding-top: 0;
+        }
     </style>
 </head>
 
 <body>
-
-
     <nav class="navbar navbar-expand-sm">
         <div class="container">
-            <a class="navbar-brand" href="/home">NZXT</a>
+            <a class="navbar-brand" href="/">NZXT</a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
                 <span class="navbar-toggler-icon"></span>
             </button>
@@ -77,22 +128,30 @@ padding-bottom: 95px;
                     <a class="nav-link" href="#">❔</a>
                     <a class="nav-link" href="#">👤</a>
                     <a class="nav-link" href="#">🛒</a>
-                    <a href="/logout"><?xml version="1.0" ?><svg fill="none" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M17 16L21 12M21 12L17 8M21 12L7 12M13 16V17C13 18.6569 11.6569 20 10 20H6C4.34315 20 3 18.6569 3 17V7C3 5.34315 4.34315 4 6 4H10C11.6569 4 13 5.34315 13 7V8" stroke="#374151" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/></svg></a>
+                    <a href="/logout">
+                        <?xml version="1.0" ?><svg fill="none" height="24" viewBox="0 0 24 24" width="24"
+                            xmlns="http://www.w3.org/2000/svg">
+                            <path
+                                d="M17 16L21 12M21 12L17 8M21 12L7 12M13 16V17C13 18.6569 11.6569 20 10 20H6C4.34315 20 3 18.6569 3 17V7C3 5.34315 4.34315 4 6 4H10C11.6569 4 13 5.34315 13 7V8"
+                                stroke="#374151" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" />
+                        </svg>
+                    </a>
                 </div>
             </div>
         </div>
     </nav>
+
     <div class="container mt-4">
         <div class="row">
             <!-- Sidebar (unchanged) -->
             <div class="col-lg-3 my-lg-0 my-md-1">
                 <%-include('./sidebar',{activePage:"orders"}) %>
             </div>
-    
+
             <!-- Main Content -->
             <div class="col-lg-9">
                 <h2>Recent Orders</h2>
-                <% orders.forEach(order => { %>
+                <% orders.forEach(order=> { %>
                     <div class="card mb-3">
                         <div class="card-header d-flex justify-content-between align-items-center">
                             <span>Order #<%= order._id %></span>
@@ -105,39 +164,159 @@ padding-bottom: 95px;
                                 <div class="col-md-8">
                                     <h5>Products:</h5>
                                     <ul class="list-group">
-                                        <% order.products.forEach(product => { %>
-                                            <li class="list-group-item d-flex justify-content-between align-items-center">
+                                        <% order.products.forEach(product=> { %>
+                                            <li
+                                                class="list-group-item d-flex justify-content-between align-items-center">
                                                 <%= product.productid.name %>
-                                                <span class="badge bg-primary rounded-pill">Qty: <%= product.quantity %></span>
+                                                    <span class="badge bg-primary rounded-pill">Qty: <%=
+                                                            product.quantity %></span>
+                                                    <div>
+                                                        <button class="btn btn-sm btn-info view-product"
+                                                            data-bs-toggle="modal" data-bs-target="#productModal"
+                                                            data-product='<%= JSON.stringify(product.productid) %>'>View</button>
+                                                        <% if (order.status !=='Delivered' && order.status
+                                                            !=='Cancelled' ) { %>
+                                                            <button class="btn btn-sm 
+                                                                <%= product.status ? 'btn-danger cancel-product' : 'btn-secondary' %>" 
+                                                                <%=product.status ? '' : 'disabled' %>
+                                                                data-bs-toggle="modal"
+                                                                data-bs-target="#cancelProductModal"
+                                                                data-order-id="<%= order._id %>"
+                                                                    data-product-id="<%= product.productid._id %>">
+                                                                        <%= product.status ? 'Cancel' : 'Cancelled' %>
+                                                            </button>
+
+                                                            <% } %>
+                                                    </div>
                                             </li>
-                                        <% }) %>
+                                            <% }) %>
                                     </ul>
                                 </div>
                                 <div class="col-md-4">
-                                    <p><strong>Date:</strong> <%= new Date(order.createdAt).toLocaleDateString() %></p>
-                                    <p><strong>Total:</strong><%= order.totalAmount  %> </p>
-                                    <% if (order.status !== 'Delivered' && order.status !== 'Cancelled') { %>
-                                        <a data-orderid="<%=order._id  %>" class="btn cancelbtn btn-danger" >Cancel Order</a>
-                                    <% } %>
+                                    <p><strong>Date:</strong>
+                                        <%= new Date(order.createdAt).toLocaleDateString() %>
+                                    </p>
+                                    <p><strong>Total:</strong>
+                                        <%= order.totalAmount %>
+                                    </p>
+                                    <% if (order.status !=='Delivered' && order.status !=='Cancelled' ) { %>
+                                        <a data-orderid="<%=order._id  %>" class="btn cancelbtn btn-danger">Cancel
+                                            Order</a>
+                                        <% } %>
                                 </div>
                             </div>
                         </div>
                     </div>
-                <% }) %>
+                    <% }) %>
             </div>
         </div>
     </div>
-    
-   
 
-   
+    <!-- Product Modal -->
+    <div class="modal fade product-modal" id="productModal" tabindex="-1" aria-labelledby="productModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="productModalLabel">Product Details</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="product-image-container mt-5    ">
+                                <img src="" alt="Product Image" id="productImage" class="product-image ">
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="product-details">
+                                <h4 id="productName" class="product-name"></h4>
+                                <p id="productDescription" class="product-description"></p>
+                                <p><strong>Price:</strong> <span id="productPrice" class="product-price"></span></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
 
-   <script src="/js/user/orders.js"></script>
+    <!-- Cancel Product Modal -->
+    <div class="modal fade" id="cancelProductModal" tabindex="-1" aria-labelledby="cancelProductModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="cancelProductModalLabel">Cancel Product</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <p>Are you sure you want to cancel this product from your order?</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">No, Keep It</button>
+                    <button type="button" class="btn btn-danger" id="confirmCancelProduct">Yes, Cancel Product</button>
+                </div>
+            </div>
+        </div>
+    </div>
 
+    <script src="/js/user/orders.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-
-    <!-- Bootstrap JS Bundle (includes Popper) -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script>
+        // Product modal functionality
+        document.getElementById('productModal').addEventListener('show.bs.modal', function (event) {
+            let button = event.relatedTarget;
+            let product = JSON.parse(button.getAttribute('data-product'));
+            let modal = this;
+            modal.querySelector('#productName').textContent = product.name;
+            modal.querySelector('#productDescription').textContent = product.description;
+            modal.querySelector('#productPrice').textContent = '$' + product.price.toFixed(2);
+            modal.querySelector('#productImage').src = `/uploads/${product.images[0]}`;
+        });
+
+        // Cancel product functionality
+        document.getElementById('cancelProductModal').addEventListener('show.bs.modal', function (event) {
+            let button = event.relatedTarget;
+            let orderId = button.getAttribute('data-order-id');
+            let productId = button.getAttribute('data-product-id');
+            let confirmButton = this.querySelector('#confirmCancelProduct');
+            confirmButton.setAttribute('data-order-id', orderId);
+            confirmButton.setAttribute('data-product-id', productId);
+        });
+
+        document.getElementById('confirmCancelProduct').addEventListener('click', function () {
+            const orderId = this.getAttribute('data-order-id');
+            const productId = this.getAttribute('data-product-id');
+
+            fetch('/user/cancel-product', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ orderId: orderId, productId: productId }),
+            })
+                .then(response => response.json())
+                .then(data => {
+                    console.log('Success:', data);
+
+                    location.reload();
+                })
+                .catch((error) => {
+                    console.error('Error:', error);
+
+                });
+
+            var modal = document.getElementById('cancelProductModal');
+            var bootstrapModal = bootstrap.Modal.getInstance(modal);
+            bootstrapModal.hide();
+        });
+    </script>
 </body>
 
 </html>

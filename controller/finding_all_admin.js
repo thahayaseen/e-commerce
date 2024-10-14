@@ -12,84 +12,96 @@ const alluser = async (req, res, next) => {
         const user = await User.find().skip(skip).limit(limit)
         const totalProducts = await User.countDocuments();
         const totalPages = Math.ceil(totalProducts / limit);
-        req.session.users = {user,totalPages, currentPage: page, limit: limit}
+        req.session.users = { user, totalPages, currentPage: page, limit: limit }
         next()
     } catch (error) {
         console.log(error);
 
     }
 }
-// const allproducts=async (req,res,next)=>{
-//     try{
-//         const products=await Product.find().populate('category_id')
-//         // console.log('prod',products)
-//         const categ=await categories.find()
 
-//         req.session.categories=categ
-//         req.session.products=products
-//         next()
-//     }
-//     catch(error){
-//         console.log(error);
-
-//     }
-// }
 const allproducts = async (req, res, next) => {
     try {
-
         const page = parseInt(req.query.page) || 1;
+        let categoryName = req.query.category || '';
+        const query=req.query.search||''
         const limit = parseInt(req.query.limit) || 6;
-        const sort = req.query.sort || 'featured'; // Default to 'featured' if no sort parameter is passed
+        const sort = req.query.sort || 'featured'; 
         const skip = (page - 1) * limit;
-        
-        // Sorting conditions based on the 'sort' parameter
+
         let sortCondition = {};
-        
+
         switch (sort) {
             case 'priceLowToHigh':
-                sortCondition = { price: 1 }; // Ascending order (low to high)
+                sortCondition = { price: 1 };
                 break;
             case 'priceHighToLow':
-                sortCondition = { price: -1 }; // Descending order (high to low)
+                sortCondition = { price: -1 };
                 break;
             case 'averageRating':
-                sortCondition = { rating: -1 }; // Highest ratings first
+                sortCondition = { rating: -1 };
                 break;
             case 'newArrivals':
-                sortCondition = { createdAt: -1 }; // Most recent first
+                sortCondition = { createdAt: -1 };
                 break;
             case 'aToZ':
-                sortCondition = { name: 1 }; // Alphabetical order (A-Z)
+                sortCondition = { name: 1 };
                 break;
             case 'zToA':
-                sortCondition = { name: -1 }; // Reverse alphabetical order (Z-A)
+                sortCondition = { name: -1 };
                 break;
             default:
-                sortCondition = { featured: -1 }; // Default sorting by featured
+                sortCondition = { featured: -1 };
+        }
+        if(categoryName=='all'){
+            categoryName=''
+        }
+        let search={}
+        if(query){
+            {
+                search= {name:{$regex:`^${query}`,$options:'i'}}
+            }
         }
         
-        // Fetch paginated products with sorting
-        const products = await Product.find()
+
+
+        let categoryFilter = {};
+        if (categoryName) {
+            const category = await categories.findOne({ name: categoryName });
+            if (category) {
+                categoryFilter = { category_id: category._id };  
+            } else {
+                categoryFilter = { category_id: null };  // No matching category, no products will be found
+            }
+        }
+        let filterdata={...categoryFilter,...search}
+        
+        const products = await Product.find(filterdata)
             .populate('category_id')
             .sort(sortCondition)
             .skip(skip)
-            .limit(limit); 
-        
-        const categ = await categories.find();
-        
+            .limit(limit);
+
+        console.log(products.length);
+
+        const categ = await categories.find();  // Fetch all categories
+
         req.session.categories = categ;
         req.session.products = products;
+
+        const totalProducts = products.length+1; 
+        console.log(totalProducts);
         
-        const totalProducts = await Product.countDocuments();
         const totalPages = Math.ceil(totalProducts / limit);
         req.session.pagination = { totalPages, currentPage: page, limit: limit };
-        
+
         next();
-        
+
     } catch (error) {
         console.log(error);
         res.status(500).send('Server Error');
     }
 };
+
 
 module.exports = { alluser, allproducts }

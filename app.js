@@ -1,9 +1,9 @@
 const express = require('express');
 const passport = require('passport');
 const session = require('express-session');
-const mongoose = require('mongoose');
 const adminrout = require('./router/adminrout');
 const router = require('./router/all_route');
+const mongoose=require('./router/mongoose')
 require('dotenv').config();
 
 const app = express();
@@ -37,22 +37,15 @@ app.use((req, res, next) => {
 
 app.use(passport.initialize());
 app.use(passport.session());
-// MongoDB connection
-mongoose.connect('mongodb://localhost:27017/ecommewrs')
-  .then(() => {
-    console.log('MongoDB connected successfully');
-  })
-  .catch((err) => {
-    console.error('MongoDB connection error:', err);
-  });
+
+app.set(mongoose)
 
 // Use routes
-
 app.use('/admin', adminrout);
 app.use('/', router);
 
 // Start the server
-const PORT = 1000; // Default to 1000 if not set
+const PORT = 4050;
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
 });

@@ -161,7 +161,7 @@ const oredrs = async (req, res) => {
 try {
        
     const userid=req.session.ulogin
-const orders=await ordersshema.find({user:userid}).populate('products.productid')
+const orders=await ordersshema.find({user:userid}).populate('products.productid').sort({createdAt:1})
     
     // console.log('\n datas \n'+orders)
     const aaa=JSON.stringify({orders})

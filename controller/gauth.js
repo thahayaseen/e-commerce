@@ -6,22 +6,22 @@
     passport.use(new GoogleStrategy({
       clientID: "1085020479396-efpdp6e3crilkcgauk7qutddailrjoi5.apps.googleusercontent.com",
       clientSecret: "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",
-      callbackURL: 'http://localhost:1000/glogin/callback',
+      callbackURL: 'http://localhost:4050/glogin/callback',
       passReqToCallback: true
     },
     async function(request, accessToken, refreshToken, profile, cb) {
       try {
         request.session.glogin='okk'
           console.log( request.session.glogin+'gsdfsh');
-        // Check if user already exists in the database
+        
         let user = await User.findOne({ googleId: profile.id,email:profile.emails[0].value });
 
         if (!user) {
           function generateUsername(name) {
             console.log('dfassdgdfgsdfhgs');
             
-            const baseUsername = name.toLowerCase().replace(/\s+/g, ''); // Remove spaces and make lowercase
-            const randomNumber = Math.floor(Math.random() * 1000); // Add random number to make it more unique
+            const baseUsername = name.toLowerCase().replace(/\s+/g, ''); 
+            const randomNumber = Math.floor(Math.random() * 1000); 
             return `${baseUsername}${randomNumber}`;
           }
       
@@ -29,7 +29,7 @@
           const uname=generateUsername(profile.displayName);
           console.log(uname);
           
-          users = new User({
+          user = new User({
             googleId: profile.id,
             name:profile.displayName,
             user_name: uname,
@@ -39,7 +39,7 @@
           })
          
           
-          const x=await users.save();
+          const x=await user.save();
           if(x){
           console.log(x);
           }
