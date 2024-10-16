@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>WeebsCorner - Wishlist</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: #244960;
+        }
+
+        .navbar {
+            background-color: #5F42E8;
+            padding: 15px 0;
+        }
+
+        .navbar-brand {
+            font-weight: bold;
+            font-size: 24px;
+            color: white !important;
+        }
+
+        .nav-link {
+            color: white !important;
+            margin-right: 20px;
+        }
+
+        .navbar-nav .nav-item:last-child .nav-link {
+            margin-right: 0;
+        }
+
+        .navbar-icons {
+            display: flex;
+            align-items: center;
+        }
+
+        .navbar-icons .nav-link {
+            padding: 0 10px;
+        }
+
+        .breadcrumb {
+            background-color: transparent;
+            padding: 1rem 0;
+        }
+
+        .card {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            background-color: #ffffff;
+            border: none;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, .1);
+        }
+
+        .btn-primary {
+            background-color: #007bff;
+            border-color: #007bff;
+        }
+
+        .btn-primary:hover {
+            background-color: #0056b3;
+            border-color: #0056b3;
+        }
+
+        .icon-hover:hover {
+            color: #007bff !important;
+        }
+
+        .bg-gradient {
+            background: linear-gradient(to right, #9333ea, #4f46e5);
+        }
+
+        .wishlist-item {
+            border-bottom: 1px solid #e0e0e0;
+            padding: 20px 0;
+        }
+
+        .wishlist-item:last-child {
+            border-bottom: none;
+        }
+
+        .product-image {
+            width: 100px;
+            height: 100px;
+            object-fit: cover;
+        }
+
+        .btn-outline-danger {
+            color: #dc3545;
+            border-color: #dc3545;
+        }
+
+        .btn-outline-danger:hover {
+            color: #fff;
+            background-color: #dc3545;
+            border-color: #dc3545;
+        }
+    </style>
+</head>
+<body>
+    <header class="bg-gradient text-white shadow">
+        <nav class="navbar navbar-expand-md p-0 navbarbg">
+            <div class="container-sm">
+                <a class="navbar-brand fs-4 fw-bold" href="/">WeebsCorner</a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="navbar container-fluid" id="navbarNav">
+                    <ul class="navbar-nav p-0">
+                        <li class="nav-item">
+                            <a class="nav-link" href="/product">All Products</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="/gaming-gear">Gaming Gear</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="/community">Community</a>
+                        </li>
+                    </ul>
+                    <div class="d-flex">
+                        <a href="/wishlist" class="btn btn-link text-white me-2">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-heart-fill" viewBox="0 0 16 16">
+                                <path fill-rule="evenodd" d="M8 1.314C12.438-3.248 23.534 4.735 8 15-7.534 4.736 3.562-3.248 8 1.314z"/>
+                            </svg>
+                        </a>
+                        <a href="/user/mydash" class="btn btn-link text-white me-2">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-person" viewBox="0 0 16 16">
+                                <path d="M8 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm2-3a2 2 0 1 1-4 0 2 2 0 0 1 4 0zm4 8c0 1-1 1-1 1H3s-1 0-1-1 1-4 6-4 6 3 6 4zm-1-.004c-.001-.246-.154-.986-.832-1.664C11.516 10.68 10.289 10 8 10c-2.29 0-3.516.68-4.168 1.332-.678.678-.83 1.418-.832 1.664h10z"/>
+                            </svg>
+                        </a>
+                        <a href="/cart" class="btn btn-link text-white me-2">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-cart" viewBox="0 0 16 16">
+                                <path d="M0 1.5A.5.5 0 0 1 .5 1H2a.5.5 0 0 1 .485.379L2.89 3H14.5a.5.5 0 0 1 .491.592l-1.5 8A.5.5 0 0 1 13 12H4a.5.5 0 0 1-.491-.408L2.01 3.607 1.61 2H.5a.5.5 0 0 1-.5-.5zM3.102 4l1.313 7h8.17l1.313-7H3.102zM5 12a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm7 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm-7 1a1 1 0 1 1 0 2 1 1 0 0 1 0-2zm7 0a1 1 0 1 1 0 2 1 1 0 0 1 0-2z"/>
+                            </svg>
+                        </a>
+                        <a href="/logout" class="btn btn-link text-white">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-box-arrow-right" viewBox="0 0 16 16">
+                                <path fill-rule="evenodd" d="M10 12.5a.5.5 0 0 1-.5.5h-8a.5.5 0 0 1-.5-.5v-9a.5.5 0 0 1 .5-.5h8a.5.5 0 0 1 .5.5v2a.5.5 0 0 0 1 0v-2A1.5 1.5 0 0 0 9.5 2h-8A1.5 1.5 0 0 0 0 3.5v9A1.5 1.5 0 0 0 1.5 14h8a1.5 1.5 0 0 0 1.5-1.5v-2a.5.5 0 0 0-1 0v2z"/>
+                                <path fill-rule="evenodd" d="M15.854 8.354a.5.5 0 0 0 0-.708l-3-3a.5.5 0 0 0-.708.708L14.293 7.5H5.5a.5.5 0 0 0 0 1h8.793l-2.147 2.146a.5.5 0 0 0 .708.708l3-3z"/>
+                            </svg>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <main class="container my-5">
+        <h1 class="text-white mb-4">My Wishlist</h1>
+        <div class="card">
+            <div class="card-body">
+                <% wishlist.productid.forEach((data,ind)=>{ %>
+                <div class="wishlist-item">
+                    <div class="row align-items-center">
+                        <div class="col-md-2" style="width: 210px;">
+                            <img src="/uploads/<%=data.images[0]  %>" alt="Product 3"  style="width: 200px; height: 150px; border-radius: 20px; " class="product-image">
+                        </div>
+                        <div class="col">
+                            <h5 class="mb-0"><%=data.name%></h5>
+                            <!-- <p class="text-muted mb-0">XL Size</p> -->
+                        </div>
+                        <div class="col-md-2 text-end">
+                            <h5 class="mb-0">$24.99</h5>
+                        </div>
+                        <div class="col text-end">
+                            <a class="btn btn-primary btn-sm" id="wishlistbtn"  data-pid="<%=data._id%>"  data-price="<%=data.price  %>" >Add to Cart</a>
+                            <button class="btn btn-outline-danger btn-sm " id="removewish" data-index="<%= ind %>" data-wishlistid="<%=wishlist._id%>">Remove</button>
+                        </div>
+                    </div>
+                </div>
+                <% }) %>
+            </div>
+        </div>
+    </main>
+    <script>
+    const removebtn=document.querySelectorAll('#removewish')
+
+    removebtn.forEach(data=>{
+        data.addEventListener('click',(e)=>{
+            const wishlistid=data.dataset.wishlistid
+            const index=data.dataset.index
+            const dataset={wishlistid,index}
+            console.log(index);
+            console.log(wishlistid);
+            fetch('/wishlist/remove',{
+                method:'PATCH',
+                body:JSON.stringify(dataset),
+                headers: {
+                            'Content-Type': 'application/json'
+                            }
+            })
+            .then(res=>res.json()
+            )
+            .then(res=>{
+                console.log(res.success);
+                
+                if(res.success){
+                    window.location.href='/wishlist'
+                }
+            })
+
+
+        })
+    })
+    
+    const wishlistbtn=document.querySelectorAll('#wishlistbtn') 
+        wishlistbtn.forEach(btns=>{
+            btns.addEventListener('click',(e)=>{
+                const priductisdata=btns.dataset.pid
+                
+                const price=btns.dataset.price
+                
+                const quantity=1
+                const dataset={priductisdata,quantity,price}
+                console.log(dataset);
+                fetch(`/cart`,{
+                    method:'POST',
+                    body:JSON.stringify(dataset),
+                    headers: {
+                            'Content-Type': 'application/json'
+                            }
+                    
+                })
+                .then(res=>res.json())
+                .then(res=>{
+                    console.log(res.success);
+                    
+                       
+                    
+                }
+                )                
+        
+            })
+        })</script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

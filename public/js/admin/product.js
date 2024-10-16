@@ -51,7 +51,7 @@ document.addEventListener('DOMContentLoaded', function () {
     let currentImageIndex = 0;
     let imagesToCrop = [];
     const croppedImages = []; // Array to store cropped images
-    const cropControls = document.getElementById('addcropControls'); // Container for cropping controls
+    const cropControls = document.getElementById('addcropControls'); 
     const cropperImage = document.getElementById('addcropperImage'); // Image element for cropping
     const nextButton = document.getElementById('nextButton'); // Next button for cropping images
     const productImageInput = document.getElementById('addproductImageInput');
@@ -234,6 +234,7 @@ document.addEventListener('DOMContentLoaded', function () {
         const productDescription = this.getAttribute('data-description');
         const stock = this.dataset.stock;
         const price = this.dataset.price;
+        const offer=this.dataset.offer;
 
         // Clear previous images from the modal
         imageContainer.innerHTML = '';
@@ -257,6 +258,7 @@ document.addEventListener('DOMContentLoaded', function () {
         document.getElementById('productDescription').value = productDescription;
         document.getElementById('productStock').value = stock;
         document.getElementById('productprice').value = price;
+        document.getElementById('productOffer').value = offer;
 
         // Set the correct category in the dropdown
         const categorySelect = document.getElementById('productCategory');

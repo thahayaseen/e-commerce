@@ -1,5 +1,5 @@
-const { signup, otpvarify, resent, varifylogin, logout, viewproduct, blockuser, glogincb, cartitemspush, cartupdata, cartitemdelete, addaddress, placeorder, deleteaddress, cancelorder, editname, changepass, productstockdata, cancelitem } = require("../controller/user/user")
-const { register, login, otp, userhome, productlist, myaccount, userdash, useraddress, oredrs, cartrender, checkout } = require('../middleware/render')
+const { signup, otpvarify, resent, varifylogin, logout, viewproduct, blockuser, glogincb, cartitemspush, cartupdata, cartitemdelete, addaddress, placeorder, deleteaddress, cancelorder, editname, changepass, productstockdata, cancelitem,patchwishlist,removewish,coupenapplaying,razorpayvarify } = require("../controller/user/user")
+const { register, login, otp, userhome, productlist, myaccount, userdash, useraddress, oredrs, cartrender, checkout,wishlist } = require('../middleware/render')
 // const plogin=require('../controller/user/ulogin')
 const { pregister } = require('../middleware/redirect')
 const { allproducts } = require('../controller/finding_all_admin')
@@ -64,14 +64,22 @@ router.patch('/address/:id', deleteaddress)
 router.patch('/userupdate', editname)
 router.patch('/changepass', changepass)
 
+// wishlist 
+router.get('/wishlist',wishlist)
+router.patch('/wishlist/remove',removewish)
+router.patch('/wishlist/:id',patchwishlist)
 
-
+router.get('/applaycoupon/:name',coupenapplaying)
 
 
 router.get('/glogin/callback', glogincb);
+//razorpay varify
+router.post('/verify-payment',razorpayvarify);
+
 
 
 //logout
+
 
 router.get('/logout', logout)
 

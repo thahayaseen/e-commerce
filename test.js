@@ -1,81 +1,72 @@
-document.addEventListener('DOMContentLoaded', function () {
-    const filterForm = document.getElementById('filterForm');
-    const sortForm = document.getElementById('sortForm');
-    const paginationLinks = document.querySelectorAll('.pagination .page-link');
+const razor = require("./config/razorpay");
 
-    function getUrlParams() {
-        return new URLSearchParams(window.location.search);
-    }
+if (paymentmethods && selectedAddress && userid) {
+    try {
+        // Find the user's cart and address
+        const usercart = await cartschema.findOne({ userid });
+        const userdata = await User.findById(userid);
+        const selectedaddress = await address_scema.findById(selectedAddress);
 
-    function updateQueryString(formData) {
-        const params = new URLSearchParams(formData);
-        return params.toString();
-    }
-
-    function applyFiltersAndSort(page = null) {
-        const filterData = new FormData(filterForm);
-        const sortData = new FormData(sortForm);
-        const currentParams = getUrlParams();
-
-
-        const limit = currentParams.get('limit') || '6';
-        filterData.append('limit', limit);
-
-
-        const currentSort = currentParams.get('sort');
-        if (currentSort && !sortData.get('sort')) {
-            sortData.set('sort', currentSort);
+        // Verify address ownership
+        if (selectedaddress.userid.toString() !== userid.toString()) {
+            return res.status(400).json({ success: false, message: 'User ID and address do not match' });
         }
 
-        if (page) {
-            filterData.append('page', page);
-        }
+        // Map product data from cart
+        const productdata = usercart.product.map(item => ({
+            productid: item.productid._id,
+            quantity: item.quantity,
+            price: item.price
+        }));
 
-        const queryString = updateQueryString(filterData) + '&' + updateQueryString(sortData);
-        window.location.href = `${window.location.pathname}?${queryString}`;
-    }
-
-    filterForm.addEventListener('submit', function (e) {
-        // e.preventDefault();
-        // applyFiltersAndSort();
-        
-    });
-
-    sortForm.querySelector('select[name="sort"]').addEventListener('change', function () {
-        applyFiltersAndSort();
-    });
-
-    paginationLinks.forEach(link => {
-        link.addEventListener('click', function (e) {
-            e.preventDefault();
-            const page = this.getAttribute('data-page');
-            applyFiltersAndSort(page);
-        });
-    });
-
-    // Set initial values based on URL parameters
-    const urlParams = getUrlParams();
-    urlParams.forEach((value, key) => {
-        const element = filterForm.elements[key] || sortForm.elements[key];
-        if (element) {
-            if (element.type === 'checkbox') {
-                element.checked = (value === 'on' || value === 'true');
-            } else {
-                element.value = value;
+        // Update stock for each product
+        for (const datas of productdata) {
+            const product = await product_schema.findById(datas.productid);
+            if (product.stock < datas.quantity) {
+                return res.status(400).json({ success: false, message: 'Insufficient stock for product ' + product._id });
             }
+            product.stock -= parseInt(datas.quantity);
+            await product.save();
         }
-    });
-});
-document.getElementById('searchInput').addEventListener('input', function () {
-    const searchTerm = this.value.toLowerCase();
-    const productCards = document.querySelectorAll('.productlist .card');
 
-    productCards.forEach(card => {
-        const productName = card.querySelector('.card-title').textContent.toLowerCase();
-        if (productName.includes(searchTerm)) {
-            card.style.display = ''
-        } else {
-            card.style.display = 'none'
+        // Create order
+        const order = new orderchema({
+            user: userid,
+            products: productdata,
+            totalAmount: usercart.totalprice,
+            paymentMethod: paymentmethods,
+            shippingAddress: selectedaddress,
+            'coupon.discount': discount,  // Ensure 'discount' is defined
+            'coupon.couponcode': cname    // Ensure 'cname' is defined
+        });
+
+        const ordersave = await order.save();
+
+        if (paymentmethods === 'onlinePayment') {
+            // Razorpay payment integration
+            const options = {
+                amount: usercart.totalprice * 100, 
+                currency: 'INR',
+                receipt: ordersave._id.toString() 
+            };
+
+            const razorpayOrder = await razor.orders.create(options);
+            console.log('Razorpay order created:', razorpayOrder);
         }
-    });
-});
+
+        if (ordersave) {
+            
+            usercart.product = [];
+            await usercart.save();
+
+            // Add the order to user's history
+            userdata.orders.push(ordersave._id);
+            await userdata.save();
+
+            return res.status(200).json({ success: true, message: 'The order was successfully placed' });
+        }
+    } catch (error) {
+        console.log('Error in placing order:', error);
+        return res.status(500).json({ success: false, message: 'Error placing order', error });
+    }
+}

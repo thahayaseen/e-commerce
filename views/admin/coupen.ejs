@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <title>Coupon Management - Admin Dashboard</title>
+  
+  <!-- Plugins CSS -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@mdi/font/css/materialdesignicons.min.css">
+
+  <!-- Main CSS -->
+  <link rel="stylesheet" href="/assets/css/style.css">
+  
+  <!-- Custom styles for this page -->
+  <style>
+    .coupon-card {
+      background-color: #191c24;
+      border-radius: 10px;
+      padding: 20px;
+      margin-bottom: 20px;
+      transition: all 0.3s ease;
+    }
+    .coupon-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+    }
+    .coupon-code {
+      font-size: 24px;
+      font-weight: bold;
+      color: #00d25b;
+    }
+    .coupon-discount {
+      font-size: 18px;
+      color: #ffab00;
+    }
+    .coupon-expiry {
+      font-size: 14px;
+      color: #6c7293;
+    }
+    .coupon-status {
+      padding: 5px 10px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: bold;
+    }
+    .status-active {
+      background-color: #00d25b;
+      color: #ffffff;
+    }
+    .status-inactive {
+      background-color: #fc424a;
+      color: #ffffff;
+    }
+    .modal-content {
+      background-color: #191c24;
+      color: #ffffff;
+    }
+    .modal-header {
+      border-bottom: 1px solid #2c2e33;
+    }
+    .modal-footer {
+      border-top: 1px solid #2c2e33;
+    }
+  </style>
+  
+  <script>
+  let coupons = <%-JSON.stringify(coupons) %>
+  </script>
+
+</head>
+
+<body>
+  <div class="container-scroller">
+    <!-- Sidebar partial -->
+    <div class="sidebar">
+        <%- include('./admin_parts/sidebar') %>
+    </div>
+    
+    <div class="container-fluid page-body-wrapper">
+      <!-- Header partial -->
+      <%- include("./admin_parts/hedder") %>
+      
+      <div class="main-panel">
+        <div class="content-wrapper">
+          <div class="page-header">
+            <h3 class="page-title" data-coupens="<%=coupons  %>">Coupon Management</h3>
+            <nav aria-label="breadcrumb">
+              <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="#">Dashboard</a></li>
+                <li class="breadcrumb-item active" aria-current="page">Coupons</li>
+              </ol>
+            </nav>
+          </div>
+          
+          <div class="row">
+            <div class="col-12 grid-margin">
+              <div class="card">
+                <div class="card-body">
+                  <h4 class="card-title">Manage Coupons</h4>
+                  <button class="btn btn-primary mb-4" data-toggle="modal" data-target="#addCouponModal">
+                    <i class="mdi mdi-plus"></i> Add New Coupon
+                  </button>
+                  <div class="row" id="couponContainer">
+                    <!-- Coupon cards will be dynamically added here -->
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Add Coupon Modal -->
+  <div class="modal fade" id="addCouponModal" tabindex="-1" role="dialog" aria-labelledby="addCouponModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="addCouponModalLabel">Add New Coupon</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <form id="addCouponForm">
+            <div class="form-group">
+              <label for="couponCode">Coupon Code</label>
+              <input type="text" class="form-control" id="couponCode" required>
+            </div>
+            <div class="form-group">
+              <label for="discountAmount">Discount Amount (%)</label>
+              <input type="number" class="form-control" min="0" max="100" maxlength="3" id="discountAmount" required>
+            </div>
+            <div class="form-group">
+              <label for="minAmount">Minimum Amount</label>
+              <input type="number" class="form-control" min="0" id="minAmount" required>
+            </div>
+            <div class="form-group">
+              <label for="maxAmount">Maximum Amount</label>
+              <input type="number" class="form-control" min="0" id="maxAmount" required>
+            </div>
+            <div class="form-group">
+              <label for="expiryDate">Expiry Date</label>
+              <input type="date" class="form-control" id="expiryDate" required>
+            </div>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-primary" onclick="addCoupon()">Add Coupon</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Edit Coupon Modal -->
+  <div class="modal fade" id="editCouponModal" tabindex="-1" role="dialog" aria-labelledby="editCouponModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="editCouponModalLabel">Edit Coupon</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <form id="editCouponForm">
+            <input type="hidden" id="editCouponId">
+            <div class="form-group">
+              <label for="editCouponCode">Coupon Code</label>
+              <input type="text" class="form-control" id="editCouponCode" required>
+            </div>
+            <div class="form-group">
+              <label for="editDiscountAmount">Discount Amount (%)</label>
+              <input type="number" class="form-control" max="100" id="editDiscountAmount" required>
+            </div>
+            <div class="form-group">
+              <label for="editMinAmount">Minimum Amount</label>
+              <input type="number" class="form-control" id="editMinAmount" min="0" required>
+            </div>
+            <div class="form-group">
+              <label for="editMaxAmount">Maximum Amount</label>
+              <input type="number" class="form-control" min="0" id="editMaxAmount" required>
+            </div>
+            <div class="form-group">
+              <label for="editExpiryDate">Expiry Date</label>
+              <input type="date" class="form-control" id="editExpiryDate" required>
+            </div>
+            <div class="form-group">
+              <label for="editStatus">Status</label>
+              <select class="form-control" id="editStatus">
+                <option value="Active">Active</option>
+                <option value="Inactive">Inactive</option>
+              </select>
+            </div>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" onclick="closeModal('editCouponModal')">Close</button>
+          <button type="button" class="btn btn-primary" onclick="updateCoupon()">Update Coupon</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Scripts -->
+  <script src="/assets/vendors/js/vendor.bundle.base.js"></script>
+  
+  <script src="/js/admin/coupon.js">
+   
+  </script>
+</body>
+
+</html>

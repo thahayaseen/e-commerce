@@ -1,7 +1,8 @@
 // MongoDB connection
 const mongoose = require('mongoose');
+// require('dotenv').config()
 
-mongoose.connect('mongodb://localhost:27017/ecommewrs')
+mongoose.connect(process.env.mongoosekey)
   .then(() => {
     console.log('MongoDB connected successfully');
   })
@@ -9,4 +10,6 @@ mongoose.connect('mongodb://localhost:27017/ecommewrs')
     console.error('MongoDB connection error:', err);
   });
 
-exports=mongoose
+
+
+module.exports=mongoose

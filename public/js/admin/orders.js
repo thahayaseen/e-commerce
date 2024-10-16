@@ -87,8 +87,9 @@ document.querySelectorAll('.vieworder').forEach(button => {
     
     document.getElementById('orderItems').innerHTML = itemsHtml;
     document.getElementById('orderSubtotal').textContent = subtotal.toFixed(2);
+    document.getElementById('coupon').textContent = `${order.coupon.couponcode}(₹${order.coupon.discount})`||'no'
     document.getElementById('orderShipping').textContent = 'free'
-    document.getElementById('orderTotal').textContent = (subtotal).toFixed(2);
+    document.getElementById('orderTotal').textContent = (subtotal-order.coupon.discount).toFixed(2);
   }
   
   function getStatusClass(status) {

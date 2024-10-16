@@ -5,6 +5,7 @@ const path = require('path');
 const fs = require('fs');
 const categories = require('../../model/categories');
 const orders=require('../../model/orders')
+const coupons=require('../../model/coupon')
 
 // admin authentication 
 const auth = async (req, res, next) => {
@@ -105,7 +106,7 @@ const list = async (req, res, next) => {
 };
 //add product
 const padd = async (req, res, next) => {
-    const { newProductName, newProductCategory, newProductDescription, newProductPrice, newProductStock } = req.body
+    const { newProductName, newProductCategory, newProductDescription, newProductPrice, newProductStock,newProductOffer } = req.body
     const fiels = req.files
     console.log(fiels);
     let image = []
@@ -121,6 +122,7 @@ const padd = async (req, res, next) => {
         description: newProductDescription,
         price: newProductPrice,
         stock: newProductStock,
+        offer:newProductOffer,
         images: image
 
     });
@@ -134,7 +136,7 @@ const submitedit = async (req, res) => {
     const productId = req.params.id;
     const product = await Product.findById(productId);
 
-    const { productName, productCategory, productDescription, productStock, productPrice } = req.body;
+    const { productName, productCategory, productDescription, productStock, productPrice,productOffer } = req.body;
 
     if (productName && productCategory && productDescription && productStock && productPrice) {
         product.name = productName;
@@ -142,6 +144,7 @@ const submitedit = async (req, res) => {
         product.description = productDescription;
         product.stock = productStock;
         product.price = productPrice;
+        product.offer = productOffer;
         product.save()
         return res.status(200).json({ success: true })
     }
@@ -153,35 +156,32 @@ const imageadding = async function updateProduct(req, res) {
 
     try {
         const files = req.files; // Get uploaded files (new images)
-        const croppedImages = req.body.croppedImages ? JSON.parse(req.body.croppedImages) : []; // Get cropped image data
-        const deletedImages = req.body.deletedImages ? JSON.parse(req.body.deletedImages) : []; // Parse deleted images
+        const croppedImages = req.body.croppedImages ? JSON.parse(req.body.croppedImages) : []; 
+        const deletedImages = req.body.deletedImages ? JSON.parse(req.body.deletedImages) : []; 
 
-        // Find the product by ID
+      
         const product = await Product.findById(productId);
 
-        // Handle new uploaded files (add new images)
+   
         if (files && files.length > 0) {
             files.forEach(file => {
-                if (!product.images.includes(file.filename)) { // Check if the image is not already in the product's image array
-                    product.images.push(file.filename); // Push the new image filenames into the array
+                if (!product.images.includes(file.filename)) { 
+                    product.images.push(file.filename); 
                 }
             });
         }
 
-        // Handle cropped images
+
         if (croppedImages.length > 0) {
             for (const croppedImage of croppedImages) {
                 const { base64, name } = croppedImage;
 
-                // Convert base64 image data to a buffer
                 const buffer = Buffer.from(base64, 'base64');
 
-                // Define the upload path and save the cropped image
                 const uploadPath = path.join(__dirname, '..', '..', 'public', 'uploads', name);
 
-                // Save the cropped image using sharp (you can adjust dimensions as needed)
                 await sharp(buffer)
-                    .resize(300, 300) // Resize or crop (adjust as needed)
+                    .resize(200, 200)
                     .toFile(uploadPath);
 
                 // Add the cropped image to the product's images array
@@ -289,4 +289,27 @@ const getiingorderdetials=async (req,res)=>{
     res.status(200).json({success:true,data:orderdata})
     
 }
-module.exports = { auth, accses, list, padd, imageadding, submitedit, savecat, useredit, categoryunlist ,updateorder,getiingorderdetials}
+const addcoupen=async(req,res)=>{
+    const bdata=req.body
+    console.log(bdata);
+    
+    const add=new coupons(bdata)
+   await add.save()
+   res.status(201).json({success:true})
+}
+const coupenedit=async (req,res)=>{
+    const id =req.params.id
+    const cdata=await coupons.findById(id)
+    if(cdata){
+        Object.assign(cdata,req.body)
+        await cdata.save()
+        res.status(201).json({success:true})
+    }
+}
+const deletecupen=async(req,res)=>{
+    const cid=req.params.id
+    const dcoupen=await coupons.deleteOne({_id:cid})
+    // await dcoupen.save()
+    res.status(204).json({success:true})
+}
+module.exports = { auth, accses, list, padd, imageadding, submitedit, savecat, useredit, categoryunlist ,updateorder,getiingorderdetials,addcoupen,coupenedit,deletecupen}

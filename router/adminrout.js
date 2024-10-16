@@ -1,11 +1,12 @@
 const express = require('express')
 const router = express.Router()
-const { auth, accses, list, padd, savecat, imageadding, submitedit, useredit, categoryunlist, updateorder, getiingorderdetials } = require('../controller/admin/admin')
-const { adminlogin, admin, user, product, catagory, orders } = require('../middleware/render')
-const { alluser, allproducts } = require('../controller/finding_all_admin')
+const { auth, accses, list, padd, savecat, imageadding, submitedit, useredit, categoryunlist, updateorder, getiingorderdetials,addcoupen,coupenedit,deletecupen } = require('../controller/admin/admin')
+const { adminlogin, admin, user, product, catagory, orders,coupenrender } = require('../middleware/render')
+const { alluser, adproducts } = require('../controller/finding_all_admin')
 const nocach = require('../middleware/nocach')
 const upload = require('../middleware/uplodimage')
 const Product = require('../model/product_schema')
+const coupon = require('../model/coupon')
 router.get('/', nocach, adminlogin)
 
 // postinf
@@ -20,11 +21,11 @@ router.get('/users', alluser, user)
 router.patch('/users/accses/:id', nocach, accses)
 // router.get('/users/unblock/:id',nocach,unblock)
 //products
-router.get('/product', allproducts, product)
+router.get('/product', adproducts, product)
 
 
 //product delete and unlist and edit
-router.post('/product/edit/:id')
+// router.post('/product/edit/:id')
 router.patch('/product/unlist/:id', list)
 //submit edited data
 
@@ -36,8 +37,12 @@ router.patch('/product/images/edit/:id', upload.array('croppedImage'), imageaddi
 router.post('/product/add', upload.array('addimage'), padd)
 
 
-router.get('/category', allproducts, catagory)
-
+router.get('/category', adproducts, catagory)
+// coupen 
+router.get('/coupon',coupenrender)
+router.post('/coupon',addcoupen)
+router.put('/coupon/:id',coupenedit)
+router.delete('/coupon/:id',deletecupen)
 
 
 // add category 

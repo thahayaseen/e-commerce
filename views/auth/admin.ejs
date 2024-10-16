@@ -2,95 +2,80 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <meta
-      name="viewport"
-      content="width=device-width, initial-scale=1.0"
-    />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Admin Login</title>
-    <link
-      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css"
-      rel="stylesheet"
-    />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet" />
     <style>
-      body{
-        background-color:antiquewhite;
+      body {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
       }
-      .inner{
-        background-color: rgb(144, 22, 22);
+      .card {
+        background-color: rgba(255, 255, 255, 0.9);
+        border-radius: 1rem;
+        box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
       }
-      label{
-        color: black;
+      .card-title {
+        color: #4a4a4a;
       }
-      p{
-        color:azure;
+      .form-control {
+        border-radius: 0.5rem;
+      }
+      .btn-primary {
+        background-color: #4e54c8;
+        border-color: #4e54c8;
+        border-radius: 0.5rem;
+        padding: 0.75rem 1.5rem;
+        font-weight: 600;
+        transition: all 0.3s ease;
+      }
+      .btn-primary:hover {
+        background-color: #3f45b2;
+        border-color: #3f45b2;
+        transform: translateY(-2px);
+      }
+      .text-primary {
+        color: #4e54c8 !important;
+      }
+      .form-check-input:checked {
+        background-color: #4e54c8;
+        border-color: #4e54c8;
       }
     </style>
   </head>
-  <body class=" py-5 mt-5">
-    <div class="container d-flex flex-column  pt-5  ">
+  <body>
+    <div class="container">
       <div class="row justify-content-center">
-        <div class="col-lg-6 col-md-8">
-          <div class="d-flex justify-content-center">
-            <div class="card p-5 shadow-sm inner rounded-3 w-100">
-              <form class="text-center " action="/admin" method="post">
-                <h3 class="mb-3 display-5 fw-bold text-primary">Admin Login</h3>
-                <p class="mb-4 ">Enter your admin credentials</p>
-                <div class="error text-danger small mt-1">
-                  <%= ans || '' %>
+        <div class="col-lg-5 col-md-7 col-sm-9">
+          <div class="card p-4 p-md-5">
+            <div class="card-body">
+              <h2 class="card-title text-center mb-4">Admin Login</h2>
+              <form action="/admin" method="post">
+                <div class="mb-4">
+                  <div class="input-group">
+                    <span class="input-group-text"><i class="fas fa-user"></i></span>
+                    <input name="username" type="text" class="form-control" id="username" placeholder="Admin Username" required />
+                  </div>
                 </div>
-                
-                <!-- Username Input -->
-                <div class="form-floating mb-3">
-                  <input
-                    name="username"
-                    type="text"
-                    id="username"
-                    class="form-control"
-                    placeholder="Admin Username"
-                    required
-                  />
-                  <label for="username">Admin Username*</label>
-                  <div class="error ms-0 align-items-start text-start text-danger"></div>
+                <div class="mb-4">
+                  <div class="input-group">
+                    <span class="input-group-text"><i class="fas fa-lock"></i></span>
+                    <input name="password" type="password" class="form-control" id="password" placeholder="Password" required />
+                  </div>
                 </div>
-
-                <!-- Password Input -->
-                <div class="form-floating mb-3">
-                  <input
-                  name="password"
-                    type="password"
-                    id="password"
-                    class="form-control"
-                    placeholder="Enter your password"
-                    required
-                  />
-                  <label for="password">Password*</label>
-                  <div class="error ms-0 align-items-start text-danger text-start"></div>
-                </div>
-
-                <div class="d-flex justify-content-between mb-4">
+                <div class="d-flex justify-content-between align-items-center mb-4">
                   <div class="form-check">
-                    <input
-                      class="form-check-input"
-                      type="checkbox"
-                      id="rememberMe"
-                    />
-                    <label class="form-check-label" for="rememberMe">
-                      Keep me logged in
-                    </label>
+                    <input class="form-check-input" type="checkbox" id="rememberMe" />
+                    <label class="form-check-label" for="rememberMe">Remember me</label>
                   </div>
                   <a href="#" class="text-primary">Forgot password?</a>
                 </div>
-
-                <button
-                  type="submit"
-                  id="butten"
-                  class="btn btn-primary w-100 mb-4"
-                >
-                  Admin Sign In
-                </button>
-                <p class="">
-                  Not an admin? 
-                  <a href="/signin" class="text-primary fw-bold">Go to User Login</a>
+                <button type="submit" class="btn btn-primary w-100 mb-4">Sign In</button>
+                <p class="text-center mb-0">
+                  Not an admin? <a href="/signin" class="text-primary">User Login</a>
                 </p>
               </form>
             </div>
@@ -98,9 +83,6 @@
         </div>
       </div>
     </div>
-    <script
-      src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"
-    ></script>
-    <script src="/js/auth/adminlogin.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
   </body>
 </html>

@@ -4,11 +4,13 @@ const session = require('express-session');
 const adminrout = require('./router/adminrout');
 const router = require('./router/all_route');
 const mongoose=require('./router/mongoose')
+
 require('dotenv').config();
 
 const app = express();
 
 app.set('view engine', 'ejs');
+app.set(mongoose)
 app.use(express.static('public'));
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
@@ -38,7 +40,6 @@ app.use((req, res, next) => {
 app.use(passport.initialize());
 app.use(passport.session());
 
-app.set(mongoose)
 
 // Use routes
 app.use('/admin', adminrout);

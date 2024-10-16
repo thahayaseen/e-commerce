@@ -23,31 +23,9 @@ const id = window.location.pathname.split('/')[2]
 
 let quantity = 1;
 
-document.getElementById('minusBtn').addEventListener('click', function () {
-    if (quantity > 1) {
-        quantity--;
-        document.getElementById('quantityDisplay').textContent = quantity;
-    }
-});
-
-document.getElementById('plusBtn').addEventListener('click', function () {
-    console.log(id);
-
-    fetch(`/productstock/${id}`, {
-        method: 'GET'
-    })
-        .then(res => res.json())
-        .then(res => {
-            if (res.stock <= quantity||quantity>=5) {
-                console.log(res.stock);
-                return alert('cannot add more quantity')
-            }
-            quantity++
-            document.getElementById('quantityDisplay').textContent = quantity;
 
 
-        })
-});
+
 // add to cart btn
 const addtobtn = document.getElementById('addtocart')
 
@@ -83,4 +61,17 @@ addtobtn.addEventListener('click', (e) => {
 
         })
 
+})
+const wishlistbtn=document.querySelectorAll('#wishlistbtn') 
+wishlistbtn.forEach(btns=>{
+    btns.addEventListener('click',(e)=>{
+        const productid=btns.dataset.productid
+        console.log(productid);
+        fetch(`/wishlist/${productid}`,{
+            method:'PATCH',
+            
+        })
+        
+
+    })
 })

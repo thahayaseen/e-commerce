@@ -6,7 +6,7 @@ const categories = require('../model/categories')
 const alluser = async (req, res, next) => {
     try {
         const page = parseInt(req.query.page) || 1
-        const limit = parseInt(req.query.limit) || 3
+        const limit = parseInt(req.query.limit) || 6
         const skip = (page - 1) * limit;
 
         const user = await User.find().skip(skip).limit(limit)
@@ -71,10 +71,11 @@ const allproducts = async (req, res, next) => {
             if (category) {
                 categoryFilter = { category_id: category._id };  
             } else {
-                categoryFilter = { category_id: null };  // No matching category, no products will be found
+                categoryFilter = { category_id: null };  
             }
         }
-        let filterdata={...categoryFilter,...search}
+        let filterdata={...categoryFilter,...search,...{unlist:false}}
+        console.log(filterdata);
         
         const products = await Product.find(filterdata)
             .populate('category_id')
@@ -82,14 +83,19 @@ const allproducts = async (req, res, next) => {
             .skip(skip)
             .limit(limit);
 
-        console.log(products.length);
+        products.forEach(a=>{
+            console.log(a.name);
+            
+        })
+        
 
-        const categ = await categories.find();  // Fetch all categories
+        const categ = await categories.find();  
 
         req.session.categories = categ;
         req.session.products = products;
 
-        const totalProducts = products.length+1; 
+        const totalProducts = await Product.countDocuments({unlist:{$ne:true}}); 
+        
         console.log(totalProducts);
         
         const totalPages = Math.ceil(totalProducts / limit);
@@ -102,6 +108,31 @@ const allproducts = async (req, res, next) => {
         res.status(500).send('Server Error');
     }
 };
+const adproducts=async (req,res,next)=>{
+    const page = parseInt(req.query.page) || 1;
+    const limit = parseInt(req.query.limit) || 6
+    const skip = (page - 1) * limit;
+    
+    const products = await Product.find()
+    .populate('category_id')
+    .skip(skip)
+    .limit(limit)
+    .sort({name:1})
 
 
-module.exports = { alluser, allproducts }
+
+    req.session.aproducts = products;
+    const categ = await categories.find();  
+
+    req.session.categories = categ;
+    const totalProducts =await Product.countDocuments(); 
+   console.log(totalProducts);
+   
+    
+    const totalPages = Math.ceil(totalProducts / limit);
+    req.session.pagination = { totalPages, currentPage: page, limit: limit };
+
+next()
+}
+
+module.exports = { alluser, allproducts,adproducts }

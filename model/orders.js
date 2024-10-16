@@ -28,6 +28,15 @@ const orderSchema = new Schema({
       }
     }
   ],
+  coupon:{ 
+    couponcode:String,
+    discount:{
+      type:Number,
+      default:0
+    }
+  
+  }
+  ,
   totalAmount: {
     type: Number,
     required: true
@@ -39,13 +48,17 @@ const orderSchema = new Schema({
   },
   paymentMethod: {
     type: String,
-    enum: ['Credit Card', 'Debit Card', 'PayPal', 'Cash on Delivery'],
+    enum: [ 'onlinePayment', 'Cash on Delivery'],
     required: true
   },
   paymentStatus: {
     type: String,
     enum: ['Pending', 'Paid', 'Failed'],
     default: 'Pending'
+  },
+  pstatus:{
+    type:Boolean,
+    default:false
   },
   shippingAddress: {
     fullname: { type: String, required: true },
