@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WalletDash - Modern Financial Dashboard</title>
+    <link rel="stylesheet" href="/css/myprofile.css">
+    
+    <!-- Modern Bootstrap -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" rel="stylesheet">
+    
+    <style>
+        :root {
+            --primary-color: #4F46E5;
+            --secondary-color: #6366F1;
+            --success-color: #10B981;
+            --warning-color: #F59E0B;
+            --background-color: #F3F4F6;
+            --box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            --transition: all 0.3s ease;
+        }
+
+        body {
+            background-color: var(--background-color);
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            color: #1F2937;
+        }
+
+        .navbar {
+            background-color: rgb(255, 20, 224);
+            box-shadow: var(--box-shadow);
+            padding: 1rem 0;
+        }
+
+        .navbar {
+            background-color: #5F42E8;
+            padding: 15px 0;
+        }
+
+        .navbar-brand:hover {
+            color: var(--secondary-color);
+        }
+
+        .nav-link {
+            position: relative;
+            padding: 0.5rem 1rem;
+        }
+
+        .nav-link i {
+            font-size: 1.2rem;
+        }
+
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 0;
+            height: 2px;
+            background-color: var(--primary-color);
+            transition: var(--transition);
+        }
+
+        .nav-link:hover::after {
+            width: 80%;
+        }
+
+        .box {
+            background: white;
+            border-radius: 1rem;
+            padding: 1.5rem;
+            box-shadow: var(--box-shadow);
+            transition: var(--transition);
+            margin-bottom: 1.5rem;
+        }
+
+        .box:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+        }
+
+        .stats-icon {
+            width: 56px;
+            height: 56px;
+            background: var(--primary-color);
+            border-radius: 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.5rem;
+            transition: var(--transition);
+        }
+
+        .box:hover .stats-icon {
+            transform: scale(1.1);
+        }
+
+        .transaction-item {
+            border-bottom: 1px solid #E5E7EB;
+            padding: 1rem 0;
+            transition: var(--transition);
+        }
+
+        .transaction-item:last-child {
+            border-bottom: none;
+        }
+
+        .transaction-item:hover {
+            background-color: #F9FAFB;
+            padding-left: 1rem;
+            border-radius: 0.5rem;
+        }
+
+        .status-badge {
+            padding: 0.5rem 1rem;
+            border-radius: 2rem;
+            font-size: 0.875rem;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        .status-completed {
+            background: #DCFCE7;
+            color: #166534;
+        }
+
+        .status-pending {
+            background: #FEF3C7;
+            color: #92400E;
+        }
+
+        .amount {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--primary-color);
+        }
+
+        .amount.positive {
+            color: var(--success-color);
+        }
+
+        .amount.negative {
+            color: var(--warning-color);
+        }
+
+        /* Responsive Adjustments */
+        @media (max-width: 768px) {
+            .box {
+                margin-bottom: 1rem;
+            }
+            
+            .stats-icon {
+                width: 48px;
+                height: 48px;
+                font-size: 1.25rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="bg-gradient text-white shadow">
+        <nav class="navbar navbar-expand-md p-0 navbarbg">
+            <div class="container-sm">
+                <a class="navbar-brand fs-4 fw-bold" href="/">WeebsCorner</a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="navbar container-fluid" id="navbarNav">
+                    <ul class="navbar-nav p-0">
+                        <li class="nav-item">
+                            <a class="nav-link" href="/product">All Products</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="/gaming-gear">Gaming Gear</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="/community">Community</a>
+                        </li>
+                    </ul>
+                    <div class="d-flex">
+                        <a href="/wishlist" class="btn btn-link text-white me-2">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-heart-fill" viewBox="0 0 16 16">
+                                <path fill-rule="evenodd" d="M8 1.314C12.438-3.248 23.534 4.735 8 15-7.534 4.736 3.562-3.248 8 1.314z"/>
+                            </svg>
+                        </a>
+                        <a href="/user/mydash" class="btn btn-link text-white me-2">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-person" viewBox="0 0 16 16">
+                                <path d="M8 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm2-3a2 2 0 1 1-4 0 2 2 0 0 1 4 0zm4 8c0 1-1 1-1 1H3s-1 0-1-1 1-4 6-4 6 3 6 4zm-1-.004c-.001-.246-.154-.986-.832-1.664C11.516 10.68 10.289 10 8 10c-2.29 0-3.516.68-4.168 1.332-.678.678-.83 1.418-.832 1.664h10z"/>
+                            </svg>
+                        </a>
+                        <a href="/cart" class="btn btn-link text-white me-2">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-cart" viewBox="0 0 16 16">
+                                <path d="M0 1.5A.5.5 0 0 1 .5 1H2a.5.5 0 0 1 .485.379L2.89 3H14.5a.5.5 0 0 1 .491.592l-1.5 8A.5.5 0 0 1 13 12H4a.5.5 0 0 1-.491-.408L2.01 3.607 1.61 2H.5a.5.5 0 0 1-.5-.5zM3.102 4l1.313 7h8.17l1.313-7H3.102zM5 12a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm7 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm-7 1a1 1 0 1 1 0 2 1 1 0 0 1 0-2zm7 0a1 1 0 1 1 0 2 1 1 0 0 1 0-2z"/>
+                            </svg>
+                        </a>
+                        <a href="/logout" class="btn btn-link text-white">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-box-arrow-right" viewBox="0 0 16 16">
+                                <path fill-rule="evenodd" d="M10 12.5a.5.5 0 0 1-.5.5h-8a.5.5 0 0 1-.5-.5v-9a.5.5 0 0 1 .5-.5h8a.5.5 0 0 1 .5.5v2a.5.5 0 0 0 1 0v-2A1.5 1.5 0 0 0 9.5 2h-8A1.5 1.5 0 0 0 0 3.5v9A1.5 1.5 0 0 0 1.5 14h8a1.5 1.5 0 0 0 1.5-1.5v-2a.5.5 0 0 0-1 0v2z"/>
+                                <path fill-rule="evenodd" d="M15.854 8.354a.5.5 0 0 0 0-.708l-3-3a.5.5 0 0 0-.708.708L14.293 7.5H5.5a.5.5 0 0 0 0 1h8.793l-2.147 2.146a.5.5 0 0 0 .708.708l3-3z"/>
+                            </svg>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <div class="container py-4">
+        <div class="row">
+            <div class="col-lg-3 my-lg-0">
+                <%- include('./sidebar', {activePage: "wallet"}) %>
+            </div>
+            
+            <div class="col-lg-9">
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <div>
+                        <h4 class="mb-1">Welcome, <%= wallet.userId.name %></h4>
+                        <p class="text-muted mb-0">Here's your financial overview</p>
+                    </div>
+                    <button class="btn btn-primary">
+                        <i class="fas fa-plus me-2"></i>Add Funds
+                    </button>
+                </div>
+
+                <div class="row g-4">
+                    <div class="col-md-4">
+                        <div class="box">
+                            <div class="d-flex align-items-center">
+                                <div class="stats-icon">
+                                    <i class="fas fa-wallet"></i>
+                                </div>
+                                <div class="ms-3">
+                                    <h6 class="mb-1">Total Balance</h6>
+                                    <h3 class="mb-0">₹<%= wallet.balance.toFixed(2) %></h3>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="box">
+                            <div class="d-flex align-items-center">
+                                <div class="stats-icon" style="background: var(--success-color)">
+                                    <i class="fas fa-arrow-down"></i>
+                                </div>
+                                <div class="ms-3">
+                                    <h6 class="mb-1">Income</h6>
+                                    <h3 class="mb-0 text-success">₹<%= wallet.income || 0 %></h3>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="box">
+                            <div class="d-flex align-items-center">
+                                <div class="stats-icon" style="background: var(--warning-color)">
+                                    <i class="fas fa-arrow-up"></i>
+                                </div>
+                                <div class="ms-3">
+                                    <h6 class="mb-1">Expenses</h6>
+                                    <h3 class="mb-0 text-warning">₹<%= wallet.expenses || 0 %></h3>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row mt-4">
+                    <div class="col-lg-12">
+                        <div class="box">
+                            <div class="d-flex justify-content-between align-items-center mb-4">
+                                <h5 class="mb-0">Recent Transactions</h5>
+                                <div class="dropdown">
+                                    <button class="btn btn-light dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown">
+                                        Filter
+                                    </button>
+                                    <ul class="dropdown-menu">
+                                        <li><a class="dropdown-item" href="#">All</a></li>
+                                        <li><a class="dropdown-item" href="#">Income</a></li>
+                                        <li><a class="dropdown-item" href="#">Expenses</a></li>
+                                    </ul>
+                                </div>
+                            </div>
+                            
+                            <% if (wallet.transactions && wallet.transactions.length > 0) { %>
+                                <% wallet.transactions.forEach((transaction) => { %>
+                                    <div class="transaction-item">
+                                        <div class="d-flex justify-content-between align-items-center">
+                                            <div class="d-flex align-items-center">
+                                                <div class="me-3">
+                                                    <i class="fas <%= transaction.type === 'credit' ? 'fa-arrow-down text-success' : 'fa-arrow-up text-warning' %> fa-2x"></i>
+                                                </div>
+                                                <div>
+                                                    <h6 class="mb-1"><%= transaction.description %></h6>
+                                                    <p class="text-muted mb-0">
+                                                        <%= new Date(transaction.date).toLocaleDateString('en-US', { 
+                                                            year: 'numeric', 
+                                                            month: 'long', 
+                                                            day: 'numeric' 
+                                                        }) %> |
+                                                        <%= new Date(transaction.date).toLocaleTimeString('en-US', { 
+                                                            hour: '2-digit', 
+                                                            minute: '2-digit', 
+                                                            hour12: true 
+                                                        }) %>
+                                                    </p>
+                                                </div>
+                                            </div>
+                                            <div class="text-end">
+                                                <span class="status-badge <%= transaction.status === 'completed' ? 'status-completed' : 'status-pending' %>">
+                                                    <%= transaction.status %>
+                                                </span>
+                                                <div class="amount <%= transaction.type === 'credit' ? 'positive' : 'negative' %>">
+                                                    <%= transaction.type === 'credit' ? '+' : '-' %>₹<%= Math.abs(transaction.amount) %>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                <% }); %>
+                            <% } else { %>
+                                <div class="text-center py-4">
+                                    <i class="fas fa-receipt fa-3x text-muted mb-3"></i>
+                                    <h6 class="text-muted">No transactions found</h6>
+                                </div>
+                            <% } %>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Initialize tooltips
+        var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
+        var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+            return new bootstrap.Tooltip(tooltipTriggerEl)
+        })
+    </script>
+</body>
+</html>

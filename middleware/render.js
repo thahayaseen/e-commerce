@@ -1,4 +1,10 @@
-
+const user_scema = require('../model/user_scema')
+const address = require('../model/address')
+const ordersshema = require('../model/orders')
+const wishlistschema = require('../model/wishlist')
+const coupon = require('../model/coupon')
+const product_schema = require('../model/product_schema')
+const wallet=require('../model/wallet')
 //register-------------------------------------------------------
 const register = (req, res) => {
     const registerMessage = req.session.register || '';
@@ -34,7 +40,7 @@ const otp = (req, res) => {
 
 const userhome = async (req, res) => {
     const product = req.session.products
-
+    
     delete req.session.products
 
     return res.render('userside/dashbord', { products: product })
@@ -52,24 +58,38 @@ const productlist = async (req, res) => {
 //admin section----------------------------------------------------------------------------------------
 //adminlogin
 
-const adminlogin = (req, res) => {
+const adminlogin =async (req, res) => {
     const notadmin = req.session.admin || ''
     const islogin = req.session.ladmin
     delete req.session.admin
-    islogin ? res.redirect('/admin/dashbord') : res.render('auth/admin', { ans: notadmin })
+    if(islogin) {
+        res.redirect('/admin/dashbord') 
+
+    }else{ res.render('auth/admin', { ans: notadmin })}
 }
 
 // admin html rendering 
 // LADMIN MEANS LOGIN ADMIN 
-const admin = (req, res) => {
-    const islogin = req.session.ladmin
-    islogin ? res.render('admin/dashbord') : res.redirect('/admin')
+const admin = async(req, res) => {
+
+    const range=req.query.range||3
+
+    // req.session.ladmin
+    const islogin = true
+    const productsandcategory=await ordersshema.find({})
+    .populate('user')
+    .populate('products.productid')
+    .sort({createdAt:-1})
+    
+    // console.log(JSON.stringify(productsandcategory));
+    
+    islogin ? res.render('admin/dashbord',{products:productsandcategory}) : res.redirect('/admin')
 }
 
 
 
 //user 
-const user = (req, res) => {
+const user = (req, res) => { 
     req.session.ladmin
     const islogin = req.session.ladmin
     const { user, totalPages, currentPage, limit } = req.session.users
@@ -90,7 +110,7 @@ const product = (req, res, next) => {
     delete req.session.aproducts;
     delete req.session.pagination;
 
-    const islogin = req.session.ladmin;
+    const islogin = req.session.ladmin||true;
 
     islogin ? res.render('admin/product', { Products: aproducts, categories: cat, pagination }) : res.redirect('/admin');
 };
@@ -112,11 +132,8 @@ const catagory = (req, res, next) => {
 const cartschema = require('../model/cart');
 //user section account
 
-const user_scema = require('../model/user_scema')
-const address = require('../model/address')
-const ordersshema = require('../model/orders')
-const wishlistschema = require('../model/wishlist')
-const coupon = require('../model/coupon')
+
+
 
 
 
@@ -166,9 +183,9 @@ const oredrs = async (req, res) => {
         const orders = await ordersshema.find({ user: userid }).populate('products.productid').sort({ createdAt: -1 })
 
         // console.log('\n datas \n'+orders)
-        const aaa = JSON.stringify({ orders })
+        
 
-        console.log(aaa);
+      
 
         res.render('userside/user dashbord/orders', { orders: orders })
     } catch (error) {
@@ -228,7 +245,7 @@ const orders = async (req, res) => {
     const limit = parseInt(req.query.limit) || 5;
     const skip = (page - 1) * limit;
 
-    const orders = await ordersshema.find({}).populate('user').skip(skip).limit(limit)
+    const orders = await ordersshema.find({}).populate('user').skip(skip).limit(limit).sort({createdAt:-1})
 
     const totalProducts = await ordersshema.countDocuments();
     const countedorders = orders.length;
@@ -266,8 +283,60 @@ const coupenrender = async (req, res) => {
 
     console.log(coupons);
 
-
     res.render('admin/coupen', { coupons })
 
 }
-module.exports = { register, login, adminlogin, otp, admin, user, product, catagory, userhome, productlist, myaccount, userdash, useraddress, oredrs, cartrender, checkout, orders, wishlist, coupenrender }
+const resetpass=(req,res)=>{
+    res.render('auth/resetpass.ejs')
+}
+
+
+const walletrender = async (req, res) => {
+    // const demoWallet = {
+    //     userId: '67137ff67093b05ed2a16a94', // Replace this with an actual ObjectId
+    //     balance: 500, // Starting balance
+    //     transactions: [
+    //         {
+    //             type: 'credit',
+    //             amount: 500,
+    //             date: new Date('2024-08-22T12:05:00'), // Date of the transaction
+    //             description: 'Initial wallet credit' // Description of the transaction
+    //         },
+    //         {
+    //             type: 'debit',
+    //             amount: 150,
+    //             date: new Date('2024-09-01T14:30:00'), // Date of the transaction
+    //             description: 'Purchased product XYZ' // Description of the transaction
+    //         }
+    //     ]
+    // };
+    
+    try {
+        const uid = req.session.ulogin; 
+        if (!uid) {
+            return res.status(401).send('User not logged in'); 
+        }
+
+        let userdata = await wallet.findOne({ userId: uid }).populate('userId')
+
+        if (!userdata) {
+            userdata = new wallet({
+                userId: uid,
+                balance: 0, 
+                transactions: [] 
+            });
+            await userdata.save();
+        }
+
+      
+        res.render('userside/user dashbord/walet', { wallet: userdata });
+    } catch (error) {
+        console.error('Error rendering wallet:', error);
+        res.status(500).send('Internal server error');
+    }
+};
+
+
+
+
+module.exports = { register, login, adminlogin, otp, admin, user, product, catagory, userhome, productlist, myaccount, userdash, useraddress, oredrs, cartrender, checkout, orders, wishlist, coupenrender,resetpass,walletrender }

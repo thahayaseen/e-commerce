@@ -4,6 +4,7 @@
     "crypto": "^1.0.1",
     "dotenv": "^16.4.5",
     "ejs": "^3.1.10",
+    "exceljs": "^4.4.0",
     "express": "^4.21.1",
     "express-session": "^1.18.0",
     "express-validator": "^7.2.0",
@@ -15,6 +16,8 @@
     "passport": "^0.7.0",
     "passport-google-oauth20": "^2.0.0",
     "path": "^0.12.7",
+    "pdfkit": "^0.15.0",
+    "puppeteer": "^23.6.0",
     "razorpay": "^2.9.4"
   },
   "name": "e-commers_website",

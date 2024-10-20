@@ -1,287 +1,190 @@
 <!DOCTYPE html>
 <html dir="ltr" lang="en-US">
-
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <title>Home</title>
+    <title>WeebsCorner - Premium PC Parts & Gaming Gear</title>
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    <link rel="icon" type="image/svg+xml" href="images/3uk2oMr6zR6S.svg">
-    <link rel="stylesheet" href="/css/homepage.css">
+    <style>
+        .hero-gradient {
+            background: linear-gradient(135deg, #4F46E5 0%, #7C3AED 100%);
+        }
+        .product-card {
+            transition: transform 0.2s ease-in-out;
+        }
+        .product-card:hover {
+            transform: translateY(-5px);
+        }
+        .custom-shape-divider-bottom {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            overflow: hidden;
+            line-height: 0;
+        }
+        .logo {
+            height: 40px;
+            width: auto;
+            transition: transform 0.2s ease;
+        }
+        .logo:hover {
+            transform: scale(1.05);
+        }
+        .navbar-brand {
+            font-weight: bold;
+            font-size: 24px;
+            color: white !important;
+        }
+        .navbar {
+            background-color: #5F42E8;
+            
+        }
+
+    </style>
 </head>
 
-<body>
-    <div id="__next">
-        <div id="page-wrapper" class="flex min-h-screen flex-col dark:bg-nzxt-dark-grey-900 h-full light">
-
-         
-            <header class="bg-gradient-to-r from-purple-600 to-indigo-600 text-white shadow-lg">
-                <nav class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                  <div class="flex justify-between items-center h-16">
-                    <div class="flex items-center">
-                      <a href="/" class="flex-shrink-0">
-                        <span class="text-2xl font-bold tracking-tight">WeebsCorner</span>
-                      </a>
-                      <div class="hidden md:block">
+<body class="bg-gray-50">
+    <header class="headerscolor navbar shadow-md fixed w-full z-50">
+        <nav class="max-w-7xl mx-auto navbar px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <div class="flex items-center">
+                    <a href="/" class="flex-shrink-0 flex items-center">
+                        <img src="/uploads/logo.png" alt="WeebsCorner Logo" class="logo mr-3">
+                        <span class="text-2xl navbar-brand font-bold text-white hidden sm:block">WeebsCorner</span>
+                    </a>
+                    <div class="hidden md:block">
                         <div class="ml-10 flex items-baseline space-x-4">
-                          <a href="/product" class="px-3 py-2 rounded-md text-sm font-medium hover:bg-purple-500 transition duration-150 ease-in-out">All Products</a>
-                          <a href="/gaming-gear" class="px-3 py-2 rounded-md text-sm font-medium hover:bg-purple-500 transition duration-150 ease-in-out">Gaming Gear</a>
-                          <a href="/community" class="px-3 py-2 rounded-md text-sm font-medium hover:bg-purple-500 transition duration-150 ease-in-out">Community</a>
+                            <a href="/product" class="px-3 py-2 rounded-md text-sm font-medium text-white hover:text-gray-200 transition">Products</a>
+                            <a href="/builds" class="px-3 py-2 rounded-md text-sm font-medium text-white hover:text-gray-200 transition">PC Builds</a>
+                            <a href="/community" class="px-3 py-2 rounded-md text-sm font-medium text-white hover:text-gray-200 transition">Community</a>
+                            <a href="/support" class="px-3 py-2 rounded-md text-sm font-medium text-white hover:text-gray-200 transition">Support</a>
                         </div>
-                      </div>
                     </div>
-                    <div class="flex items-center">
-                      
-                      <a href="/wishlist" class="ml-4 flex items-center justify-center p-1 rounded-full hover:bg-purple-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-purple-600 focus:ring-white transition duration-150 ease-in-out">
-                        <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
-                        </svg>
-                      </a>
-                      <a href="/user/mydash" class="ml-4 flex items-center justify-center p-1 rounded-full hover:bg-purple-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-purple-600 focus:ring-white transition duration-150 ease-in-out">
-                        <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
-                        </svg>
-                      </a>
-                      <a href="/cart" class="ml-4 flex items-center justify-center p-1 rounded-full hover:bg-purple-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-purple-600 focus:ring-white transition duration-150 ease-in-out">
-                        <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
-                        </svg>
-                      </a>
-                      <a href="/logout" class="ml-4 flex items-center justify-center p-1 rounded-full hover:bg-purple-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-purple-600 focus:ring-white transition duration-150 ease-in-out">
-                        <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
-                        </svg>
-                      </a>
-                    </div>
-                  </div>
-                </nav>
-              </header>
-
-
-
-                <div id="main-wrapper"
-                    class="dark:bg-nzxt-dark-grey-800 bg-white dark:bg-nzxt-dark-grey-900 dark:bg-rad-grad-page dark:text-white">
-                    <main id="main" class="flex-1  Layout_mainSpacing__ebeiJ">
-
-                        <div class="relative overflow-hidden w-full mx-auto lg:min-h-[468px] min-h-[450px]"
-                            style="background-color: rgb(0, 0, 0);" data-test-id="hero-block-wrapper">
-                            <div
-                                class="flex w-full lg:max-w-screen-xl mx-auto flex-col lg:flex-col  lg:min-h-[468px] min-h-[450px]">
-                                <div
-                                    class="flex flex-col relative lg:w-[52%] mb-auto mt-0 lg:mb-auto lg:mt-0 pt-12 pb-8 pl-6 pr-6 lg:pt-16 lg:pb-8 lg:pr-0 lg:pl-0 lg:mb-auto lg:mx-auto lg:mt-0 text-center lg:text-center order-1 lg:order-1">
-                                    <h1 class="text-3xl mb-4 lg:mb-5 lg:text-5xl font-bold max-w-prose leading-tight lg:leading-tight text-white"
-                                        data-test-id="hero-copy-block-heading">POWERFULLY PREBUILT</h1>
-                                    <div class="max-w-prose text-base md:text-lg text-white mx-auto lg:mx-auto"
-                                        data-test-id="hero-copy-block-md">
-                                        <p>We curate. We build. You play.</p>
-                                    </div>
-                                    <div class="flex mt-7 lg:mt-10">
-                                        <div class="hidden lg:block flex justify-center lg:flex-row flex-col items-center mx-auto"
-                                            data-test-id="hero-button-block-lg">
-                                            <div class="flex flex-wrap gap-4 md:gap-7 max-w-max items-center justify-center md:text-lg"
-                                                data-test-id="link-group-block"><a
-                                                    class="opacity-100 pointer-events-auto group min-w-max flex items-center font-medium cursor-pointer text-center justify-around transition whitespace-nowrap h-11 border-white border-2 text-white px-4 2xl:px-10 min-w-120 md:min-w-140 rounded-md buttonStyles_btn__Lyagj"
-                                                    aria-label="Shop Prebuilt PCs" data-test-id="61600802-button"
-                                                    href="/category/gaming-pcs/prebuilt-pcs">Shop Prebuilt PCs</a></div>
-                                        </div>
-                                        <div class="flex justify-center lg:flex-row flex-col lg:hidden block items-center mx-auto"
-                                            data-test-id="hero-button-block-sm">
-                                            <div class="flex flex-wrap gap-4 md:gap-7 max-w-max items-center justify-center md:text-lg"
-                                                data-test-id="link-group-block"><a
-                                                    class="opacity-100 pointer-events-auto group min-w-max flex items-center font-medium cursor-pointer text-center justify-around transition whitespace-nowrap h-11 border-white border-2 text-white px-4 2xl:px-10 min-w-120 md:min-w-140 rounded-md buttonStyles_btn__Lyagj"
-                                                    aria-label="Shop Prebuilt PCs " data-test-id="61600802-button"
-                                                    href="/category/gaming-pcs/prebuilt-pcs">Shop Prebuilt PCs</a></div>
-                                        </div>
-                                    </div>
-                                </div>
-
-                            </div>
-                        </div>
-                        <!-- home page product section  -->
-                        <section class="py-6 md:py-12 xl:py-16 scroll-m-20" id="nzxt-prebuilt-gaming-pcs"
-                            data-test-id="product-grid-block">
-                            <div
-                                class="w-11/12 lg:max-w-screen-lg xl:max-w-screen-xl 2xl:max-w-screen-2xl mx-auto xl:px-20">
-                                <div class="space-y-2 mb-6 md:mb-8 lg:mb-10 w-11/12 md:max-w-screen-sm lg:max-w-screen-lg xl:max-w-screen-xl text-center mx-auto"
-                                    data-test-id="section-heading-block">
-                                    <h2 lang="en-US" class="h3 hyphen-auto text-center mx-auto"
-                                        data-test-id="section-heading">NZXT Prebuilt Gaming PCs </h2>
-                                    <p class="max-w-ch-50 text-center mx-auto text-nzxt-light-grey-600"
-                                        data-test-id="section-subheading">We use the latest generation performance
-                                        components and configurations to get you gaming, fast.</p>
-                                </div>
-                                <!-- show products  -->
-
-                                <div class="container mx-auto">
-                                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                                        <% products.forEach((product)=> { %>
-                                            <% if(!product.unlist===true){ %>
-
-                                                <div class="w-full mb-4">
-                                                    <div class="lg:max-w-md h-full">
-                                                        <div class="flex flex-col h-full max-w-md relative">
-                                                            <div class="flex flex-col h-full">
-                                                                <div
-                                                                    class="relative w-full p-4 xl:p-10 mb-1 bg-gray-50 dark:bg-purple-800">
-                                                                    <a href="#">
-                                                                        <div class="z-0 max-w-lg block overflow-hidden relative flex items-center justify-center"
-                                                                            aria-hidden="true">
-                                                                            <img src="uploads/<%= product.images[0] %>"
-                                                                                alt="<%= product.name %>"
-                                                                                class="w-56 h-40 object-cover" />
-                                                                        </div>
-
-                                                                    </a>
-
-                                                                </div>
-                                                                <a href='#'>
-                                                                    <div class="flex-grow mb-3 mt-1">
-                                                                        <div class="mb-4">
-                                                                            <p
-                                                                                class="font-bold text-gray-800 dark:text-white mb-1 text-sm md:text-lg">
-                                                                                <%= product.name %>
-                                                                            </p>
-
-                                                                        </div>
-                                                                    </div>
-                                                                </a>
-                                                            </div>
-                                                            <div class="flex flex-col w-full">
-                                                                <div class="border-t pt-3 mb-3 flex-1 mt-3">
-                                                                    <p class="text-xs font-bold">Key Specs</p>
-                                                                </div>
-                                                                <div class="w-full">
-                                                                    <div class="grid items-center pt-3 border-t">
-                                                                        <p class="text-xs md:text-sm">$<%= product.price
-                                                                                %>
-                                                                        </p>
-                                                                    </div>
-                                                                    <div class="grid items-center pt-3">
-                                                                        <a href="/product/<%= product._id %>"
-                                                                            class="group flex items-center font-medium bg-yellow-400 hover:bg-yellow-500 text-white rounded-md px-3 py-2">
-                                                                            Shop
-                                                                        </a>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-
-                                                <% } %>
-                                                    <% }) %>
-                                    </div>
-                                </div>
-
-                            </div>
-
-
-
                 </div>
-                </section>
-                </main>
-                <footer id="footer" class="bg-gray-800 py-8">
-                    <div class="container mx-auto px-4">
-                        <div class="flex flex-col md:flex-row justify-between items-center pb-6">
-                            <!-- Language Selection -->
-                            <div class="flex flex-col items-center md:items-end md:w-1/3 mb-6 md:mb-0">
-                                <form class="w-full">
-                                    <label for="language"
-                                        class="block text-xs uppercase text-gray-400 mb-1">Language</label>
-                                    <div class="relative">
-                                        <select id="language"
-                                            class="w-full bg-gray-700 text-white border border-gray-600 rounded px-3 py-2">
-                                            <option value="en">English</option>
+                <div class="flex items-center space-x-4">
+                    <a href="/wishlist" class="text-white hover:text-gray-200 transition">
+                        <i class="far fa-heart text-xl"></i>
+                    </a>
+                    <a href="/cart" class="text-white hover:text-gray-200 transition">
+                        <i class="fas fa-shopping-cart text-xl"></i>
+                    </a>
+                    <a href="/user/mydash" class="text-white hover:text-gray-200 transition">
+                        <i class="far fa-user text-xl"></i>
+                    </a>
+                </div>
+            </div>
+        </nav>
+    </header>
 
-                                        </select>
-                                    </div>
-                                </form>
+    <main class="pt-16">
+        <!-- Hero Section -->
+        <section class="hero-gradient relative min-h-[600px] flex items-center">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24 text-white">
+                <div class="max-w-3xl">
+                    <h1 class="text-5xl font-bold mb-6">Build Your Dream Gaming PC</h1>
+                    <p class="text-xl mb-8">Premium components, expert builds, and unmatched performance for serious gamers.</p>
+               
+                  <br>
+                  <br>
+                  
+                </div>
+            </div>
+            <div class="custom-shape-divider-bottom">
+                <svg viewBox="0 0 1200 120" preserveAspectRatio="none">
+                    <path d="M321.39,56.44c58-10.79,114.16-30.13,172-41.86,82.39-16.72,168.19-17.73,250.45-.39C823.78,31,906.67,72,985.66,92.83c70.05,18.48,146.53,26.09,214.34,3V0H0V27.35A600.21,600.21,0,0,0,321.39,56.44Z" fill="#ffffff"></path>
+                </svg>
+            </div>
+        </section>
+
+        <!-- Featured Categories -->
+        <section class="py-16 bg-white">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <h2 class="text-3xl font-bold text-center mb-12">Shop By Category</h2>
+                <div class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-8">
+                    <a href="/category/processors" class="product-card bg-gray-50 rounded-xl p-6 text-center hover:shadow-lg">
+                        <i class="fas fa-microchip text-4xl text-indigo-600 mb-4"></i>
+                        <h3 class="text-xl font-semibold">Processors</h3>
+                    </a>
+                    <a href="/category/graphics-cards" class="product-card bg-gray-50 rounded-xl p-6 text-center hover:shadow-lg">
+                        <i class="fas fa-tv text-4xl text-indigo-600 mb-4"></i>
+                        <h3 class="text-xl font-semibold">Graphics Cards</h3>
+                    </a>
+                    <a href="/category/memory" class="product-card bg-gray-50 rounded-xl p-6 text-center hover:shadow-lg">
+                        <i class="fas fa-memory text-4xl text-indigo-600 mb-4"></i>
+                        <h3 class="text-xl font-semibold">Memory</h3>
+                    </a>
+                    <a href="/category/storage" class="product-card bg-gray-50 rounded-xl p-6 text-center hover:shadow-lg">
+                        <i class="fas fa-hdd text-4xl text-indigo-600 mb-4"></i>
+                        <h3 class="text-xl font-semibold">Storage</h3>
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <!-- Featured Products -->
+        <section class="py-16 bg-gray-50">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <h2 class="text-3xl font-bold text-center mb-12">Featured Products</h2>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                    <% products.forEach((product) => { %>
+                        <% if(!product.unlist) { %>
+                            <div class="product-card bg-white rounded-xl overflow-hidden shadow-md hover:shadow-xl">
+                                <div class="p-4">
+                                    <img src="/uploads/<%= product.images[0] %>" alt="<%= product.name %>" class="w-full h-48 object-cover rounded-lg">
+                                    <h3 class="text-xl font-semibold mt-4"><%= product.name %></h3>
+                                    <p class="text-gray-600 mt-2">$<%= product.price %></p>
+                                    <a href="/product/<%= product._id %>" class="mt-4 block text-center bg-indigo-600 text-white py-2 rounded-lg hover:bg-indigo-700 transition">View Details</a>
+                                </div>
                             </div>
+                        <% } %>
+                    <% }) %>
+                </div>
+            </div>
+        </section>
+    </main>
 
-                            <!-- Social Media Links -->
-                            <div class="flex justify-center space-x-6">
-                                <a href="https://www.facebook.com/nzxt" target="_blank" rel="noopener noreferrer"
-                                    class="text-gray-400 hover:text-white">
-                                    <span class="sr-only">Facebook</span>
-                                    <svg class="h-6 w-6" fill="currentColor" viewBox="0 0 24 24">
-                                        <path
-                                            d="M24 12.073C24 5.405 18.628 0 12 0S0 5.405 0 12.073C0 18.1 4.388 23.094 10.125 24v-8.437H7.078v-3.49h3.047v-2.66c0-3.025 1.79-4.697 4.533-4.697 1.312 0 2.686.236 2.686.236v2.971H15.83c-1.49 0-1.955.931-1.955 1.886v2.264h3.328l-.532 3.49h-2.796V24C19.613 23.095 24 18.1 24 12.073z" />
-                                    </svg>
-                                </a>
-                                <a href="https://twitter.com/nzxt" target="_blank" rel="noopener noreferrer"
-                                    class="text-gray-400 hover:text-white">
-                                    <span class="sr-only">Twitter</span>
-                                    <svg class="h-6 w-6" fill="currentColor" viewBox="0 0 24 24">
-                                        <path
-                                            d="M12 0C5.37 0 0 5.37 0 12s5.37 12 12 12 12-5.37 12-12S18.63 0 12 0zm6.024 9.726c.006.126.006.246.006.372 0 3.822-2.91 8.232-8.232 8.232a8.177 8.177 0 01-4.434-1.302 5.816 5.816 0 004.284-1.194 2.889 2.889 0 01-2.7-2.01 2.884 2.884 0 001.308-.048 2.891 2.891 0 01-2.322-2.838v-.036c.39.216.834.348 1.308.36a2.895 2.895 0 01-.9-3.858 8.208 8.208 0 005.964 3.024 2.894 2.894 0 014.926-2.64 5.859 5.859 0 001.836-.702 2.892 2.892 0 01-1.272 1.602 5.928 5.928 0 001.662-.456 5.657 5.657 0 01-1.434 1.494z" />
-                                    </svg>
-                                </a>
-                                <a href="https://www.instagram.com/nzxt/" target="_blank" rel="noopener noreferrer"
-                                    class="text-gray-400 hover:text-white">
-                                    <span class="sr-only">Instagram</span>
-                                    <svg class="h-6 w-6" fill="currentColor" viewBox="0 0 24 24">
-                                        <path
-                                            d="M11.995 2.162c3.205 0 3.581.014 4.848.071 1.171.053 1.805.248 2.228.415.562.219.962.476 1.381.895.42.419.681.819.896 1.38.162.425.361 1.058.414 2.23.057 1.266.071 1.642.071 4.847 0 3.205-.014 3.58-.071 4.848-.053 1.171-.248 1.804-.414 2.228a3.722 3.722 0 01-.896 1.381c-.419.42-.819.681-1.38.895-.424.162-1.058.362-2.23.415-1.266.057-1.642.071-4.847.071-3.205 0-3.58-.014-4.847-.071-1.172-.053-1.805-.248-2.229-.415a3.723 3.723 0 01-1.38-.895 3.664 3.664 0 01-.896-1.38c-.162-.425-.362-1.058-.414-2.23-.058-1.266-.072-1.642-.072-4.847 0-3.205.014-3.581.072-4.848.052-1.171.247-1.804.414-2.228.219-.562.476-.962.895-1.381a3.665 3.665 0 011.381-.895c.424-.162 1.057-.362 2.229-.415 1.266-.062 1.647-.071 4.847-.071zm0-2.162C8.738 0 8.33.014 7.048.071 5.77.13 4.9.333 4.138.63a5.847 5.847 0 00-2.124 1.385A5.95 5.95 0 00.63 4.138C.333 4.9.129 5.771.07 7.052.014 8.33 0 8.738 0 11.995c0 3.257.014 3.667.071 4.948.058 1.276.262 2.147.558 2.914.304.79.719 1.457 1.385 2.124a5.95 5.95 0 002.124 1.386c.762.295 1.633.5 2.914.557 1.281.057 1.686.071 4.948.071 3.262 0 3.667-.014 4.948-.071 1.276-.057 2.147-.262 2.914-.557a5.847 5.847 0 002.124-1.386 5.949 5.949 0 001.38-2.124c.295-.762.5-1.633.557-2.914.057-1.281.071-1.686.071-4.948 0-3.257-.014-3.667-.071-4.948-.058-1.276-.262-2.147-.558-2.914a5.847 5.847 0 00-1.386-2.124 5.95 5.95 0 00-2.124-1.386c-.762-.295-1.633-.5-2.914-.557-1.281-.057-1.686-.071-4.948-.071z" />
-                                    </svg>
-                                </a>
-                            </div>
-                        </div>
-
-                        <!-- Footer Links -->
-                        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-                            <div>
-                                <h4 class="text-white text-sm uppercase font-semibold mb-4">Contact</h4>
-                                <ul class="space-y-2">
-                                    <li><a href="/support" class="text-gray-400 hover:text-white">Customer Support</a>
-                                    </li>
-                                    <li><a href="https://support.nzxt.com/hc/en/requests/new" target="_blank"
-                                            class="text-gray-400 hover:text-white">Submit a Request</a></li>
-                                    <li><a href="https://support.nzxt.com/hc/en-us" target="_blank"
-                                            class="text-gray-400 hover:text-white">Support Center</a></li>
-                                </ul>
-                            </div>
-
-                            <div>
-                                <h4 class="text-white text-sm uppercase font-semibold mb-4">Company</h4>
-                                <ul class="space-y-2">
-                                    <li><a href="/about" class="text-gray-400 hover:text-white">About Us</a></li>
-                                    <li><a href="/careers" class="text-gray-400 hover:text-white">Careers</a></li>
-                                    <li><a href="/blog" class="text-gray-400 hover:text-white">Blog</a></li>
-                                </ul>
-                            </div>
-
-                            <div>
-                                <h4 class="text-white text-sm uppercase font-semibold mb-4">Legal</h4>
-                                <ul class="space-y-2">
-                                    <li><a href="/terms" class="text-gray-400 hover:text-white">Terms of Service</a>
-                                    </li>
-                                    <li><a href="/privacy" class="text-gray-400 hover:text-white">Privacy Policy</a>
-                                    </li>
-                                    <li><a href="/returns" class="text-gray-400 hover:text-white">Returns Policy</a>
-                                    </li>
-                                </ul>
-                            </div>
-                        </div>
-
-                        <!-- Bottom Section -->
-                        <div class="mt-8 border-t border-gray-700 pt-6 text-center">
-                            <p class="text-gray-500 text-xs">© 2024 YourCompany. All rights reserved.</p>
-                        </div>
+    <!-- Footer -->
+    <footer class="bg-gray-900 text-white py-12">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+                <div>
+                    <img src="/uploads/logo.png" alt="WeebsCorner Logo" class="h-8 mb-4">
+                    <p class="text-gray-400">Your ultimate destination for premium PC parts and gaming gear.</p>
+                </div>
+                <div>
+                    <h3 class="text-lg font-semibold mb-4">Quick Links</h3>
+                    <ul class="space-y-2">
+                        <li><a href="/about" class="text-gray-400 hover:text-white">About Us</a></li>
+                        <li><a href="/contact" class="text-gray-400 hover:text-white">Contact</a></li>
+                        <li><a href="/shipping" class="text-gray-400 hover:text-white">Shipping Info</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 class="text-lg font-semibold mb-4">Support</h3>
+                    <ul class="space-y-2">
+                        <li><a href="/faq" class="text-gray-400 hover:text-white">FAQ</a></li>
+                        <li><a href="/returns" class="text-gray-400 hover:text-white">Returns</a></li>
+                        <li><a href="/warranty" class="text-gray-400 hover:text-white">Warranty</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 class="text-lg font-semibold mb-4">Connect</h3>
+                    <div class="flex space-x-4">
+                        <a href="#" class="text-gray-400 hover:text-white"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#" class="text-gray-400 hover:text-white"><i class="fab fa-twitter"></i></a>
+                        <a href="#" class="text-gray-400 hover:text-white"><i class="fab fa-instagram"></i></a>
+                        <a href="#" class="text-gray-400 hover:text-white"><i class="fab fa-discord"></i></a>
                     </div>
-                </footer>
-
+                </div>
+            </div>
+            <div class="border-t border-gray-800 mt-8 pt-8 text-center">
+                <p class="text-gray-400">&copy; 2024 WeebsCorner. All rights reserved.</p>
+            </div>
         </div>
-    </div>
-    <div class="Toastify"></div>
-    </div>
+    </footer>
 
-    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.1/dist/umd/popper.min.js"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-
-
-
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 </body>
-
 </html>

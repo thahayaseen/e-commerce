@@ -1,47 +1,442 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-  <!-- Required meta tags -->
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-  <title>dashboard Admin</title>
-  <!-- plugins:css -->
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@mdi/font/css/materialdesignicons.min.css">
-
-  <link rel="stylesheet" href="/assets/vendors/css/vendor.bundle.base.css">
-  <!-- endinject -->
-  <!-- Plugin css for this page -->
-  <link rel="stylesheet" href="/assets/vendors/jvectormap/jquery-jvectormap.css">
-  <link rel="stylesheet" href="/assets/vendors/flag-icon-css/css/flag-icon.min.css">
-  <link rel="stylesheet" href="/assets/vendors/owl-carousel-2/owl.carousel.min.css">
-  <link rel="stylesheet" href="/assets/vendors/owl-carousel-2/owl.theme.default.min.css">
-  <!-- End plugin css for this page <!-- Layout styles -->
-  <link rel="stylesheet" href="/assets/css/style.css">
-  <!-- End layout styles -->
-  <!-- <link rel="shortcut icon" href="/assets/images/favicon.png" /> -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>Sales Report - Dashboard Admin</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@mdi/font/css/materialdesignicons.min.css">
+    
+    <link rel="stylesheet" href="/assets/css/style.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.7.0/chart.min.js"></script>
+    <script>const products=<%-JSON.stringify(products)%>;</script>
 </head>
 
 <body>
-  <div class="container-scroller">
-    <%-include('./admin_parts/sidebar')%>
-      <!-- partial -->
-      <div class="container-fluid page-body-wrapper">
-        <!-- partial:partials/_navbar.html -->
-        <%-include("./admin_parts/hedder")%>
-          <!-- partial -->
-          <div class="main-panel">
-            <div class="content-wrapper">
+    <div class="container-scroller">
+       <div class="sidebar"> <%-include('./admin_parts/sidebar')%></div>
+        <div class="container-fluid page-body-wrapper">
+            <%-include("./admin_parts/hedder")%>
+            <div class="main-panel">
+                <div class="content-wrapper">
+                    <!-- Page Title with Export Options -->
+                    <div class="row">
+                        <div class="col-12 grid-margin stretch-card">
+                            <div class="card">
+                                <div class="card-body">
+                                    <div class="d-flex justify-content-between align-items-center flex-wrap">
+                                        <div>
+                                            <h4 class="card-title mb-1">Sales Report</h4>
+                                            <p class="card-description">Sales performance overview</p>
+                                        </div>
+                                        <div class="d-flex align-items-center">
+                                            <!-- Date Range Picker -->
+                                            <div class="dropdown mr-3">
+                                                <button class="btn btn-outline-primary dropdown-toggle" type="button" id="timeRange" data-toggle="dropdown">
+                                                    <i class="mdi mdi-calendar-range"></i> Report
+                                                </button>
+                                                <div class="dropdown-menu">
+                                                    <a class="dropdown-item listrange" href="/admin/dashbord?range=7">Last 7 Days</a>
+                                                    <a class="dropdown-item listrange" href="/admin/dashbord?range=30">Last 30 Days</a>
+                                                
+                                                    <!-- Custom date range input -->
+                                                    <label class="dropdown-item">
+                                                        <input type="date" id="dateStart" onchange="setCustomDateRange()">
+                                                        <input type="date" id="dateEnd" onchange="setCustomDateRange()">
+                                                    </label>
+                                                </div>
+                                                
+                                                
+                                            </div>
+                                            <!-- Export Options -->
+                                            <div class="dropdown">
+                                                <button class="btn btn-primary dropdown-toggle" type="button" id="exportOptions" data-toggle="dropdown">
+                                                    <i class="mdi mdi-download"></i> Export Report
+                                                </button>
+                                                <div class="dropdown-menu">
+                                                    <a class="dropdown-item" href="#" onclick="exportReport('pdf')">
+                                                        <i class="mdi mdi-file-pdf text-danger"></i> Export as PDF
+                                                    </a>
+                                                    <a class="dropdown-item" href="#" onclick="exportReport('excel')">
+                                                        <i class="mdi mdi-file-excel text-success"></i> Export as Excel
+                                                    </a>
+                                                    
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
 
-
-              <!-- partial -->
+                  
+                    <div class="content">
+                      <!-- Page Title -->
+                     
+  
+                      <!-- Sales Statistics Cards -->
+                      <div class="row">
+                          <div class="col-xl-3 col-sm-6 grid-margin stretch-card">
+                              <div class="card">
+                                  <div class="card-body">
+                                      <div class="row">
+                                          <div class="col-9">
+                                              <div class="d-flex align-items-center align-self-start">
+                                                  <h3 class="mb-0" id="toatalprofit"></h3>
+                                                  
+                                              </div>
+                                          </div>
+                                          <div class="col-3">
+                                              <div class="icon icon-box-success">
+                                                  <span class="mdi mdi-arrow-top-right icon-item"></span>
+                                              </div>
+                                          </div>
+                                      </div>
+                                      <h6 class="text-muted font-weight-normal">Total Sales</h6>
+                                  </div>
+                              </div>
+                          </div>
+                          <div class="col-xl-3 col-sm-6 grid-margin stretch-card">
+                              <div class="card">
+                                  <div class="card-body">
+                                      <div class="row">
+                                          <div class="col-9">
+                                              <div class="d-flex align-items-center align-self-start">
+                                                  <h3 class="mb-0" id="toatalorders"></h3>
+                                                 
+                                              </div>
+                                          </div>
+                                          <div class="col-3">
+                                              <div class="icon icon-box-success">
+                                                  <span class="mdi mdi-shopping icon-item"></span>
+                                              </div>
+                                          </div>
+                                      </div>
+                                      <h6 class="text-muted font-weight-normal">Orders</h6>
+                                  </div>
+                              </div>
+                          </div>
+                          <div class="col-xl-3 col-sm-6 grid-margin stretch-card">
+                              <div class="card">
+                                  <div class="card-body">
+                                      <div class="row">
+                                          <div class="col-9">
+                                              <div class="d-flex align-items-center align-self-start">
+                                                  <h3 class="mb-0" id="avarage"></h3>
+                                                  
+                                              </div>
+                                          </div>
+                                          <div class="col-3">
+                                              <div class="icon icon-box-danger">
+                                                  <span class="mdi mdi-chart-bar icon-item"></span>
+                                              </div>
+                                          </div>
+                                      </div>
+                                      <h6 class="text-muted font-weight-normal">Average Order Value</h6>
+                                  </div>
+                              </div>
+                          </div>
+                          <div class="col-xl-3 col-sm-6 grid-margin stretch-card">
+                              <div class="card">
+                                  <div class="card-body">
+                                      <div class="row">
+                                          <div class="col-9">
+                                              <div class="d-flex align-items-center align-self-start">
+                                                  <h3 class="mb-0">42.6%</h3>
+                                                  <p class="text-success ml-2 mb-0 font-weight-medium">+0.8%</p>
+                                              </div>
+                                          </div>
+                                          <div class="col-3">
+                                              <div class="icon icon-box-success">
+                                                  <span class="mdi mdi-percent icon-item"></span>
+                                              </div>
+                                          </div>
+                                      </div>
+                                      <h6 class="text-muted font-weight-normal">Conversion Rate</h6>
+                                  </div>
+                              </div>
+                          </div>
+                      </div>
+  
+                      <!-- Sales Chart -->
+                      <div class="row">
+                          <div class="col-lg-8 grid-margin stretch-card">
+                              <div class="card">
+                                  <div class="card-body">
+                                      <h4 class="card-title">Sales Trend</h4>
+                                      <canvas id="salesChart"></canvas>
+                                  </div>
+                              </div>
+                          </div>
+                          <div class="col-lg-4 grid-margin stretch-card">
+                              <div class="card">
+                                  <div class="card-body">
+                                      <h4 class="card-title">Sales by Category</h4>
+                                      <canvas id="pieChart"></canvas>
+                                  </div>
+                              </div>
+                          </div>
+                      </div>
+  
+                      <!-- Recent Sales Table -->
+                      <div class="row">
+                          <div class="col-12 grid-margin">
+                              <div class="card">
+                                  <div class="card-body">
+                                      <h4 class="card-title">Recent Sales</h4>
+                                      <div class="table-responsive">
+                                          <table class="table">
+                                              <thead>
+                                                  <tr>
+                                                      <th>Order ID</th>
+                                                      <th>Customer</th>
+                                                      <th>Product</th>
+                                                      <th>Amount</th>
+                                                      <th>Status</th>
+                                                      <th>Date</th>
+                                                  </tr>
+                                              </thead>
+                                              <% products.forEach(order=>{ %>
+                                              <tbody>
+                                                  <tr>
+                                                      <td>#<%=order._id%></td>
+                                                      <td><%=order.user.name%></td>
+                                                      <td><%=order.products.map(e=>e.productid.name  )%></td>
+                                                      <td><%=order.totalAmount-order.coupon.discount%></td>
+                                                      <td>
+                                                        <% if (order.status === 'Delivered') { %>
+                                                          <span class="badge badge-success">Delivered</span>
+                                                        <% } else if (order.status === 'Cancelled') { %>
+                                                          <span class="badge badge-danger">Cancelled</span>
+                                                        <% } else if (order.status === 'Shipped') { %>
+                                                          <span class="badge badge-info">Shipped</span>
+                                                        <% } else if (order.status === 'Processing') { %>
+                                                          <span class="badge badge-warning">Processing</span>
+                                                        <% } else { %>
+                                                          <span class="badge badge-primary">Pending</span>
+                                                        <% } %>
+                                                      </td>
+                                                      
+                                                      <td><%=new Date(order.createdAt).toISOString().split('T')[0]%></td>
+                                                  </tr>
+                                                  <% }) %>
+                                              </tbody>
+                                          </table>
+                                      </div>
+                                  </div>
+                              </div>
+                          </div>
+                      </div>
+                  </div>
+                    
+                </div>
             </div>
-            <!-- main-panel ends -->
-          </div>
-          <!-- page-body-wrapper ends -->
-      </div>
-   
-      <!-- End custom js for this page -->
-</body>
+        </div>
+    </div>
+    
+    <script>
+        function setCustomDateRange() {
+            const startDate = document.getElementById('dateStart').value;
+            const endDate = document.getElementById('dateEnd').value;
+            console.log(startDate+endDate);
+            const url=new URLSearchParams(window.location.search)
+            // console.log(range);
+            if (startDate && endDate) {
+                const range=  url.get('range')
+                
+                window.location.href = `/admin/dashbord?range=${range}&startDate=${startDate}&endDate=${endDate}`;
+            }
+        }
+    </script>
+    <script>
 
+//         // list range 
+//         const ranges=document.getElementById('exportOptions')
+//         ranges.addEventListener('click',e=>{
+//             const params = new URLSearchParams(window.location.search);
+//             const param=params.get('range')||3
+// console.log(param);
+
+//             fetch('/admin/exporttotdf/'+param,{
+//                 method:'PUT'
+//             })
+//         })
+     
+
+
+
+      // Sales Chart
+      const salesCtx = document.getElementById('salesChart').getContext('2d');
+      new Chart(salesCtx, {
+          type: 'line',
+          data: {
+              labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul'],
+              datasets: [{
+                  label: 'Sales',
+                  data: [65, 59, 80, 81, 56, 55, 40],
+                  borderColor: '#4B49AC',
+                  tension: 0.1,
+                  fill: false
+              }]
+          },
+          options: {
+              responsive: true,
+              plugins: {
+                  legend: {
+                      position: 'top',
+                  }
+              }
+          }
+      });
+
+      // Pie Chart
+      const pieCtx = document.getElementById('pieChart').getContext('2d');
+      new Chart(pieCtx, {
+          type: 'pie',
+          data: {
+              labels: ['Electronics', 'Clothing', 'Food', 'Books'],
+              datasets: [{
+                  data: [30, 25, 25, 20],
+                  backgroundColor: [
+                      '#4B49AC',
+                      '#FFC100',
+                      '#248AFD',
+                      '#FF4747'
+                  ]
+              }]
+          },
+          options: {
+              responsive: true,
+              plugins: {
+                  legend: {
+                      position: 'bottom',
+                  }
+              }
+          }
+      });
+  </script>
+    <script>
+      console.log(products);
+      
+        // Function to handle report export
+        function exportReport(format) {
+        if(format==='pdf'){
+            const params = window.location.search
+            
+            window.location.href='/admin/exporttopdf'+params
+        }
+        else if(format==='excel'){
+            const params = window.location.search
+          
+            window.location.href='/admin/exporttoexcel'+params
+        }
+            setTimeout(() => {
+                console.log(`Exporting report with parameters:`);
+                hideLoading();
+                showNotification(`Report exported successfully in ${format.toUpperCase()} format`);
+            }, 1500);
+        }
+
+        // Function to generate report preview
+        function generateReport() {
+            // Show loading indicator
+            showLoading();
+
+            // Simulate report generation
+            setTimeout(() => {
+                hideLoading();
+                showNotification('Report generated successfully');
+            }, 1000);
+        }
+
+        // UI Helper Functions
+        function showLoading() {
+            // Add loading overlay
+            const overlay = document.createElement('div');
+            overlay.id = 'loadingOverlay';
+            overlay.style.cssText = `
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background: rgba(0,0,0,0.5);
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                z-index: 9999;
+            `;
+            overlay.innerHTML = '<div class="spinner-border text-light" role="status"></div>';
+            document.body.appendChild(overlay);
+        }
+
+        function hideLoading() {
+            const overlay = document.getElementById('loadingOverlay');
+            if (overlay) {
+                overlay.remove();
+            }
+        }
+
+        function showNotification(message) {
+            // Create notification element
+            const notification = document.createElement('div');
+            notification.style.cssText = `
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                padding: 15px 25px;
+                background: #4CAF50;
+                color: white;
+                border-radius: 4px;
+                z-index: 9999;
+                animation: slideIn 0.5s ease-out;
+            `;
+            notification.textContent = message;
+            document.body.appendChild(notification);
+
+            // Remove notification after 3 seconds
+            setTimeout(() => {
+                notification.style.animation = 'slideOut 0.5s ease-in';
+                setTimeout(() => notification.remove(), 500);
+            }, 3000);
+        }
+
+        // Add necessary styles
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes slideIn {
+                from { transform: translateX(100%); }
+                to { transform: translateX(0); }
+            }
+            @keyframes slideOut {
+                from { transform: translateX(0); }
+                to { transform: translateX(100%); }
+            }
+        `;
+        document.head.appendChild(style);
+
+       
+    </script>
+    <script>
+      console.log(products.length);
+      document.getElementById('toatalorders').innerText=products.length
+      let toatal=0
+      // calculating toatla price 
+      products.forEach(e=>{
+        console.log(e);
+        toatal+= e.totalAmount-e.coupon.discount
+      })
+      console.log(toatal)
+      document.getElementById('toatalprofit').innerText='₹'+toatal.toFixed(2)
+      // ----------------------------------------------------------------------------------
+      // avarege colloction 
+      
+      let avarage=toatal/products.length
+      console.log(avarage);
+      document.getElementById('avarage').innerText='₹'+avarage.toFixed()
+      
+      </script>
+  <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
 </html>

@@ -65,6 +65,7 @@ function validateForm(event) {
 
 // coupon code 
 let cname
+let  rate
 let discountprice=0
 const coupon=document.getElementById('apply')
 const applaysubmit=document.getElementById('applysubmit')
@@ -77,6 +78,7 @@ applaysubmit.addEventListener('click',(e)=>{
     })
     .then(res=>res.json())
     .then(res=>{
+        
         if(res.success==false){
             document.getElementById('applayerror').innerText=res.erromsg
            return console.log(res.erromsg);
@@ -84,8 +86,10 @@ applaysubmit.addEventListener('click',(e)=>{
         }
         if(res.success){
             document.querySelector('.discount-charge').classList.remove('d-none')
+            document.getElementById('applayerror').innerText=''
+
             document.querySelector('.discount-charge').classList.add('d-flex')
-            const rate=res.toatal-res.discount
+             rate=res.toatal-res.discount
             discountprice=res.discount
             cname=res.coupon
             console.log(rate);
@@ -97,7 +101,17 @@ applaysubmit.addEventListener('click',(e)=>{
 
     
 })
+document.getElementById('removecoupon').addEventListener('click',e=>{
+    e.preventDefault()
+    rate+=discountprice
+    discountprice   =0
+   document.querySelector('.discount-charge').classList.remove('d-flex')
+   document.querySelector('.discount-charge').classList.add('d-none')
+   document.getElementById('total').innerText=rate
 
+//    document.getElementById('coupondiscount').innerText=
+
+})
 
 // New address form submission
 address.addEventListener('submit', async function (e) {

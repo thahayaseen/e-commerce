@@ -1,156 +1,39 @@
 {
-    "orders": [
+    "coupon": {
+        "discount": 0
+    },
+    "shippingAddress": {
+        "fullname": "Ansab Ali Sulthan",
+        "addressline1": "kozhikode",
+        "addressline2": "",
+        "city": "nallalam",
+        "state": "kozhikode",
+        "zipcode": "673027",
+        "country": "IN",
+        "phone": "7907339099"
+    },
+    "_id": "6714b847408ba6fa7ffb50bf",
+    "user": "6714b0f82fa99849d6fe4c3d",
+    "products": [
         {
-            "coupon": {
-                "discount": 1700,
-                "couponcode": "uwais"
-            },
-            "shippingAddress": {
-                "fullname": "THAHA YASEEN",
-                "addressline1": "Kolathara, Kozhikode",
-                "addressline2": "India",
-                "city": "Kozhikode",
-                "state": "Kerala",
-                "zipcode": "673655",
-                "country": "IN",
-                "phone": "8089109152"
-            },
-            "_id": "670e846a8bea3d356062b470",
-            "user": "670e7b0f8bea3d356062b338",
-            "products": [
-                {
-                    "productid": {
-                        "_id": "66fd08496988d06040bdc7c3",
-                        "name": "ZEBRONICS  N24A 24",
-                        "price": 8499,
-                        "stock": 50,
-                        "unlist": false,
-                        "images": [
-                            "1727858761291.jpg",
-                            "1727858761295.jpg",
-                            "1727858761297.jpg"
-                        ],
-                        "description": "Anti-glare screen: The 60.4cm screen of the ZEB-N24A is treated with an anti-glare coating, which reduces reflections and minimizes eye strain during prolonged gaming sessions.\r\nBuilt-in Speakers: Equipped with built-in speakers, the ZEB-N24A offers a convenient audio solution without the need for external speakers.\r\nBezel-Less Design: The ZEB-N24A boasts a sleek, bezel-less design, providing an expansive viewing area that enhances the sense of immersion. Its 16:9 aspect ratio offers a wider viewing experience.\r\nRefresh Rate: The monitor's 180Hz refresh rate and 1ms MPRT ensure smooth gameplay with reduced motion blur and more frames per second.",
-                        "category_id": "66fa26a5e8f8b40366d3d0e9",
-                        "createdAt": "2024-10-02T08:46:01.317Z",
-                        "updatedAt": "2024-10-15T15:04:10.020Z",
-                        "__v": 0
-                    },
-                    "quantity": 1,
-                    "price": 8499,
-                    "status": true,
-                    "_id": "670e846a8bea3d356062b471"
-                }
-            ],
-            "totalAmount": 8499,
-            "status": "Pending",
-            "paymentMethod": "Cash on Delivery",
-            "paymentStatus": "Pending",
-            "orderDate": "2024-10-15T15:04:10.025Z",
-            "createdAt": "2024-10-15T15:04:10.028Z",
-            "updatedAt": "2024-10-15T15:04:10.028Z",
-            "__v": 0
-        },
-        {
-            "coupon": {
-                "discount": 4250,
-                "couponcode": "1234"
-            },
-            "shippingAddress": {
-                "fullname": "THAHA YASEEN",
-                "addressline1": "Kolathara, Kozhikode",
-                "addressline2": "India",
-                "city": "Kozhikode",
-                "state": "Kerala",
-                "zipcode": "673655",
-                "country": "IN",
-                "phone": "8089109152"
-            },
-            "_id": "670e842c8bea3d356062b43c",
-            "user": "670e7b0f8bea3d356062b338",
-            "products": [
-                {
-                    "productid": {
-                        "_id": "66fd08496988d06040bdc7c3",
-                        "name": "ZEBRONICS  N24A 24",
-                        "price": 8499,
-                        "stock": 50,
-                        "unlist": false,
-                        "images": [
-                            "1727858761291.jpg",
-                            "1727858761295.jpg",
-                            "1727858761297.jpg"
-                        ],
-                        "description": "Anti-glare screen: The 60.4cm screen of the ZEB-N24A is treated with an anti-glare coating, which reduces reflections and minimizes eye strain during prolonged gaming sessions.\r\nBuilt-in Speakers: Equipped with built-in speakers, the ZEB-N24A offers a convenient audio solution without the need for external speakers.\r\nBezel-Less Design: The ZEB-N24A boasts a sleek, bezel-less design, providing an expansive viewing area that enhances the sense of immersion. Its 16:9 aspect ratio offers a wider viewing experience.\r\nRefresh Rate: The monitor's 180Hz refresh rate and 1ms MPRT ensure smooth gameplay with reduced motion blur and more frames per second.",
-                        "category_id": "66fa26a5e8f8b40366d3d0e9",
-                        "createdAt": "2024-10-02T08:46:01.317Z",
-                        "updatedAt": "2024-10-15T15:04:10.020Z",
-                        "__v": 0
-                    },
-                    "quantity": 1,
-                    "price": 8499,
-                    "status": true,
-                    "_id": "670e842c8bea3d356062b43d"
-                }
-            ],
-            "totalAmount": 8499,
-            "status": "Pending",
-            "paymentMethod": "Cash on Delivery",
-            "paymentStatus": "Pending",
-            "orderDate": "2024-10-15T15:03:08.577Z",
-            "createdAt": "2024-10-15T15:03:08.580Z",
-            "updatedAt": "2024-10-15T15:03:08.580Z",
-            "__v": 0
-        },
-        {
-            "coupon": {
-                "discount": 0
-            },
-            "shippingAddress": {
-                "fullname": "THAHA YASEEN",
-                "addressline1": "Kolathara, Kozhikode",
-                "addressline2": "India",
-                "city": "Kozhikode",
-                "state": "Kerala",
-                "zipcode": "673655",
-                "country": "IN",
-                "phone": "8089109152"
-            },
-            "_id": "670e7d298bea3d356062b3e7",
-            "user": "670e7b0f8bea3d356062b338",
-            "products": [
-                {
-                    "productid": {
-                        "_id": "670e7abf8bea3d356062b329",
-                        "name": "rapand",
-                        "price": 32,
-                        "stock": 231,
-                        "unlist": false,
-                        "images": [
-                            "1729002175355.jpg",
-                            "1729002316762.jpg",
-                            "1729002435837.jpg"
-                        ],
-                        "description": "efdfadsgdfg",
-                        "category_id": "66fa4cc1da7aa084c07f546d",
-                        "createdAt": "2024-10-15T14:22:55.378Z",
-                        "updatedAt": "2024-10-15T14:33:13.524Z",
-                        "__v": 2
-                    },
-                    "quantity": 1,
-                    "price": 32,
-                    "status": true,
-                    "_id": "670e7d298bea3d356062b3e8"
-                }
-            ],
-            "totalAmount": 32,
-            "status": "Cancelled",
-            "paymentMethod": "Cash on Delivery",
-            "paymentStatus": "Pending",
-            "orderDate": "2024-10-15T14:33:13.533Z",
-            "createdAt": "2024-10-15T14:33:13.538Z",
-            "updatedAt": "2024-10-15T14:34:21.168Z",
-            "__v": 0
+            "productid": "66fd0abddc87a29804163f60",
+            "discount": 0,
+            "quantity": 1,
+            "price": 42788.16,
+            "status": true,
+            "return": "returnreq",
+            "_id": "6714b847408ba6fa7ffb50c0",
+            "returnExplanation": "fsdfsadfasdfasdf",
+            "returnReason": "wrong_size"
         }
-    ]
+    ],
+    "totalAmount": 42788.16,
+    "status": "Shipped",
+    "paymentMethod": "onlinePayment",
+    "paymentStatus": "Pending",
+    "pstatus": true,
+    "orderDate": "2024-10-20T07:59:03.430Z",
+    "createdAt": "2024-10-20T07:59:03.435Z",
+    "updatedAt": "2024-10-20T09:40:12.651Z",
+    "__v": 0
 }

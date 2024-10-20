@@ -14,6 +14,10 @@ const orderSchema = new Schema({
         ref: 'Product',  
         required: true
       },
+      discount: {
+        type: Number,
+        default: 0
+      },
       quantity: {
         type: Number,
         required: true,
@@ -23,20 +27,34 @@ const orderSchema = new Schema({
         type: Number,
         required: true
       },
-      status:{type:Boolean,
-              default:true
+      status: {
+        type: Boolean,
+        default: true
+      },
+      return: {
+        type: String,
+        enum: ['returned','returning', 'noreturn', 'returnreq','notrequst'],
+        default: 'notrequst' 
+      },
+      returnReason: {
+        type: String, 
+        
+      },
+      returnExplanation: {
+        type: String,
+        required: function() {
+          return this.return === 'returnreq'; 
+        }
       }
     }
   ],
-  coupon:{ 
-    couponcode:String,
-    discount:{
-      type:Number,
-      default:0
+  coupon: { 
+    couponcode: String,
+    discount: {
+      type: Number,
+      default: 0
     }
-  
-  }
-  ,
+  },
   totalAmount: {
     type: Number,
     required: true
@@ -48,7 +66,7 @@ const orderSchema = new Schema({
   },
   paymentMethod: {
     type: String,
-    enum: [ 'onlinePayment', 'Cash on Delivery'],
+    enum: ['onlinePayment', 'Cash on Delivery'],
     required: true
   },
   paymentStatus: {
@@ -56,16 +74,16 @@ const orderSchema = new Schema({
     enum: ['Pending', 'Paid', 'Failed'],
     default: 'Pending'
   },
-  pstatus:{
-    type:Boolean,
-    default:false
+  pstatus: {
+    type: Boolean,
+    default: false
   },
   shippingAddress: {
     fullname: { type: String, required: true },
     addressline1: { type: String, required: true },
     addressline2: { type: String },
     city: { type: String, required: true },
-    state:{type:String},
+    state: { type: String },
     zipcode: { type: String, required: true },
     country: { type: String, required: true },
     phone: { type: String, required: true }

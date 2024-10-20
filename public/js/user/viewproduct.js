@@ -52,7 +52,7 @@ addtobtn.addEventListener('click', (e) => {
 
             if (res.success == true) {
                 console.log('ok');
-                alert('product successfully added to cart')
+               
             }
 
             else {
@@ -69,6 +69,39 @@ wishlistbtn.forEach(btns=>{
         console.log(productid);
         fetch(`/wishlist/${productid}`,{
             method:'PATCH',
+            
+        })
+        .then(res=>res.json())
+        .then(res=>{
+            if(res.success===true){
+                Swal.fire({
+                    title: 'Added to Wishlist!',
+                    text: res.message,
+                    icon: 'success',
+                    showConfirmButton: false,
+                    timer: 1500
+                });
+            }
+            else if (res.success === false) {
+                Swal.fire({
+                    title: 'Failed to Add to Wishlist!',
+                    text: res.message,
+                    icon: 'error', 
+                    showConfirmButton: false,
+                    timer: 1000
+                });
+            }
+            else if (res.success == 'nologined') {
+                Swal.fire({
+                    title: 'Failed to Add to Wishlist!',
+                    text: res.message,
+                    icon: 'error', 
+                    showConfirmButton: false,
+                    timer: 1900
+                });
+            }
+           
+            
             
         })
         

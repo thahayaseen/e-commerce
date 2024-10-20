@@ -5,7 +5,53 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" rel="stylesheet">
     <link rel="stylesheet" href="/css/myprofile.css">
+    <!-- Toastr CSS -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" rel="stylesheet" />
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+  
+    <!-- SweetAlert2 JS -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <!-- Toastr JS -->
+
     <style>
+        .custom-popup {
+    border-radius: 15px !important;
+    box-shadow: 0 0 20px rgba(0,0,0,0.1) !important;
+}
+
+.swal2-title {
+    color: #2c3e50 !important;
+    font-size: 1.5em !important;
+    font-weight: 600 !important;
+}
+
+.swal2-content {
+    color: #34495e !important;
+}
+
+.swal2-confirm, .swal2-cancel {
+    border-radius: 8px !important;
+    font-weight: 500 !important;
+    transition: all 0.3s ease !important;
+}
+
+.swal2-confirm:hover {
+    transform: translateY(-2px) !important;
+    box-shadow: 0 5px 15px rgba(220, 53, 69, 0.3) !important;
+}
+
+.swal2-cancel:hover {
+    transform: translateY(-2px) !important;
+    box-shadow: 0 5px 15px rgba(108, 117, 125, 0.3) !important;
+}
+
+/* Animation for loading state */
+.swal2-shown.swal2-loading {
+    overflow: hidden;
+}
         .profile-header {
             background-color: #dfdfdf;
             padding: 20px;
@@ -130,53 +176,63 @@
             font-weight: bold;
             font-size: 1.2em;
         }
+        .navbar {
+            background-color: #5F42E8;
+            padding: 15px 0;
+        }
+        .navbar-brand{
+            color: white;
+        }
     </style>
 </head>
 
 <body>
-    <nav class="navbar navbar-expand-sm">
-        <div class="container">
-            <a class="navbar-brand" href="/">NZXT</a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">All Products</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">Components</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">Gaming Gear</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">Monitors</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">Software</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">Community</a>
-                    </li>
-                </ul>
-                <div class="navbar-icons">
-                    <a class="nav-link" href="#">❔</a>
-                    <a class="nav-link" href="#">👤</a>
-                    <a class="nav-link" href="#">🛒</a>
-                    <a href="/logout">
-                        <?xml version="1.0" ?><svg fill="none" height="24" viewBox="0 0 24 24" width="24"
-                            xmlns="http://www.w3.org/2000/svg">
-                            <path
-                                d="M17 16L21 12M21 12L17 8M21 12L7 12M13 16V17C13 18.6569 11.6569 20 10 20H6C4.34315 20 3 18.6569 3 17V7C3 5.34315 4.34315 4 6 4H10C11.6569 4 13 5.34315 13 7V8"
-                                stroke="#374151" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" />
-                        </svg>
-                    </a>
+    <header class="bg-gradient text-white shadow">
+        <nav class="navbar navbar-expand-md p-0 navbarbg">
+            <div class="container-sm">
+                <a class="navbar-brand fs-4 fw-bold" href="/">WeebsCorner</a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="navbar container-fluid" id="navbarNav">
+                    <ul class="navbar-nav p-0">
+                        <li class="nav-item">
+                            <a class="nav-link" href="/product">All Products</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="/gaming-gear">Gaming Gear</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="/community">Community</a>
+                        </li>
+                    </ul>
+                    <div class="d-flex">
+                        <a href="/wishlist" class="btn btn-link text-white me-2">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-heart-fill" viewBox="0 0 16 16">
+                                <path fill-rule="evenodd" d="M8 1.314C12.438-3.248 23.534 4.735 8 15-7.534 4.736 3.562-3.248 8 1.314z"/>
+                            </svg>
+                        </a>
+                        <a href="/user/mydash" class="btn btn-link text-white me-2">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-person" viewBox="0 0 16 16">
+                                <path d="M8 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm2-3a2 2 0 1 1-4 0 2 2 0 0 1 4 0zm4 8c0 1-1 1-1 1H3s-1 0-1-1 1-4 6-4 6 3 6 4zm-1-.004c-.001-.246-.154-.986-.832-1.664C11.516 10.68 10.289 10 8 10c-2.29 0-3.516.68-4.168 1.332-.678.678-.83 1.418-.832 1.664h10z"/>
+                            </svg>
+                        </a>
+                        <a href="/cart" class="btn btn-link text-white me-2">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-cart" viewBox="0 0 16 16">
+                                <path d="M0 1.5A.5.5 0 0 1 .5 1H2a.5.5 0 0 1 .485.379L2.89 3H14.5a.5.5 0 0 1 .491.592l-1.5 8A.5.5 0 0 1 13 12H4a.5.5 0 0 1-.491-.408L2.01 3.607 1.61 2H.5a.5.5 0 0 1-.5-.5zM3.102 4l1.313 7h8.17l1.313-7H3.102zM5 12a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm7 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm-7 1a1 1 0 1 1 0 2 1 1 0 0 1 0-2zm7 0a1 1 0 1 1 0 2 1 1 0 0 1 0-2z"/>
+                            </svg>
+                        </a>
+                        <a href="/logout" class="btn btn-link text-white">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-box-arrow-right" viewBox="0 0 16 16">
+                                <path fill-rule="evenodd" d="M10 12.5a.5.5 0 0 1-.5.5h-8a.5.5 0 0 1-.5-.5v-9a.5.5 0 0 1 .5-.5h8a.5.5 0 0 1 .5.5v2a.5.5 0 0 0 1 0v-2A1.5 1.5 0 0 0 9.5 2h-8A1.5 1.5 0 0 0 0 3.5v9A1.5 1.5 0 0 0 1.5 14h8a1.5 1.5 0 0 0 1.5-1.5v-2a.5.5 0 0 0-1 0v2z"/>
+                                <path fill-rule="evenodd" d="M15.854 8.354a.5.5 0 0 0 0-.708l-3-3a.5.5 0 0 0-.708.708L14.293 7.5H5.5a.5.5 0 0 0 0 1h8.793l-2.147 2.146a.5.5 0 0 0 .708.708l3-3z"/>
+                            </svg>
+                        </a>
+                    </div>
                 </div>
             </div>
-        </div>
-    </nav>
+        </nav>
+    </header>
 
     <div class="container mt-4">
         <div class="row">
@@ -203,47 +259,99 @@
                                     <ul class="list-group">
                                         <% order.products.forEach(product=> { %>
                                             <li class="list-group-item d-flex justify-content-between align-items-center">
-                                                <%= product.productid.name %>
-                                                    <span class="badge bg-primary rounded-pill">Qty: <%= product.quantity %></span>
-                                                    <div>
-                                                        <button class="btn btn-sm btn-info view-product"
-                                                            data-bs-toggle="modal" data-bs-target="#productModal"
-                                                            data-product='<%= JSON.stringify(product.productid) %>'>View</button>
-                                                        <% if (order.status !== 'Delivered' && order.status !== 'Cancelled' ) { %>
-                                                            <button class="btn btn-sm 
-                                                                <%= product.status ? 'btn-danger cancel-product' : 'btn-secondary' %>" 
-                                                                <%= product.status ? '' : 'disabled' %>
-                                                                data-bs-toggle="modal"
-                                                                data-bs-target="#cancelProductModal"
-                                                                data-order-id="<%= order._id %>"
-                                                                data-product-id="<%= product.productid._id %>">
-                                                                <%= product.status ? 'Cancel' : 'Cancelled' %>
+                                                <div>
+                                                    <%= product.productid.name %>
+                                                    <% if (product.return === 'returnreq') { %>
+                                                        <span class="return-status return-status-requested ml-2">Return Requested</span>
+                                                    <% } else if (product.return === 'returned') { %>
+                                                        <span class="return-status return-status-returned ml-2">Returned</span>
+                                                    <% } else if (product.return === 'noreturn') { %>
+                                                        <span class="return-status btn btn-danger return-status-noreturn ml-2">Cannot Return</span>
+                                                    <% } else if (product.return === 'returning') { %>
+                                                        <span class="return-status btn btn-success return-status-returning ml-2">Returning</span>
+                                                    <% } %>
+                                                </div>
+                                                <div class="d-flex align-items-center">
+                                                    <span class="badge bg-primary rounded-pill me-2">Qty: <%= product.quantity %></span>
+                                                    <div class="btn-group">
+                                                        <button class="btn btn-sm btn-info view-product" 
+                                                                data-bs-toggle="modal" 
+                                                                data-bs-target="#productModal"
+                                                                data-product='<%= JSON.stringify(product.productid) %>'>
+                                                            View
+                                                        </button>
+                                                        <% if (product.return === 'returnreq' || product.return === 'returned') { %>
+                                                            <button class="btn btn-sm btn-secondary view-return-reason"
+                                                                    data-bs-toggle="modal"
+                                                                    data-bs-target="#returnReasonModal"
+                                                                    data-return-reason="<%= product.returnReason %>"
+                                                                    data-return-explanation="<%= product.returnExplanation %>">
+                                                                View Return Details
+                                                            </button>
+                                                        <% } else if (order.status === 'Delivered' && product.return === 'notrequst') { %>
+                                                            <button class="btn btn-sm btn-warning return-product"
+                                                                    data-bs-toggle="modal"
+                                                                    data-bs-target="#returnModal"
+                                                                    data-order-id="<%= order._id %>"
+                                                                    data-product-id="<%= product.productid._id %>">
+                                                                Return
                                                             </button>
                                                         <% } %>
                                                     </div>
+                                                </div>
                                             </li>
                                         <% }) %>
                                     </ul>
                                 </div>
                                 <div class="col-md-4">
-                                    <p><strong>Date:</strong> <%= new Date(order.createdAt).toLocaleDateString() %></p>
-                                    <p><strong>Total:</strong> <%= order.totalAmount-order.coupon.discount %></p>
-                                    <% if (order.status !== 'Delivered' && order.status !== 'Cancelled' ) { %>
-                                        <a data-orderid="<%= order._id %>" class="btn cancelbtn btn-danger">Cancel Order</a>
-                                    <% } %>
-                                    <button class="btn btn-primary view-order-details" data-bs-toggle="modal"
-                                        data-bs-target="#orderDetailsModal" data-order='<%= JSON.stringify(order) %>'>
-                                        View Details
-                                    </button>
+                                    <p><strong>Date:</strong>
+                                        <%= new Date(order.createdAt).toLocaleDateString() %>
+                                    </p>
+                                    <p><strong>Total:</strong>
+                                        <%= (order.totalAmount-order.coupon.discount).toFixed(2) %>
+                                    </p>
+                                    <% if (order.status !=='Delivered' && order.status !=='Cancelled' ) { %>
+                                        <a data-orderid="<%= order._id %>" class="btn cancelbtn btn-danger">Cancel
+                                            Order</a>
+                                        <% } %>
+                                            <button class="btn btn-primary view-order-details" data-bs-toggle="modal"
+                                                data-bs-target="#orderDetailsModal"
+                                                data-order='<%= JSON.stringify(order) %>'>
+                                                View Details
+                                            </button>
                                 </div>
                             </div>
                         </div>
                     </div>
-                <% }) %>
+                    <% }) %>
             </div>
         </div>
     </div>
 
+<!-- return moda  -->
+    <div class="modal fade return-reason-modal" id="returnReasonModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Return Details</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="return-reason-box">
+                        <h6>Return Reason:</h6>
+                        <p id="modalReturnReason"></p>
+                    </div>
+                    <div class="return-reason-box">
+                        <h6>Additional Details:</h6>
+                        <p id="modalReturnExplanation"></p>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
     <!-- Product Modal -->
     <div class="modal fade product-modal" id="productModal" tabindex="-1" aria-labelledby="productModalLabel"
         aria-hidden="true">
@@ -297,8 +405,8 @@
     </div>
 
     <!-- Order Details Modal -->
-    <div class="modal fade order-details-modal" id="orderDetailsModal" tabindex="-1" aria-labelledby="orderDetailsModalLabel"
-        aria-hidden="true">
+    <div class="modal fade order-details-modal" id="orderDetailsModal" tabindex="-1"
+        aria-labelledby="orderDetailsModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
                 <div class="modal-header">
@@ -341,11 +449,141 @@
         </div>
     </div>
 
+    <!-- Return Modal -->
+    <div class="modal fade return-modal" id="returnModal" tabindex="-1" aria-labelledby="returnModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="returnModalLabel">Return Product</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="returnForm">
+                        <div class="return-reason mb-3">
+                            <label for="returnReason" class="form-label">Reason for Return</label>
+                            <select class="form-select" id="returnReason" required>
+                                <option value="">Select a reason</option>
+                                <option value="wrong_size">Wrong Size</option>
+                                <option value="damaged">Damaged/Defective</option>
+                                <option value="not_as_described">Not as Described</option>
+                                <option value="changed_mind">Changed Mind</option>
+                                <option value="other">Other</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="returnDetails" class="form-label">Additional Details</label>
+                            <textarea class="form-control" id="returnDetails" rows="3" required></textarea>
+                        </div>
+                        <div class="return-policy">
+                            <strong>Return Policy:</strong>
+                            <ul>
+                                <li>Returns must be initiated within 14 days of delivery</li>
+                                <li>Product must be in original condition</li>
+                                <li>Include all original packaging and accessories</li>
+                                <li>Refund will be processed within 5-7 business days after inspection</li>
+                            </ul>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-primary" id="confirmReturn">Submit Return Request</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Success Message Modal -->
+    <div class="modal fade" id="successModal" tabindex="-1" aria-labelledby="successModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="successModalLabel">Success</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <p>Your return request has been submitted successfully!</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <script src="/js/user/orders.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.bundle.min.js"></script>
 
     <script>
+         document.querySelectorAll('.view-return-reason').forEach(button => {
+            button.addEventListener('click', (e) => {
+                const returnReason = button.getAttribute('data-return-reason');
+                const returnExplanation = button.getAttribute('data-return-explanation');
+                
+                document.getElementById('modalReturnReason').textContent = returnReason;
+                document.getElementById('modalReturnExplanation').textContent = returnExplanation;
+            });
+        });
+        document.querySelectorAll('.return-product').forEach(returnbtn=>{
+            returnbtn.addEventListener('click',(e)=>{
+                const orderId = returnbtn.getAttribute('data-order-id');
+                const productid = returnbtn.getAttribute('data-product-id');
+        
+                console.log(productid);
+                
+
+                document.getElementById('confirmReturn').addEventListener('click', function () {
+            const returnForm = document.getElementById('returnForm');
+            const returnReason = document.getElementById('returnReason').value;
+            const returnDetails = document.getElementById('returnDetails').value;
+
+                    let datas={}
+                    datas.returnReason=returnReason
+                    datas.returnDetails=returnDetails
+                    datas.returnreson=returnReason
+                    
+                    datas.orderid=orderId
+
+                    console.log(datas);
+                    
+            if (returnForm.checkValidity()) {
+               fetch('/return/'+productid,{
+                method:'POST',
+                headers:{
+                    'Content-Type':'application/json'
+                },
+                body:JSON.stringify(datas)
+               })
+
+               
+                $('#returnModal').modal('hide'); 
+                $('#successModal').modal('show'); 
+
+                // Reset the form
+                returnForm.reset();
+            } else {
+                returnForm.reportValidity();
+            }
+        });
+            })
+
+
+        })
+        // return per product 
+    
+
+
+
+
+
+
+
+
+
+
+
         // Product modal functionality
         document.getElementById('productModal').addEventListener('show.bs.modal', function (event) {
             let button = event.relatedTarget;
@@ -395,7 +633,7 @@
         // Order Details modal functionality
         document.getElementById('orderDetailsModal').addEventListener('show.bs.modal', function (event) {
             let button = event.relatedTarget;
-         
+
             let order = JSON.parse(button.getAttribute('data-order'));
             let modal = this;
             let tableBody = modal.querySelector('#orderDetailsTableBody');
@@ -415,7 +653,7 @@
                 row.insertCell(1).textContent = product.quantity;
                 row.insertCell(2).textContent = '₹' + (product.price.toFixed(2));
                 console.log(product.productid.price.toFixed(2));
-                
+
                 let itemTotal = product.quantity * product.price;
                 console.log(itemTotal);
                 console.log(product.price);
@@ -426,12 +664,12 @@
 
             subtotalAmount.textContent = '$' + subtotal.toFixed(2);
 
-            
+
             if (order.coupon) {
                 couponRow.style.display = 'table-row';
-                let discountAmount =order.coupon.discount;
+                let discountAmount = order.coupon.discount;
                 console.log(discountAmount);
-                
+
                 couponDiscount.textContent = '-$' + discountAmount.toFixed(2);
                 totalAmount.textContent = '$' + (subtotal - discountAmount).toFixed(2);
             } else {

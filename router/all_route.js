@@ -1,5 +1,5 @@
-const { signup, otpvarify, resent, varifylogin, logout, viewproduct, blockuser, glogincb, cartitemspush, cartupdata, cartitemdelete, addaddress, placeorder, deleteaddress, cancelorder, editname, changepass, productstockdata, cancelitem,patchwishlist,removewish,coupenapplaying,razorpayvarify } = require("../controller/user/user")
-const { register, login, otp, userhome, productlist, myaccount, userdash, useraddress, oredrs, cartrender, checkout,wishlist } = require('../middleware/render')
+const { signup, otpvarify, resent, varifylogin, logout, viewproduct, blockuser, glogincb, cartitemspush, cartupdata, cartitemdelete, addaddress, placeorder, deleteaddress, cancelorder, editname, changepass, productstockdata, cancelitem,patchwishlist,removewish,coupenapplaying,razorpayvarify,sendreset,resetpage,resetpasspost,returning } = require("../controller/user/user")
+const { register, login, otp, userhome, productlist, myaccount, userdash, useraddress, oredrs, cartrender, checkout,wishlist,resetpass,walletrender, } = require('../middleware/render')
 // const plogin=require('../controller/user/ulogin')
 const { pregister } = require('../middleware/redirect')
 const { allproducts } = require('../controller/finding_all_admin')
@@ -14,6 +14,8 @@ router.post('/signup', signup, pregister)
 router.get('/signin', login)
 router.post('/signin', varifylogin)
 
+router.get('/resetpass',resetpass )
+router.post('/reset',sendreset )
 
 // otp 
 router.get('/otp', otp)
@@ -24,6 +26,11 @@ router.post('/otp', otpvarify)
 // resendotp 
 router.post('/resendotp', resent)
 
+router.get('/reset-password/:token', resetpage);
+// Route to update the password
+router.post('/reset-password/:token', resetpasspost);
+  
+  
 // user side 
 
 router.get('/', blockuser, allproducts, userhome)
@@ -39,6 +46,7 @@ router.get('/user/address', useraddress)
 router.get('/user/orders', oredrs)
 router.post('/user/cancel-product', cancelitem)
 
+router.patch('/orders/:id', cancelorder)
 //google validation
 router.get('/glogin',
     passport.authenticate('google', { scope: ['email', 'profile'] })
@@ -53,14 +61,14 @@ router.delete('/cart/delete', cartitemdelete)
 //checkout page 
 router.get('/checkout', checkout)
 router.post('/orders', placeorder)
-router.patch('/orders/:id', cancelorder)
 //addres edit and update
 router.post('/address', addaddress)
 router.patch('/address/update/:id')
 router.patch('/address/:id', deleteaddress)
-
+router.post('/return/:proid',returning)
 //user data update
-
+// wallet 
+router.get('/user/wallet',walletrender)
 router.patch('/userupdate', editname)
 router.patch('/changepass', changepass)
 

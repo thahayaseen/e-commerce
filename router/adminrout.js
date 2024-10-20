@@ -1,6 +1,6 @@
 const express = require('express')
 const router = express.Router()
-const { auth, accses, list, padd, savecat, imageadding, submitedit, useredit, categoryunlist, updateorder, getiingorderdetials,addcoupen,coupenedit,deletecupen } = require('../controller/admin/admin')
+const { auth, accses, list, padd, savecat, imageadding, submitedit, useredit, categoryunlist, updateorder, getiingorderdetials,addcoupen,coupenedit,deletecupen,exportpdf,exportexcel,returnadmin } = require('../controller/admin/admin')
 const { adminlogin, admin, user, product, catagory, orders,coupenrender } = require('../middleware/render')
 const { alluser, adproducts } = require('../controller/finding_all_admin')
 const nocach = require('../middleware/nocach')
@@ -15,6 +15,10 @@ router.post('/', nocach, auth)
 
 // dashbord 
 router.get('/dashbord', nocach, admin)
+router.get('/exporttopdf',exportpdf)
+router.get('/exporttoexcel',exportexcel)
+
+
 
 router.get('/users', alluser, user)
 //user block and unblock 
@@ -36,7 +40,7 @@ router.patch('/product/images/edit/:id', upload.array('croppedImage'), imageaddi
 //add product
 router.post('/product/add', upload.array('addimage'), padd)
 
-
+router.post('/order/:orderid/:product/:action',returnadmin)
 router.get('/category', adproducts, catagory)
 // coupen 
 router.get('/coupon',coupenrender)
@@ -55,6 +59,10 @@ router.patch('/category/unlist/:id', categoryunlist)
 router.get('/orders', orders)
 router.patch('/orders', updateorder)
 router.get('/orderlist/:id', getiingorderdetials)
+
+
+// // salereport 
+// router.get('/salerepor')
 
 
 module.exports = router

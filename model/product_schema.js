@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-const { catagory } = require('../middleware/render');
+
 
 const productSchema = new mongoose.Schema({
     name: {

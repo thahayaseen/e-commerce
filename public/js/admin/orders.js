@@ -1,115 +1,283 @@
-const actionbtn=document.querySelectorAll('.actionbtn')
+document.addEventListener('DOMContentLoaded', function() {
+  // Handle action buttons
+  const actionButtons = document.querySelectorAll('.actionbtn');
+  actionButtons.forEach(btn => {
+      btn.addEventListener('change', async (e) => {
+          try {
+              const action = btn.value;
+              const orderId = btn.dataset.id;
+              console.log(action);
+              
+              if (!orderId) {
+                  throw new Error('Order ID is missing');
+              }
 
-actionbtn.forEach(btn=>{
-    btn.addEventListener('change',(e)=>{
-       const action= btn.value
-       const orderid=btn.dataset.id
-        // console.log(orderid);
-        
-       fetch('/admin/orders',{
-        method:'PATCH',
-        headers:{
-            'Content-Type':'application/json'
-        },
-        body:JSON.stringify({
-            action,orderid
-        })
+              const response = await fetch('/admin/orders', {
+                  method: 'PATCH',
+                  headers: {
+                      'Content-Type': 'application/json'
+                  },
+                  body: JSON.stringify({ action, orderId })
+              });
 
-       })
-       .then(res=>res.json())
-       .then(res=>{
-        if(res.success){
-            window.location.href='/admin/orders'
-        }
-       })
-        
-    })
-    
-})
-
-
-//view order 
-document.querySelectorAll('.vieworder').forEach(button => {
-    button.addEventListener('click', (e) => {
-      const orderId = button.dataset.id;
-  
-      fetch(`/admin/orderlist/${orderId}`, {
-        method: 'GET',
-      })
-      .then(response => response.json())
-      .then(response => {
-        if (response.success) {
-          populateOrderModal(response.data);
-        } else {
-          console.error('Error fetching order details:', response.message);
-        }
-      })
-      .catch(error => {
-        console.error('Error:', error);
+              const data = await response.json();
+              if (data.success) {
+                  window.location.href = '/admin/orders';
+              } else {
+                  throw new Error(data.message || 'Failed to update order');
+              }
+          } catch (error) {
+              console.error('Error:', error);
+              alert(`Failed to process action: ${error.message}`);
+          }
       });
-    });
   });
-  
+
+  // Handle view order buttons
+  document.querySelectorAll('.vieworder').forEach(button => {
+      button.addEventListener('click', async (e) => {
+          try {
+              const orderId = button.dataset.id;
+              
+              if (!orderId) {
+                  throw new Error('Order ID is missing');
+              }
+
+              const response = await fetch(`/admin/orderlist/${orderId}`);
+              const data = await response.json();
+              
+              if (data.success) {
+                  populateOrderModal(data.data);
+              } else {
+                  throw new Error(data.message || 'Failed to fetch order details');
+              }
+          } catch (error) {
+              console.error('Error:', error);
+              alert(`Failed to fetch order details: ${error.message}`);
+          }
+      });
+  });
+
   function populateOrderModal(order) {
-    document.getElementById('orderId').textContent = order._id;
-    document.getElementById('customerName').textContent = order.name;
-    document.getElementById('orderDate').textContent = new Date(order.createdAt).toLocaleDateString();
-    document.getElementById('orderStatus').textContent = order.status;
-    document.getElementById('orderStatus').className = `badge badge-pill badge-${getStatusClass(order.status)}`;
-    document.getElementById('shippingAddress').innerHTML = formatAddress(order.shippingAddress);
-  
-    let itemsHtml = '';
-    let subtotal = 0;
-    order.products.forEach(item => {
-      subtotal += item.quantity * item.price;
-      itemsHtml += `
-        <div class="col-md-6 mb-3">
-          <div class="card h-100">
-            <div class="row no-gutters">
-              <div class="col-md-4">
-                <img src="/uploads/${item.productid.images[0]}" class="card-img h-100" alt="${item.productid.name}" style="object-fit: cover;">
+      try {
+          if (!order) {
+              throw new Error('No order data provided');
+          }
+
+          // Populate order summary
+          const elements = {
+              orderId: order._id,
+              customerName: order.name,
+              orderDate: new Date(order.createdAt).toLocaleDateString(),
+              shippingAddress: formatAddress(order.shippingAddress)
+          };
+
+          // Update DOM elements with error checking
+          Object.entries(elements).forEach(([id, value]) => {
+              const element = document.getElementById(id);
+              if (element) {
+                  element.textContent = value;
+              }
+          });
+
+          // Update status with proper styling
+          const statusElement = document.getElementById('orderStatus');
+          if (statusElement) {
+              statusElement.textContent = order.status;
+              statusElement.className = `badge badge-pill badge-${getStatusBadgeClass(order.status)}`;
+          }
+
+          // Populate order items
+          let itemsHtml = '';
+          let subtotal = 0;
+
+          if (!Array.isArray(order.products)) {
+              throw new Error('Products data is invalid');
+          }
+
+          order.products.forEach((item) => {
+              const { productid, quantity, price, return: returnStatus } = item;
+              if (!productid || !quantity || !price) {
+                  console.warn('Incomplete product data:', item);
+                  return;
+              }
+
+              const { name, images, sku } = productid;
+              subtotal += quantity * price;
+
+              const productImage = images && images.length > 0 ? `/uploads/${images[0]}` : '/placeholder-image.jpg';
+              const productTotal = (quantity * price).toFixed(2);
+
+              const returnStatusHtml = returnStatus
+                  ? `
+                      <div class="mt-2">
+                          <span class="badge badge-${getProductStatusBadgeClass(returnStatus)} mr-2">
+                              ${returnStatus}
+                          </span>
+                          ${generateReturnButtons(returnStatus, order, productid, quantity)}
+                      </div>
+                  `
+                  : '<div class="mt-2">No return request</div>';
+
+              itemsHtml += generateProductCard(name, sku, price, quantity, productImage, productTotal, returnStatusHtml);
+          });
+
+          const orderItemsElement = document.getElementById('orderItems');
+          if (orderItemsElement) {
+              orderItemsElement.innerHTML = itemsHtml;
+          }
+
+          // Update totals
+          updateOrderTotals(subtotal, order.coupon);
+
+      } catch (error) {
+          console.error('Error in populateOrderModal:', error);
+          alert('Failed to populate order details');
+      }
+  }
+
+  function generateProductCard(name, sku, price, quantity, productImage, productTotal, returnStatusHtml) {
+      return `
+          <div class="card mb-3">
+              <div class="card-body">
+                  <div class="row">
+                      <div class="col-2 p-0">
+                          <img src="${productImage}" alt="${name}" 
+                               class="img-fluid rounded" 
+                               
+                               onerror="this.src='/placeholder-image.jpg'">
+                      </div>
+                      <div class="col-md-6">
+                          <h5 class="card-title">${name}</h5>
+                          <p class="card-text">
+                              <small class="text-muted">SKU: ${sku || 'N/A'}</small><br>
+                              Price: ₹${price} | Quantity: ${quantity}
+                          </p>
+                      </div>
+                      <div class="col-4 ">
+                          <h5 class="text-right">Total: ₹${productTotal}</h5>
+                          ${returnStatusHtml}
+                      </div>
+                  </div>
               </div>
-              <div class="col-md-8">
-                <div class="card-body">
-                  <h5 class="card-title">${item.productid.name}</h5>
-                  <p class="card-text">
-                    Quantity: ${item.quantity}<br>
-                    Price: $${item.price}<br>
-                    Subtotal: $${(item.quantity * item.price).toFixed(2)}
-                  </p>
-                </div>
-              </div>
-            </div>
           </div>
-        </div>
       `;
-    });
-    
-    document.getElementById('orderItems').innerHTML = itemsHtml;
-    document.getElementById('orderSubtotal').textContent = subtotal.toFixed(2);
-    document.getElementById('coupon').textContent = `${order.coupon.couponcode}(₹${order.coupon.discount})`||'no'
-    document.getElementById('orderShipping').textContent = 'free'
-    document.getElementById('orderTotal').textContent = (subtotal-order.coupon.discount).toFixed(2);
   }
-  
-  function getStatusClass(status) {
-    switch (status.toLowerCase()) {
-      case 'pending': return 'warning';
-      case 'processing': return 'info';
-      case 'shipped': return 'primary';
-      case 'delivered': return 'success';
-      case 'cancelled': return 'danger';
-      default: return 'secondary';
-    }
+
+  function generateReturnButtons(returnStatus, order, productid, quantity) {
+      if (returnStatus !== 'returnreq') {
+          return '<br> actions unavailable';
+      }
+
+      return `
+          <div class="btn-group btn-group-sm mt-2">
+              <button class="btn btn-sm btn-success product-action" 
+                      data-order-id="${order._id}"
+                      data-product-id="${productid._id}"
+                      data-action="accept">
+                  <i class="mdi mdi-check"></i> Accept
+              </button>
+              <button class="btn btn-sm btn-danger product-action"
+                      data-order-id="${order._id}"
+                      data-product-id="${productid._id}"
+                      data-action="reject">
+                  <i class="mdi mdi-close"></i> Reject
+              </button>
+          </div>
+      `;
   }
-  
+
+  function updateOrderTotals(subtotal, coupon) {
+      const elements = {
+          orderSubtotal: subtotal.toFixed(2),
+          orderShipping: 'Free',
+          coupon: coupon.couponcode ? `${coupon.couponcode} (-₹${coupon.discount})` : 'No coupon applied',
+          orderTotal: (subtotal - (coupon ? coupon.discount : 0)).toFixed(2)
+      };
+
+      Object.entries(elements).forEach(([id, value]) => {
+          const element = document.getElementById(id);
+          if (element) {
+              element.textContent = value;
+          }
+      });
+  }
+
+  // Handle product actions (Accept/Reject) with error handling
+  document.addEventListener('click', async function(event) {
+      if (event.target.classList.contains('product-action')) {
+          try {
+              const button = event.target;
+              const orderId = button.dataset.orderId;
+              const productId = button.dataset.productId;
+              const action = button.dataset.action;
+
+              if (!orderId || !productId || !action) {
+                  throw new Error('Missing required data for product action');
+              }
+
+              button.disabled = true;
+
+             fetch(`/admin/order/${orderId}/${productId}/${action}`, {
+                  method: 'POST'
+              })
+              .then(res=>res.json)
+              .then(res=>{
+
+              })
+             
+              
+            
+          } catch (error) {
+              console.error('Error:', error);
+              alert(`Failed to process action: ${error.message}`);
+          } finally {
+              event.target.disabled = false;
+          }
+      }
+  });
+
+  function getStatusBadgeClass(status) {
+      const statusMap = {
+          pending: 'warning',
+          processing: 'info',
+          shipped: 'primary',
+          delivered: 'success',
+          cancelled: 'danger'
+      };
+      return statusMap[status.toLowerCase()] || 'secondary';
+  }
+
+  function getProductStatusBadgeClass(status) {
+      const statusMap = {
+          returned: 'success',
+          notrequst: 'danger',
+          returnreq: 'warning'
+      };
+      return statusMap[status] || 'secondary';
+  }
+
   function formatAddress(address) {
-    return `
-      ${address.addressline1}<br>
-      ${address.addressline2}
-      ${address.city}, ${address.state} ${address.zipcode}<br>
-      ${address.phone},<br>
-      ${address.country}
-    `;
+      if (!address) {
+          return 'Address not available';
+      }
+
+      const {
+          addressline1 = '',
+          addressline2 = '',
+          city = '',
+          state = '',
+          zipcode = '',
+          phone = '',
+          country = ''
+      } = address;
+
+      return `
+          ${addressline1}<br>
+          ${addressline2}
+          ${city}, ${state} ${zipcode}<br>
+          ${phone}<br>
+          ${country}
+      `.trim();
   }
-  
+});

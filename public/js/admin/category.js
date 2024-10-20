@@ -34,35 +34,47 @@ const form =document.getElementById('addCategoryForm')
 
 
 form.addEventListener('submit',(e)=>{
-    const formdata=new FormData(e.target)
-    let formjson={}
-    formdata.forEach((val,ind)=>{
-        formjson[ind]=val
-    })
-    // console.log(formjson);
-    
+    const categoryname =document.getElementById('newCategoryName').value.trim()
+    const Categorydiscription =document.getElementById('Categorydiscription').value.trim()
     e.preventDefault()
-    fetch('/admin/category/add',
-        {
-            method:'POST',
-            headers: {
-                'Content-Type': 'application/json', // Important to indicate JSON format
-              },
-            body :JSON.stringify(formjson)
-        }
+    console.log(categoryname);
+   if(categoryname==''||Categorydiscription==''){
+   return Swal.fire({
+         
+          text: 'Input cannot be empty. Please enter something.',
+          icon: 'error',
+          confirmButtonText: 'OK'
+        });
+   }
+   
+   const formdata=new FormData(e.target)
+   let formjson={}
+   formdata.forEach((val,ind)=>{
+       formjson[ind]=val
+   })
+   // console.log(formjson);
+   
+   e.preventDefault()
+   fetch('/admin/category/add',
+       {
+           method:'POST',
+           headers: {
+               'Content-Type': 'application/json', // Important to indicate JSON format
+             },
+           body :JSON.stringify(formjson)
+       }
 
-    )
-    .then((res=>res.json()))
-    .then((res)=>{
-        if(res.success===true){
-       return window.location.href='/admin/category'
-    }}
-    )
-    .catch((err)=>console.log("when fetching add data "+err)
-    )
-    
-    
-
+   )
+   .then((res=>res.json()))
+   .then((res)=>{
+       if(res.success===true){
+      return window.location.href='/admin/category'
+   }}
+   )
+   .catch((err)=>console.log("when fetching add data "+err)
+   )
+   
+   
 })
 
 

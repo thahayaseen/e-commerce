@@ -40,15 +40,17 @@ const cart = new mongoose.Schema({
 
 cart.pre('save', function (next) {
     let totalprice = 0;
-  
+
     this.product.forEach(item => {
-        totalprice += item.quantity * item.price;
+        totalprice += item.quantity * item.price; // Do the math without converting to a string
     });
-  
-    this.totalprice = totalprice;
-  
+
+    // Now apply .toFixed(2) to the total sum
+    this.totalprice = totalprice.toFixed(2);
+
     next();
-  });
+});
+
 
 const cartschema = mongoose.model('Cart', cart)
 module.exports = cartschema

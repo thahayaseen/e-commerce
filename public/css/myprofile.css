@@ -281,10 +281,14 @@ nav ul li a .cart::after {
         padding: 3px 0;
      
     }
+    .navbar {
+        background-color: #5F42E8;
+        padding: 15px 0;
+    }
     .navbar-brand {
         font-weight: bold;
         font-size: 20px;
-        color: rgb(121, 115, 115) !important;
+        color: rgb(255, 255, 255) !important;
     }
     .nav-link {
         color: white !important;

@@ -6,6 +6,7 @@ const orderchema = require('../../model/orders')
 const wishlist=require('../../model/wishlist')
 const passport = require('passport');
 const coupencode=require('../../model/coupon')
+const Wallet=require('../../model/wallet')
 const razorpay=require('../../config/razorpay')
 const crypto=require('crypto')
 
@@ -133,7 +134,7 @@ const otpvarify = async (req, res, next) => {
         res.status(500).send("Server error during OTP verification");
     }
 };
-const getotp = require('../../middleware/getotp');
+const {getotp,sendPasswordResetOTP} = require('../../middleware/getotp');
 const coupon = require('../../model/coupon');
 
 
@@ -431,21 +432,25 @@ const placeorder = async (req, res) => {
     const { selectedAddress, paymentmethods,discount,cname } = req.body
     if (paymentmethods && selectedAddress && userid) {
         try {
-            // Find the user's cart and address
-            const usercart = await cartschema.findOne({ userid });
+            // user's cart and address
+            const usercart = await cartschema.findOne({ userid }).populate('product.productid')
             const userdata = await User.findById(userid);
             const selectedaddress = await address_scema.findById(selectedAddress);
     
-            // Verify address ownership
+            
             if (selectedaddress.userid.toString() !== userid.toString()) {
                 return res.status(400).json({ success: false, message: 'User ID and address do not match' });
             }
-    
-            // Map product data from cart
+       
+        
+            
+            // console.log(JSON.stringify(usercart))
+            
             const productdata = usercart.product.map(item => ({
                 productid: item.productid._id,
                 quantity: item.quantity,
-                price: item.price
+                price: item.price,
+          
             }));
     
             // Update stock for each product
@@ -462,7 +467,7 @@ const placeorder = async (req, res) => {
             const order = new orderchema({
                 user: userid,
                 products: productdata,
-                totalAmount: usercart.totalprice,
+                totalAmount: usercart.totalprice.toFixed(2),
                 paymentMethod: paymentmethods,
                 shippingAddress: selectedaddress,
                 'coupon.discount': discount,  // Ensure 'discount' is defined
@@ -533,10 +538,44 @@ const deleteaddress = async (req, res) => {
 
 }
 const cancelorder = async (req, res) => {
+    const userid=req.session.ulogin
     const orderid = req.params.id;
-    const order = await orderchema.findById(orderid).populate('products');
+    const order = await orderchema.findById(orderid).populate('products.productid');
 
-    if (order.status === 'Pending') {
+    if (order.status === 'Pending'||order.status==='Processing') {
+        if(order.paymentMethod==='onlinePayment'){
+         const wallets=  await Wallet.findOne({userId:userid})
+         console.log(wallets);
+         const money=(order.totalAmount-order.coupon.discount)
+         
+         if(!wallets){
+            userdata = new Wallet({
+                userId: userid,
+                balance: money, 
+                transactions: [] 
+            });
+            await userdata.save();
+            order.status = 'Cancelled';
+            await order.save();
+           return  res.status(200).json({ success: true, message: 'The order is canceled successfully' });
+         }
+         console.log(wallets);
+         wallets.balance+=money
+        const dats= order.products.map(item => item.productid.name).join(', ')
+        const datsee= order.products.map(item => item.name)
+
+        
+         wallets.transactions.push({
+            type: 'credit',
+            amount: money,
+            date: new Date(),
+            description: `refund of ${dats}`
+        });
+        
+        //  console.log(wallets);
+         
+         await wallets.save()
+        }
         order.status = 'Cancelled';
         await order.save();
 
@@ -610,32 +649,38 @@ const cancelitem=async (req,res)=>{
         res.status(204)
     }
 }
-const patchwishlist=async (req,res)=>{
-    const productid=req.params.id
-    const userid=req.session.ulogin
-    const wishlistuser=await wishlist.findOne({userid:userid})
-    if(!wishlistuser){
-        const cwishlist=new wishlist({
-            userid:userid,
-            productid:[productid]
-        })
-     return await cwishlist.save()
-    }
-    else {
-        if(!wishlistuser.productid.includes(productid)){
-             wishlistuser.productid.push(productid)
-        
-        await wishlistuser.save()
-        }
-        
-        // if(){
+const patchwishlist = async (req, res) => {
+    const productid = req.params.id;
+    const userid = req.session.ulogin;
 
-        // }
-       
+    const wishlistuser = await wishlist.findOne({ userid: userid });
+
+   if(userid){
+    if (!wishlistuser) {
+        const cwishlist = new wishlist({
+            userid: userid,
+            productid: [productid],
+        });
+        await cwishlist.save();
+        return res.status(200).json({ success: true, message: 'Product added to your wishlist.' });
+    } else {
+        if (wishlistuser.productid.includes(productid)) {
+            return res.status(200).json({ success: false, message: 'The product is already in your wishlist.' });
+        } else {
+            wishlistuser.productid.push(productid);
+            await wishlistuser.save();
+            return res.status(200).json({ success: true, message: 'Product added to your wishlist.' });
+        }
     }
-    console.log(productid);
-    
-}
+   }
+   else{
+    return res.status(200).json({ success: 'nologined', message: 'Make sure you logind.' });
+
+   }
+
+
+};
+
 const coupenapplaying=async(req,res)=>{
     const cname=req.params.name
     const coupen=await coupencode.findOne({code:cname})
@@ -719,4 +764,97 @@ const razorpayvarify= async (req, res) => {
         });
     }
 }
-module.exports = { signup, otpvarify, resent, varifylogin, viewproduct, logout, blockuser, glogincb, cartitemspush, cartupdata, cartitemdelete, addaddress, placeorder, deleteaddress, cancelorder, editname, changepass,productstockdata,cancelitem,patchwishlist,removewish,coupenapplaying,razorpayvarify }     
+const sendreset = async (req, res) => {
+    try {
+      const { email } = req.body;
+      req.session.username = email;
+  
+      const user = await User.findOne({ email });
+      if (!user) {
+        return res.status(404).send('User not found');
+      }
+  
+      
+      const resetToken = crypto.randomBytes(32).toString('hex');
+      const tokenExpiry = Date.now() + 3600000; 
+  
+  
+      user.resetPasswordToken = resetToken;
+      user.resetPasswordExpires = tokenExpiry;
+      await user.save();
+  
+      // Construct the reset link
+      const resetLink = `http://localhost:4050/reset-password/${resetToken}`;
+  
+      // Send the reset link to the user's email
+      await sendPasswordResetOTP(email, resetLink,user.user_name);
+  
+      res.send('Password reset email sent.');
+    } catch (error) {
+      console.error(error);
+      res.status(500).send('Error sending reset email.');
+    }
+  };
+ const resetpage= async (req, res) => {
+    const { token } = req.params;
+  
+    // Find user by token and check if the token is still valid
+    const user = await User.findOne({
+      resetPasswordToken: token,
+      resetPasswordExpires: { $gt: Date.now() } // Ensure the token is still valid
+    });
+  
+    if (!user) {
+      return res.status(400).send('Password reset token is invalid or has expired.');
+    }
+  
+    // Render a form where the user can enter a new password
+    res.render('reset-password', { token });
+  }
+  const resetpasspost=async (req, res) => {
+    const { token } = req.params;
+    const { password } = req.body;
+  
+    try {
+      // Find the user by token and check if token is valid
+      const user = await User.findOne({
+        resetPasswordToken: token,
+        resetPasswordExpires: { $gt: Date.now() } // Ensure token is still valid
+      });
+  
+      if (!user) {
+        return res.status(400).send('Password reset token is invalid or has expired.');
+      }
+  
+      const hashed_pass = await bcrypt.hash(password, 10)
+
+      user.password = hashed_pass; 
+      user.resetPasswordToken = undefined;
+      user.resetPasswordExpires = undefined;
+  
+      await user.save();
+  
+      res.redirect('/signin')
+    } catch (error) {
+      console.error(error);
+      res.status(500).send('Error resetting password.');
+    }
+  }
+  const returning=async(req,res)=>{
+    const productid=req.params.proid
+    console.log(productid);
+    const {returnReason,returnDetails,orderid}=req.body
+    // console.log(bodydata);
+    const orders=await orderchema.findById(orderid)
+    console.log(orders);
+    const index = orders.products.findIndex(p => p.productid.equals(productid));
+
+    console.log(index);
+    orders.products[index].return="returnreq"
+    orders.products[index].returnReason=returnReason
+    orders.products[index].returnExplanation=returnDetails
+
+    await orders.save()
+
+  }
+module.exports = { signup, otpvarify, resent, varifylogin, viewproduct, logout, blockuser, glogincb, cartitemspush, cartupdata, cartitemdelete, addaddress, placeorder, deleteaddress, cancelorder, editname, changepass,productstockdata,cancelitem,patchwishlist,removewish,coupenapplaying,razorpayvarify,sendreset,resetpage,resetpasspost,returning }     
