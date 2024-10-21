@@ -69,6 +69,7 @@ let  rate
 let discountprice=0
 const coupon=document.getElementById('apply')
 const applaysubmit=document.getElementById('applysubmit')
+// add coupon 
 applaysubmit.addEventListener('click',(e)=>{
     e.preventDefault()
     const code=coupon.value
@@ -101,6 +102,7 @@ applaysubmit.addEventListener('click',(e)=>{
 
     
 })
+// remove coupon 
 document.getElementById('removecoupon').addEventListener('click',e=>{
     e.preventDefault()
     rate+=discountprice
@@ -158,8 +160,7 @@ function placeOrder() {
 }
 
 // Main checkout form handling
-// const checkoutForm = document.getElementById('checkoutForm')
-// const paymentForm = document.querySelector('.paymentclass')
+
 
 // Main checkout form handling
 const checkoutForm = document.getElementById('checkoutForm');

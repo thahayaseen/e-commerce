@@ -1,275 +1,268 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Elegant Checkout Page</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <title>Shopping Cart - WeebsCorner</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.1.3/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
-    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
-
     <style>
+        :root {
+            --primary-color: #5F42E8;
+            --secondary-color: #4A34B7;
+            --accent-color: #FFD700;
+        }
+        
         body {
-            background-color: #f0f2f5;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: 'Roboto', sans-serif;
         }
-        .container {
-            background-color: #ffffff;
-            border-radius: 20px;
-            box-shadow: 0 0 30px rgba(0,0,0,0.1);
-            padding: 40px;
-            margin-top: 50px;
-            margin-bottom: 50px;
-        }
-        h2, h3 {
-            color: #3b5998;
-            margin-bottom: 25px;
-            font-weight: 600;
-        }
-        .address-card {
-            border: 2px solid #e9ecef;
-            border-radius: 15px;
-            padding: 20px;
-            cursor: pointer;
-            transition: all 0.3s;
-            height: 100%;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-        }
-        .address-card:hover, .address-card.selected {
-            border-color: #3b5998;
-            background-color: #f0f2f5;
-            transform: translateY(-5px);
-        }
-        .address-card input[type="radio"] {
-            display: none;
-        }
-        .btn-primary {
-            background-color: #3b5998;
-            border: none;
-            padding: 10px 20px;
-            font-weight: 600;
-            transition: all 0.3s;
-        }
-        .btn-primary:hover {
-            background-color: #2d4373;
-            transform: translateY(-2px);
-        }
-        .product-list {
-            margin-bottom: 30px;
-        }
-        .product-item {
-            border-bottom: 1px solid #e9ecef;
+
+        .navbar {
+            background-color: var(--primary-color);
             padding: 15px 0;
-            transition: all 0.3s;
         }
-        .product-item:hover {
-            background-color: #f8f9fa;
-            padding-left: 10px;
+
+        .navbar-brand {
+            font-weight: bold;
+            font-size: 28px;
+            color: white !important;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
         }
-        .summary-card {
-            background-color: #f8f9fa;
-            border-radius: 15px;
-            padding: 25px;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+
+        .nav-link {
+            color: white !important;
+            margin-right: 20px;
+            font-weight: 500;
+            transition: color 0.3s ease;
         }
-        .coupon-wrapper {
-            position: relative;
-            margin-bottom: 20px;
+
+        .nav-link:hover {
+            color: var(--accent-color) !important;
         }
-        .coupon-input {
+
+        .navbar-nav .nav-item:last-child .nav-link {
+            margin-right: 0;
+        }
+
+        .navbar-icons {
             display: flex;
-            margin-bottom: 10px;
-        }
-        .coupon-input input {
-            border-top-right-radius: 0;
-            border-bottom-right-radius: 0;
-            border: 2px solid #e9ecef;
-            transition: all 0.3s;
-        }
-        .coupon-input input:focus {
-            border-color: #3b5998;
-            box-shadow: none;
-        }
-        .coupon-input button {
-            border-top-left-radius: 0;
-            border-bottom-left-radius: 0;
-        }
-        .coupon-badge {
-            display: none;
-            background-color: #e3f2fd;
-            border-radius: 10px;
-            padding: 10px 15px;
-            margin-bottom: 15px;
-        }
-        .coupon-badge.active {
-            display: flex;
-            justify-content: space-between;
             align-items: center;
         }
-        .coupon-badge .remove-coupon {
-            color: #dc3545;
-            cursor: pointer;
+
+        .navbar-icons .nav-link {
+            padding: 0 10px;
+        }
+
+        .star-rating {
+            color: var(--accent-color);
+        }
+
+        .hover-text-danger:hover {
+            color: #dc3545 !important;
+        }
+
+        .card {
             border: none;
-            background: none;
-            padding: 0;
-            margin-left: 10px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
         }
-        .delivery-charge {
-            font-style: italic;
-            color: #6c757d;
+
+        .card:hover {
+            transform: translateY(-5px);
         }
-        .summary-total {
-            font-size: 1.2em;
-            color: #3b5998;
+
+        .btn-primary {
+            background-color: var(--primary-color);
+            border-color: var(--primary-color);
         }
-        .coupenerror {
-            margin-bottom: 10px;
+
+        .btn-primary:hover {
+            background-color: var(--secondary-color);
+            border-color: var(--secondary-color);
         }
-        #applayerror {
-            display: block;
-            margin-top: 5px;
+
+        .btn-outline-secondary {
+            color: var(--primary-color);
+            border-color: var(--primary-color);
         }
-        .discount-charge {
-            color: #28a745;
-            font-weight: 500;
+
+        .btn-outline-secondary:hover {
+            background-color: var(--primary-color);
+            color: white;
         }
-        .modal-content {
-            border-radius: 15px;
+
+        .quantity-input {
+            width: 40px;
+            text-align: center;
+            border: 1px solid #ced4da;
+            border-radius: 0;
         }
-        .modal-header {
+
+        .empty-cart-container {
             background-color: #f8f9fa;
-            border-top-left-radius: 15px;
-            border-top-right-radius: 15px;
+            border-radius: 10px;
+            padding: 40px;
+        }
+
+        .continue-shopping-btn {
+            transition: transform 0.3s ease;
+        }
+
+        .continue-shopping-btn:hover {
+            transform: translateY(-3px);
+        }
+
+        @media (max-width: 768px) {
+            .navbar-brand {
+                font-size: 24px;
+            }
+            
+            .card-body {
+                padding: 1rem;
+            }
         }
     </style>
 </head>
-<body>
-    <div class="container">
-        <!-- Rest of the HTML structure remains the same -->
-        <div class="row">
-            <div class="col-lg-8">
-                <h2 class="mb-4"><i class="fas fa-shopping-cart me-2"></i>Checkout</h2>
-                <form id="checkoutForm">
-                    <h3><i class="fas fa-box-open me-2"></i>Your Cart</h3>
-                    <div class="product-list">
-                        <% cart.product.forEach(product=>{ %>
-                        <div class="product-item d-flex justify-content-between align-items-center">
-                            <div>
-                                <h6 class="mb-0"><%= product.productid.name %></h6>
-                                <p class="text-muted">Quantity: <%= product.quantity %></p>
-                            </div>
-                            <span class="fw-bold">₹ <%=product.price %></span>
-                        </div>
-                        <% } )%>
-                    </div>
 
-                    <div class="summary-card">
-                        <h3><i class="fas fa-receipt me-2"></i>Order Summary</h3>
-                        <div class="coupon-wrapper">
-                            <div class="coupon-badge" id="activeCoupon">
-                                <span><i class="fas fa-tag me-2"></i><span id="couponCode"></span></span>
-                                <button type="button" class="remove-coupon" id="removeCoupon">
-                                    <i class="fas fa-times"></i>
-                                </button>
-                            </div>
-                            <div class="coupon-input">
-                                <input type="text" class="form-control" id="apply" maxlength="7" placeholder="Enter coupon code">
-                                <button class="btn btn-primary" id="applysubmit">Apply</button>
-                            </div>
-                            <small id="applayerror" class="text-danger"></small>
-                        </div>
-                        <div class="d-flex justify-content-between mb-2">
-                            <span>Subtotal</span>
-                            <span id="subtotal" class="summary-total">₹ <%=cart.totalprice.toFixed(2)%></span>
-                        </div>
-                        <div class="d-none justify-content-between mb-2 discount-charge">
-                            <span>Coupon Discount</span>
-                            <span id="coupondiscount" class="text-success"></span>
-                        </div>
-                        <div class="d-flex justify-content-between mb-2 delivery-charge">
-                            <span>Delivery Charge</span>
-                            <span id="deliveryCharge"><del>₹50</del></span>
-                        </div>
-                        <hr>
-                        <div class="d-flex justify-content-between mb-4">
-                            <strong>Total</strong>
-                            <strong id="total" class="summary-total">₹ <%=cart.totalprice.toFixed(2)%></strong>
-                        </div>
-                        <!-- Rest of the summary card content remains the same -->
+<body class="bg-light">
+    <header class="bg-gradient text-white shadow">
+        <nav class="navbar navbar-expand-md p-0 navbarbg">
+            <div class="container-sm">
+                <a class="navbar-brand fs-4 fw-bold" href="/">WeebsCorner</a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="navbar container-fluid" id="navbarNav">
+                    <ul class="navbar-nav p-0">
+                        <li class="nav-item">
+                            <a class="nav-link" href="/product">All Products</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="/gaming-gear">Gaming Gear</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="/community">Community</a>
+                        </li>
+                    </ul>
+                    <div class="d-flex">
+                        <a href="/wishlist" class="btn btn-link text-white me-2">
+                            <i class="fas fa-heart"></i>
+                        </a>
+                        <a href="/user/mydash" class="btn btn-link text-white me-2">
+                            <i class="fas fa-user"></i>
+                        </a>
+                        <a href="/cart" class="btn btn-link text-white me-2">
+                            <i class="fas fa-shopping-cart"></i>
+                        </a>
+                        <a href="/logout" class="btn btn-link text-white">
+                            <i class="fas fa-sign-out-alt"></i>
+                        </a>
                     </div>
-                </form>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <% if(!cart.product.length>0){ %>
+    <div class="container">
+        <div class="row justify-content-center align-items-center" style="height: 80vh;">
+            <div class="col-md-6">
+                <div class="empty-cart-container text-center">
+                    <i class="fas fa-shopping-cart fa-4x mb-3 text-muted"></i>
+                    <h2 class="mb-3">Your cart is empty</h2>
+                    <p class="text-muted mb-4">Need inspiration? Check out our recommended items to begin building the extraordinary!</p>
+                    <a href="/" class="btn btn-primary continue-shopping-btn px-4 py-2">
+                        <i class="fas fa-arrow-left me-2"></i>Continue Shopping
+                    </a>
+                </div>
             </div>
         </div>
     </div>
+    <% } else { %>
+    <div class="container py-5">
+        <div class="row">
+            <div class="col-lg-8">
+                <h1 class="mb-4">Your Shopping Cart</h1>
+                <div class="card mb-3">
+                    <div class="card-body">
+                        <% cart.product.forEach(product => { %>
+                        <div class="row mb-4 align-items-center">
+                            <div class="col-md-2">
+                                <img src="/uploads/<%= product.productid.images[0] %>" alt="<%= product.productid.name %>" class="img-fluid rounded">
+                            </div>
+                            <div class="col-md-5">
+                                <h5 class="card-title mb-1"><%= product.productid.name %></h5>
+                                <p class="star-rating mb-1">
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star-half-alt"></i>
+                                    <span class="text-muted ms-1">4.6 (384 reviews)</span>
+                                </p>
+                            </div>
+                            <div class="col-md-2">
+                                <div class="input-group">
+                                    <button class="btn btn-outline-secondary minusbtn" type="button">
+                                        <i class="fas fa-minus"></i>
+                                    </button>
+                                    <span data-quntity="<%= product.quantity %>" data-productid="<%= product.productid._id %>" class="quantity-input py-2">
+                                        <%= product.quantity %>
+                                    </span>
+                                    <button class="btn btn-outline-secondary plusbtn" type="button">
+                                        <i class="fas fa-plus"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="col-md-3 text-end">
+                                <p class="fw-bold mb-0">
+                                    Total: ₹<span class="productprice"><%= (product.quantity * product.price).toFixed(2) %></span>
+                                </p>
+                                <p class="mb-1 text-muted">
+                                    Price: ₹<span><%= product.price.toFixed(2) %></span>
+                                </p>
+                                <button class="btn btn-link text-muted p-0 hover-text-danger deletebtn">
+                                    <i class="fas fa-trash"></i> Remove
+                                </button>
+                            </div>
+                        </div>
+                        <% if (cart.product.indexOf(product) !== cart.product.length - 1) { %>
+                            <hr>
+                        <% } %>
+                        <% }) %>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-4">
+                <div class="card mt-4 sticky-top" style="top: 20px;">
+                    <div class="card-body">
+                        <h5 class="card-title mb-4">Order Summary</h5>
+                        <div class="d-flex justify-content-between mb-2">
+                            <span>Subtotal</span>
+                            <span class="fw-bold summerytoatal">₹<%= cart.totalprice.toFixed(2) %></span>
+                        </div>
+                        <div class="d-flex justify-content-between mb-3">
+                            <span>Estimated shipping</span>
+                            <span class="text-muted">Calculated at checkout</span>
+                        </div>
+                        <hr>
+                        <div class="d-flex justify-content-between mb-4">
+                            <span class="fw-bold">Total</span>
+                            <span class="fw-bold">₹<%= cart.totalprice.toFixed(2) %></span>
+                        </div>
+                        <a href="/checkout" class="btn btn-primary w-100 py-2">
+                            <i class="fas fa-lock me-2"></i>Proceed to Checkout
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <% } %>
 
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const couponInput = document.getElementById('apply');
-            const applyButton = document.getElementById('applysubmit');
-            const removeCouponButton = document.getElementById('removeCoupon');
-            const activeCouponBadge = document.getElementById('activeCoupon');
-            const couponCodeSpan = document.getElementById('couponCode');
-            const errorSpan = document.getElementById('applayerror');
-            const discountDiv = document.querySelector('.discount-charge');
-            const couponDiscountSpan = document.getElementById('coupondiscount');
-            const subtotalSpan = document.getElementById('subtotal');
-            const totalSpan = document.getElementById('total');
-
-            applyButton.addEventListener('click', function() {
-                const code = couponInput.value.trim();
-                if (code) {
-                    // Simulate coupon validation (replace with actual API call)
-                    if (code.length === 7) {
-                        const discount = calculateDiscount(parseFloat(subtotalSpan.textContent.replace('₹ ', '')));
-                        applyCoupon(code, discount);
-                        errorSpan.textContent = '';
-                    } else {
-                        errorSpan.textContent = 'Invalid coupon code';
-                    }
-                }
-            });
-
-            removeCouponButton.addEventListener('click', function() {
-                removeCoupon();
-            });
-
-            function calculateDiscount(amount) {
-                // Simulate discount calculation (replace with actual logic)
-                return amount * 0.1; // 10% discount
-            }
-
-            function applyCoupon(code, discount) {
-                couponCodeSpan.textContent = code;
-                activeCouponBadge.classList.add('active');
-                couponInput.value = '';
-                couponInput.disabled = true;
-                applyButton.disabled = true;
-                
-                discountDiv.classList.remove('d-none');
-                discountDiv.classList.add('d-flex');
-                couponDiscountSpan.textContent = `- ₹ ${discount.toFixed(2)}`;
-                
-                updateTotal(discount);
-            }
-
-            function removeCoupon() {
-                activeCouponBadge.classList.remove('active');
-                couponInput.disabled = false;
-                applyButton.disabled = false;
-                
-                discountDiv.classList.remove('d-flex');
-                discountDiv.classList.add('d-none');
-                
-                updateTotal(0);
-            }
-
-            function updateTotal(discount) {
-                const subtotal = parseFloat(subtotalSpan.textContent.replace('₹ ', ''));
-                const newTotal = subtotal - discount;
-                totalSpan.textContent = `₹ ${newTotal.toFixed(2)}`;
-            }
-        });
-    </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.1.3/js/bootstrap.bundle.min.js"></script>
+    <script src="/js/user/cart.js"></script>
 </body>
+
 </html>

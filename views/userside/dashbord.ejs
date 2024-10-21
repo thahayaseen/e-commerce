@@ -41,6 +41,38 @@
             background-color: #5F42E8;
             
         }
+        .offer-badge {
+            position: absolute;
+            top: 12px;
+            right: 12px;
+            background: #FF3366;
+            color: white;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-weight: 600;
+            box-shadow: 0 2px 4px rgba(255, 51, 102, 0.2);
+            z-index: 10;
+        }
+        .price-tag {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+        .original-price {
+            text-decoration: line-through;
+            color: #6B7280;
+            font-size: 0.9em;
+        }
+        .offer-price {
+            color: #FF3366;
+            font-weight: 700;
+            font-size: 1.2em;
+        }
+        .saving-text {
+            color: #059669;
+            font-size: 0.85em;
+            font-weight: 500;
+        }
 
     </style>
 </head>
@@ -130,12 +162,62 @@
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
                     <% products.forEach((product) => { %>
                         <% if(!product.unlist) { %>
-                            <div class="product-card bg-white rounded-xl overflow-hidden shadow-md hover:shadow-xl">
-                                <div class="p-4">
-                                    <img src="/uploads/<%= product.images[0] %>" alt="<%= product.name %>" class="w-full h-48 object-cover rounded-lg">
-                                    <h3 class="text-xl font-semibold mt-4"><%= product.name %></h3>
-                                    <p class="text-gray-600 mt-2">$<%= product.price %></p>
-                                    <a href="/product/<%= product._id %>" class="mt-4 block text-center bg-indigo-600 text-white py-2 rounded-lg hover:bg-indigo-700 transition">View Details</a>
+                            <div class="product-card bg-white rounded-xl overflow-hidden shadow-md hover:shadow-xl relative">
+                                <!-- Offer Badge -->
+                                <% if(product.offer> 0) { %>
+                                    <div class="offer-badge">
+                                        <%= product.offer %>% OFF
+                                    </div>
+                                <% } %>
+                                
+                                <div class="relative">
+                                    <img src="/uploads/<%= product.images[0] %>" alt="<%= product.name %>" 
+                                         class="w-full h-48 object-cover">
+                                 
+                                </div>
+
+                                <div class="p-6">
+                                    <!-- Product Category -->
+                                    <div class="text-sm text-indigo-600 font-medium mb-2">
+                                        <%= product.category %>
+                                    </div>
+
+                                    <!-- Product Name -->
+                                    <h3 class="text-xl font-semibold mb-3"><%= product.name %></h3>
+
+                                    <!-- Pricing Section -->
+                                    <div class="price-tag mb-4">
+                                        <% if(product.offer > 0) { %>
+                                            <span class="original-price">₹<%= product.price %></span>
+                                            <span class="offer-price">₹<%=product.price- (product.price * product.offer)/100 %></span>
+                                            <span class="saving-text">
+                                                Save ₹<%= (product.price * product.offer/100).toFixed(2) %>
+                                            </span>
+                                        <% } else { %>
+                                            <span class="offer-price">₹<%= product.price %></span>
+                                        <% } %>
+                                    </div>
+
+                                    <!-- Stock Status -->
+                                    <div class="mb-4">
+                                        <% if(product.stock > 0) { %>
+                                            <span class="text-green-600 text-sm flex items-center">
+                                                <i class="fas fa-check-circle mr-1"></i>
+                                                In Stock
+                                            </span>
+                                        <% } else { %>
+                                            <span class="text-red-600 text-sm flex items-center">
+                                                <i class="fas fa-times-circle mr-1"></i>
+                                                Out of Stock
+                                            </span>
+                                        <% } %>
+                                    </div>
+
+                                    <!-- Action Button -->
+                                    <a href="/product/<%= product._id %>" 
+                                       class="block text-center bg-indigo-600 text-white py-2 px-4 rounded-lg hover:bg-indigo-700 transition">
+                                        View Details
+                                    </a>
                                 </div>
                             </div>
                         <% } %>

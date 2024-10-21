@@ -579,7 +579,8 @@ const exportpdf = async (req, res) => {
                 }
             },
             { $project: { productDetails: 0 } },
-            { $match: matchQuery }
+            { $match: matchQuery },
+            {$sort:{createdAt:-1}}
         ])
 
         // console.log(data);
@@ -604,7 +605,7 @@ const exportpdf = async (req, res) => {
         const formatCurrency = (amount, coupon, datass) => {
             let amounts = 0
 
-            return `${amount - (coupon ? coupon.discount : 0)} Rs`
+            return `${Math.floor(amount - (coupon ? coupon.discount : 0))} Rs`
         };
         const formatDate = (date) => new Date(date).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
         const formatOrderId = (id) => id.length > 12 ? `${id.substring(0, 6)}...${id.slice(-4)}` : id;
@@ -641,8 +642,8 @@ const exportpdf = async (req, res) => {
         // Calculate Statistics
         const stats = {
             totalOrders: data.length,
-            totalRevenue: data.reduce((sum, order) => sum + order.totalAmount, 0),
-            averageOrderValue: data.length ? data.reduce((sum, order) => sum + order.totalAmount, 0) / data.length : 0
+            totalRevenue: Math.floor(data.reduce((sum, order) => sum + order.totalAmount, 0)),
+            averageOrderValue: Math.floor(data.length ? data.reduce((sum, order) => sum + order.totalAmount, 0) / data.length : 0)
         };
 
         // Render PDF stats
@@ -801,7 +802,8 @@ const exportexcel = async (req, res) => {
                 }
             },
             { $project: { productDetails: 0 } },
-            { $match: matchQuery }
+            { $match: matchQuery },
+            {$sort:{createdAt:-1}}
         ]);
 
         // Create a new workbook

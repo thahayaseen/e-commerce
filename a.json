@@ -1,39 +1,765 @@
-{
-    "coupon": {
-        "discount": 0
+[
+    {
+        "coupon": {
+            "discount": 10697,
+            "couponcode": "sadin"
+        },
+        "shippingAddress": {
+            "fullname": "Ansab Ali Sulthan",
+            "addressline1": "kozhikode",
+            "addressline2": "",
+            "city": "nallalam",
+            "state": "kozhikode",
+            "zipcode": "673027",
+            "country": "IN",
+            "phone": "7907339099"
+        },
+        "_id": "6715340f74e397d57b769ac7",
+        "user": {
+            "_id": "6714b0f82fa99849d6fe4c3d",
+            "name": "weebs corner",
+            "user_name": "weebscorner420",
+            "email": "weebscorner01@gmail.com",
+            "googleId": "115650112839497589475",
+            "phone": null,
+            "address": [
+                "6714b1072fa99849d6fe4c5e"
+            ],
+            "uotp": null,
+            "varify": true,
+            "isadmin": false,
+            "orders": [
+                "671533b374e397d57b769a30",
+                "671533ee74e397d57b769a83",
+                "6715340f74e397d57b769ac7"
+            ],
+            "blocked": false,
+            "createdAt": "2024-10-20T07:27:52.302Z",
+            "updatedAt": "2024-10-20T16:47:11.918Z",
+            "__v": 4
+        },
+        "products": [
+            {
+                "productid": {
+                    "_id": "66fd0abddc87a29804163f60",
+                    "name": "MSI Geforce RTX 4060 ",
+                    "price": 44571,
+                    "stock": 13,
+                    "unlist": false,
+                    "images": [
+                        "1728019075199.jpg",
+                        "1728019082582.jpg",
+                        "1728019086622.jpg"
+                    ],
+                    "description": "The MSI GeForce RTX 4060 Gaming X 8G is a high-performance gaming graphics card powered by NVIDIA's latest GeForce RTX 4060 GPU. It features 8GB of GDDR6 memory, delivering exceptional gaming and rendering performance with ray tracing and AI-based enhancements. With MSI's Twin Frozr 8 thermal design, it ensures efficient cooling for quieter, cooler gameplay, while offering a boost in FPS for demanding games. Ideal for gamers and creators, the card supports DLSS 3.0, real-time ray tracing, and other cutting-edge technologies for an immersive gaming experience.",
+                    "category_id": "66fa26a5e8f8b40366d3d0e9",
+                    "createdAt": "2024-10-02T08:56:29.026Z",
+                    "updatedAt": "2024-10-20T16:47:11.910Z",
+                    "__v": 7,
+                    "offer": 4
+                },
+                "discount": 0,
+                "quantity": 1,
+                "price": 42788.16,
+                "status": true,
+                "return": "notrequst",
+                "_id": "6715340f74e397d57b769ac8"
+            }
+        ],
+        "totalAmount": 42788.16,
+        "status": "Pending",
+        "paymentMethod": "Cash on Delivery",
+        "paymentStatus": "Pending",
+        "pstatus": false,
+        "orderDate": "2024-10-20T16:47:11.912Z",
+        "createdAt": "2024-10-20T16:47:11.913Z",
+        "updatedAt": "2024-10-20T16:47:11.913Z",
+        "__v": 0
     },
-    "shippingAddress": {
-        "fullname": "Ansab Ali Sulthan",
-        "addressline1": "kozhikode",
-        "addressline2": "",
-        "city": "nallalam",
-        "state": "kozhikode",
-        "zipcode": "673027",
-        "country": "IN",
-        "phone": "7907339099"
-    },
-    "_id": "6714b847408ba6fa7ffb50bf",
-    "user": "6714b0f82fa99849d6fe4c3d",
-    "products": [
-        {
-            "productid": "66fd0abddc87a29804163f60",
+    {
+        "coupon": {
             "discount": 0,
-            "quantity": 1,
-            "price": 42788.16,
-            "status": true,
-            "return": "returnreq",
-            "_id": "6714b847408ba6fa7ffb50c0",
-            "returnExplanation": "fsdfsadfasdfasdf",
-            "returnReason": "wrong_size"
-        }
-    ],
-    "totalAmount": 42788.16,
-    "status": "Shipped",
-    "paymentMethod": "onlinePayment",
-    "paymentStatus": "Pending",
-    "pstatus": true,
-    "orderDate": "2024-10-20T07:59:03.430Z",
-    "createdAt": "2024-10-20T07:59:03.435Z",
-    "updatedAt": "2024-10-20T09:40:12.651Z",
-    "__v": 0
-}
+            "couponcode": "sadin"
+        },
+        "shippingAddress": {
+            "fullname": "Ansab Ali Sulthan",
+            "addressline1": "kozhikode",
+            "addressline2": "",
+            "city": "nallalam",
+            "state": "kozhikode",
+            "zipcode": "673027",
+            "country": "IN",
+            "phone": "7907339099"
+        },
+        "_id": "671533ee74e397d57b769a83",
+        "user": {
+            "_id": "6714b0f82fa99849d6fe4c3d",
+            "name": "weebs corner",
+            "user_name": "weebscorner420",
+            "email": "weebscorner01@gmail.com",
+            "googleId": "115650112839497589475",
+            "phone": null,
+            "address": [
+                "6714b1072fa99849d6fe4c5e"
+            ],
+            "uotp": null,
+            "varify": true,
+            "isadmin": false,
+            "orders": [
+                "671533b374e397d57b769a30",
+                "671533ee74e397d57b769a83",
+                "6715340f74e397d57b769ac7"
+            ],
+            "blocked": false,
+            "createdAt": "2024-10-20T07:27:52.302Z",
+            "updatedAt": "2024-10-20T16:47:11.918Z",
+            "__v": 4
+        },
+        "products": [
+            {
+                "productid": {
+                    "_id": "66fd097f6988d06040bdc7d8",
+                    "name": "METHEI Gaming Desktop",
+                    "price": 159999,
+                    "stock": 0,
+                    "unlist": false,
+                    "images": [
+                        "1727859071613.jpg",
+                        "1727859071614.jpg",
+                        "1727859071617.jpg"
+                    ],
+                    "description": "Powerful Performance: Equipped with an Core i7-3770 processor clocked at 3.4 GHz.\r\n16 GB DDR3 RAM, this gaming CPU delivers blazing-fast speeds for seamless multitasking and intense gaming sessions.\r\nAmple Storage: Enjoy lightning-quick boot times and rapid data access with a 512 GB solid-state drive (SSD), providing ample space for your games, applications, and files.\r\nDedicated Graphics: The 4 GB NVIDIA GeForce GT 730 graphics card ensures smooth rendering of high-resolution visuals and immersive gaming experiences.",
+                    "category_id": "66fa4cc1da7aa084c07f546d",
+                    "createdAt": "2024-10-02T08:51:11.625Z",
+                    "updatedAt": "2024-10-20T16:46:38.052Z",
+                    "__v": 0,
+                    "offer": 4
+                },
+                "discount": 0,
+                "quantity": 1,
+                "price": 153599.04,
+                "status": true,
+                "return": "notrequst",
+                "_id": "671533ee74e397d57b769a84"
+            },
+            {
+                "productid": {
+                    "_id": "66fd0abddc87a29804163f60",
+                    "name": "MSI Geforce RTX 4060 ",
+                    "price": 44571,
+                    "stock": 13,
+                    "unlist": false,
+                    "images": [
+                        "1728019075199.jpg",
+                        "1728019082582.jpg",
+                        "1728019086622.jpg"
+                    ],
+                    "description": "The MSI GeForce RTX 4060 Gaming X 8G is a high-performance gaming graphics card powered by NVIDIA's latest GeForce RTX 4060 GPU. It features 8GB of GDDR6 memory, delivering exceptional gaming and rendering performance with ray tracing and AI-based enhancements. With MSI's Twin Frozr 8 thermal design, it ensures efficient cooling for quieter, cooler gameplay, while offering a boost in FPS for demanding games. Ideal for gamers and creators, the card supports DLSS 3.0, real-time ray tracing, and other cutting-edge technologies for an immersive gaming experience.",
+                    "category_id": "66fa26a5e8f8b40366d3d0e9",
+                    "createdAt": "2024-10-02T08:56:29.026Z",
+                    "updatedAt": "2024-10-20T16:47:11.910Z",
+                    "__v": 7,
+                    "offer": 4
+                },
+                "discount": 0,
+                "quantity": 1,
+                "price": 42788.16,
+                "status": true,
+                "return": "notrequst",
+                "_id": "671533ee74e397d57b769a85"
+            }
+        ],
+        "totalAmount": 196387.2,
+        "status": "Pending",
+        "paymentMethod": "Cash on Delivery",
+        "paymentStatus": "Pending",
+        "pstatus": false,
+        "orderDate": "2024-10-20T16:46:38.058Z",
+        "createdAt": "2024-10-20T16:46:38.059Z",
+        "updatedAt": "2024-10-20T16:46:38.059Z",
+        "__v": 0
+    },
+    {
+        "coupon": {
+            "discount": 0,
+            "couponcode": "sadin"
+        },
+        "shippingAddress": {
+            "fullname": "Ansab Ali Sulthan",
+            "addressline1": "kozhikode",
+            "addressline2": "",
+            "city": "nallalam",
+            "state": "kozhikode",
+            "zipcode": "673027",
+            "country": "IN",
+            "phone": "7907339099"
+        },
+        "_id": "671533b374e397d57b769a30",
+        "user": {
+            "_id": "6714b0f82fa99849d6fe4c3d",
+            "name": "weebs corner",
+            "user_name": "weebscorner420",
+            "email": "weebscorner01@gmail.com",
+            "googleId": "115650112839497589475",
+            "phone": null,
+            "address": [
+                "6714b1072fa99849d6fe4c5e"
+            ],
+            "uotp": null,
+            "varify": true,
+            "isadmin": false,
+            "orders": [
+                "671533b374e397d57b769a30",
+                "671533ee74e397d57b769a83",
+                "6715340f74e397d57b769ac7"
+            ],
+            "blocked": false,
+            "createdAt": "2024-10-20T07:27:52.302Z",
+            "updatedAt": "2024-10-20T16:47:11.918Z",
+            "__v": 4
+        },
+        "products": [
+            {
+                "productid": {
+                    "_id": "66fd097f6988d06040bdc7d8",
+                    "name": "METHEI Gaming Desktop",
+                    "price": 159999,
+                    "stock": 0,
+                    "unlist": false,
+                    "images": [
+                        "1727859071613.jpg",
+                        "1727859071614.jpg",
+                        "1727859071617.jpg"
+                    ],
+                    "description": "Powerful Performance: Equipped with an Core i7-3770 processor clocked at 3.4 GHz.\r\n16 GB DDR3 RAM, this gaming CPU delivers blazing-fast speeds for seamless multitasking and intense gaming sessions.\r\nAmple Storage: Enjoy lightning-quick boot times and rapid data access with a 512 GB solid-state drive (SSD), providing ample space for your games, applications, and files.\r\nDedicated Graphics: The 4 GB NVIDIA GeForce GT 730 graphics card ensures smooth rendering of high-resolution visuals and immersive gaming experiences.",
+                    "category_id": "66fa4cc1da7aa084c07f546d",
+                    "createdAt": "2024-10-02T08:51:11.625Z",
+                    "updatedAt": "2024-10-20T16:46:38.052Z",
+                    "__v": 0,
+                    "offer": 4
+                },
+                "discount": 0,
+                "quantity": 1,
+                "price": 153599.04,
+                "status": true,
+                "return": "notrequst",
+                "_id": "671533b374e397d57b769a31"
+            },
+            {
+                "productid": {
+                    "_id": "66fd0abddc87a29804163f60",
+                    "name": "MSI Geforce RTX 4060 ",
+                    "price": 44571,
+                    "stock": 13,
+                    "unlist": false,
+                    "images": [
+                        "1728019075199.jpg",
+                        "1728019082582.jpg",
+                        "1728019086622.jpg"
+                    ],
+                    "description": "The MSI GeForce RTX 4060 Gaming X 8G is a high-performance gaming graphics card powered by NVIDIA's latest GeForce RTX 4060 GPU. It features 8GB of GDDR6 memory, delivering exceptional gaming and rendering performance with ray tracing and AI-based enhancements. With MSI's Twin Frozr 8 thermal design, it ensures efficient cooling for quieter, cooler gameplay, while offering a boost in FPS for demanding games. Ideal for gamers and creators, the card supports DLSS 3.0, real-time ray tracing, and other cutting-edge technologies for an immersive gaming experience.",
+                    "category_id": "66fa26a5e8f8b40366d3d0e9",
+                    "createdAt": "2024-10-02T08:56:29.026Z",
+                    "updatedAt": "2024-10-20T16:47:11.910Z",
+                    "__v": 7,
+                    "offer": 4
+                },
+                "discount": 0,
+                "quantity": 1,
+                "price": 42788.16,
+                "status": true,
+                "return": "notrequst",
+                "_id": "671533b374e397d57b769a32"
+            }
+        ],
+        "totalAmount": 196387.2,
+        "status": "Pending",
+        "paymentMethod": "Cash on Delivery",
+        "paymentStatus": "Pending",
+        "pstatus": false,
+        "orderDate": "2024-10-20T16:45:39.010Z",
+        "createdAt": "2024-10-20T16:45:39.012Z",
+        "updatedAt": "2024-10-20T16:45:39.012Z",
+        "__v": 0
+    },
+    {
+        "coupon": {
+            "discount": 2104,
+            "couponcode": "sadin"
+        },
+        "shippingAddress": {
+            "fullname": "THAHA YASEEN",
+            "addressline1": "Kolathara, Kozhikode",
+            "addressline2": "India",
+            "city": "Kozhikode",
+            "state": "Kerala",
+            "zipcode": "673655",
+            "country": "IN",
+            "phone": "8089109152"
+        },
+        "_id": "67151cbf04318b98e0874a6b",
+        "user": {
+            "_id": "6715062cdde575dfc819e1e3",
+            "name": "thaha",
+            "user_name": "thaah986",
+            "email": "thajayaseenvalappil@gmail.com",
+            "password": "$2b$10$8geQ0Ci0IUhZ0Wrqm6muCeu57cOR2zN6HcqUowc7yczHKZgDvZB/q",
+            "phone": null,
+            "address": [
+                "67150ed71356017a9ce2e2af"
+            ],
+            "uotp": null,
+            "varify": true,
+            "isadmin": true,
+            "orders": [],
+            "blocked": false,
+            "createdAt": "2024-10-20T13:31:24.943Z",
+            "updatedAt": "2024-10-20T14:08:23.965Z",
+            "__v": 1
+        },
+        "products": [
+            {
+                "productid": {
+                    "_id": "66fd08496988d06040bdc7c3",
+                    "name": "ZEBRONICS  N24A 24",
+                    "price": 8499,
+                    "stock": 45,
+                    "unlist": false,
+                    "images": [
+                        "1727858761291.jpg",
+                        "1727858761295.jpg",
+                        "1727858761297.jpg"
+                    ],
+                    "description": "Anti-glare screen: The 60.4cm screen of the ZEB-N24A is treated with an anti-glare coating, which reduces reflections and minimizes eye strain during prolonged gaming sessions.\r\nBuilt-in Speakers: Equipped with built-in speakers, the ZEB-N24A offers a convenient audio solution without the need for external speakers.\r\nBezel-Less Design: The ZEB-N24A boasts a sleek, bezel-less design, providing an expansive viewing area that enhances the sense of immersion. Its 16:9 aspect ratio offers a wider viewing experience.\r\nRefresh Rate: The monitor's 180Hz refresh rate and 1ms MPRT ensure smooth gameplay with reduced motion blur and more frames per second.",
+                    "category_id": "66fa26a5e8f8b40366d3d0e9",
+                    "createdAt": "2024-10-02T08:46:01.317Z",
+                    "updatedAt": "2024-10-20T15:09:18.243Z",
+                    "__v": 0,
+                    "offer": 1
+                },
+                "discount": 0,
+                "quantity": 1,
+                "price": 8414.01,
+                "status": true,
+                "return": "notrequst",
+                "_id": "67151cbf04318b98e0874a6c"
+            }
+        ],
+        "totalAmount": 8414.01,
+        "status": "Cancelled",
+        "paymentMethod": "onlinePayment",
+        "paymentStatus": "Pending",
+        "pstatus": true,
+        "orderDate": "2024-10-20T15:07:43.603Z",
+        "createdAt": "2024-10-20T15:07:43.604Z",
+        "updatedAt": "2024-10-20T15:09:18.229Z",
+        "__v": 0
+    },
+    {
+        "coupon": {
+            "discount": 0
+        },
+        "shippingAddress": {
+            "fullname": "THAHA YASEEN",
+            "addressline1": "Kolathara, Kozhikode",
+            "addressline2": "India",
+            "city": "Kozhikode",
+            "state": "Kerala",
+            "zipcode": "673655",
+            "country": "IN",
+            "phone": "8089109152"
+        },
+        "_id": "67150eda1356017a9ce2e2c3",
+        "user": {
+            "_id": "6715062cdde575dfc819e1e3",
+            "name": "thaha",
+            "user_name": "thaah986",
+            "email": "thajayaseenvalappil@gmail.com",
+            "password": "$2b$10$8geQ0Ci0IUhZ0Wrqm6muCeu57cOR2zN6HcqUowc7yczHKZgDvZB/q",
+            "phone": null,
+            "address": [
+                "67150ed71356017a9ce2e2af"
+            ],
+            "uotp": null,
+            "varify": true,
+            "isadmin": true,
+            "orders": [],
+            "blocked": false,
+            "createdAt": "2024-10-20T13:31:24.943Z",
+            "updatedAt": "2024-10-20T14:08:23.965Z",
+            "__v": 1
+        },
+        "products": [
+            {
+                "productid": {
+                    "_id": "66fd0abddc87a29804163f60",
+                    "name": "MSI Geforce RTX 4060 ",
+                    "price": 44571,
+                    "stock": 13,
+                    "unlist": false,
+                    "images": [
+                        "1728019075199.jpg",
+                        "1728019082582.jpg",
+                        "1728019086622.jpg"
+                    ],
+                    "description": "The MSI GeForce RTX 4060 Gaming X 8G is a high-performance gaming graphics card powered by NVIDIA's latest GeForce RTX 4060 GPU. It features 8GB of GDDR6 memory, delivering exceptional gaming and rendering performance with ray tracing and AI-based enhancements. With MSI's Twin Frozr 8 thermal design, it ensures efficient cooling for quieter, cooler gameplay, while offering a boost in FPS for demanding games. Ideal for gamers and creators, the card supports DLSS 3.0, real-time ray tracing, and other cutting-edge technologies for an immersive gaming experience.",
+                    "category_id": "66fa26a5e8f8b40366d3d0e9",
+                    "createdAt": "2024-10-02T08:56:29.026Z",
+                    "updatedAt": "2024-10-20T16:47:11.910Z",
+                    "__v": 7,
+                    "offer": 4
+                },
+                "discount": 0,
+                "quantity": 2,
+                "price": 42788.16,
+                "status": true,
+                "return": "returning",
+                "_id": "67150eda1356017a9ce2e2c4",
+                "returnExplanation": "dfgsadfsdf",
+                "returnReason": "wrong_size"
+            },
+            {
+                "productid": {
+                    "_id": "66fd08496988d06040bdc7c3",
+                    "name": "ZEBRONICS  N24A 24",
+                    "price": 8499,
+                    "stock": 45,
+                    "unlist": false,
+                    "images": [
+                        "1727858761291.jpg",
+                        "1727858761295.jpg",
+                        "1727858761297.jpg"
+                    ],
+                    "description": "Anti-glare screen: The 60.4cm screen of the ZEB-N24A is treated with an anti-glare coating, which reduces reflections and minimizes eye strain during prolonged gaming sessions.\r\nBuilt-in Speakers: Equipped with built-in speakers, the ZEB-N24A offers a convenient audio solution without the need for external speakers.\r\nBezel-Less Design: The ZEB-N24A boasts a sleek, bezel-less design, providing an expansive viewing area that enhances the sense of immersion. Its 16:9 aspect ratio offers a wider viewing experience.\r\nRefresh Rate: The monitor's 180Hz refresh rate and 1ms MPRT ensure smooth gameplay with reduced motion blur and more frames per second.",
+                    "category_id": "66fa26a5e8f8b40366d3d0e9",
+                    "createdAt": "2024-10-02T08:46:01.317Z",
+                    "updatedAt": "2024-10-20T15:09:18.243Z",
+                    "__v": 0,
+                    "offer": 1
+                },
+                "discount": 0,
+                "quantity": 1,
+                "price": 8414.01,
+                "status": true,
+                "return": "noreturn",
+                "_id": "67150eda1356017a9ce2e2c5",
+                "returnExplanation": "dfgsdfgsdf",
+                "returnReason": "damaged"
+            }
+        ],
+        "totalAmount": 93990.33,
+        "status": "Delivered",
+        "paymentMethod": "onlinePayment",
+        "paymentStatus": "Pending",
+        "pstatus": true,
+        "orderDate": "2024-10-20T14:08:26.672Z",
+        "createdAt": "2024-10-20T14:08:26.677Z",
+        "updatedAt": "2024-10-20T14:29:11.654Z",
+        "__v": 0
+    },
+    {
+        "coupon": {
+            "discount": 0
+        },
+        "shippingAddress": {
+            "fullname": "Ansab Ali Sulthan",
+            "addressline1": "kozhikode",
+            "addressline2": "",
+            "city": "nallalam",
+            "state": "kozhikode",
+            "zipcode": "673027",
+            "country": "IN",
+            "phone": "7907339099"
+        },
+        "_id": "6714b847408ba6fa7ffb50bf",
+        "user": {
+            "_id": "6714b0f82fa99849d6fe4c3d",
+            "name": "weebs corner",
+            "user_name": "weebscorner420",
+            "email": "weebscorner01@gmail.com",
+            "googleId": "115650112839497589475",
+            "phone": null,
+            "address": [
+                "6714b1072fa99849d6fe4c5e"
+            ],
+            "uotp": null,
+            "varify": true,
+            "isadmin": false,
+            "orders": [
+                "671533b374e397d57b769a30",
+                "671533ee74e397d57b769a83",
+                "6715340f74e397d57b769ac7"
+            ],
+            "blocked": false,
+            "createdAt": "2024-10-20T07:27:52.302Z",
+            "updatedAt": "2024-10-20T16:47:11.918Z",
+            "__v": 4
+        },
+        "products": [
+            {
+                "productid": {
+                    "_id": "66fd0abddc87a29804163f60",
+                    "name": "MSI Geforce RTX 4060 ",
+                    "price": 44571,
+                    "stock": 13,
+                    "unlist": false,
+                    "images": [
+                        "1728019075199.jpg",
+                        "1728019082582.jpg",
+                        "1728019086622.jpg"
+                    ],
+                    "description": "The MSI GeForce RTX 4060 Gaming X 8G is a high-performance gaming graphics card powered by NVIDIA's latest GeForce RTX 4060 GPU. It features 8GB of GDDR6 memory, delivering exceptional gaming and rendering performance with ray tracing and AI-based enhancements. With MSI's Twin Frozr 8 thermal design, it ensures efficient cooling for quieter, cooler gameplay, while offering a boost in FPS for demanding games. Ideal for gamers and creators, the card supports DLSS 3.0, real-time ray tracing, and other cutting-edge technologies for an immersive gaming experience.",
+                    "category_id": "66fa26a5e8f8b40366d3d0e9",
+                    "createdAt": "2024-10-02T08:56:29.026Z",
+                    "updatedAt": "2024-10-20T16:47:11.910Z",
+                    "__v": 7,
+                    "offer": 4
+                },
+                "discount": 0,
+                "quantity": 1,
+                "price": 42788.16,
+                "status": true,
+                "return": "returning",
+                "_id": "6714b847408ba6fa7ffb50c0",
+                "returnExplanation": "fsdfsadfasdfasdf",
+                "returnReason": "wrong_size"
+            }
+        ],
+        "totalAmount": 42788.16,
+        "status": "Shipped",
+        "paymentMethod": "onlinePayment",
+        "paymentStatus": "Pending",
+        "pstatus": true,
+        "orderDate": "2024-10-20T07:59:03.430Z",
+        "createdAt": "2024-10-20T07:59:03.435Z",
+        "updatedAt": "2024-10-20T12:09:50.314Z",
+        "__v": 0
+    },
+    {
+        "coupon": {
+            "discount": 0
+        },
+        "shippingAddress": {
+            "fullname": "THAHA YASEEN",
+            "addressline1": "Kolathara, Kozhikode",
+            "addressline2": "",
+            "city": "Kozhikode",
+            "state": "6645645",
+            "zipcode": "673655",
+            "country": "US",
+            "phone": "89109152"
+        },
+        "_id": "6714b16c2fa99849d6fe4d00",
+        "user": {
+            "_id": "6714b1532fa99849d6fe4cb7",
+            "name": "THAHA YASEEN",
+            "user_name": "thahayaseen860",
+            "email": "kthahayaseen@gmail.com",
+            "googleId": "101609897264615376682",
+            "phone": null,
+            "address": [
+                "6714b1682fa99849d6fe4cec"
+            ],
+            "uotp": null,
+            "varify": true,
+            "isadmin": true,
+            "orders": [],
+            "blocked": false,
+            "createdAt": "2024-10-20T07:29:23.199Z",
+            "updatedAt": "2024-10-20T07:29:44.545Z",
+            "__v": 1
+        },
+        "products": [
+            {
+                "productid": {
+                    "_id": "66fd0abddc87a29804163f60",
+                    "name": "MSI Geforce RTX 4060 ",
+                    "price": 44571,
+                    "stock": 13,
+                    "unlist": false,
+                    "images": [
+                        "1728019075199.jpg",
+                        "1728019082582.jpg",
+                        "1728019086622.jpg"
+                    ],
+                    "description": "The MSI GeForce RTX 4060 Gaming X 8G is a high-performance gaming graphics card powered by NVIDIA's latest GeForce RTX 4060 GPU. It features 8GB of GDDR6 memory, delivering exceptional gaming and rendering performance with ray tracing and AI-based enhancements. With MSI's Twin Frozr 8 thermal design, it ensures efficient cooling for quieter, cooler gameplay, while offering a boost in FPS for demanding games. Ideal for gamers and creators, the card supports DLSS 3.0, real-time ray tracing, and other cutting-edge technologies for an immersive gaming experience.",
+                    "category_id": "66fa26a5e8f8b40366d3d0e9",
+                    "createdAt": "2024-10-02T08:56:29.026Z",
+                    "updatedAt": "2024-10-20T16:47:11.910Z",
+                    "__v": 7,
+                    "offer": 4
+                },
+                "discount": 0,
+                "quantity": 1,
+                "price": 42788.16,
+                "status": true,
+                "_id": "6714b16c2fa99849d6fe4d01",
+                "return": "noreturn",
+                "returnExplanation": "fsdfsad",
+                "returnReason": "damaged"
+            },
+            {
+                "productid": {
+                    "_id": "66fd08496988d06040bdc7c3",
+                    "name": "ZEBRONICS  N24A 24",
+                    "price": 8499,
+                    "stock": 45,
+                    "unlist": false,
+                    "images": [
+                        "1727858761291.jpg",
+                        "1727858761295.jpg",
+                        "1727858761297.jpg"
+                    ],
+                    "description": "Anti-glare screen: The 60.4cm screen of the ZEB-N24A is treated with an anti-glare coating, which reduces reflections and minimizes eye strain during prolonged gaming sessions.\r\nBuilt-in Speakers: Equipped with built-in speakers, the ZEB-N24A offers a convenient audio solution without the need for external speakers.\r\nBezel-Less Design: The ZEB-N24A boasts a sleek, bezel-less design, providing an expansive viewing area that enhances the sense of immersion. Its 16:9 aspect ratio offers a wider viewing experience.\r\nRefresh Rate: The monitor's 180Hz refresh rate and 1ms MPRT ensure smooth gameplay with reduced motion blur and more frames per second.",
+                    "category_id": "66fa26a5e8f8b40366d3d0e9",
+                    "createdAt": "2024-10-02T08:46:01.317Z",
+                    "updatedAt": "2024-10-20T15:09:18.243Z",
+                    "__v": 0,
+                    "offer": 1
+                },
+                "discount": 0,
+                "quantity": 1,
+                "price": 8414.01,
+                "status": true,
+                "_id": "6714b16c2fa99849d6fe4d02",
+                "return": "returnreq",
+                "returnExplanation": "fsdtdrfyhsdzf",
+                "returnReason": "wrong_size"
+            }
+        ],
+        "totalAmount": 51202.17,
+        "status": "Delivered",
+        "paymentMethod": "onlinePayment",
+        "paymentStatus": "Pending",
+        "pstatus": true,
+        "orderDate": "2024-10-20T07:29:48.308Z",
+        "createdAt": "2024-10-20T07:29:48.311Z",
+        "updatedAt": "2024-10-20T12:10:15.925Z",
+        "__v": 0
+    },
+    {
+        "coupon": {
+            "discount": 0
+        },
+        "shippingAddress": {
+            "fullname": "Ansab Ali Sulthan",
+            "addressline1": "kozhikode",
+            "addressline2": "",
+            "city": "nallalam",
+            "state": "kozhikode",
+            "zipcode": "673027",
+            "country": "IN",
+            "phone": "7907339099"
+        },
+        "_id": "6714b10c2fa99849d6fe4c75",
+        "user": {
+            "_id": "6714b0f82fa99849d6fe4c3d",
+            "name": "weebs corner",
+            "user_name": "weebscorner420",
+            "email": "weebscorner01@gmail.com",
+            "googleId": "115650112839497589475",
+            "phone": null,
+            "address": [
+                "6714b1072fa99849d6fe4c5e"
+            ],
+            "uotp": null,
+            "varify": true,
+            "isadmin": false,
+            "orders": [
+                "671533b374e397d57b769a30",
+                "671533ee74e397d57b769a83",
+                "6715340f74e397d57b769ac7"
+            ],
+            "blocked": false,
+            "createdAt": "2024-10-20T07:27:52.302Z",
+            "updatedAt": "2024-10-20T16:47:11.918Z",
+            "__v": 4
+        },
+        "products": [],
+        "totalAmount": 0,
+        "status": "Pending",
+        "paymentMethod": "onlinePayment",
+        "paymentStatus": "Pending",
+        "pstatus": false,
+        "orderDate": "2024-10-20T07:28:12.457Z",
+        "createdAt": "2024-10-20T07:28:12.459Z",
+        "updatedAt": "2024-10-20T07:28:12.459Z",
+        "__v": 0
+    },
+    {
+        "coupon": {
+            "discount": 0
+        },
+        "shippingAddress": {
+            "fullname": "Ansab Ali Sulthan",
+            "addressline1": "kozhikode",
+            "addressline2": "",
+            "city": "nallalam",
+            "state": "kozhikode",
+            "zipcode": "673027",
+            "country": "IN",
+            "phone": "7907339099"
+        },
+        "_id": "6714b10b2fa99849d6fe4c6e",
+        "user": {
+            "_id": "6714b0f82fa99849d6fe4c3d",
+            "name": "weebs corner",
+            "user_name": "weebscorner420",
+            "email": "weebscorner01@gmail.com",
+            "googleId": "115650112839497589475",
+            "phone": null,
+            "address": [
+                "6714b1072fa99849d6fe4c5e"
+            ],
+            "uotp": null,
+            "varify": true,
+            "isadmin": false,
+            "orders": [
+                "671533b374e397d57b769a30",
+                "671533ee74e397d57b769a83",
+                "6715340f74e397d57b769ac7"
+            ],
+            "blocked": false,
+            "createdAt": "2024-10-20T07:27:52.302Z",
+            "updatedAt": "2024-10-20T16:47:11.918Z",
+            "__v": 4
+        },
+        "products": [
+            {
+                "return": "notrequst",
+                "productid": {
+                    "_id": "66fd097f6988d06040bdc7d8",
+                    "name": "METHEI Gaming Desktop",
+                    "price": 159999,
+                    "stock": 0,
+                    "unlist": false,
+                    "images": [
+                        "1727859071613.jpg",
+                        "1727859071614.jpg",
+                        "1727859071617.jpg"
+                    ],
+                    "description": "Powerful Performance: Equipped with an Core i7-3770 processor clocked at 3.4 GHz.\r\n16 GB DDR3 RAM, this gaming CPU delivers blazing-fast speeds for seamless multitasking and intense gaming sessions.\r\nAmple Storage: Enjoy lightning-quick boot times and rapid data access with a 512 GB solid-state drive (SSD), providing ample space for your games, applications, and files.\r\nDedicated Graphics: The 4 GB NVIDIA GeForce GT 730 graphics card ensures smooth rendering of high-resolution visuals and immersive gaming experiences.",
+                    "category_id": "66fa4cc1da7aa084c07f546d",
+                    "createdAt": "2024-10-02T08:51:11.625Z",
+                    "updatedAt": "2024-10-20T16:46:38.052Z",
+                    "__v": 0,
+                    "offer": 4
+                },
+                "discount": 0,
+                "quantity": 1,
+                "price": 153599.04,
+                "status": true,
+                "_id": "6714b10b2fa99849d6fe4c6f"
+            }
+        ],
+        "totalAmount": 153599.04,
+        "status": "Cancelled",
+        "paymentMethod": "onlinePayment",
+        "paymentStatus": "Pending",
+        "pstatus": true,
+        "orderDate": "2024-10-20T07:28:11.793Z",
+        "createdAt": "2024-10-20T07:28:11.798Z",
+        "updatedAt": "2024-10-20T07:29:00.294Z",
+        "__v": 0
+    }
+]

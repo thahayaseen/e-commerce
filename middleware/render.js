@@ -37,7 +37,7 @@ const otp = (req, res) => {
         return res.redirect('/signup');
     }
 };
-
+// home page 
 const userhome = async (req, res) => {
     const product = req.session.products
     
@@ -71,19 +71,24 @@ const adminlogin =async (req, res) => {
 // admin html rendering 
 // LADMIN MEANS LOGIN ADMIN 
 const admin = async(req, res) => {
+    const count=req.query.range||7
+    const islogin = req.session.ladmin
 
-    const range=req.query.range||3
+    if(islogin ) {
+    const range= new Date(new Date().setDate(new Date().getDate() - parseInt(count)))
+ console.log(range);
+ 
 
     // req.session.ladmin
-    const islogin = true
-    const productsandcategory=await ordersshema.find({})
+    const productsandcategory=await ordersshema.find({createdAt:{$gt:range}})
     .populate('user')
     .populate('products.productid')
     .sort({createdAt:-1})
     
-    // console.log(JSON.stringify(productsandcategory));
+    console.log(JSON.stringify(productsandcategory));
     
-    islogin ? res.render('admin/dashbord',{products:productsandcategory}) : res.redirect('/admin')
+   res.render('admin/dashbord',{products:productsandcategory})} 
+   else res.redirect('/admin')
 }
 
 
@@ -110,7 +115,7 @@ const product = (req, res, next) => {
     delete req.session.aproducts;
     delete req.session.pagination;
 
-    const islogin = req.session.ladmin||true;
+    const islogin = req.session.ladmin
 
     islogin ? res.render('admin/product', { Products: aproducts, categories: cat, pagination }) : res.redirect('/admin');
 };
@@ -137,7 +142,7 @@ const cartschema = require('../model/cart');
 
 
 
-//my account 
+//my account user side 
 const myaccount = async (req, res) => {
     const id = req.session.ulogin
     if (id) {
@@ -164,12 +169,12 @@ const useraddress = async (req, res) => {
         const userid = req.session.ulogin
         const addres = await user_scema.findById(userid).populate('address')
 
-        console.log(addres);
+   
 
 
 
 
-        res.render('userside/user dashbord/address', { address: addres.address })
+        userid? res.render('userside/user dashbord/address', { address: addres.address }):res.redirect('/signin')
 
     } catch (error) {
         console.log(error);
@@ -187,7 +192,7 @@ const oredrs = async (req, res) => {
 
       
 
-        res.render('userside/user dashbord/orders', { orders: orders })
+        userid? res.render('userside/user dashbord/orders', { orders: orders }):res.redirect('/signin')
     } catch (error) {
         console.log(error);
 
@@ -209,11 +214,6 @@ const cartrender = async (req, res) => {
         res.render('userside/cart', { cart: ucart })
 
     }
-
-
-
-    //    console.log(ucart.product[0])
-    //    console.log(JSON.stringify(ucart));
 
 
     else {
@@ -244,7 +244,7 @@ const orders = async (req, res) => {
     const page = parseInt(req.query.page) || 1;
     const limit = parseInt(req.query.limit) || 5;
     const skip = (page - 1) * limit;
-
+    const adlogin=req.session.ladmin
     const orders = await ordersshema.find({}).populate('user').skip(skip).limit(limit).sort({createdAt:-1})
 
     const totalProducts = await ordersshema.countDocuments();
@@ -255,7 +255,7 @@ const orders = async (req, res) => {
     pagination = { totalPages, currentPage: page, limit: limit };
 
 
-    res.render('admin/orders', { Orders: orders, pagination })
+    adlogin?res.render('admin/orders', { Orders: orders, pagination }):res.redirect('/admin')
 }
 const wishlist = async (req, res) => {
     const uid = req.session.ulogin
@@ -280,10 +280,11 @@ const wishlist = async (req, res) => {
 }
 const coupenrender = async (req, res) => {
     const coupons = await coupon.find({}) || ''
+    const adlogin=req.session.ladmin
 
     console.log(coupons);
 
-    res.render('admin/coupen', { coupons })
+    adlogin? res.render('admin/coupen', { coupons }):res.redirect('/admin')
 
 }
 const resetpass=(req,res)=>{
@@ -292,33 +293,20 @@ const resetpass=(req,res)=>{
 
 
 const walletrender = async (req, res) => {
-    // const demoWallet = {
-    //     userId: '67137ff67093b05ed2a16a94', // Replace this with an actual ObjectId
-    //     balance: 500, // Starting balance
-    //     transactions: [
-    //         {
-    //             type: 'credit',
-    //             amount: 500,
-    //             date: new Date('2024-08-22T12:05:00'), // Date of the transaction
-    //             description: 'Initial wallet credit' // Description of the transaction
-    //         },
-    //         {
-    //             type: 'debit',
-    //             amount: 150,
-    //             date: new Date('2024-09-01T14:30:00'), // Date of the transaction
-    //             description: 'Purchased product XYZ' // Description of the transaction
-    //         }
-    //     ]
-    // };
-    
+
     try {
         const uid = req.session.ulogin; 
+        const gid = req.session.glogin; 
         if (!uid) {
-            return res.status(401).send('User not logged in'); 
+            return res.redirect('/signin') 
         }
 
         let userdata = await wallet.findOne({ userId: uid }).populate('userId')
-
+        console.log(uid);
+        
+        console.log(gid);
+        console.log(userdata);
+        
         if (!userdata) {
             userdata = new wallet({
                 userId: uid,

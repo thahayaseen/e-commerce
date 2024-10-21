@@ -467,7 +467,7 @@ const placeorder = async (req, res) => {
             const order = new orderchema({
                 user: userid,
                 products: productdata,
-                totalAmount: usercart.totalprice.toFixed(2),
+                totalAmount: Math.floor(usercart.totalprice*100)/100,
                 paymentMethod: paymentmethods,
                 shippingAddress: selectedaddress,
                 'coupon.discount': discount,  // Ensure 'discount' is defined

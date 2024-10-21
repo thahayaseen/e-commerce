@@ -179,54 +179,76 @@
                       </div>
   
                       <!-- Recent Sales Table -->
-                      <div class="row">
-                          <div class="col-12 grid-margin">
-                              <div class="card">
-                                  <div class="card-body">
-                                      <h4 class="card-title">Recent Sales</h4>
-                                      <div class="table-responsive">
-                                          <table class="table">
-                                              <thead>
-                                                  <tr>
-                                                      <th>Order ID</th>
-                                                      <th>Customer</th>
-                                                      <th>Product</th>
-                                                      <th>Amount</th>
-                                                      <th>Status</th>
-                                                      <th>Date</th>
-                                                  </tr>
-                                              </thead>
-                                              <% products.forEach(order=>{ %>
-                                              <tbody>
-                                                  <tr>
-                                                      <td>#<%=order._id%></td>
-                                                      <td><%=order.user.name%></td>
-                                                      <td><%=order.products.map(e=>e.productid.name  )%></td>
-                                                      <td><%=order.totalAmount-order.coupon.discount%></td>
-                                                      <td>
-                                                        <% if (order.status === 'Delivered') { %>
-                                                          <span class="badge badge-success">Delivered</span>
-                                                        <% } else if (order.status === 'Cancelled') { %>
-                                                          <span class="badge badge-danger">Cancelled</span>
-                                                        <% } else if (order.status === 'Shipped') { %>
-                                                          <span class="badge badge-info">Shipped</span>
-                                                        <% } else if (order.status === 'Processing') { %>
-                                                          <span class="badge badge-warning">Processing</span>
-                                                        <% } else { %>
-                                                          <span class="badge badge-primary">Pending</span>
-                                                        <% } %>
-                                                      </td>
-                                                      
-                                                      <td><%=new Date(order.createdAt).toISOString().split('T')[0]%></td>
-                                                  </tr>
-                                                  <% }) %>
-                                              </tbody>
-                                          </table>
-                                      </div>
-                                  </div>
-                              </div>
-                          </div>
-                      </div>
+                        <div class="row">
+        <div class="col-12 grid-margin">
+            <div class="card">
+                <div class="card-body">
+                    <h4 class="card-title">Recent Sales</h4>
+                    <div class="table-responsive">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>Order ID</th>
+                                    <th>Customer</th>
+                                    <th>Product</th>
+                                    <th>Original Price</th>
+                                    <th>Offer Applied</th>
+                                    <th>Final Amount</th>
+                                    <th>Status</th>
+                                    <th>Date</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <% products.forEach(order=>{ %>
+                                <tr>
+                                    <td>#<%=order._id%></td>
+                                    <td><%=order.user.name%></td>
+                                    <td>
+                                        <% order.products.forEach(product => { %>
+                                            <div class="product-item mb-2">
+                                                <div><%=product.productid.name%></div>
+                                                <% if(product.productid.offer && product.productid.offer.percentage) { %>
+                                                    <span class="product-offer">
+                                                        <%=product.productid.offer.percentage%>% OFF
+                                                    </span>
+                                                <% } %>
+                                            </div>
+                                        <% }) %>
+                                    </td>
+                                    <td class="price-details">
+                                        <span class="original-price">₹<%=order.totalAmount%></span>
+                                    </td>
+                                    <td>
+                                        <% if(order.coupon && order.coupon.discount) { %>
+                                            <span class="product-offer">
+                                                Coupon: ₹<%=order.coupon.discount%> OFF
+                                            </span>
+                                        <% } %>
+                                    </td>
+                                    <td class="final-price">₹<%=order.totalAmount - order.coupon.discount%></td>
+                                    <td>
+                                        <% if (order.status === 'Delivered') { %>
+                                            <span class="badge badge-success">Delivered</span>
+                                        <% } else if (order.status === 'Cancelled') { %>
+                                            <span class="badge badge-danger">Cancelled</span>
+                                        <% } else if (order.status === 'Shipped') { %>
+                                            <span class="badge badge-info">Shipped</span>
+                                        <% } else if (order.status === 'Processing') { %>
+                                            <span class="badge badge-warning">Processing</span>
+                                        <% } else { %>
+                                            <span class="badge badge-primary">Pending</span>
+                                        <% } %>
+                                    </td>
+                                    <td><%=new Date(order.createdAt).toISOString().split('T')[0]%></td>
+                                </tr>
+                                <% }) %>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
                   </div>
                     
                 </div>
@@ -249,19 +271,6 @@
         }
     </script>
     <script>
-
-//         // list range 
-//         const ranges=document.getElementById('exportOptions')
-//         ranges.addEventListener('click',e=>{
-//             const params = new URLSearchParams(window.location.search);
-//             const param=params.get('range')||3
-// console.log(param);
-
-//             fetch('/admin/exporttotdf/'+param,{
-//                 method:'PUT'
-//             })
-//         })
-     
 
 
 
