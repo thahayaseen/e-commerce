@@ -613,7 +613,7 @@ const cancelorder = async (req, res) => {
             description: `refund of ${dats}`
         });
         
-        //  console.log(wallets);
+     
          
          await wallets.save()
         }
@@ -624,7 +624,7 @@ const cancelorder = async (req, res) => {
             console.log('\n \n' + a + '\n');
             const product = await product_schema.findById(a.productid);
             if (product) {
-                product.stock += a.quantity; // Assuming you want to add the quantity back to stock
+                product.stock += a.quantity; 
                 await product.save();
             }
         }
