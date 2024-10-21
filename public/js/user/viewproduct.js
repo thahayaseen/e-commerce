@@ -53,6 +53,22 @@ addtobtn.addEventListener('click', (e) => {
             if (res.success == true) {
                 console.log('ok');
                
+            Swal.fire({
+                title: 'Added to Cart!',
+                text: 'Product has been added to your cart successfully',
+                icon: 'success',
+                showConfirmButton: false,
+                timer: 1500
+            });
+            }
+            else if(res.success==false){
+                Swal.fire({
+                    title: 'Added to Cart!',
+                    text: 'Product is aldredy in your cart',
+                    icon: 'error',
+                    showConfirmButton: false,
+                    timer: 1500
+                });
             }
 
             else {

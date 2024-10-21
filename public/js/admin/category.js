@@ -69,7 +69,30 @@ form.addEventListener('submit',(e)=>{
    .then((res)=>{
        if(res.success===true){
       return window.location.href='/admin/category'
-   }}
+   }
+   else if(res.success===false){
+   console.log('errors');
+   
+
+    Swal.fire({
+      icon: 'error',
+      title: 'Oops...',
+      text: res.message,
+    
+      
+      background: '#f8d7da',
+      color: '#721c24',
+      iconColor: '#721c24',
+      customClass: {
+        popup: 'rounded-lg',
+      },
+    });
+  
+
+
+   }
+
+}
    )
    .catch((err)=>console.log("when fetching add data "+err)
    )
@@ -117,12 +140,35 @@ document.addEventListener('DOMContentLoaded',(e)=>{
                   },
                   body:JSON.stringify(formdata1)
                })
-               .then(res=>res.json())
+               .then((res=>res.json()))
                .then((res)=>{
-                if (res.success===true) {
-                    window.location.href='/admin/category'
-                }
-               })
+                   if(res.success===true){
+                  return window.location.href='/admin/category'
+               }
+               else if(res.success===false){
+               console.log('errors');
+               
+            
+                Swal.fire({
+                  icon: 'error',
+                  title: 'Oops...',
+                  text: res.message,
+                
+                  
+                  background: '#f8d7da',
+                  color: '#721c24',
+                  iconColor: '#721c24',
+                  customClass: {
+                    popup: 'rounded-lg',
+                  },
+                });
+              
+            
+            
+               }
+            
+            }
+               )
                .catch((err)=>console.log('err is'+err)
                )
                 

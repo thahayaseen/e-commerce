@@ -10,10 +10,15 @@
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@mdi/font/css/materialdesignicons.min.css">
 
   <!-- Main CSS -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+  <!-- Include jQuery -->
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
   <link rel="stylesheet" href="/assets/css/style.css">
   
   <!-- Custom styles for this page -->
   <style>
+    
     .coupon-card {
       background-color: #191c24;
       border-radius: 10px;
@@ -204,7 +209,13 @@
       </div>
     </div>
   </div>
-
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script>const today = new Date().toISOString().split('T')[0];
+    
+  
+  document.getElementById('expiryDate').setAttribute('min', today);
+  document.getElementById('editExpiryDate').setAttribute('min', today);
+  </script>
   <!-- Scripts -->
   <script src="/assets/vendors/js/vendor.bundle.base.js"></script>
   

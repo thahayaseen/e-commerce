@@ -11,7 +11,7 @@ const register = (req, res) => {
     const ulogined = req.session.ulogin
 
     delete req.session.register
-    ulogined ? res.redirect('/home') : res.render('auth/signup.ejs', { msg: registerMessage })
+    ulogined ? res.redirect('/') : res.render('auth/signup.ejs', { msg: registerMessage })
 }
 
 
@@ -20,7 +20,7 @@ const login = async (req, res) => {
     const invalid = req.session.login || ''
     delete req.session.login
     const ulogined = req.session.ulogin
-    ulogined ? res.redirect('/home') : res.render('auth/ulogin', { mesasge: invalid })
+    ulogined ? res.redirect('/') : res.render('auth/ulogin', { mesasge: invalid })
 }
 //otp
 const otp = (req, res) => {
@@ -124,7 +124,7 @@ const product = (req, res, next) => {
 // catogory 
 const catagory = (req, res, next) => {
     const categ = req.session.categories || ''
-    const islogin = req.session.ladmin
+    const islogin = req.session.ladmin||true
     const pagination = req.session.pagination || { totalPages: 1, currentPage: 1 };
 
     delete req.session.categories
@@ -223,14 +223,19 @@ const cartrender = async (req, res) => {
 
 const checkout = async (req, res) => {
     const login = req.session.ulogin
-
+    const uid = req.session.ulogin
+    
     if (req.session.ulogin) {
+        const cart = await cartschema.findOne({ userid: uid }).populate('product.productid')
+        if(cart.product.length==0){
+            res.redirect('/')
+        }
+        console.log(cart);
+        
         const popuser = await user_scema.findById(login).populate('address')
         console.log(popuser);
-        const uid = req.session.ulogin
-        const cart = await cartschema.findOne({ userid: uid }).populate('product.productid')
         console.log(cart);
-        // console.log(JSON.stringify(cart))
+       
 
 
         res.render('userside/checkout', { savedAddresses: popuser.address, cart: cart })

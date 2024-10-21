@@ -24,7 +24,7 @@ const allproducts = async (req, res, next) => {
     try {
         const page = parseInt(req.query.page) || 1;
         let categoryName = req.query.category || '';
-        const query=req.query.search||''
+        const query = req.query.search || '';
         const limit = parseInt(req.query.limit) || 6;
         const sort = req.query.sort || 'featured'; 
         const skip = (page - 1) * limit;
@@ -53,17 +53,15 @@ const allproducts = async (req, res, next) => {
             default:
                 sortCondition = { featured: -1 };
         }
-        if(categoryName=='all'){
-            categoryName=''
-        }
-        let search={}
-        if(query){
-            {
-                search= {name:{$regex:`^${query}`,$options:'i'}}
-            }
-        }
-        
 
+        if (categoryName === 'all') {
+            categoryName = '';
+        }
+
+        let search = {};
+        if (query) {
+            search = { name: { $regex: `^${query}`, $options: 'i' } };
+        }
 
         let categoryFilter = {};
         if (categoryName) {
@@ -74,30 +72,29 @@ const allproducts = async (req, res, next) => {
                 categoryFilter = { category_id: null };  
             }
         }
-        let filterdata={...categoryFilter,...search,...{unlist:false}}
+
+        let filterdata = { ...categoryFilter, ...search, unlist: false };
         console.log(filterdata);
-        
+
         const products = await Product.find(filterdata)
             .populate('category_id')
             .sort(sortCondition)
             .skip(skip)
             .limit(limit);
 
-        products.forEach(a=>{
+        products.forEach(a => {
             console.log(a.name);
-            
-        })
-        
+        });
 
         const categ = await categories.find();  
 
         req.session.categories = categ;
         req.session.products = products;
-
-        const totalProducts = await Product.countDocuments({unlist:{$ne:true}}); 
+ 
+        const totalProducts = await Product.countDocuments({ ...filterdata, unlist: { $ne: true } }); 
         
         console.log(totalProducts);
-        
+
         const totalPages = Math.ceil(totalProducts / limit);
         req.session.pagination = { totalPages, currentPage: page, limit: limit };
 
@@ -108,6 +105,7 @@ const allproducts = async (req, res, next) => {
         res.status(500).send('Server Error');
     }
 };
+
 const adproducts=async (req,res,next)=>{
     const page = parseInt(req.query.page) || 1;
     const limit = parseInt(req.query.limit) || 6
@@ -122,7 +120,12 @@ const adproducts=async (req,res,next)=>{
 
 
     req.session.aproducts = products;
-    const categ = await categories.find();  
+    const categ = await categories
+    .find()  
+    .skip(skip)
+    .limit(limit)
+    .sort({name:1})
+
 
     req.session.categories = categ;
     const totalProducts =await Product.countDocuments(); 

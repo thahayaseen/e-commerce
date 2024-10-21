@@ -7,6 +7,7 @@ const categories = require('../../model/categories');
 const orders = require('../../model/orders')
 const coupons = require('../../model/coupon')
 const excel = require('exceljs')
+const Swal=require('sweetalert2')
 // admin authentication 
 const auth = async (req, res, next) => {
     try {
@@ -217,6 +218,15 @@ const imageadding = async function updateProduct(req, res) {
 const savecat = async (req, res) => {
     try {
         const { newCategoryName, newProductDescription } = req.body
+
+        const cnames=newCategoryName.toUpperCase()
+        const uniqcategory=await categories.findOne({name:cnames})
+        if(uniqcategory){
+            console.log(uniqcategory);
+          return res.status(200).json({success:false,message:'This coupon in aldredy exsist'})
+        }
+            
+        
         const newcategories = new categories({
             name: newCategoryName,
             description: newProductDescription
@@ -232,10 +242,21 @@ const savecat = async (req, res) => {
 }
 
 const useredit = async (req, res, next) => {
+
     const { CategoryName, ProductDescription } = req.body
 
+    const cnames=CategoryName.toUpperCase()
+
+        const uniqcategory=await categories.findOne({name:cnames})
+
+        if(uniqcategory){
+
+            console.log(uniqcategory);
+
+          return res.status(200).json({success:false,message:'This coupon in aldredy exsist'})
+        }
     const catid = req.params.id
-    // console.log(catid);
+  
     const category = await categories.findById(catid)
 
     category.name = CategoryName
@@ -292,7 +313,14 @@ const getiingorderdetials = async (req, res) => {
 const addcoupen = async (req, res) => {
     const bdata = req.body
     console.log(bdata);
+    const unique=await coupons.findOne({code:bdata.code})
 
+    if(unique){
+       
+          
+        return res.status(200).json({success:false,message:'This coupon in aldredy exsist'})
+    }
+    
     const add = new coupons(bdata)
     await add.save()
     res.status(201).json({ success: true })
@@ -300,6 +328,12 @@ const addcoupen = async (req, res) => {
 const coupenedit = async (req, res) => {
     const id = req.params.id
     const cdata = await coupons.findById(id)
+    const bdata=req.body
+    const unique=await coupons.findOne({code:bdata.code})
+
+    if(unique){
+        return res.status(200).json({success:false,message:'This coupon in aldredy exsist'})
+    }
     if (cdata) {
         Object.assign(cdata, req.body)
         await cdata.save()
@@ -309,7 +343,7 @@ const coupenedit = async (req, res) => {
 const deletecupen = async (req, res) => {
     const cid = req.params.id
     const dcoupen = await coupons.deleteOne({ _id: cid })
-    await dcoupen.save()
+
     res.status(204).json({ success: true })
 }
 const PDFDocument = require('pdfkit');

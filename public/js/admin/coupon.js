@@ -1,3 +1,6 @@
+
+
+
 if (coupons) {
     function renderCouponCards() {
       const container = document.getElementById('couponContainer');
@@ -29,7 +32,7 @@ if (coupons) {
 
     function addCoupon() {
       const newCoupon = {
-        code: document.getElementById('couponCode').value,
+        code: document.getElementById('couponCode').value.toLowerCase(),
         discount: parseInt(document.getElementById('discountAmount').value),
         expiryDate: document.getElementById('expiryDate').value,
         status: 'true',
@@ -44,12 +47,28 @@ if (coupons) {
       })
       .then(response => response.json())
       .then(data => {
+       if(data.success){
         coupons.push(data);
-        console.log(data+'fgsdf');
+    
         
         closeModal('addCouponModal');
         document.getElementById('addCouponForm').reset();
         window.location.reload()
+       }
+       else if(data.success==false){
+        // window.location.reload()
+        Swal.fire({
+          text: data.message,
+          icon: 'error',
+          timer: 1600, 
+          timerProgressBar: true, 
+          willClose: () => {
+            window.location.href = '/admin/coupon'; 
+              console.log('Error alert closed');
+          }
+      });
+        
+       }
       })
       .catch(error => console.error('Error adding coupon:', error));
     }
@@ -84,7 +103,7 @@ if (coupons) {
       }
       else false
       const updatedCoupon = {
-        code: document.getElementById('editCouponCode').value,
+        code: document.getElementById('editCouponCode').value.toLowerCase(),
         discount: parseInt(document.getElementById('editDiscountAmount').value),
         expiryDate: document.getElementById('editExpiryDate').value,
         status:ustatus ,
@@ -98,14 +117,32 @@ if (coupons) {
         body: JSON.stringify(updatedCoupon)
       })
       .then(response => response.json())
-      .then(() => {
+      .then((data) => {
+       if(data.success){
         const couponIndex = coupons.findIndex(c => c._id === id);
         if (couponIndex !== -1) {
           coupons[couponIndex] = { ...coupons[couponIndex], ...updatedCoupon };
           renderCouponCards();
           closeModal('editCouponModal');
         }
+      
+       }
+        else if(data.success==false){
+         
+          Swal.fire({
+            text: data.message,
+            icon: 'error',
+            timer: 1600, 
+            timerProgressBar: true, 
+            willClose: () => {
+              window.location.href = '/admin/coupon'; 
+                console.log('Error alert closed');
+            }
+        });
+          
+         }
       })
+      
       .catch(error => console.error('Error updating coupon:', error));
     }
 

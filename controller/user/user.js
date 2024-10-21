@@ -3,12 +3,12 @@ const product_schema = require('../../model/product_schema');
 const cartschema = require('../../model/cart');
 const address_scema = require('../../model/address');
 const orderchema = require('../../model/orders')
-const wishlist=require('../../model/wishlist')
+const wishlist = require('../../model/wishlist')
 const passport = require('passport');
-const coupencode=require('../../model/coupon')
-const Wallet=require('../../model/wallet')
-const razorpay=require('../../config/razorpay')
-const crypto=require('crypto')
+const coupencode = require('../../model/coupon')
+const Wallet = require('../../model/wallet')
+const razorpay = require('../../config/razorpay')
+const crypto = require('crypto')
 
 require('dotenv').config()
 const bcrypt = require('bcrypt')
@@ -134,7 +134,7 @@ const otpvarify = async (req, res, next) => {
         res.status(500).send("Server error during OTP verification");
     }
 };
-const {getotp,sendPasswordResetOTP} = require('../../middleware/getotp');
+const { getotp, sendPasswordResetOTP } = require('../../middleware/getotp');
 const coupon = require('../../model/coupon');
 
 
@@ -241,7 +241,7 @@ const viewproduct = async (req, res, next) => {
 };
 
 
-const  glogincb = (req, res, next) => {
+const glogincb = (req, res, next) => {
     passport.authenticate('google', (err, user, info) => {
         if (err) {
             return next(err);
@@ -253,7 +253,7 @@ const  glogincb = (req, res, next) => {
             if (err) {
                 return next(err);
             }
-        
+
             if (!user.blocked) {
                 req.session.ulogin = user._id
                 return res.redirect('/')
@@ -267,25 +267,27 @@ const  glogincb = (req, res, next) => {
         });
     })(req, res, next);
 }
-const removewish=async(req,res)=>{
+const removewish = async (req, res) => {
     const wishlistid = req.body.wishlistid
     const index = req.body.index
 
-    console.log(wishlistid+index);
+    console.log(wishlistid + index);
     if (wishlistid) {
 
         const wishlistData = await wishlist.findById(wishlistid);
         if (wishlistData) {
-           
-            
-                wishlistData.productid.splice(index, 1);
-                await wishlistData.save(); 
-                res.status(201).json({success:true})
-            
+
+
+            wishlistData.productid.splice(index, 1);
+            await wishlistData.save();
+            res.status(201).json({ success: true })
+
         }
     }
 }
 const cartitemspush = async (req, res) => {
+    console.log(req.session.ulogin);
+
     if (req.session.ulogin) {
         const productId = req.body.priductisdata
         const price = req.body.price
@@ -295,32 +297,39 @@ const cartitemspush = async (req, res) => {
         console.log(productId + ' ' + userid + " " + price);
 
         try {
+            console.log(userid);
 
-            let cart = await cartschema.findOne({ userid: userid });
 
-            if (!cart) {
+            if (userid) {
+                let cart = await cartschema.findOne({ userid: userid });
 
-                cart = new cartschema({ userid: userid, product: [] });
+                if (!cart) {
+
+                    cart = new cartschema({ userid: userid, product: [] });
+                }
+                const existingProductIndex = cart.product.findIndex(item => item.productid.toString() === productId);
+
+                if (existingProductIndex > -1) {
+
+                    return res.status(200).json({ success: false })
+                } else {
+
+                    cart.product.push({ productid: productId, quantity: quantity, price: price });
+
+                }
+
+
+                await cart.save();
+                console.log('Product added to cart successfully!');
+
+
+                return res.status(200).json({ success: true })
+
+
             }
-            const existingProductIndex = cart.product.findIndex(item => item.productid.toString() === productId);
-
-            if (existingProductIndex > -1) {
-
-                cart.product[existingProductIndex].quantity += quantity;
-            } else {
-
-                cart.product.push({ productid: productId, quantity: quantity, price: price });
-
+            else {
+                res.redirect('/signin')
             }
-
-
-            await cart.save();
-            console.log('Product added to cart successfully!');
-           
-            
-            return res.status(200).json({ success: true })
-
-
         } catch (error) {
             console.error('Error adding product to cart:', error);
         }
@@ -329,7 +338,7 @@ const cartitemspush = async (req, res) => {
     }
     else {
         req.session.login = 'before product select please login :)'
-        res.status(200).json({ success: false, message: 'user need to login' })
+        res.status(200).json({ success: 'notlogind', message: 'user need to login' })
     }
     // const cart=cartschema
 
@@ -348,21 +357,21 @@ const cartupdata = async (req, res) => {
     console.log(userid);
 
     const usercartdata = await cartschema.findOne({ userid: userid })
-    const product=await product_schema.findById(id)
+    const product = await product_schema.findById(id)
     console.log(product.stock);
     console.log(number);
-    
-    if (usercartdata) {
-        if(product.stock>=number){
-        usercartdata.product[index].quantity = number;
-        const toatlproductaprice = number * usercartdata.product[index].price
 
-        await usercartdata.save()
-        const summerytoatal = usercartdata.totalprice
-        res.status(200).json({ success: true, message: 'cart updated successfully', totalprice: toatlproductaprice, sumtoatal: summerytoatal })
+    if (usercartdata) {
+        if (product.stock >= number) {
+            usercartdata.product[index].quantity = number;
+            const toatlproductaprice = number * usercartdata.product[index].price
+
+            await usercartdata.save()
+            const summerytoatal = usercartdata.totalprice
+            res.status(200).json({ success: true, message: 'cart updated successfully', totalprice: toatlproductaprice, sumtoatal: summerytoatal })
         }
-        else{
-            res.status(200).json({success:false,message: "This is the maximum quantity"})
+        else {
+            res.status(200).json({ success: false, message: "This is the maximum quantity" })
         }
     }
     // console.log(usercartdata.product[index]);
@@ -429,31 +438,27 @@ const placeorder = async (req, res) => {
     // console.log(req.body);
     const userid = req.session.ulogin
 
-    const { selectedAddress, paymentmethods,discount,cname } = req.body
+    const { selectedAddress, paymentmethods, discount, cname } = req.body
     if (paymentmethods && selectedAddress && userid) {
         try {
             // user's cart and address
             const usercart = await cartschema.findOne({ userid }).populate('product.productid')
             const userdata = await User.findById(userid);
             const selectedaddress = await address_scema.findById(selectedAddress);
-            console.log('payment is'+paymentmethods);
-            
-            
+            console.log('payment is' + paymentmethods);
+
+
             if (selectedaddress.userid.toString() !== userid.toString()) {
                 return res.status(400).json({ success: false, message: 'User ID and address do not match' });
             }
-       
-        
-            
-            // console.log(JSON.stringify(usercart))
-            
+
             const productdata = usercart.product.map(item => ({
                 productid: item.productid._id,
                 quantity: item.quantity,
                 price: item.price,
-          
+
             }));
-    
+
             // Update stock for each product
             for (const datas of productdata) {
                 const product = await product_schema.findById(datas.productid);
@@ -463,106 +468,107 @@ const placeorder = async (req, res) => {
                 product.stock -= parseInt(datas.quantity);
                 await product.save();
             }
-    
+
             // Create order
             const order = new orderchema({
                 user: userid,
                 products: productdata,
-                totalAmount: Math.floor(usercart.totalprice*100)/100,
+                totalAmount: Math.floor(usercart.totalprice * 100) / 100,
                 paymentMethod: paymentmethods,
                 shippingAddress: selectedaddress,
-                'coupon.discount': discount,  // Ensure 'discount' is defined
-                'coupon.couponcode': cname    // Ensure 'cname' is defined
+                'coupon.discount': discount,  
+                'coupon.couponcode': cname    
             });
-    
+            console.log(discount);
+            
             const ordersave = await order.save();
             if (paymentmethods === 'onlinePayment') {
-               
-                if (ordersave) {
-                    usercart.product = [];
-                    await usercart.save();
-                    userdata.orders.push(ordersave._id);
-                // console.log(ordersave.totalAmount);
 
-                const options = {
-                    amount: ordersave.totalAmount * 100, 
-                    currency: 'INR',
-                    receipt: ordersave._id.toString() // Use string format
-                };
-    
-                const razorpayOrder = await razorpay.orders.create(options);
-                console.log('Razorpay order created:', razorpayOrder);
-                
-               return  res.status(200).json({
-                    success: true,
-                    order_id: razorpayOrder.id,
-                    razorpay:true,
-                    amount: options.amount,
-                    orderId: ordersave._id
-                })
-    
-            }
-            }
-            
-            else if(paymentmethods=='wallet'){
-               if(ordersave){
-                
-                 
-                const wallet=await Wallet.findOne({userId:userid})
-                const toatal=Math.floor(usercart.totalprice*100)/100
-                console.log('inside wallet');
-                console.log(wallet.balance);
-                console.log(toatal);
-               
-                if(wallet.balance>=toatal){
-                    const dats= order.products
-                    // console.log(dats);
-                    
-                    wallet.transactions.push({
-                        type: 'debit',
-                        amount: toatal,
-                        date: new Date(),
-                        description: `purchesed `
-                    });
-                    order.status='Processing'
-                await order.save()
-                    usercart.product = [];
-                    await usercart.save();
-        
-               
-                    userdata.orders.push(ordersave._id);
-                    await userdata.save();
-        
-                    wallet.balance-=toatal
-                    await wallet.save()
-                    return res.status(200).json({ success: true, message: 'The order was successfully placed' });
-                    
-                }
-                else{
-                    return res.status(200).json({success:'nobalence',message:'balence is low'})
-                }
-               }
-            }
-            
                 if (ordersave) {
-                 
+                  
+                    userdata.orders.push(ordersave._id);
+
+
+                    const options = {
+                        amount: Math.floor((ordersave.totalAmount*100) - (ordersave.coupon.discount*100)),
+                        currency: 'INR',
+                        receipt: ordersave._id.toString() 
+                    };
+
+                    const razorpayOrder = await razorpay.orders.create(options);
+                    console.log('Razorpay order created:', razorpayOrder);
                     usercart.product = [];
                     await usercart.save();
-        
-                    // Add the order to user's history
-                    userdata.orders.push(ordersave._id);
-                    await userdata.save();
-        
-                    return res.status(200).json({ success: true, message: 'The order was successfully placed' });
+                    return res.status(200).json({
+                        success: true,
+                        order_id: razorpayOrder.id,
+                        razorpay: true,
+                        amount: options.amount,
+                        orderId: ordersave._id
+                    })
+
                 }
-            
-    
+            }
+
+            else if (paymentmethods == 'wallet') {
+                if (ordersave) {
+
+
+                    const wallet = await Wallet.findOne({ userId: userid })
+                    const toatal = Math.floor(usercart.totalprice * 100) / 100
+                    console.log('inside wallet');
+                    console.log(wallet.balance);
+                    console.log(toatal);
+
+                    if (wallet.balance >= toatal) {
+                        const dats = order.products
+                        // console.log(dats);
+
+                        wallet.transactions.push({
+                            type: 'debit',
+                            amount: toatal,
+                            date: new Date(),
+                            description: `purchesed `
+                        });
+                        order.status = 'Processing'
+                        await order.save()
+                        usercart.product = [];
+                        await usercart.save();
+
+
+                        userdata.orders.push(ordersave._id);
+                        await userdata.save();
+
+                        wallet.balance -= toatal
+                        await wallet.save()
+                        return res.status(200).json({ success: true, message: 'The order was successfully placed' });
+
+                    }
+                    else {
+                        return res.status(200).json({ success: 'nobalence', message: 'balence is low' })
+                    }
+                }
+            }
+
+            if (ordersave) {
+
+                usercart.product = [];
+                await usercart.save();
+
+                // Add the order to user's history
+                userdata.orders.push(ordersave._id);
+                await userdata.save();
+
+                return res.status(200).json({ success: true, message: 'The order was successfully placed' });
+            }
+
+
         } catch (error) {
             console.log('Error in placing order:', error);
             return res.status(500).json({ success: false, message: 'Error placing order', error });
         }
     }
-    
+
 
 }
 const deleteaddress = async (req, res) => {
@@ -579,43 +585,43 @@ const deleteaddress = async (req, res) => {
 
 }
 const cancelorder = async (req, res) => {
-    const userid=req.session.ulogin
+    const userid = req.session.ulogin
     const orderid = req.params.id;
     const order = await orderchema.findById(orderid).populate('products.productid');
 
-    if (order.status === 'Pending'||order.status==='Processing') {
-        if(order.paymentMethod==='onlinePayment'){
-         const wallets=  await Wallet.findOne({userId:userid})
-         console.log(wallets);
-         const money=(order.totalAmount-order.coupon.discount)
-         
-         if(!wallets){
-            userdata = new Wallet({
-                userId: userid,
-                balance: money, 
-                transactions: [] 
-            });
-            await userdata.save();
-            order.status = 'Cancelled';
-            await order.save();
-           return  res.status(200).json({ success: true, message: 'The order is canceled successfully' });
-         }
-         console.log(wallets);
-         wallets.balance+=money
-        const dats= order.products.map(item => item.productid.name).join(', ')
-        const datsee= order.products.map(item => item.name)
+    if (order.status === 'Pending' || order.status === 'Processing') {
+        if (order.paymentMethod === 'Processing') {
+            const wallets = await Wallet.findOne({ userId: userid })
+            console.log(wallets);
+            const money = (order.totalAmount - order.coupon.discount)
 
-        
-         wallets.transactions.push({
-            type: 'credit',
-            amount: money,
-            date: new Date(),
-            description: `refund of ${dats}`
-        });
-        
-     
-         
-         await wallets.save()
+            if (!wallets) {
+                userdata = new Wallet({
+                    userId: userid,
+                    balance: money,
+                    transactions: []
+                });
+                await userdata.save();
+                order.status = 'Cancelled';
+                await order.save();
+                return res.status(200).json({ success: true, message: 'The order is canceled successfully' });
+            }
+            console.log(wallets);
+            wallets.balance += money
+            const dats = order.products.map(item => item.productid.name).join(', ')
+            const datsee = order.products.map(item => item.name)
+
+
+            wallets.transactions.push({
+                type: 'credit',
+                amount: money,
+                date: new Date(),
+                description: `refund of ${dats}`
+            });
+
+
+
+            await wallets.save()
         }
         order.status = 'Cancelled';
         await order.save();
@@ -624,7 +630,7 @@ const cancelorder = async (req, res) => {
             console.log('\n \n' + a + '\n');
             const product = await product_schema.findById(a.productid);
             if (product) {
-                product.stock += a.quantity; 
+                product.stock += a.quantity;
                 await product.save();
             }
         }
@@ -655,38 +661,38 @@ const changepass = async (req, res) => {
 
     if (user.password) {
         console.log(user.password);
-        
-        const isvalid = await bcrypt.compare(currentPassword,user.password)
+
+        const isvalid = await bcrypt.compare(currentPassword, user.password)
         if (!isvalid) {
             return res.status(401).json({ message: 'Entered incorrrect password' })
         }
     }
-    newhshedpass =await  bcrypt.hash(newPassword, 10)
+    newhshedpass = await bcrypt.hash(newPassword, 10)
 
-user.password=newhshedpass
-const a =await user.save()
-    a?res.status(200).json({success:true}):res,res.status(404)
+    user.password = newhshedpass
+    const a = await user.save()
+    a ? res.status(200).json({ success: true }) : res, res.status(404)
 }
-const productstockdata=async (req,res)=>{
-    const proid=req.params.id
-    const productdata=await product_schema.findById(proid)
+const productstockdata = async (req, res) => {
+    const proid = req.params.id
+    const productdata = await product_schema.findById(proid)
     console.log(productdata);
-    res.status(200).json({success:true,stock:productdata.stock})
-    
+    res.status(200).json({ success: true, stock: productdata.stock })
+
 }
-const cancelitem=async (req,res)=>{
+const cancelitem = async (req, res) => {
     console.log(req.body);
-   const {orderId,productId}= req.body
-   const orderdata=await orderchema.findById(orderId)
-   const index = orderdata.products.findIndex(product => product.productid == productId);
+    const { orderId, productId } = req.body
+    const orderdata = await orderchema.findById(orderId)
+    const index = orderdata.products.findIndex(product => product.productid == productId);
 
     console.log(index);
-    orderdata.products[index].status=false
-    const change=await orderdata.save()
+    orderdata.products[index].status = false
+    const change = await orderdata.save()
     if (change) {
-        res.status(201).json({success:true})
+        res.status(201).json({ success: true })
     }
-    else{
+    else {
         res.status(204)
     }
 }
@@ -696,68 +702,68 @@ const patchwishlist = async (req, res) => {
 
     const wishlistuser = await wishlist.findOne({ userid: userid });
 
-   if(userid){
-    if (!wishlistuser) {
-        const cwishlist = new wishlist({
-            userid: userid,
-            productid: [productid],
-        });
-        await cwishlist.save();
-        return res.status(200).json({ success: true, message: 'Product added to your wishlist.' });
-    } else {
-        if (wishlistuser.productid.includes(productid)) {
-            return res.status(200).json({ success: false, message: 'The product is already in your wishlist.' });
-        } else {
-            wishlistuser.productid.push(productid);
-            await wishlistuser.save();
+    if (userid) {
+        if (!wishlistuser) {
+            const cwishlist = new wishlist({
+                userid: userid,
+                productid: [productid],
+            });
+            await cwishlist.save();
             return res.status(200).json({ success: true, message: 'Product added to your wishlist.' });
+        } else {
+            if (wishlistuser.productid.includes(productid)) {
+                return res.status(200).json({ success: false, message: 'The product is already in your wishlist.' });
+            } else {
+                wishlistuser.productid.push(productid);
+                await wishlistuser.save();
+                return res.status(200).json({ success: true, message: 'Product added to your wishlist.' });
+            }
         }
     }
-   }
-   else{
-    return res.status(200).json({ success: 'nologined', message: 'Make sure you logind.' });
+    else {
+        return res.status(200).json({ success: 'nologined', message: 'Make sure you logind.' });
 
-   }
+    }
 
 
 };
 
-const coupenapplaying=async(req,res)=>{
-    const cname=req.params.name
-    const coupen=await coupencode.findOne({code:cname})
-    if(!coupen){
-       return res.status(200).json({success:false,erromsg:'Entered couponcode is invalid'})
+const coupenapplaying = async (req, res) => {
+    const cname = req.params.name
+    const coupen = await coupencode.findOne({ code: cname })
+    if (!coupen) {
+        return res.status(200).json({ success: false, erromsg: 'Entered couponcode is invalid' })
     }
     // const formattedDate = expiryDate.;
 
-        console.log();
-        const exdate=coupen.expiryDate.toISOString().split('T')[0]
-        const date=new Date().toISOString().split('T')[0]
+    console.log();
+    const exdate = coupen.expiryDate.toISOString().split('T')[0]
+    const date = new Date().toISOString().split('T')[0]
     console.log(date);
     console.log(exdate);
-    if(date>=exdate){
-        return res.status(200).json({success:false,erromsg:'The coupon code expaired'})
-        
-    }
-   
-    
-   
-    const userid=req.session.ulogin
+    if (date >= exdate) {
+        return res.status(200).json({ success: false, erromsg: 'The coupon code expaired' })
 
-    const cart=await cartschema.findOne({userid:userid})
-    const price=cart.totalprice>coupen.min&&cart.totalprice<coupen.max
-    console.log(price);
-     if(!price){
-       return res.status(200).json({success:false,erromsg:`The coupon can apply between ${coupen.min} - ${coupen.max} `})
     }
-    const discount=(cart.totalprice*coupen.discount)/100
-    
-  
-  res.status(200).json({success:true,coupon:coupen.code,discount,toatal:cart.totalprice})
-    
-    
+
+
+
+    const userid = req.session.ulogin
+
+    const cart = await cartschema.findOne({ userid: userid })
+    const price = cart.totalprice > coupen.min && cart.totalprice < coupen.max
+    console.log(price);
+    if (!price) {
+        return res.status(200).json({ success: false, erromsg: `The coupon can apply between ${coupen.min} - ${coupen.max} ` })
+    }
+    const discount = (cart.totalprice * coupen.discount) / 100
+
+
+    res.status(200).json({ success: true, coupon: coupen.code, discount, toatal: cart.totalprice })
+
+
 }
-const razorpayvarify= async (req, res) => {
+const razorpayvarify = async (req, res) => {
     try {
         const {
             razorpay_order_id,
@@ -770,23 +776,23 @@ const razorpayvarify= async (req, res) => {
         const sign = razorpay_order_id + "|" + razorpay_payment_id;
         console.log(sign);
         console.log(razorpay_signature);
-        
+
         const expectedSign = crypto
             .createHmac("sha256", process.env.RAZORPAYSCECRET)
             .update(sign)
             .digest("hex");
 
         if (razorpay_signature === expectedSign) {
-           
+
             const updatedOrder = await orderchema.findById(orderId);
-            updatedOrder.status='Processing'
-            updatedOrder.pstatus=true
-           await updatedOrder.save()
+            updatedOrder.status = 'Processing'
+            updatedOrder.pstatus = true
+            await updatedOrder.save()
             if (!updatedOrder) {
                 throw new Error('Order not found');
             }
 
-          
+
 
             res.json({
                 success: true,
@@ -807,95 +813,95 @@ const razorpayvarify= async (req, res) => {
 }
 const sendreset = async (req, res) => {
     try {
-      const { email } = req.body;
-      req.session.username = email;
-  
-      const user = await User.findOne({ email });
-      if (!user) {
-        return res.status(404).send('User not found');
-      }
-  
-      
-      const resetToken = crypto.randomBytes(32).toString('hex');
-      const tokenExpiry = Date.now() + 3600000; 
-  
-  
-      user.resetPasswordToken = resetToken;
-      user.resetPasswordExpires = tokenExpiry;
-      await user.save();
-  
-      // Construct the reset link
-      const resetLink = `http://localhost:4050/reset-password/${resetToken}`;
-  
-      // Send the reset link to the user's email
-      await sendPasswordResetOTP(email, resetLink,user.user_name);
-  
-      res.send('Password reset email sent.');
+        const { email } = req.body;
+        req.session.username = email;
+
+        const user = await User.findOne({ email });
+        if (!user) {
+            return res.status(404).send('User not found');
+        }
+
+
+        const resetToken = crypto.randomBytes(32).toString('hex');
+        const tokenExpiry = Date.now() + 3600000;
+
+
+        user.resetPasswordToken = resetToken;
+        user.resetPasswordExpires = tokenExpiry;
+        await user.save();
+
+        // Construct the reset link
+        const resetLink = `http://localhost:4050/reset-password/${resetToken}`;
+
+        // Send the reset link to the user's email
+        await sendPasswordResetOTP(email, resetLink, user.user_name);
+
+        res.send('Password reset email sent.');
     } catch (error) {
-      console.error(error);
-      res.status(500).send('Error sending reset email.');
+        console.error(error);
+        res.status(500).send('Error sending reset email.');
     }
-  };
- const resetpage= async (req, res) => {
+};
+const resetpage = async (req, res) => {
     const { token } = req.params;
-  
+
     // Find user by token and check if the token is still valid
     const user = await User.findOne({
-      resetPasswordToken: token,
-      resetPasswordExpires: { $gt: Date.now() } // Ensure the token is still valid
+        resetPasswordToken: token,
+        resetPasswordExpires: { $gt: Date.now() } // Ensure the token is still valid
     });
-  
+
     if (!user) {
-      return res.status(400).send('Password reset token is invalid or has expired.');
+        return res.status(400).send('Password reset token is invalid or has expired.');
     }
-  
+
     // Render a form where the user can enter a new password
     res.render('reset-password', { token });
-  }
-  const resetpasspost=async (req, res) => {
+}
+const resetpasspost = async (req, res) => {
     const { token } = req.params;
     const { password } = req.body;
-  
-    try {
-      // Find the user by token and check if token is valid
-      const user = await User.findOne({
-        resetPasswordToken: token,
-        resetPasswordExpires: { $gt: Date.now() } // Ensure token is still valid
-      });
-  
-      if (!user) {
-        return res.status(400).send('Password reset token is invalid or has expired.');
-      }
-  
-      const hashed_pass = await bcrypt.hash(password, 10)
 
-      user.password = hashed_pass; 
-      user.resetPasswordToken = undefined;
-      user.resetPasswordExpires = undefined;
-  
-      await user.save();
-  
-      res.redirect('/signin')
+    try {
+        // Find the user by token and check if token is valid
+        const user = await User.findOne({
+            resetPasswordToken: token,
+            resetPasswordExpires: { $gt: Date.now() } // Ensure token is still valid
+        });
+
+        if (!user) {
+            return res.status(400).send('Password reset token is invalid or has expired.');
+        }
+
+        const hashed_pass = await bcrypt.hash(password, 10)
+
+        user.password = hashed_pass;
+        user.resetPasswordToken = undefined;
+        user.resetPasswordExpires = undefined;
+
+        await user.save();
+
+        res.redirect('/signin')
     } catch (error) {
-      console.error(error);
-      res.status(500).send('Error resetting password.');
+        console.error(error);
+        res.status(500).send('Error resetting password.');
     }
-  }
-  const returning=async(req,res)=>{
-    const productid=req.params.proid
+}
+const returning = async (req, res) => {
+    const productid = req.params.proid
     console.log(productid);
-    const {returnReason,returnDetails,orderid}=req.body
+    const { returnReason, returnDetails, orderid } = req.body
     // console.log(bodydata);
-    const orders=await orderchema.findById(orderid)
+    const orders = await orderchema.findById(orderid)
     console.log(orders);
     const index = orders.products.findIndex(p => p.productid.equals(productid));
 
     console.log(index);
-    orders.products[index].return="returnreq"
-    orders.products[index].returnReason=returnReason
-    orders.products[index].returnExplanation=returnDetails
+    orders.products[index].return = "returnreq"
+    orders.products[index].returnReason = returnReason
+    orders.products[index].returnExplanation = returnDetails
 
     await orders.save()
 
-  }
-module.exports = { signup, otpvarify, resent, varifylogin, viewproduct, logout, blockuser, glogincb, cartitemspush, cartupdata, cartitemdelete, addaddress, placeorder, deleteaddress, cancelorder, editname, changepass,productstockdata,cancelitem,patchwishlist,removewish,coupenapplaying,razorpayvarify,sendreset,resetpage,resetpasspost,returning }     
+}
+module.exports = { signup, otpvarify, resent, varifylogin, viewproduct, logout, blockuser, glogincb, cartitemspush, cartupdata, cartitemdelete, addaddress, placeorder, deleteaddress, cancelorder, editname, changepass, productstockdata, cancelitem, patchwishlist, removewish, coupenapplaying, razorpayvarify, sendreset, resetpage, resetpasspost, returning }     

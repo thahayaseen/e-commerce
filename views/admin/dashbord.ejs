@@ -207,9 +207,9 @@
                                         <% order.products.forEach(product => { %>
                                             <div class="product-item mb-2">
                                                 <div><%=product.productid.name%></div>
-                                                <% if(product.productid.offer && product.productid.offer.percentage) { %>
+                                                <% if(product.productid.offer && product.productid.offer) { %>
                                                     <span class="product-offer">
-                                                        <%=product.productid.offer.percentage%>% OFF
+                                                        <%=product.productid.offer%>% OFF
                                                     </span>
                                                 <% } %>
                                             </div>

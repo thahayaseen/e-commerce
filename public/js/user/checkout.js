@@ -274,6 +274,9 @@ paymentForm.addEventListener('submit', async (e) => {
                 });
           
         }
+        else if(data.success=='cartempty'){
+            window.location.href='/'
+        }
         else {
             throw new Error('Order placement failed');
         }
