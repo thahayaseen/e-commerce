@@ -264,7 +264,17 @@ paymentForm.addEventListener('submit', async (e) => {
                 // For non-Razorpay payments (e.g., COD)
                 placeOrder();
             }
-        } else {
+        } 
+        else if(data.success=='nobalence'){
+                Swal.fire({
+                    text: "Insufficient balance!",
+                    icon: 'error',
+                    timer: 3000, 
+                    showConfirmButton: false,  
+                });
+          
+        }
+        else {
             throw new Error('Order placement failed');
         }
     } catch (error) {

@@ -436,7 +436,8 @@ const placeorder = async (req, res) => {
             const usercart = await cartschema.findOne({ userid }).populate('product.productid')
             const userdata = await User.findById(userid);
             const selectedaddress = await address_scema.findById(selectedAddress);
-    
+            console.log('payment is'+paymentmethods);
+            
             
             if (selectedaddress.userid.toString() !== userid.toString()) {
                 return res.status(400).json({ success: false, message: 'User ID and address do not match' });
@@ -501,6 +502,46 @@ const placeorder = async (req, res) => {
                 })
     
             }
+            }
+            
+            else if(paymentmethods=='wallet'){
+               if(ordersave){
+                
+                 
+                const wallet=await Wallet.findOne({userId:userid})
+                const toatal=Math.floor(usercart.totalprice*100)/100
+                console.log('inside wallet');
+                console.log(wallet.balance);
+                console.log(toatal);
+               
+                if(wallet.balance>=toatal){
+                    const dats= order.products
+                    // console.log(dats);
+                    
+                    wallet.transactions.push({
+                        type: 'debit',
+                        amount: toatal,
+                        date: new Date(),
+                        description: `purchesed `
+                    });
+                    order.status='Processing'
+                await order.save()
+                    usercart.product = [];
+                    await usercart.save();
+        
+               
+                    userdata.orders.push(ordersave._id);
+                    await userdata.save();
+        
+                    wallet.balance-=toatal
+                    await wallet.save()
+                    return res.status(200).json({ success: true, message: 'The order was successfully placed' });
+                    
+                }
+                else{
+                    return res.status(200).json({success:'nobalence',message:'balence is low'})
+                }
+               }
             }
             
                 if (ordersave) {
