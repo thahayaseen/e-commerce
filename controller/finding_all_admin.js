@@ -117,7 +117,12 @@ const adproducts=async (req,res,next)=>{
     .limit(limit)
     .sort({name:1})
 
-
+    const categ = await categories
+    .find()  
+    .skip(skip)
+    .limit(limit)
+    .sort({name:1})
+    req.session.categories = categ;
 
     req.session.aproducts = products;
     
