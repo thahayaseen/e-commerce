@@ -120,14 +120,9 @@ const adproducts=async (req,res,next)=>{
 
 
     req.session.aproducts = products;
-    const categ = await categories
-    .find()  
-    .skip(skip)
-    .limit(limit)
-    .sort({name:1})
+    
 
 
-    req.session.categories = categ;
     const totalProducts =await Product.countDocuments(); 
    console.log(totalProducts);
    
@@ -137,5 +132,21 @@ const adproducts=async (req,res,next)=>{
 
 next()
 }
+const categorydatas=async (req,res,next)=>{
+    const page = parseInt(req.query.page) || 1;
+    const limit = parseInt(req.query.limit) || 6
+    const skip = (page - 1) * limit;
+    const categ = await categories
+    .find()  
+    .skip(skip)
+    .limit(limit)
+    .sort({name:1})
+    const totalProducts =await categories.countDocuments(); 
+    req.session.categories = categ;
 
-module.exports = { alluser, allproducts,adproducts }
+    const totalPages = Math.ceil(totalProducts / limit);
+
+    req.session.pagination = { totalPages, currentPage: page, limit: limit };
+next()
+}
+module.exports = { alluser, allproducts,adproducts,categorydatas }
