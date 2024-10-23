@@ -28,12 +28,19 @@ const productSchema = new mongoose.Schema({
     offer:{
         type:Number
     },
+    offerdealprice:{
+        type:Number,
+        default:0
+    },
     category_id: {
         type: mongoose.Schema.Types.ObjectId, 
         ref: 'Category', 
         // required: true 
     }
 },{timestamps:true});
+
+
+
 
 
 

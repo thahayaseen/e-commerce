@@ -6,8 +6,9 @@ const fs = require('fs');
 const categories = require('../../model/categories');
 const orders = require('../../model/orders')
 const coupons = require('../../model/coupon')
+const offerschema = require('../../model/offer')
 const excel = require('exceljs')
-const Swal=require('sweetalert2')
+const Swal = require('sweetalert2')
 // admin authentication 
 const auth = async (req, res, next) => {
     try {
@@ -219,14 +220,14 @@ const savecat = async (req, res) => {
     try {
         const { newCategoryName, newProductDescription } = req.body
 
-        const cnames=newCategoryName.toUpperCase()
-        const uniqcategory=await categories.findOne({name:cnames})
-        if(uniqcategory){
+        const cnames = newCategoryName.toUpperCase()
+        const uniqcategory = await categories.findOne({ name: cnames })
+        if (uniqcategory) {
             console.log(uniqcategory);
-          return res.status(200).json({success:false,message:'This coupon in aldredy exsist'})
+            return res.status(200).json({ success: false, message: 'This coupon in aldredy exsist' })
         }
-            
-        
+
+
         const newcategories = new categories({
             name: newCategoryName,
             description: newProductDescription
@@ -245,18 +246,18 @@ const useredit = async (req, res, next) => {
 
     const { CategoryName, ProductDescription } = req.body
 
-    const cnames=CategoryName.toUpperCase()
+    const cnames = CategoryName.toUpperCase()
 
-        const uniqcategory=await categories.findOne({name:cnames})
+    const uniqcategory = await categories.findOne({ name: cnames })
 
-        if(uniqcategory){
+    if (uniqcategory) {
 
-            console.log(uniqcategory);
+        console.log(uniqcategory);
 
-          return res.status(200).json({success:false,message:'This coupon in aldredy exsist'})
-        }
+        return res.status(200).json({ success: false, message: 'This coupon in aldredy exsist' })
+    }
     const catid = req.params.id
-  
+
     const category = await categories.findById(catid)
 
     category.name = CategoryName
@@ -313,14 +314,14 @@ const getiingorderdetials = async (req, res) => {
 const addcoupen = async (req, res) => {
     const bdata = req.body
     console.log(bdata);
-    const unique=await coupons.findOne({code:bdata.code})
+    const unique = await coupons.findOne({ code: bdata.code })
 
-    if(unique){
-       
-          
-        return res.status(200).json({success:false,message:'This coupon in aldredy exsist'})
+    if (unique) {
+
+
+        return res.status(200).json({ success: false, message: 'This coupon in aldredy exsist' })
     }
-    
+
     const add = new coupons(bdata)
     await add.save()
     res.status(201).json({ success: true })
@@ -328,11 +329,11 @@ const addcoupen = async (req, res) => {
 const coupenedit = async (req, res) => {
     const id = req.params.id
     const cdata = await coupons.findById(id)
-    const bdata=req.body
-    const unique=await coupons.findOne({code:bdata.code})
+    const bdata = req.body
+    const unique = await coupons.findOne({ code: bdata.code })
 
-    if(unique){
-        return res.status(200).json({success:false,message:'This coupon in aldredy exsist'})
+    if (unique) {
+        return res.status(200).json({ success: false, message: 'This coupon in aldredy exsist' })
     }
     if (cdata) {
         Object.assign(cdata, req.body)
@@ -546,22 +547,26 @@ const exportpdf = async (req, res) => {
     // const date = new Date()
     const startDate = req.query.startDate;
     const endDate = req.query.endDate;
-    const count=req.query.range
+    const count = req.query.range
     let matchQuery
     console.log(endDate);
     // console.log(range);
 
-    
-    
+
+
     if (startDate && endDate) {
-        matchQuery ={ createdAt: {
-            $gte: new Date(startDate),$lte: new Date(endDate)
-        }};
+        matchQuery = {
+            createdAt: {
+                $gte: new Date(startDate), $lte: new Date(endDate)
+            }
+        };
     } else {
 
-        matchQuery={createdAt : {
-            $gte: new Date(new Date().setDate(new Date().getDate() - parseInt(count)))
-        }};
+        matchQuery = {
+            createdAt: {
+                $gte: new Date(new Date().setDate(new Date().getDate() - parseInt(count)))
+            }
+        };
     }
     // console.log(matchQuery)
 
@@ -614,7 +619,7 @@ const exportpdf = async (req, res) => {
             },
             { $project: { productDetails: 0 } },
             { $match: matchQuery },
-            {$sort:{createdAt:-1}}
+            { $sort: { createdAt: -1 } }
         ])
 
         // console.log(data);
@@ -771,22 +776,26 @@ const exportpdf = async (req, res) => {
 const exportexcel = async (req, res) => {
     const startDate = req.query.startDate;
     const endDate = req.query.endDate;
-    const count=req.query.range
+    const count = req.query.range
     let matchQuery
     console.log(endDate);
     // console.log(range);
 
-    
-    
+
+
     if (startDate && endDate) {
-        matchQuery ={ createdAt: {
-            $gte: new Date(startDate),$lte: new Date(endDate)
-        }};
+        matchQuery = {
+            createdAt: {
+                $gte: new Date(startDate), $lte: new Date(endDate)
+            }
+        };
     } else {
 
-        matchQuery={createdAt : {
-            $gte: new Date(new Date().setDate(new Date().getDate() - parseInt(count)))
-        }};
+        matchQuery = {
+            createdAt: {
+                $gte: new Date(new Date().setDate(new Date().getDate() - parseInt(count)))
+            }
+        };
     }
     try {
         const data = await orders.aggregate([
@@ -837,7 +846,7 @@ const exportexcel = async (req, res) => {
             },
             { $project: { productDetails: 0 } },
             { $match: matchQuery },
-            {$sort:{createdAt:-1}}
+            { $sort: { createdAt: -1 } }
         ]);
 
         // Create a new workbook
@@ -987,31 +996,113 @@ const exportexcel = async (req, res) => {
 };
 
 
-const returnadmin=async(req,res)=>{
-    const orderid=req.params.orderid
-    const product=req.params.product
-    const action=req.params.action
-    const order=await orders.findById(orderid)
-    const productindex=order.products.findIndex(a=>a.productid==product)
+const returnadmin = async (req, res) => {
+    const orderid = req.params.orderid
+    const product = req.params.product
+    const action = req.params.action
+    const order = await orders.findById(orderid)
+    const productindex = order.products.findIndex(a => a.productid == product)
     console.log(productindex);
-    
+
     console.log(JSON.stringify(order));
     console.log(orderid);
     console.log(action);
     console.log(product);
-    if(action==='accept'){
-        order.products[productindex].return='returning'
+    if (action === 'accept') {
+        order.products[productindex].return = 'returning'
     }
-    else if(action==='reject'){
-        order.products[productindex].return='noreturn'
+    else if (action === 'reject') {
+        order.products[productindex].return = 'noreturn'
     }
     await order.save()
     // order.products.findIndex(a=>)
 
 }
+const offers = async (req, res) => {
+    // console.log(req.body);
+    const offdata = await offerschema.find({ name: req.body.name })
+    // console.log(offdata);
 
 
+    let data = req.body
+    if (data.offerid) {
+        const offerdatas = await offerschema.findById(data.offerid)
+        if (offerdatas) {
+            data.selectedItems = JSON.parse(data.selectedItems)
+            // console.log(data);
+
+            Object.assign(offerdatas, data)
+            await offerdatas.save()
+            offerapplayinproduct( data.selectedItems,data.applicationType,offerdatas)
+            return res.status(200).json({ success: true, message: 'The Offer Updated successfully' })
+        }
 
 
+    }
+    if (offdata.length > 0) {
+        return res.status(200).json({ success: false, message: 'offer aldredy exsist' })
+    }
+    // data.name
+    // console.log(data.name);
 
-module.exports = { auth, accses, list, padd, imageadding, submitedit, savecat, useredit, categoryunlist, updateorder, getiingorderdetials, addcoupen, coupenedit, exportpdf, deletecupen, exportexcel,returnadmin }
+
+    data.selectedItems = JSON.parse(data.selectedItems)
+
+    // console.log(data);
+
+
+    const offerdata = await new offerschema(data)
+    await offerdata.save()
+    offerapplayinproduct( data.selectedItems,data.applicationType,offerdata)
+
+    return res.status(200).json({ success: true, message: 'The Offer Created Successfully' })
+
+
+}
+const offerapplayinproduct=async(selscted,type,offer)=>{
+    let finddata
+    if(selscted[0]=='all'){
+        console.log('okke');
+        finddata={}
+        
+    }
+    else {
+        finddata={_id:{$in:selscted}}
+    }
+    if(type=='product'||type=='all'){
+        const pdatas=await Product.find(finddata) 
+        console.log('products id '+pdatas.length);
+
+    }
+    if(type=='category'){
+        const pdatas=await Product.find({category_id:{$in:selscted}}) 
+        console.log('products id '+pdatas);
+        if(offer.discountType=='fixed'){
+            pdatas.forEach(async(data)=>{
+                data.offerdealprice=data.price-offer.discountValue
+                data.save()
+            })
+        }
+            else if(offer.discountType=='percentage'){
+                pdatas.forEach(async(data)=>{
+                    data.offerdealprice=data.price-(data.price*offer.discountValue)/100
+                    data.save()
+                })
+            }
+            // await pdatas.save()
+
+    }
+    
+
+}
+
+const deleteoffers = async (req, res) => {
+    const offid = req.params.id
+    console.log(offid);
+    await offerschema.deleteOne({ _id: offid })
+    res.status(200).json({ success: true })
+
+}
+
+
+module.exports = { auth, accses, list, padd, imageadding, submitedit, savecat, useredit, categoryunlist, updateorder, getiingorderdetials, addcoupen, coupenedit, exportpdf, deletecupen, exportexcel, returnadmin, offers, deleteoffers }

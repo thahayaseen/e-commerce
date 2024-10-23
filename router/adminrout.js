@@ -1,7 +1,7 @@
 const express = require('express')
 const router = express.Router()
-const { auth, accses, list, padd, savecat, imageadding, submitedit, useredit, categoryunlist, updateorder, getiingorderdetials,addcoupen,coupenedit,deletecupen,exportpdf,exportexcel,returnadmin, } = require('../controller/admin/admin')
-const { adminlogin, admin, user, product, catagory, orders,coupenrender,offerpage } = require('../middleware/render')
+const { auth, accses, list, padd, savecat, imageadding, submitedit, useredit, categoryunlist, updateorder, getiingorderdetials,addcoupen,coupenedit,deletecupen,exportpdf,exportexcel,returnadmin,offers,deleteoffers } = require('../controller/admin/admin')
+const { adminlogin, admin, user, product, catagory, orders,coupenrender,offerpage,datatoedit } = require('../middleware/render')
 const { alluser, adproducts,categorydatas } = require('../controller/finding_all_admin')
 const nocach = require('../middleware/nocach')
 const upload = require('../middleware/uplodimage')
@@ -52,17 +52,18 @@ router.delete('/coupon/:id',deletecupen)
 // add category 
 router.post('/category/add', savecat)
 router.patch('/category/edit/:id', useredit)
-router.patch('/category/unlist/:id', categoryunlist)
+router.patch('/category/unlist/:id', datatoedit)
 
 router.get('/offer',offerpage)
+router.get('/offers/:id',datatoedit )
+router.post('/offers/delete/:id',deleteoffers )
+router.post('/offers/save',offers)
 // orders section 
 router.get('/orders', orders)
 router.patch('/orders', updateorder)
 router.get('/orderlist/:id', getiingorderdetials)
 
 
-// // salereport 
-// router.get('/salerepor')
 
 
 module.exports = router

@@ -10,6 +10,6 @@ const wishlist=mongoose.Schema({
         ref:'Product'
         
     }
-})
+},{timestamps:true})
 
 module.exports=mongoose.model('wishlist',wishlist)

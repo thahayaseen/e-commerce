@@ -34,7 +34,7 @@ const address=mongoose.Schema({
     addrestype:{
         type:String
     }
-})
+},{timestamps:true})
 
 
 module.exports = mongoose.model('Address',address)

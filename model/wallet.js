@@ -32,7 +32,7 @@ const walletSchema = new mongoose.Schema({
             default: ''
         }
     }]
-});
+},{timestamps:true});
 
 
 const Wallet = mongoose.model('Wallet', walletSchema);

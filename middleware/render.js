@@ -5,6 +5,8 @@ const wishlistschema = require('../model/wishlist')
 const coupon = require('../model/coupon')
 const product_schema = require('../model/product_schema')
 const wallet=require('../model/wallet')
+const categoriesschema=require('../model/categories')
+const offer=require('../model/offer')
 //register-------------------------------------------------------
 const register = (req, res) => {
     const registerMessage = req.session.register || '';
@@ -329,170 +331,28 @@ const walletrender = async (req, res) => {
     }
 };
 
-const offerpage=(req,res)=>{
+const offerpage=async (req,res)=>{
 
-    product_schema
-    const products = [
-        {
-          _id: "prod001",
-          name: "iPhone 13",
-          category: "cat001",
-          price: 79999,
-          stock: 50,
-          description: "Latest iPhone model",
-          images: ["iphone13.jpg"]
-        },
-        {
-          _id: "prod002",
-          name: "Samsung Galaxy S21",
-          category: "cat001",
-          price: 69999,
-          stock: 45,
-          description: "Samsung flagship phone",
-          images: ["s21.jpg"]
-        },
-        {
-          _id: "prod003",
-          name: "Nike Air Max",
-          category: "cat002",
-          price: 9999,
-          stock: 100,
-          description: "Comfortable running shoes",
-          images: ["airmax.jpg"]
-        },
-        {
-          _id: "prod004",
-          name: "Levi's 501 Jeans",
-          category: "cat003",
-          price: 4999,
-          stock: 200,
-          description: "Classic fit jeans",
-          images: ["levis501.jpg"]
-        },
-        {
-          _id: "prod005",
-          name: "MacBook Pro",
-          category: "cat004",
-          price: 129999,
-          stock: 25,
-          description: "Powerful laptop for professionals",
-          images: ["macbook.jpg"]
-        }
-      ];
+    const products=await product_schema.find()
+  const categories=await categoriesschema.find()
+ const offers=await offer.find().populate('selectedItems.categories')
+
       
-      // Sample Categories
-      const categories = [
-        {
-          _id: "cat001",
-          name: "Smartphones",
-          description: "Mobile phones and accessories",
-          isActive: true
-        },
-        {
-          _id: "cat002",
-          name: "Footwear",
-          description: "Shoes, sandals, and more",
-          isActive: true
-        },
-        {
-          _id: "cat003",
-          name: "Clothing",
-          description: "Men's and women's apparel",
-          isActive: true
-        },
-        {
-          _id: "cat004",
-          name: "Laptops",
-          description: "Notebooks and accessories",
-          isActive: true
-        },
-        {
-          _id: "cat005",
-          name: "Electronics",
-          description: "General electronics",
-          isActive: true
-        }
-      ];
-      
-      // Sample Offers
-      const offers = [
-        {
-          _id: "off001",
-          name: "New Year Special",
-          description: "Start the year with amazing discounts",
-          discountType: "percentage",
-          discountValue: 20,
-          applicationType: "category",
-          categories: ["cat001", "cat004"],
-          validFrom: "2024-01-01",
-          validUntil: "2024-01-31",
-          minPurchaseAmount: 5000,
-          isActive: true,
-          createdAt: "2024-01-01T00:00:00Z",
-          updatedAt: "2024-01-01T00:00:00Z"
-        },
-        {
-          _id: "off002",
-          name: "Summer Sale",
-          description: "Hot deals for summer",
-          discountType: "percentage",
-          discountValue: 15,
-          applicationType: "all",
-          validFrom: "2024-03-01",
-          validUntil: "2024-03-31",
-          minPurchaseAmount: 0,
-          isActive: true,
-          createdAt: "2024-03-01T00:00:00Z",
-          updatedAt: "2024-03-01T00:00:00Z"
-        },
-        {
-          _id: "off003",
-          name: "Smartphone Bonanza",
-          description: "Exclusive discounts on smartphones",
-          discountType: "fixed",
-          discountValue: 5000,
-          applicationType: "product",
-          products: ["prod001", "prod002"],
-          validFrom: "2024-02-01",
-          validUntil: "2024-02-28",
-          minPurchaseAmount: 50000,
-          isActive: true,
-          createdAt: "2024-02-01T00:00:00Z",
-          updatedAt: "2024-02-01T00:00:00Z"
-        },
-        {
-          _id: "off004",
-          name: "Fashion Week",
-          description: "Trendy deals on clothing and footwear",
-          discountType: "percentage",
-          discountValue: 30,
-          applicationType: "category",
-          categories: ["cat002", "cat003"],
-          validFrom: "2024-04-01",
-          validUntil: "2024-04-15",
-          minPurchaseAmount: 2500,
-          isActive: false,
-          createdAt: "2024-04-01T00:00:00Z",
-          updatedAt: "2024-04-01T00:00:00Z"
-        },
-        {
-          _id: "off005",
-          name: "Flash Sale",
-          description: "24-hour mega discount",
-          discountType: "percentage",
-          discountValue: 25,
-          applicationType: "all",
-          validFrom: "2024-05-01",
-          validUntil: "2024-05-02",
-          minPurchaseAmount: 1000,
-          isActive: false,
-          createdAt: "2024-05-01T00:00:00Z",
-          updatedAt: "2024-05-01T00:00:00Z"
-        }
-      ];
+     
     res.render('admin/offers',{offers,categories,products})
+}
+const datatoedit=async(req,res)=>{
+    try {
+        const offerid=req.params.id
+    const offerdatas=await offer.findById(offerid)
+    console.log(offerdatas);
+    
+    return res.status(200).json(offerdatas)
+    } catch (error) {
+        console.log('error in fetchinf offer '+error);
+        
+    }
 }
 
 
-
-module.exports = { register, login, adminlogin, otp, admin, user, product, catagory, userhome, productlist, myaccount, userdash, useraddress, oredrs, cartrender, checkout, orders, wishlist, coupenrender,resetpass,walletrender,offerpage }
+module.exports = { register, login, adminlogin, otp, admin, user, product, catagory, userhome, productlist, myaccount, userdash, useraddress, oredrs, cartrender, checkout, orders, wishlist, coupenrender,resetpass,walletrender,offerpage,datatoedit }

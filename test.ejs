@@ -9,10 +9,16 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
   <!-- Plugins CSS -->
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@mdi/font/css/materialdesignicons.min.css">
+  <link rel="stylesheet" href="/assets/vendors/css/vendor.bundle.base.css">
+
+  <link rel="stylesheet" href="/assets/vendors/jvectormap/jquery-jvectormap.css">
+  <link rel="stylesheet" href="/assets/vendors/flag-icon-css/css/flag-icon.min.css">
+  <link rel="stylesheet" href="/assets/vendors/owl-carousel-2/owl.carousel.min.css">
+  <link rel="stylesheet" href="/assets/vendors/owl-carousel-2/owl.theme.default.min.css">
 
   <!-- croper js  -->
 
-
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.css">
 
 
 
@@ -168,7 +174,7 @@
                         <tr>
                           <td><%= index + 1 %></td>
                           <td><%= offer.name %></td>
-                          <td><%= offer.discountType %></td>
+                          <td><%= offer.type %></td>
                           <td>
                             <%= offer.discountType === 'percentage' ? offer.discountValue + '%' : '₹' + offer.discountValue %>
                           </td>
@@ -178,8 +184,8 @@
                           </td>
                           
                           <td>
-                            <div class="badge <%= offer.isActive ? 'badge-success' : 'badge-danger' %>">
-                              <%= offer.isActive   ? 'Active' : 'Inactive' %>
+                            <div class="badge <%= offer.isActive=='on' ? 'badge-success' : 'badge-danger' %>">
+                              <%= offer.isActive=='on' ? 'Active' : 'Inactive' %>
                             </div>
                           </td>
                           <td>
@@ -205,7 +211,7 @@
   </div>
 
   <!-- Add/Edit Offer Modal -->
-  <div class="modal fade" id="addOfferModal"  tabindex="-1">
+  <div class="modal fade" id="addOfferModal" tabindex="-1">
     <div class="modal-dialog modal-lg">
       <div class="modal-content">
         <div class="modal-header">
@@ -238,10 +244,10 @@
             <div class="form-group">
               <label>Apply To</label>
               <select class="form-control" name="applicationType" id="applicationType" required>
-                <option value="all">Select One</option>
-                <option value="all">All Products</option>
+                <option value="">Select Type</option>
                 <option value="product">Product</option>
                 <option value="category">Product Categories</option>
+                <option value="all">All Products</option>
               </select>
             </div>
             <input type="hidden" name="offerid"">
@@ -303,8 +309,7 @@
 
             <div class="form-group">
               <div class="custom-control custom-switch">
-                <input type="checkbox" class="custom-control-input" id="isActive" name="isActive" value="true" checked>
-                <input type="hidden" class="custom-control-input"  name="isActive" value="false" >
+                <input type="checkbox" class="custom-control-input" id="isActive" name="isActive" checked>
                 <label class="custom-control-label" for="isActive">Active</label>
               </div>
             </div>
@@ -377,7 +382,7 @@
      
 
       
-      if(discountValue.trim()==''){
+      if(discountValue.trim()==''||value>=100){
         isvalid=false
         // console.log(discountValue);
         errors='\n Please check the offer discountValue'
@@ -395,7 +400,7 @@
         isvalid=false
         errors='\n Please enter the offer validUntil'
       }
-      if(!selectedItems||selectedItems.length==0){
+      if(selectedItems.length==0){
         isvalid=false
         errors='\n Please enter the offer select item'
       }
@@ -407,13 +412,7 @@
     document.getElementById('saveOffer').addEventListener('click', async function(e) {
       e.preventDefault();
       const form = document.getElementById('offerForm');
-      const active=document.getElementById('isActive')
-      if(active.checked){
-        form.querySelector('input[name=isActive][type=hidden]').disabled=true 
-      }
       const formData = new FormData(form);
-      console.log(formData);
-      
       
       const applicationType = document.getElementById('applicationType').value;
       if (applicationType === 'category') {
@@ -425,19 +424,11 @@
         .map(input => input.value);
         formData.set('selectedItems', JSON.stringify(selectedProducts));
       }
-      else if(applicationType=='all'){
-        selectedProducts=['all']
-        formData.set('selectedItems', JSON.stringify(selectedProducts));
-      }
+      
       let datas = {};
       for (let [key, value] of formData) {
         datas[key] = value;
       }
-      console.log(datas);
-
-    //  console.log(datas);
-    //  console.log(applicationType);
-     
       if(!validation(datas)){
        return toastr.error(errors)
       }
@@ -457,7 +448,7 @@
         if (data.success) {
           toastr.success('Offer saved successfully');
           setTimeout(() => {
-            window.location.reload();
+            // window.location.reload();
           }, 1000);
         } else if(!data.success) {
           toastr.error(data.message || 'Failed to save offer');
@@ -506,7 +497,6 @@
           }
           
           const modal = new bootstrap.Modal(document.getElementById('addOfferModal'));
-          // document.getElementById('offerForm').reset();
           modal.show();
         } catch (error) {
           toastr.error('Failed to fetch offer details');
