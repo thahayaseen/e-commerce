@@ -190,13 +190,7 @@ const useraddress = async (req, res) => {
 
         const userid = req.session.ulogin
         const addres = await user_scema.findById(userid).populate('address')
-
-   
-
-
-
-
-        userid? res.render('userside/user dashbord/address', { address: addres.address }):res.redirect('/signin')
+         userid? res.render('userside/user dashbord/address', { address: addres.address }):res.redirect('/signin')
 
     } catch (error) {
         console.log(error);
@@ -229,8 +223,7 @@ const cartrender = async (req, res) => {
         let cart = await cartschema.findOne({ userid: ulogin })
         if (!cart) {
 
-            cart = new cartschema({ userid: ulogin, product: [] });
-            await cart.save()
+           res.status(404).json({success:false,message:'user not fount'})
         }
         const ucart = await cartschema.findOne({ userid: ulogin }).populate('product.productid').exec()
         res.render('userside/cart', { cart: ucart })

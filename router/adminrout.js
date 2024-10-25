@@ -14,7 +14,7 @@ router.post('/', nocach, auth)
 
 
 // dashbord 
-router.get('/dashbord', nocach, admin)
+router.get('/dashboard', nocach, admin)
 router.get('/exporttopdf',exportpdf)
 router.get('/exporttoexcel',exportexcel)
 
@@ -54,7 +54,7 @@ router.post('/category/add', savecat)
 router.patch('/category/edit/:id', useredit)
 router.patch('/category/unlist/:id', datatoedit)
 
-router.get('/offer',offerpage)
+router.get('/offers',offerpage)
 router.get('/offers/:id',datatoedit )
 router.post('/offers/delete/:id',deleteoffers )
 router.post('/offers/save',offers)

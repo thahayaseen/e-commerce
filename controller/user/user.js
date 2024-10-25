@@ -31,8 +31,8 @@ const signup = async (req, res, next) => {
         }
         else {
             function generateUsername(name) {
-                const baseUsername = name.toLowerCase().replace(/\s+/g, ''); // Remove spaces and make lowercase
-                const randomNumber = Math.floor(Math.random() * 1000); // Add random number to make it more unique
+                const baseUsername = name.toLowerCase().replace(/\s+/g, ''); 
+                const randomNumber = Math.floor(Math.random() * 1000); 
                 return `${baseUsername}${randomNumber}`;
             }
             const saltRound = 10;
@@ -47,7 +47,8 @@ const signup = async (req, res, next) => {
             })
             const a = await users.save()
             if (a) {
-
+                cart = new cartschema({ userid: a._id, product: [] });
+                await cart.save()
                 getotp(email, otp, userid)
                 req.session.username = name
                 req.session.blocked = a.blocked
@@ -318,8 +319,8 @@ const cartitemspush = async (req, res) => {
                 let cart = await cartschema.findOne({ userid: userid });
 
                 if (!cart) {
+                    res.status(404).json({success:false,message:'user not fount'})
 
-                    cart = new cartschema({ userid: userid, product: [] });
                 }
                 const existingProductIndex = cart.product.findIndex(item => item.productid.toString() === productId);
 

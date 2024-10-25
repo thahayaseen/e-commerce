@@ -35,8 +35,8 @@
                                                     <i class="mdi mdi-calendar-range"></i> Report
                                                 </button>
                                                 <div class="dropdown-menu">
-                                                    <a class="dropdown-item listrange" href="/admin/dashbord?range=7">Last 7 Days</a>
-                                                    <a class="dropdown-item listrange" href="/admin/dashbord?range=30">Last 30 Days</a>
+                                                    <a class="dropdown-item listrange" href="/admin/dashboard?range=7">Last 7 Days</a>
+                                                    <a class="dropdown-item listrange" href="/admin/dashboard?range=30">Last 30 Days</a>
                                                 
                                                     <!-- Custom date range input -->
                                                     <label class="dropdown-item">
@@ -266,7 +266,7 @@
             if (startDate && endDate) {
                 const range=  url.get('range')
                 
-                window.location.href = `/admin/dashbord?range=${range}&startDate=${startDate}&endDate=${endDate}`;
+                window.location.href = `/admin/dashboard?range=${range}&startDate=${startDate}&endDate=${endDate}`;
             }
         }
     </script>

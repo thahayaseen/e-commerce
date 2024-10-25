@@ -33,7 +33,7 @@ const auth = async (req, res, next) => {
         }
         if (exsist.isadmin === true) {
             req.session.ladmin = true
-            return res.redirect('/admin/dashbord')
+            return res.redirect('/admin/dashboard')
 
         }
 

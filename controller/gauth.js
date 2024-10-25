@@ -1,5 +1,6 @@
     const passport = require('passport');
     const GoogleStrategy = require('passport-google-oauth20').Strategy;
+    const cartschema=require('../model/cart')
     const User = require('../model/user_scema'); 
   
 
@@ -41,6 +42,8 @@
           
           const x=await user.save();
           if(x){
+            cart = new cartschema({ userid: x._id, product: [] });
+           await cart.save()
           console.log(x);
           }
           else{
