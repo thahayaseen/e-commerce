@@ -658,7 +658,9 @@ const exportpdf = async (req, res) => {
             return products.map((p) => {
                 const price = p.price
                 const name = p.name.padEnd(10, ' ');
-                return `${name} (${price}-${(p.price * p.offer) / 100})Rs × ${p.quantity.toString().padStart(3, ' ')}`;
+                discountprice=0
+              
+                return `${name} (${price}-${Math.floor(p.discount)})Rs × ${p.quantity.toString().padStart(3, ' ')}`;
             }).join('\n');
         };
         const formatCoupon = (coupon) => {
@@ -1061,16 +1063,29 @@ const offers = async (req, res) => {
 }
 const offerapplayinproduct=async(selscted,type,offer)=>{
     let finddata
-    if(selscted[0]=='all'){
+    if(type=='all'){
         console.log('okke');
         finddata={}
         
     }
-    else {
-        finddata={_id:{$in:selscted}}
-    }
-    if(type=='product'||type=='all'){
-        const pdatas=await Product.find(finddata) 
+  
+    if(type=='product'){
+        const pdatas=await Product.find({_id:{$in:selscted}}) 
+         if(offer.discountType=='fixed'){
+            pdatas.forEach(async(data)=>{
+                data.offerdealprice=data.price-offer.discountValue
+                data.dealoffertype='fixed'
+                data.save()
+            })
+        }
+            else if(offer.discountType=='percentage'){
+                pdatas.forEach(async(data)=>{
+                    data.offerdealprice=data.price-(data.price*offer.discountValue)/100
+                data.dealoffertype='percentage'
+
+                    data.save()
+                })
+            }
         console.log('products id '+pdatas.length);
 
     }
@@ -1080,16 +1095,19 @@ const offerapplayinproduct=async(selscted,type,offer)=>{
         if(offer.discountType=='fixed'){
             pdatas.forEach(async(data)=>{
                 data.offerdealprice=data.price-offer.discountValue
+                data.dealoffertype='fixed'
                 data.save()
             })
         }
             else if(offer.discountType=='percentage'){
                 pdatas.forEach(async(data)=>{
                     data.offerdealprice=data.price-(data.price*offer.discountValue)/100
+                data.dealoffertype='percentage'
+
                     data.save()
                 })
             }
-            // await pdatas.save()
+       
 
     }
     
@@ -1097,12 +1115,52 @@ const offerapplayinproduct=async(selscted,type,offer)=>{
 }
 
 const deleteoffers = async (req, res) => {
-    const offid = req.params.id
-    console.log(offid);
-    await offerschema.deleteOne({ _id: offid })
-    res.status(200).json({ success: true })
+    try {
+        const offid = req.params.id;
+        console.log(`Deleting offer ID: ${offid}`);
+        
+        const offerdata=await offerschema.findById(offid)
+        let product
+        console.log(offerdata);
+        console.log(offerdata.selectedItems);
+        
+      if(offerdata.applicationType=='product'){
+            product={_id:{$in:offerdata.selectedItems}}
+        }
+        else if(offerdata.applicationType='category'){
+            product={category_id:{$in:offerdata.selectedItems}}
 
-}
+        }
+        else{
+          
+                console.log('yess');
+                
+                product= {}
+            
+        }
+        console.log(product);
+        
+        
+        const products = await Product.find(product);
+        console.log(products);
+        
+        products.forEach(async (product) => {
+            product.offerdealprice = undefined; 
+            product.dealoffertype = undefined;  
+            product.save(); 
+        });
+        
+        await offerschema.deleteOne({ _id: offid });
+
+
+
+        res.status(200).json({ success: true, message: 'Offer deleted and products updated' });
+    } catch (error) {
+        console.error('Error deleting offer:', error);
+        res.status(500).json({ success: false, message: 'Failed to delete offer' });
+    }
+};
+
 
 
 module.exports = { auth, accses, list, padd, imageadding, submitedit, savecat, useredit, categoryunlist, updateorder, getiingorderdetials, addcoupen, coupenedit, exportpdf, deletecupen, exportexcel, returnadmin, offers, deleteoffers }

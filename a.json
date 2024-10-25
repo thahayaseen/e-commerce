@@ -1,142 +1,28 @@
-[
-    {
-        "selectedItems": {
-            "categories": [
-                {
-                    "_id": "66fa26a5e8f8b40366d3d0e9",
-                    "name": "MONITOR",
-                    "description": "A monitor is an electronic display device that visually outputs information from a computer or other devices. It typically features a screen (LCD, LED, or OLED) that displays images, videos, text, and other graphical content. Monitors come in various sizes and resolutions, often equipped with adjustable settings for brightness, contrast, and color. They are commonly used for work, entertainment, gaming, and more. Key characteristics include screen size, resolution, refresh rate, and connectivity options (HDMI, DisplayPort, etc.).",
-                    "createdAt": "2024-09-30T04:18:45.110Z",
-                    "updatedAt": "2024-10-15T09:04:25.000Z",
-                    "__v": 0,
-                    "list": true
-                },
-                {
-                    "_id": "66fa4cc1da7aa084c07f546d",
-                    "name": "CPU",
-                    "description": "CPUs (Central Processing Units) are the powerhouse of any computing system, responsible for executing instructions and processing data. Available in various architectures and performance levels, CPUs cater to a wide range of applications—from everyday tasks to high-end gaming and professional workloads. Whether you're building a budget PC or a high-performance workstation, selecting the right CPU is crucial for optimal performance and efficiency.",
-                    "createdAt": "2024-09-30T07:01:21.441Z",
-                    "updatedAt": "2024-10-11T13:58:49.116Z",
-                    "__v": 0,
-                    "list": true
-                },
-                {
-                    "_id": "66fa515cda7aa084c07f54d7",
-                    "name": "GPU",
-                    "description": "\nCould you clarify what you're looking for in a GPU description? Are you interested in specifications, comparisons between different models, or perhaps recommendations for a specific use case (like gaming, rendering, etc.)? Let me know how I can help!",
-                    "createdAt": "2024-09-30T07:21:00.201Z",
-                    "updatedAt": "2024-10-11T13:58:46.007Z",
-                    "__v": 0,
-                    "list": true
-                },
-                {
-                    "_id": "66fd0bcfdc87a29804163f91",
-                    "name": "PC CABINET",
-                    "description": "A PC cabinet, or computer case, is an enclosure that houses key components like the motherboard, CPU, RAM, storage, and power supply. It protects these parts from dust, damage, and electromagnetic interference, while also helping with airflow and cooling. Available in various sizes like full tower, mid-tower, and mini-tower, it accommodates different motherboard types and expansion options. Modern PC cabinets often feature aesthetic elements like tempered glass panels, RGB lighting, and organized cable management. Their design also focuses on ease of installation, ventilation, and customization, making them crucial for both functionality and style in any build.\n",
-                    "createdAt": "2024-10-02T09:01:03.675Z",
-                    "updatedAt": "2024-10-16T06:29:53.153Z",
-                    "__v": 0,
-                    "list": true
-                },
-                {
-                    "_id": "6715de1605bbf3ed4e685701",
-                    "name": "gpu",
-                    "description": "eraewtr",
-                    "createdAt": "2024-10-21T04:52:38.681Z",
-                    "updatedAt": "2024-10-21T04:52:38.681Z",
-                    "__v": 0
-                },
-                {
-                    "_id": "67161d5afac79b45f98dc75e",
-                    "name": "Monitor",
-                    "description": "dsfdf",
-                    "createdAt": "2024-10-21T09:22:34.257Z",
-                    "updatedAt": "2024-10-21T09:22:34.257Z",
-                    "__v": 0
-                }
-            ],
-            "products": []
-        },
-        "_id": "671791bac7e8eb970830e49c",
-        "name": "545sg",
-        "applicationType": "category",
-        "discountType": "percentage",
-        "discountValue": 543,
-        "isActive": "off",
-        "validFrom": "0005-05-05T00:00:00.000Z",
-        "validUntil": "0005-05-05T00:00:00.000Z",
-        "createdAt": "2024-10-22T11:51:22.844Z",
-        "updatedAt": "2024-10-22T11:51:22.844Z",
-        "__v": 0
+{
+    offerdealprice: 0,
+    _id: new ObjectId('66fd0b19dc87a29804163f65'),   
+    name: 'GIGABYTE Geforce',
+    price: 2799,
+    stock: 50,
+    unlist: false,
+    images: [ '1727859481254.jpg', '1727859541764.jpg', '1727859552740.jpg'
+    ],
+    description: 'Powered by NVIDIA DLSS 3, ultra-efficient Ada Lovelace architechture, and full ray tracing\r\n' +
+      '4th Generation Tensor Cores: Up to 4x performance with DLSS 3\r\n' +
+      '3rd Generation RT Cores: Up to 2x ray tracing performance\r\n' +
+      'Integrated with 8GB GDDR6 128-bit memory interface',
+    category_id: {
+      _id: new ObjectId('66fa515cda7aa084c07f54d7'), 
+      name: 'GPU',
+      description: '\n' +
+        "Could you clarify what you're looking for in a GPU description? Are you interested in specifications, comparisons between different models, or perhaps recommendations for a specific use case (like gaming, rendering, etc.)? Let me know how I can help!",
+      createdAt: 2024-09-30T07: 21: 00.201Z,
+      updatedAt: 2024-10-11T13: 58: 46.007Z,
+      __v: 0,
+      list: true
     },
-    {
-        "selectedItems": {
-            "categories": [
-                {
-                    "_id": "66fa26a5e8f8b40366d3d0e9",
-                    "name": "MONITOR",
-                    "description": "A monitor is an electronic display device that visually outputs information from a computer or other devices. It typically features a screen (LCD, LED, or OLED) that displays images, videos, text, and other graphical content. Monitors come in various sizes and resolutions, often equipped with adjustable settings for brightness, contrast, and color. They are commonly used for work, entertainment, gaming, and more. Key characteristics include screen size, resolution, refresh rate, and connectivity options (HDMI, DisplayPort, etc.).",
-                    "createdAt": "2024-09-30T04:18:45.110Z",
-                    "updatedAt": "2024-10-15T09:04:25.000Z",
-                    "__v": 0,
-                    "list": true
-                },
-                {
-                    "_id": "66fa4cc1da7aa084c07f546d",
-                    "name": "CPU",
-                    "description": "CPUs (Central Processing Units) are the powerhouse of any computing system, responsible for executing instructions and processing data. Available in various architectures and performance levels, CPUs cater to a wide range of applications—from everyday tasks to high-end gaming and professional workloads. Whether you're building a budget PC or a high-performance workstation, selecting the right CPU is crucial for optimal performance and efficiency.",
-                    "createdAt": "2024-09-30T07:01:21.441Z",
-                    "updatedAt": "2024-10-11T13:58:49.116Z",
-                    "__v": 0,
-                    "list": true
-                },
-                {
-                    "_id": "66fa515cda7aa084c07f54d7",
-                    "name": "GPU",
-                    "description": "\nCould you clarify what you're looking for in a GPU description? Are you interested in specifications, comparisons between different models, or perhaps recommendations for a specific use case (like gaming, rendering, etc.)? Let me know how I can help!",
-                    "createdAt": "2024-09-30T07:21:00.201Z",
-                    "updatedAt": "2024-10-11T13:58:46.007Z",
-                    "__v": 0,
-                    "list": true
-                },
-                {
-                    "_id": "66fd0bcfdc87a29804163f91",
-                    "name": "PC CABINET",
-                    "description": "A PC cabinet, or computer case, is an enclosure that houses key components like the motherboard, CPU, RAM, storage, and power supply. It protects these parts from dust, damage, and electromagnetic interference, while also helping with airflow and cooling. Available in various sizes like full tower, mid-tower, and mini-tower, it accommodates different motherboard types and expansion options. Modern PC cabinets often feature aesthetic elements like tempered glass panels, RGB lighting, and organized cable management. Their design also focuses on ease of installation, ventilation, and customization, making them crucial for both functionality and style in any build.\n",
-                    "createdAt": "2024-10-02T09:01:03.675Z",
-                    "updatedAt": "2024-10-16T06:29:53.153Z",
-                    "__v": 0,
-                    "list": true
-                },
-                {
-                    "_id": "6715de1605bbf3ed4e685701",
-                    "name": "gpu",
-                    "description": "eraewtr",
-                    "createdAt": "2024-10-21T04:52:38.681Z",
-                    "updatedAt": "2024-10-21T04:52:38.681Z",
-                    "__v": 0
-                },
-                {
-                    "_id": "67161d5afac79b45f98dc75e",
-                    "name": "Monitor",
-                    "description": "dsfdf",
-                    "createdAt": "2024-10-21T09:22:34.257Z",
-                    "updatedAt": "2024-10-21T09:22:34.257Z",
-                    "__v": 0
-                }
-            ],
-            "products": []
-        },
-        "_id": "671791d5c7e8eb970830e49e",
-        "name": "545sg",
-        "applicationType": "category",
-        "discountType": "percentage",
-        "discountValue": 543,
-        "isActive": "on",
-        "validFrom": "0005-05-05T00:00:00.000Z",
-        "validUntil": "0005-05-05T00:00:00.000Z",
-        "createdAt": "2024-10-22T11:51:49.817Z",
-        "updatedAt": "2024-10-22T11:51:49.817Z",
-        "__v": 0
-    }
-]
+    createdAt: 2024-10-02T08: 58: 01.261Z,
+    updatedAt: 2024-10-21T06: 42: 43.586Z,
+    __v: 3,
+    offer: 3
+}

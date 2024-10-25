@@ -44,7 +44,7 @@ router.get('/user/myaccount', myaccount)
 router.get('/user/mydash', userdash)
 router.get('/user/address', useraddress)
 router.get('/user/orders', oredrs)
-router.post('/user/cancel-product', cancelitem)
+// router.post('/user/cancel-product', cancelitem)
 
 router.patch('/orders/:id', cancelorder)
 //google validation

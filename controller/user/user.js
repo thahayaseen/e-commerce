@@ -226,10 +226,24 @@ const viewproduct = async (req, res, next) => {
             category_id: productdata.category_id._id,
             _id: { $ne: id }
         });
+       
+            let poffer=productdata.price-(productdata.price*productdata.offer)/100
+            console.log(poffer);
+            
+            if (poffer<productdata.offerdealprice||productdata.offerdealprice==0) {
+                
+                productdata.dealprice=poffer
+            }
+            else{
+                productdata.dealprice=productdata.offerdealprice  
+                productdata.offtype=productdata.dealoffertype
 
+            }
+   
         res.render('userside/product_over_view', {
             product: productdata,
-            sameProducts: sameProducts
+            sameProducts: sameProducts,
+            
         });
 
         console.log('Product:', productdata);
@@ -446,7 +460,8 @@ const placeorder = async (req, res) => {
             const userdata = await User.findById(userid);
             const selectedaddress = await address_scema.findById(selectedAddress);
             console.log('payment is' + paymentmethods);
-
+            console.log(usercart);
+            
 
             if (selectedaddress.userid.toString() !== userid.toString()) {
                 return res.status(400).json({ success: false, message: 'User ID and address do not match' });
@@ -455,8 +470,8 @@ const placeorder = async (req, res) => {
             const productdata = usercart.product.map(item => ({
                 productid: item.productid._id,
                 quantity: item.quantity,
-                price: item.price,
-
+                price: item.productid.price,
+                discount:Math.abs(item.price-item.productid.price)
             }));
 
             // Update stock for each product
@@ -590,9 +605,13 @@ const cancelorder = async (req, res) => {
     const order = await orderchema.findById(orderid).populate('products.productid');
 
     if (order.status === 'Pending' || order.status === 'Processing') {
-        if (order.paymentMethod === 'Processing') {
+        console.log('in cancelation');
+        
+        if (order.pstatus == true) {
             const wallets = await Wallet.findOne({ userId: userid })
-            console.log(wallets);
+            console.log('yes');
+            
+            // console.log(wallets);
             const money = (order.totalAmount - order.coupon.discount)
 
             if (!wallets) {
@@ -606,10 +625,10 @@ const cancelorder = async (req, res) => {
                 await order.save();
                 return res.status(200).json({ success: true, message: 'The order is canceled successfully' });
             }
-            console.log(wallets);
+            // console.log(wallets);
             wallets.balance += money
             const dats = order.products.map(item => item.productid.name).join(', ')
-            const datsee = order.products.map(item => item.name)
+            
 
 
             wallets.transactions.push({
@@ -618,6 +637,7 @@ const cancelorder = async (req, res) => {
                 date: new Date(),
                 description: `refund of ${dats}`
             });
+            console.log('saved');
 
 
 

@@ -96,17 +96,17 @@ document.addEventListener('DOMContentLoaded', function() {
           }
 
           order.products.forEach((item) => {
-              const { productid, quantity, price, return: returnStatus } = item;
+              const { productid, quantity, price,discount, return: returnStatus } = item;
               if (!productid || !quantity || !price) {
                   console.warn('Incomplete product data:', item);
                   return;
               }
 
               const { name, images, sku } = productid;
-              subtotal += quantity * price;
+              subtotal += quantity * (price-discount)
 
               const productImage = images && images.length > 0 ? `/uploads/${images[0]}` : '/placeholder-image.jpg';
-              const productTotal = (quantity * price).toFixed(2);
+              const productTotal = (quantity * (price-discount)).toFixed(2);
 
               const returnStatusHtml = returnStatus
                   ? `

@@ -2,7 +2,7 @@ const express = require('express');
 const passport = require('passport');
 const session = require('express-session');
 const adminrout = require('./router/adminrout');
-const router = require('./router/all_route');
+const router = require('./router/routes');
 const mongoose=require('./router/mongoose')
 
 require('dotenv').config();

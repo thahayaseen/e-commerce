@@ -49,12 +49,32 @@ const userhome = async (req, res) => {
 }
 
 const productlist = async (req, res) => {
+    let dealprice=0
     const product = req.session.products
     const categ = req.session.categories || ''
     const pagination = req.session.pagination || { totalPages: 1, currentPage: 1 };
+    product.forEach(product=>{
+
+    
+        let poffer=product.price-(product.price*product.offer)/100
+        console.log(poffer);
+        
+        if (poffer<product.offerdealprice||product.offerdealprice==0) {
+            
+            product.dealprice=poffer
+        }
+        else{
+            product.dealprice=product.offerdealprice
+            product.offtype=product.dealoffertype
+    
+            
+        }
+       })
+
+    
     delete req.session.categories
     delete req.session.products
-    res.render('userside/productlist', { products: product, categories: categ, pagination })
+    res.render('userside/productlist', { products: product, categories: categ, pagination,dealprice })
 }
 
 //admin section----------------------------------------------------------------------------------------
