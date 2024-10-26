@@ -265,7 +265,7 @@ paymentForm.addEventListener('submit', async (e) => {
                 placeOrder();
             }
         } 
-        else if(data.success=='nobalence'){
+        else if(data.reson=='nobalence'){
                 Swal.fire({
                     text: "Insufficient balance!",
                     icon: 'error',

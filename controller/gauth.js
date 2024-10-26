@@ -2,6 +2,8 @@
     const GoogleStrategy = require('passport-google-oauth20').Strategy;
     const cartschema=require('../model/cart')
     const User = require('../model/user_scema'); 
+    const wishlistschema = require('../model/wishlist'); 
+const Wallet = require('../model/wallet')
   
 
     passport.use(new GoogleStrategy({
@@ -42,8 +44,19 @@
           
           const x=await user.save();
           if(x){
+            const cwishlist = new wishlistschema({
+              userid: x._id,
+              productid: []
+          })
+          await cwishlist.save()
             cart = new cartschema({ userid: x._id, product: [] });
            await cart.save()
+           userdata = new Wallet({
+            userId: x._id,
+            balance: 0, 
+            transactions: [] 
+        });
+        await userdata.save();
           console.log(x);
           }
           else{

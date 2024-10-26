@@ -19,6 +19,7 @@ const auth = async (req, res, next) => {
 
 
         if (!exsist) {
+            req.session.admin='This user not admin'
             return res.redirect('/admin')
         }
         const adminverigfy = await bcrypt.compare(password, exsist.password)

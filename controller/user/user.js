@@ -8,6 +8,7 @@ const passport = require('passport');
 const coupencode = require('../../model/coupon')
 const Wallet = require('../../model/wallet')
 const razorpay = require('../../config/razorpay')
+const wishlistschema=require('../../model/wishlist')
 const crypto = require('crypto')
 
 require('dotenv').config()
@@ -27,6 +28,8 @@ const signup = async (req, res, next) => {
 
         if (exsist.length > 0) {
             req.session.register = "User name or email already exist";
+            console.log('yess');
+            
             return res.redirect('/signup')
         }
         else {
@@ -49,6 +52,17 @@ const signup = async (req, res, next) => {
             if (a) {
                 cart = new cartschema({ userid: a._id, product: [] });
                 await cart.save()
+                const cwishlist = new wishlistschema({
+                    userid: uid,
+                    productid: []
+                })
+                await cwishlist.save()
+                userdata = new Wallet({
+                    userId: uid,
+                    balance: 0, 
+                    transactions: [] 
+                });
+                await userdata.save();
                 getotp(email, otp, userid)
                 req.session.username = name
                 req.session.blocked = a.blocked
@@ -455,6 +469,8 @@ const placeorder = async (req, res) => {
 
     const { selectedAddress, paymentmethods, discount, cname } = req.body
     if (paymentmethods && selectedAddress && userid) {
+        console.log('payment method is '+paymentmethods);
+        
         try {
             // user's cart and address
             const usercart = await cartschema.findOne({ userid }).populate('product.productid')
@@ -536,9 +552,10 @@ const placeorder = async (req, res) => {
                     console.log(wallet.balance);
                     console.log(toatal);
 
+                    console.log(wallet.balance >= toatal);
                     if (wallet.balance >= toatal) {
-                        const dats = order.products
-                        // console.log(dats);
+                        
+                        console.log('insieddsfasdfasfd');
 
                         wallet.transactions.push({
                             type: 'debit',
@@ -547,6 +564,7 @@ const placeorder = async (req, res) => {
                             description: `purchesed `
                         });
                         order.status = 'Processing'
+                        order.pstatus=true
                         await order.save()
                         usercart.product = [];
                         await usercart.save();
@@ -557,11 +575,13 @@ const placeorder = async (req, res) => {
 
                         wallet.balance -= toatal
                         await wallet.save()
-                        return res.status(200).json({ success: true, message: 'The order was successfully placed' });
+                        return res.status(200).json({ success: true, message: 'The order was successfully placed used Wallet' });
 
                     }
                     else {
-                        return res.status(200).json({ success: 'nobalence', message: 'balence is low' })
+                        console.log('here');
+                        
+                        return res.status(200).json({success:false, reson: 'nobalence', message: 'balence is low' })
                     }
                 }
             }

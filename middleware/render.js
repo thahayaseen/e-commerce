@@ -283,12 +283,9 @@ const wishlist = async (req, res) => {
         const list = await wishlistschema.findOne({ userid: uid }).populate('productid')
         console.log(list);
         if (!list) {
-            const cwishlist = new wishlistschema({
-                userid: uid,
-                productid: []
-            })
-            await cwishlist.save()
-            return res.redirect('/wishlist')
+         res.status(404).json({success:false,message:'user not fount'})
+         
+       
         }
 
         res.render('userside/wishlist', { wishlist: list })
@@ -328,12 +325,7 @@ const walletrender = async (req, res) => {
         console.log(userdata);
         
         if (!userdata) {
-            userdata = new wallet({
-                userId: uid,
-                balance: 0, 
-                transactions: [] 
-            });
-            await userdata.save();
+           res.status(404).json({success:false,message:"user not fount"})
         }
 
       
