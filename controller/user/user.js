@@ -53,12 +53,12 @@ const signup = async (req, res, next) => {
                 cart = new cartschema({ userid: a._id, product: [] });
                 await cart.save()
                 const cwishlist = new wishlistschema({
-                    userid: uid,
+                    userid: a._id,
                     productid: []
                 })
                 await cwishlist.save()
                 userdata = new Wallet({
-                    userId: uid,
+                    userId: a._id,
                     balance: 0, 
                     transactions: [] 
                 });

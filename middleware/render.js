@@ -85,7 +85,7 @@ const adminlogin =async (req, res) => {
     const islogin = req.session.ladmin
     delete req.session.admin
     if(islogin) {
-        res.redirect('/admin/dashbord') 
+        res.redirect('/admin/dashboard') 
 
     }else{ res.render('auth/admin', { ans: notadmin })}
 }
@@ -265,15 +265,21 @@ const orders = async (req, res) => {
     const limit = parseInt(req.query.limit) || 5;
     const skip = (page - 1) * limit;
     const adlogin=req.session.ladmin
-    const orders = await ordersshema.find({}).populate('user').skip(skip).limit(limit).sort({createdAt:-1})
+    let orders = await ordersshema.find({}).populate('user').skip(skip).limit(limit).sort({createdAt:-1})
+    console.log('order data is'+orders);
+    
 
     const totalProducts = await ordersshema.countDocuments();
     const countedorders = orders.length;
     console.log(countedorders);
 
-    const totalPages = Math.ceil(totalProducts / limit);
-    pagination = { totalPages, currentPage: page, limit: limit };
+    let totalPages = Math.ceil(totalProducts / limit);
+    if(totalPages<=0){
+        totalPages=1
+    }
 
+    pagination = { totalPages, currentPage: page, limit: limit };
+   
 
     adlogin?res.render('admin/orders', { Orders: orders, pagination }):res.redirect('/admin')
 }

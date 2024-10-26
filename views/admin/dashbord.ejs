@@ -200,6 +200,7 @@
                             </thead>
                             <tbody>
                                 <% products.forEach(order=>{ %>
+                               <% if(order.length>0){ %>
                                 <tr>
                                     <td>#<%=order._id%></td>
                                     <td><%=order.user.name%></td>
@@ -241,7 +242,7 @@
                                     </td>
                                     <td><%=new Date(order.createdAt).toISOString().split('T')[0]%></td>
                                 </tr>
-                                <% }) %>
+                                <% }}) %>
                             </tbody>
                         </table>
                     </div>

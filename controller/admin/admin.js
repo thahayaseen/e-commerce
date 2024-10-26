@@ -221,16 +221,16 @@ const savecat = async (req, res) => {
     try {
         const { newCategoryName, newProductDescription } = req.body
 
-        const cnames = newCategoryName.toUpperCase()
+        const cnames = newCategoryName.toLovercase()
         const uniqcategory = await categories.findOne({ name: cnames })
         if (uniqcategory) {
             console.log(uniqcategory);
-            return res.status(200).json({ success: false, message: 'This coupon in aldredy exsist' })
+            return res.status(200).json({ success: false, message: 'This categoty in aldredy exsist' })
         }
 
 
         const newcategories = new categories({
-            name: newCategoryName,
+            name: newCategoryName.toLowercase(),
             description: newProductDescription
         })
         await newcategories.save()
@@ -255,7 +255,7 @@ const useredit = async (req, res, next) => {
 
         console.log(uniqcategory);
 
-        return res.status(200).json({ success: false, message: 'This coupon in aldredy exsist' })
+        return res.status(200).json({ success: false, message: 'This category in aldredy exsist' })
     }
     const catid = req.params.id
 

@@ -3,13 +3,14 @@
     const cartschema=require('../model/cart')
     const User = require('../model/user_scema'); 
     const wishlistschema = require('../model/wishlist'); 
+    require('dotenv').config
 const Wallet = require('../model/wallet')
   
 
     passport.use(new GoogleStrategy({
       clientID: process.env.CLIENT_ID,
       clientSecret: process.env.CLIENT_SECRET,
-      callbackURL: '/glogin/callback',
+      callbackURL: process.env.GOOGLECB,
       passReqToCallback: true
     },
     async function(request, accessToken, refreshToken, profile, cb) {
