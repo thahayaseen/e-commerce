@@ -271,6 +271,7 @@ const viewproduct = async (req, res, next) => {
 
 
 const glogincb = (req, res, next) => {
+    passport.authenticate('google', { failureRedirect: '/' }), 
     passport.authenticate('google', (err, user, info) => {
         if (err) {
             return next(err);
