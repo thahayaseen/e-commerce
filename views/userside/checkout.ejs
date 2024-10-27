@@ -10,6 +10,47 @@
     <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
 
     <style>
+         :root {
+            --primary-color: #5F42E8;
+            --secondary-color: #4A34B7;
+            --accent-color: #FFD700;
+        }
+        .navbar {
+            background-color: var(--primary-color);
+            padding: 15px 0;
+        }
+
+        .navbar-brand {
+            font-weight: bold;
+            font-size: 28px;
+            color: white !important;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .nav-link {
+            color: white !important;
+            margin-right: 20px;
+            font-weight: 500;
+            transition: color 0.3s ease;
+        }
+
+        .nav-link:hover {
+            color: var(--accent-color) !important;
+        }
+
+        .navbar-nav .nav-item:last-child .nav-link {
+            margin-right: 0;
+        }
+
+        .navbar-icons {
+            display: flex;
+            align-items: center;
+        }
+
+        .navbar-icons .nav-link {
+            padding: 0 10px;
+        }
+
         body {
             background-color: #f0f2f5;
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -90,6 +131,43 @@
     </style>
 </head>
 <body>
+    <header class="bg-gradient text-white shadow">
+        <nav class="navbar navbar-expand-md p-0 navbarbg">
+            <div class="container-sm">
+                <a class="navbar-brand fs-4 fw-bold" href="/">WeebsCorner</a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="navbar container-fluid" id="navbarNav">
+                    <ul class="navbar-nav p-0">
+                        <li class="nav-item">
+                            <a class="nav-link" href="/product">All Products</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="/gaming-gear">Gaming Gear</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="/community">Community</a>
+                        </li>
+                    </ul>
+                    <div class="d-flex">
+                        <a href="/wishlist" class="btn btn-link text-white me-2">
+                            <i class="fas fa-heart"></i>
+                        </a>
+                        <a href="/user/mydash" class="btn btn-link text-white me-2">
+                            <i class="fas fa-user"></i>
+                        </a>
+                        <a href="/cart" class="btn btn-link text-white me-2">
+                            <i class="fas fa-shopping-cart"></i>
+                        </a>
+                        <a href="/logout" class="btn btn-link text-white">
+                            <i class="fas fa-sign-out-alt"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </nav>
+    </header>
     <div class="container">
         <div class="row">
             <div class="col-lg-8">

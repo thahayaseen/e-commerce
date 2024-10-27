@@ -8,6 +8,7 @@
     
     <link rel="stylesheet" href="/assets/css/style.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.7.0/chart.min.js"></script>
+    <script>const categoryCounts=<%-JSON.stringify(categoryCounts)%>;</script>
     <script>const products=<%-JSON.stringify(products)%>;</script>
 </head>
 
@@ -200,7 +201,7 @@
                             </thead>
                             <tbody>
                                 <% products.forEach(order=>{ %>
-                               <% if(order.length>0){ %>
+                               <% if(products.length>0){ %>
                                 <tr>
                                     <td>#<%=order._id%></td>
                                     <td><%=order.user.name%></td>
@@ -274,7 +275,10 @@
     <script>
 
 
-
+function getRandomColor() {
+    const randomColor = Math.floor(Math.random() * 16777215).toString(16);
+    return `#${randomColor.padStart(6, '0')}`; // Ensure the color code is 6 characters
+}
       // Sales Chart
       const salesCtx = document.getElementById('salesChart').getContext('2d');
       new Chart(salesCtx, {
@@ -304,16 +308,11 @@
       new Chart(pieCtx, {
           type: 'pie',
           data: {
-              labels: ['Electronics', 'Clothing', 'Food', 'Books'],
-              datasets: [{
-                  data: [30, 25, 25, 20],
-                  backgroundColor: [
-                      '#4B49AC',
-                      '#FFC100',
-                      '#248AFD',
-                      '#FF4747'
-                  ]
-              }]
+            labels: Object.keys(categoryCounts),
+            datasets: [{
+            data: Object.values(categoryCounts),
+                backgroundColor: Array.from({ length: Object.values(categoryCounts).length }, getRandomColor)
+            }]
           },
           options: {
               responsive: true,

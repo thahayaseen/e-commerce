@@ -52,7 +52,7 @@ router.delete('/coupon/:id',deletecupen)
 // add category 
 router.post('/category/add', savecat)
 router.patch('/category/edit/:id', useredit)
-router.patch('/category/unlist/:id', datatoedit)
+router.patch('/category/unlist/:id', categoryunlist)
 
 router.get('/offers',offerpage)
 router.get('/offers/:id',datatoedit )

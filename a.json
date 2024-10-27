@@ -1,28 +1,227 @@
-{
-    offerdealprice: 0,
-    _id: new ObjectId('66fd0b19dc87a29804163f65'),   
-    name: 'GIGABYTE Geforce',
-    price: 2799,
-    stock: 50,
-    unlist: false,
-    images: [ '1727859481254.jpg', '1727859541764.jpg', '1727859552740.jpg'
-    ],
-    description: 'Powered by NVIDIA DLSS 3, ultra-efficient Ada Lovelace architechture, and full ray tracing\r\n' +
-      '4th Generation Tensor Cores: Up to 4x performance with DLSS 3\r\n' +
-      '3rd Generation RT Cores: Up to 2x ray tracing performance\r\n' +
-      'Integrated with 8GB GDDR6 128-bit memory interface',
-    category_id: {
-      _id: new ObjectId('66fa515cda7aa084c07f54d7'), 
-      name: 'GPU',
-      description: '\n' +
-        "Could you clarify what you're looking for in a GPU description? Are you interested in specifications, comparisons between different models, or perhaps recommendations for a specific use case (like gaming, rendering, etc.)? Let me know how I can help!",
-      createdAt: 2024-09-30T07: 21: 00.201Z,
-      updatedAt: 2024-10-11T13: 58: 46.007Z,
-      __v: 0,
-      list: true
+[
+  {
+    "coupon": {
+      "discount": 0
     },
-    createdAt: 2024-10-02T08: 58: 01.261Z,
-    updatedAt: 2024-10-21T06: 42: 43.586Z,
-    __v: 3,
-    offer: 3
-}
+    "shippingAddress": {
+      "fullname": "Siyad Muhsin k",
+      "addressline1": "KANNANKUZHI PULPATTA 676123 MALAPPURAM",
+      "addressline2": "   ",
+      "city": "Malappuram",
+      "state": "Kerala",
+      "zipcode": "676123",
+      "country": "US",
+      "phone": "0000000000"
+    },
+    "_id": "671cb310ffe79d7147cb48d6",
+    "user": {
+      "_id": "671cb195ffe79d7147cb481f",
+      "name": "Siyad Muhsin",
+      "user_name": "siyadmuhsin574",
+      "email": "siyadsm4065@gmail.com",
+      "googleId": "100172364386964857164",
+      "phone": null,
+      "address": [
+        "671cb21affe79d7147cb4860",
+        "671cb254ffe79d7147cb4869"
+      ],
+      "uotp": null,
+      "varify": true,
+      "isadmin": false,
+      "orders": [],
+      "blocked": false,
+      "createdAt": "2024-10-26T09:08:37.851Z",
+      "updatedAt": "2024-10-26T09:11:48.050Z",
+      "__v": 2
+    },
+    "products": [
+      {
+        "productid": {
+          "_id": "670e8dd8b49b130e45f69ffb",
+          "name": "535",
+          "price": 535,
+          "stock": 519,
+          "unlist": false,
+          "images": [
+            "1729007064625.jpg"
+          ],
+          "description": "452345",
+          "offer": 5,
+          "category_id": "66fa26a5e8f8b40366d3d0e9",
+          "createdAt": "2024-10-15T15:44:24.649Z",
+          "updatedAt": "2024-10-26T09:14:56.196Z",
+          "__v": 0,
+          "dealoffertype": "percentage",
+          "offerdealprice": 0
+        },
+        "discount": 26.75,
+        "quantity": 2,
+        "price": 535,
+        "status": true,
+        "return": "returning",
+        "_id": "671cb310ffe79d7147cb48d7",
+        "returnExplanation": "Sadhan poora",
+        "returnReason": "wrong_size"
+      }
+    ],
+    "totalAmount": 1016.5,
+    "status": "Delivered",
+    "paymentMethod": "onlinePayment",
+    "paymentStatus": "Pending",
+    "pstatus": true,
+    "orderDate": "2024-10-26T09:14:56.206Z",
+    "createdAt": "2024-10-26T09:14:56.209Z",
+    "updatedAt": "2024-10-26T09:18:40.893Z",
+    "__v": 0
+  },
+  {
+    "coupon": {
+      "discount": 0
+    },
+    "shippingAddress": {
+      "fullname": "Siyad Muhsin k",
+      "addressline1": "KANNANKUZHI PULPATTA 676123 MALAPPURAM",
+      "addressline2": "   ",
+      "city": "Malappuram",
+      "state": "Kerala",
+      "zipcode": "676123",
+      "country": "US",
+      "phone": "0000000000"
+    },
+    "_id": "671cb273ffe79d7147cb4884",
+    "user": {
+      "_id": "671cb195ffe79d7147cb481f",
+      "name": "Siyad Muhsin",
+      "user_name": "siyadmuhsin574",
+      "email": "siyadsm4065@gmail.com",
+      "googleId": "100172364386964857164",
+      "phone": null,
+      "address": [
+        "671cb21affe79d7147cb4860",
+        "671cb254ffe79d7147cb4869"
+      ],
+      "uotp": null,
+      "varify": true,
+      "isadmin": false,
+      "orders": [],
+      "blocked": false,
+      "createdAt": "2024-10-26T09:08:37.851Z",
+      "updatedAt": "2024-10-26T09:11:48.050Z",
+      "__v": 2
+    },
+    "products": [
+      {
+        "productid": {
+          "_id": "66fd08e66988d06040bdc7cd",
+          "name": "Acer EK220Q 21.5 Inch ",
+          "price": 4799,
+          "stock": 37,
+          "unlist": false,
+          "images": [
+            "1727858918097.jpg",
+            "1727858918099.jpg",
+            "1727858918101.jpg"
+          ],
+          "description": "💥Full HD💥21.5 Inch Full HD 1920 x 1080 Resolution VA Panel Monitor I 250 Nits Brightness I 178 / 178 Degree View Angle I Edge to Edge Zero Frame Design\r\n💥1 MS💥 VRB Respose time helps Reduces Ghost & smearing effect also Elimination blur on fast moving object I 💥100 Hz💥 Refresh Rate for Outstanding fluidity of images & also provide gamers an excellent in-game experience",
+          "category_id": "66fa26a5e8f8b40366d3d0e9",
+          "createdAt": "2024-10-02T08:48:38.112Z",
+          "updatedAt": "2024-10-26T09:13:59.914Z",
+          "__v": 2,
+          "offer": 11,
+          "dealoffertype": "percentage",
+          "offerdealprice": 0
+        },
+        "discount": 527.8900000000003,
+        "quantity": 2,
+        "price": 4799,
+        "status": true,
+        "return": "notrequst",
+        "_id": "671cb273ffe79d7147cb4885"
+      }
+    ],
+    "totalAmount": 8542.21,
+    "status": "Cancelled",
+    "paymentMethod": "onlinePayment",
+    "paymentStatus": "Pending",
+    "pstatus": false,
+    "orderDate": "2024-10-26T09:12:19.498Z",
+    "createdAt": "2024-10-26T09:12:19.501Z",
+    "updatedAt": "2024-10-26T09:13:59.893Z",
+    "__v": 0
+  },
+  {
+    "coupon": {
+      "discount": 0
+    },
+    "shippingAddress": {
+      "fullname": "Siyad Muhsin k",
+      "addressline1": "KANNANKUZHI PULPATTA 676123 MALAPPURAM",
+      "addressline2": "   ",
+      "city": "Malappuram",
+      "state": "Kerala",
+      "zipcode": "676123",
+      "country": "US",
+      "phone": "0000000000"
+    },
+    "_id": "671cb26affe79d7147cb4879",
+    "user": {
+      "_id": "671cb195ffe79d7147cb481f",
+      "name": "Siyad Muhsin",
+      "user_name": "siyadmuhsin574",
+      "email": "siyadsm4065@gmail.com",
+      "googleId": "100172364386964857164",
+      "phone": null,
+      "address": [
+        "671cb21affe79d7147cb4860",
+        "671cb254ffe79d7147cb4869"
+      ],
+      "uotp": null,
+      "varify": true,
+      "isadmin": false,
+      "orders": [],
+      "blocked": false,
+      "createdAt": "2024-10-26T09:08:37.851Z",
+      "updatedAt": "2024-10-26T09:11:48.050Z",
+      "__v": 2
+    },
+    "products": [
+      {
+        "productid": {
+          "_id": "66fd08e66988d06040bdc7cd",
+          "name": "Acer EK220Q 21.5 Inch ",
+          "price": 4799,
+          "stock": 37,
+          "unlist": false,
+          "images": [
+            "1727858918097.jpg",
+            "1727858918099.jpg",
+            "1727858918101.jpg"
+          ],
+          "description": "💥Full HD💥21.5 Inch Full HD 1920 x 1080 Resolution VA Panel Monitor I 250 Nits Brightness I 178 / 178 Degree View Angle I Edge to Edge Zero Frame Design\r\n💥1 MS💥 VRB Respose time helps Reduces Ghost & smearing effect also Elimination blur on fast moving object I 💥100 Hz💥 Refresh Rate for Outstanding fluidity of images & also provide gamers an excellent in-game experience",
+          "category_id": "66fa26a5e8f8b40366d3d0e9",
+          "createdAt": "2024-10-02T08:48:38.112Z",
+          "updatedAt": "2024-10-26T09:13:59.914Z",
+          "__v": 2,
+          "offer": 11,
+          "dealoffertype": "percentage",
+          "offerdealprice": 0
+        },
+        "discount": 527.8900000000003,
+        "quantity": 2,
+        "price": 4799,
+        "status": true,
+        "return": "notrequst",
+        "_id": "671cb26affe79d7147cb487a"
+      }
+    ],
+    "totalAmount": 8542.21,
+    "status": "Pending",
+    "paymentMethod": "wallet",
+    "paymentStatus": "Pending",
+    "pstatus": false,
+    "orderDate": "2024-10-26T09:12:10.534Z",
+    "createdAt": "2024-10-26T09:12:10.539Z",
+    "updatedAt": "2024-10-26T09:12:10.539Z",
+    "__v": 0
+  }
+]

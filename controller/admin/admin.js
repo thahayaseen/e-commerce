@@ -221,7 +221,7 @@ const savecat = async (req, res) => {
     try {
         const { newCategoryName, newProductDescription } = req.body
 
-        const cnames = newCategoryName.toLovercase()
+        const cnames = newCategoryName.toLowerCase()
         const uniqcategory = await categories.findOne({ name: cnames })
         if (uniqcategory) {
             console.log(uniqcategory);
@@ -230,7 +230,7 @@ const savecat = async (req, res) => {
 
 
         const newcategories = new categories({
-            name: newCategoryName.toLowercase(),
+            name: newCategoryName.toLowerCase(),
             description: newProductDescription
         })
         await newcategories.save()

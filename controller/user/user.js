@@ -518,6 +518,7 @@ const placeorder = async (req, res) => {
             if (paymentmethods === 'onlinePayment') {
 
                 if (ordersave) {
+                //   console.log();
                   
                     userdata.orders.push(ordersave._id);
 
@@ -602,7 +603,10 @@ const placeorder = async (req, res) => {
 
         } catch (error) {
             console.log('Error in placing order:', error);
-            return res.status(500).json({ success: false, message: 'Error placing order', error });
+            let errosis=error.error.description
+            console.log(errosis);
+            
+            return res.status(500).json({ success: false, message: 'Error placing order', errosis});
         }
     }
 
@@ -611,6 +615,8 @@ const placeorder = async (req, res) => {
 const deleteaddress = async (req, res) => {
     const id = req.params.id
     const userid = req.session.ulogin
+    console.log(id);
+    
     await address_scema.deleteOne({ _id: id })
     const user = await User.findById(userid)
     filteredarray = user.address.filter(addressId => !addressId.equals(id))
@@ -620,6 +626,19 @@ const deleteaddress = async (req, res) => {
     data ? res.status(200).json({ success: true }) : res.status(404)
 
 
+}
+const addressave=async(req,res)=>{
+    console.log(req.body);
+    const address=await address_scema.findById(req.body.id)
+    Object.assign(address,req.body)
+    console.log(address);
+    
+  const addresaveed=  await address.save()
+  console.log('saved'+addresaveed);
+  
+  if(addresaveed){
+   return res.status(200).json({success:true ,message:'address updated'})
+  }
 }
 const cancelorder = async (req, res) => {
     const userid = req.session.ulogin
@@ -946,4 +965,4 @@ const returning = async (req, res) => {
     await orders.save()
 
 }
-module.exports = { signup, otpvarify, resent, varifylogin, viewproduct, logout, blockuser, glogincb, cartitemspush, cartupdata, cartitemdelete, addaddress, placeorder, deleteaddress, cancelorder, editname, changepass, productstockdata, cancelitem, patchwishlist, removewish, coupenapplaying, razorpayvarify, sendreset, resetpage, resetpasspost, returning }     
+module.exports = { signup, otpvarify, resent, varifylogin, viewproduct, logout, blockuser, glogincb, cartitemspush, cartupdata, cartitemdelete, addaddress, placeorder, deleteaddress, cancelorder, editname, changepass, productstockdata, cancelitem, patchwishlist, removewish, coupenapplaying, razorpayvarify, sendreset, resetpage, resetpasspost, returning,addressave }     

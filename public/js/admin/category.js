@@ -5,6 +5,10 @@ deletebtn.forEach((categories)=>{
     // const deletebnt=document.getElementById('deletebutton')
     categories.addEventListener('click',function(e){
         const id= this.dataset.cid
+        console.log(id);
+        const id2= categories.getAttribute('data-cid')
+        console.log(id2);
+        
         fetch(`/admin/category/unlist/${id}`,{
             method:'PATCH',
             

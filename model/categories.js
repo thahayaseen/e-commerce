@@ -12,7 +12,8 @@ const categorySchema = new mongoose.Schema({
         required: true
     },
     list:{
-        type:Boolean
+        type:Boolean,
+        default:true
     }
 }, { timestamps: true });
 
