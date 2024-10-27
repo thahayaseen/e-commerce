@@ -259,11 +259,24 @@ paymentForm.addEventListener('submit', async (e) => {
                 };
 
                 const rzp = new Razorpay(options);
+                rzp.on('payment.failed', async function (response) {
+                    console.log(response);
+                    fetch('/payment-failed/'+data.orderId,{
+                        method:'PATCH',
+                        headers:{
+                            'Content-Type':'applaycoupon/json'
+                        }
+                        
+                    })
+                   await  Swal.fire({
+                        title: 'Payment Failed!',
+                        text: 'Your payment could not be processed. Please try again.',
+                        icon: 'error',
+                        confirmButtonText: 'Okay',
+                    });
+                });
                 rzp.open();
-            } else {
-                // For non-Razorpay payments (e.g., COD)
-                placeOrder();
-            }
+            } 
         } 
         else if(data.reson=='nobalence'){
                 Swal.fire({
@@ -277,13 +290,21 @@ paymentForm.addEventListener('submit', async (e) => {
         else if(data.success=='cartempty'){
             window.location.href='/'
         }
+        else if(data.success==false){
+            Swal.fire({
+                text: data.message,
+                icon: 'error',
+                timer: 3000, 
+                showConfirmButton: false,  
+            });
+        }
         else {
-            throw new Error('Order placement failed');
+            throw new Error('Order placement failed due to the product you selected outofstock or unavailable' );
         }
     } catch (error) {
         console.error('Error:', error);
         Swal.fire({
-            text: 'There was an error processing your request. Please try again.',
+            text: 'There was an error processing your request. Please try again.'+error,
             icon: 'error',
         });
     }

@@ -251,6 +251,14 @@
                             <span class="badge bg-<%= order.status === 'Delivered' ? 'success' : 'primary' %>">
                                 <%= order.status %>
                             </span>
+                            <span class="badge bg-<% 
+                            if (order.paymentStatus === 'Paid') { %>success<% 
+                            } else if (order.paymentStatus === 'Pending') { %>warning<% 
+                            } else if (order.paymentStatus === 'Failed') { %>danger<% 
+                            } %>">
+                            <%= order.paymentStatus %>
+                        </span>
+                        
                         </div>
                         <div class="card-body">
                             <div class="row">
@@ -310,10 +318,11 @@
                                     <p><strong>Total:</strong>
                                         <%= (order.totalAmount-order.coupon.discount).toFixed(2) %>
                                     </p>
-                                    <% if (order.status !=='Delivered' && order.status !=='Cancelled' ) { %>
-                                        <a data-orderid="<%= order._id %>" class="btn cancelbtn btn-danger">Cancel
-                                            Order</a>
-                                        <% } %>
+                                    <% if (order.status !=='Delivered' && order.status !=='Cancelled'&&order.paymentStatus!=='Failed' ) { %>
+                                        <a data-orderid="<%= order._id %>" class="btn cancelbtn btn-danger">Cancel Order</a>
+                                        <% }else if(order.paymentStatus=='Failed'){ %>
+                                        <a data-orderid="<%= order._id %>" class="btn retrypayment btn-warning">RetryPayment</a>
+                                            <%}%>
                                             <button class="btn btn-primary view-order-details" data-bs-toggle="modal"
                                                 data-bs-target="#orderDetailsModal"
                                                 data-order='<%= JSON.stringify(order) %>'>

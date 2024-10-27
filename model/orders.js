@@ -69,6 +69,7 @@ const orderSchema = new Schema({
     enum: ['onlinePayment', 'Cash on Delivery','wallet'],
     required: true
   },
+ 
   paymentStatus: {
     type: String,
     enum: ['Pending', 'Paid', 'Failed'],

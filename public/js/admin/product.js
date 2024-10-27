@@ -52,14 +52,18 @@ document.addEventListener('DOMContentLoaded', function () {
     let imagesToCrop = [];
     const croppedImages = []; // Array to store cropped images
     const cropControls = document.getElementById('addcropControls'); 
-    const cropperImage = document.getElementById('addcropperImage'); // Image element for cropping
-    const nextButton = document.getElementById('nextButton'); // Next button for cropping images
+    const cropperImage = document.getElementById('addcropperImage'); 
+    const nextButton = document.getElementById('nextButton'); 
     const productImageInput = document.getElementById('addproductImageInput');
     const addbtn=document.getElementById('addproductbtn')
     productImageInput.addEventListener('change', (event) => {
         const files = event.target.files;
+        console.log(files.length);
+        if(files.length>3){
+            return alert('cannot add morethan 3 images')
+        }
         imagesToCrop = Array.from(files);
-        currentImageIndex = 0; // Reset index to start from the first image
+        currentImageIndex = 0; 
 
         if (imagesToCrop.length > 0) {
             // Show cropping controls
@@ -80,7 +84,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 cropper.destroy();
             }
             cropper = new Cropper(cropperImage, {
-                aspectRatio: 0.5/0.5, 
+                aspectRatio: 1, 
                 viewMode: 1, 
             });
         };
@@ -353,8 +357,9 @@ function loadImageToCrop(file) {
             cropper.destroy();
         }
         cropper = new Cropper(cropperImage, {
-            aspectRatio: 0.7/0.5, // Change aspect ratio as needed
-            viewMode: 1, // Change view mode if necessary
+            aspectRatio: 0.7/0.5, 
+            viewMode: 1, 
+            background: false
         });
     };
     reader.readAsDataURL(file);

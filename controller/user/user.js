@@ -464,6 +464,16 @@ const addaddress = async (req, res) => {
         res.redirect('/signin')
     }
 }
+async function updatestok (productdata,res){
+    for (const datas of productdata) {
+        const product = await product_schema.findById(datas.productid);
+        if (product.stock < datas.quantity) {
+            return res.status(400).json({ success: false, message: 'Insufficient stock for product |' + product.name+"|" });
+        }
+        product.stock -= parseInt(datas.quantity);
+        await product.save();
+    }
+}
 const placeorder = async (req, res) => {
     // console.log(req.body);
     const userid = req.session.ulogin
@@ -492,15 +502,8 @@ const placeorder = async (req, res) => {
                 discount:Math.abs(item.price-item.productid.price)
             }));
 
-            // Update stock for each product
-            for (const datas of productdata) {
-                const product = await product_schema.findById(datas.productid);
-                if (product.stock < datas.quantity) {
-                    return res.status(400).json({ success: false, message: 'Insufficient stock for product ' + product._id });
-                }
-                product.stock -= parseInt(datas.quantity);
-                await product.save();
-            }
+            // updatestok(productdata,res)
+         
 
             // Create order
             const order = new orderchema({
@@ -533,6 +536,9 @@ const placeorder = async (req, res) => {
                     console.log('Razorpay order created:', razorpayOrder);
                     usercart.product = [];
                     await usercart.save();
+                    console.log(productdata);
+                    
+                    // updatestok(productdata,res)
                     return res.status(200).json({
                         success: true,
                         order_id: razorpayOrder.id,
@@ -566,7 +572,7 @@ const placeorder = async (req, res) => {
                             description: `purchesed `
                         });
                         order.status = 'Processing'
-                        order.pstatus=true
+                        order.paymentStatus='Paid'
                         await order.save()
                         usercart.product = [];
                         await usercart.save();
@@ -577,6 +583,8 @@ const placeorder = async (req, res) => {
 
                         wallet.balance -= toatal
                         await wallet.save()
+                    updatestok(productdata,res)
+
                         return res.status(200).json({ success: true, message: 'The order was successfully placed used Wallet' });
 
                     }
@@ -648,7 +656,7 @@ const cancelorder = async (req, res) => {
     if (order.status === 'Pending' || order.status === 'Processing') {
         console.log('in cancelation');
         
-        if (order.pstatus == true) {
+        if (order.paymentStatus == 'Paid') {
             const wallets = await Wallet.findOne({ userId: userid })
             console.log('yes');
             
@@ -846,8 +854,16 @@ const razorpayvarify = async (req, res) => {
         if (razorpay_signature === expectedSign) {
 
             const updatedOrder = await orderchema.findById(orderId);
+            const products=updatedOrder.products.map(item=>({
+                productid: item.productid._id,
+                quantity: item.quantity,
+                price: item.productid.price,
+                discount:Math.abs(item.price-item.productid.price)
+            }))
+
+            updatestok(products,res)
             updatedOrder.status = 'Processing'
-            updatedOrder.pstatus = true
+            updatedOrder.paymentStatus = 'Paid'
             await updatedOrder.save()
             if (!updatedOrder) {
                 throw new Error('Order not found');
@@ -861,7 +877,9 @@ const razorpayvarify = async (req, res) => {
                 order: updatedOrder
             });
         } else {
+            console.log('payment error or failed');
             throw new Error('Invalid signature');
+            
         }
     } catch (error) {
         console.error('Payment verification error:', error);
@@ -965,4 +983,14 @@ const returning = async (req, res) => {
     await orders.save()
 
 }
-module.exports = { signup, otpvarify, resent, varifylogin, viewproduct, logout, blockuser, glogincb, cartitemspush, cartupdata, cartitemdelete, addaddress, placeorder, deleteaddress, cancelorder, editname, changepass, productstockdata, cancelitem, patchwishlist, removewish, coupenapplaying, razorpayvarify, sendreset, resetpage, resetpasspost, returning,addressave }     
+const paymentfaied=async(req,res)=>{
+    console.log(req.params);
+    const orderdata=await orderchema.findById(req.params.id)
+    console.log(orderdata);
+    orderdata.paymentStatus='Failed'
+   await orderdata.save()
+    
+    
+}
+
+module.exports = { signup, otpvarify, resent, varifylogin, viewproduct, logout, blockuser, glogincb, cartitemspush, cartupdata, cartitemdelete, addaddress, placeorder, deleteaddress, cancelorder, editname, changepass, productstockdata, cancelitem, patchwishlist, removewish, coupenapplaying, razorpayvarify, sendreset, resetpage, resetpasspost, returning,addressave,paymentfaied }     

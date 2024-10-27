@@ -101,7 +101,7 @@ const admin = async (req, res) => {
         console.log(range);
 
         // Fetch products
-        const productsAndCategory = await ordersshema.find({ createdAt: { $gt: range } })
+        const productsAndCategory = await ordersshema.find({ createdAt: { $gt: range },paymentStatus:{$in:['Pending','Paid']} })
             .populate('user')
             .populate('products.productid')
             .sort({ createdAt: -1 });
@@ -159,9 +159,9 @@ const user = (req, res) => {
 //product
 
 
-const product = (req, res, next) => {
+const product = async(req, res, next) => {
     const aproducts = req.session.aproducts || '';
-    const cat = req.session.categories || '';
+    const cat = await categoriesschema.find();
     const pagination = req.session.pagination || { totalPages: 1, currentPage: 1 }; // Default pagination info
 
     delete req.session.aproducts;
