@@ -465,9 +465,13 @@ const addaddress = async (req, res) => {
     }
 }
 async function updatestok (productdata,res){
+    console.log('sdfasdgasfgafg');
+    
     for (const datas of productdata) {
         const product = await product_schema.findById(datas.productid);
         if (product.stock < datas.quantity) {
+            console.log('yse');
+            
             return res.status(400).json({ success: false, message: 'Insufficient stock for product |' + product.name+"|" });
         }
         product.stock -= parseInt(datas.quantity);
@@ -475,162 +479,138 @@ async function updatestok (productdata,res){
     }
 }
 const placeorder = async (req, res) => {
-    // console.log(req.body);
-    const userid = req.session.ulogin
+    const userid = req.session.ulogin;
+    const { selectedAddress, paymentmethods, discount, cname } = req.body;
 
-    const { selectedAddress, paymentmethods, discount, cname } = req.body
     if (paymentmethods && selectedAddress && userid) {
-        console.log('payment method is '+paymentmethods);
-        
         try {
             // user's cart and address
-            const usercart = await cartschema.findOne({ userid }).populate('product.productid')
+            const usercart = await cartschema.findOne({ userid }).populate('product.productid');
             const userdata = await User.findById(userid);
             const selectedaddress = await address_scema.findById(selectedAddress);
-            console.log('payment is' + paymentmethods);
-            console.log(usercart);
-            
 
             if (selectedaddress.userid.toString() !== userid.toString()) {
                 return res.status(400).json({ success: false, message: 'User ID and address do not match' });
             }
-            
+
             const productdata = usercart.product.map(item => ({
                 productid: item.productid._id,
                 quantity: item.quantity,
                 price: item.productid.price,
-                discount:Math.abs(item.price-item.productid.price)
+                discount: Math.abs(item.price - item.productid.price)
             }));
 
-            // updatestok(productdata,res)
-         
+            // Check product stock
+            for (const datas of productdata) {
+                const product = await product_schema.findById(datas.productid);
+
+                if (!product) {
+                    return res.status(400).json({ success: false, message: `Product with ID ${datas.productid} not found` });
+                }
+
+                console.log(`Checking stock for product ID: ${datas.productid} - Stock: ${product.stock}, Requested Quantity: ${datas.quantity}`);
+                console.log(product.stock);
+                console.log(product.quantity);
+                
+                if (product.stock < datas.quantity) {
+                    console.log('false');
+                    
+                    return res.status(400).json({ success: false, message: 'Insufficient stock for product |' + product.name + "|" });
+                }
+            }
+
+            // Generate unique order ID
             const uniqueString = `${Date.now()}-${Math.random()}`;
-
-
             const hash = crypto.createHash('sha256').update(uniqueString).digest('hex');
-
-
             const orderId = `ORD-${hash.slice(0, 16).toUpperCase()}`;
-            // Create order
+
+            // Create new order
             const order = new orderchema({
                 user: userid,
-                orderid:orderId,
+                orderid: orderId,
                 products: productdata,
                 totalAmount: Math.floor(usercart.totalprice * 100) / 100,
                 paymentMethod: paymentmethods,
                 shippingAddress: selectedaddress,
-                'coupon.discount': discount,  
+                'coupon.discount': discount,
                 'coupon.couponcode': cname    
             });
-            console.log(discount);
-            console.log(paymentmethods);
-            
-            const ordersave = await order.save();
-            if (paymentmethods === 'onlinePayment') {
 
+            const ordersave = await order.save();
+
+            if (paymentmethods === 'onlinePayment') {
                 if (ordersave) {
-                //   console.log();
-                  
                     userdata.orders.push(ordersave._id);
 
-
                     const options = {
-                        amount: Math.floor((ordersave.totalAmount*100) - (ordersave.coupon.discount*100)),
+                        amount: Math.floor((ordersave.totalAmount * 100) - (ordersave.coupon.discount * 100)),
                         currency: 'INR',
-                        receipt: ordersave._id.toString() 
+                        receipt: ordersave._id.toString()
                     };
 
                     const razorpayOrder = await razorpay.orders.create(options);
-                    console.log('Razorpay order created:', razorpayOrder);
                     usercart.product = [];
                     await usercart.save();
-                    console.log(productdata);
-                    ordersave.razorpay=razorpayOrder.id
-                    ordersave.save()
-                    // updatestok(productdata,res)
+                    ordersave.razorpay = razorpayOrder.id;
+                    await ordersave.save();
+
                     return res.status(200).json({
                         success: true,
                         order_id: razorpayOrder.id,
                         razorpay: true,
                         amount: options.amount,
                         orderId: ordersave._id
-                    })
-
+                    });
                 }
-            }
-
-            else if (paymentmethods == 'wallet') {
+            } else if (paymentmethods === 'wallet') {
                 if (ordersave) {
+                    updatestok(productdata,res)
+                    const wallet = await Wallet.findOne({ userId: userid });
+                    const total = Math.floor(usercart.totalprice * 100) / 100;
 
-
-                    const wallet = await Wallet.findOne({ userId: userid })
-                    const toatal = Math.floor(usercart.totalprice * 100) / 100
-                    console.log('inside wallet');
-                    console.log(wallet.balance);
-                    console.log(toatal);
-
-                    console.log(wallet.balance >= toatal);
-                    if (wallet.balance >= toatal) {
-                        
-                        console.log('insieddsfasdfasfd');
-
+                    if (wallet.balance >= total) {
                         wallet.transactions.push({
                             type: 'debit',
-                            amount: toatal,
+                            amount: total,
                             date: new Date(),
-                            description: `purchesed `
+                            description: 'Purchased'
                         });
-                        order.status = 'Processing'
-                        order.paymentStatus='Paid'
-                        await order.save()
+                        order.status = 'Processing';
+                        order.paymentStatus = 'Paid';
+                        await order.save();
+
                         usercart.product = [];
                         await usercart.save();
-
 
                         userdata.orders.push(ordersave._id);
                         await userdata.save();
 
-                        wallet.balance -= toatal
-                        await wallet.save()
-                    updatestok(productdata,res)
+                        wallet.balance -= total;
+                        await wallet.save();
 
-                        return res.status(200).json({ success: true, message: 'The order was successfully placed used Wallet' });
-
-                    }
-                    else {
-                        console.log('here');
-                        ordersave.paymentStatus='waiting Payment'
-                        ordersave.save()
-                        return res.status(200).json({success:false, reson: 'nobalence', message: 'insufficient balance' })
+                        return res.status(200).json({ success: true, message: 'The order was successfully placed using Wallet' });
+                    } else {
+                        return res.status(200).json({ success: false, reason: 'nobalence', message: 'Insufficient balance' });
                     }
                 }
-            }
-
-            else{
-                console.log('else');
-                
+            } else {
+                updatestok(productdata,res)
                 usercart.product = [];
                 await usercart.save();
 
-                // Add the order to user's history
                 userdata.orders.push(ordersave._id);
                 await userdata.save();
 
-                return res.status(200).json({ success:false,cod:true, message: 'The order was successfully placed' });
+                return res.status(200).json({ success: false, cod: true, message: 'The order was successfully placed' });
             }
-
-
         } catch (error) {
-            console.log('Error in placing order:', error);
-            let errosis=error.error.description
-            console.log(errosis);
-            
-            return res.status(500).json({ success: false, message: 'Error placing order', errosis});
+            console.error('Error in placing order:', error);
+            return res.status(500).json({ success: false, message: 'Error placing order', error: error.message });
         }
     }
-
-
 }
+
+
 const deleteaddress = async (req, res) => {
     const id = req.params.id
     const userid = req.session.ulogin

@@ -254,11 +254,12 @@
                             </span>
                            <div>
                             <span>Payment Status</span>
-                            <span class="badge bg-<% if (order.paymentStatus === 'Paid') { %>success<% 
-                            } else if (order.paymentStatus === 'Pending') { %>warning<% 
-                            } else if (order.paymentStatus === 'Failed') { %>danger<% 
-                            } %>" >
-                           <%= order.paymentStatus %>
+                            <span class="badge bg-<% if (order.paymentStatus === 'Paid'&&order.status!=='Cancelled') { %>success<% 
+                            } else if (order.paymentStatus === 'Pending'&&order.status!=='Cancelled') { %>warning<% 
+                            } else if (order.paymentStatus === 'Failed'&&order.status!=='Cancelled') { %>danger<% 
+                            }else {%>danger<%
+                            }%>" >
+                           <%= order.status!=='Cancelled'? order.paymentStatus:'Canceled' %>
                         </span>
                            </div>
                         

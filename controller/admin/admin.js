@@ -1066,11 +1066,28 @@ const offerapplayinproduct=async(selscted,type,offer)=>{
     let finddata
     if(type=='all'){
         console.log('okke');
-        finddata={}
+    
+        const pdatas=await Product.find({}) 
+        if(offer.discountType=='fixed'){
+           pdatas.forEach(async(data)=>{
+               data.offerdealprice=data.price-offer.discountValue
+               data.dealoffertype='fixed'
+               data.save()
+           })
+       }
+           else if(offer.discountType=='percentage'){
+               pdatas.forEach(async(data)=>{
+                   data.offerdealprice=data.price-(data.price*offer.discountValue)/100
+               data.dealoffertype='percentage'
+
+                   data.save()
+               })
+           }
+  
         
     }
   
-    if(type=='product'){
+   else if(type=='product'){
         const pdatas=await Product.find({_id:{$in:selscted}}) 
          if(offer.discountType=='fixed'){
             pdatas.forEach(async(data)=>{
@@ -1090,7 +1107,7 @@ const offerapplayinproduct=async(selscted,type,offer)=>{
         console.log('products id '+pdatas.length);
 
     }
-    if(type=='category'){
+   else if(type=='category'){
         const pdatas=await Product.find({category_id:{$in:selscted}}) 
         console.log('products id '+pdatas);
         if(offer.discountType=='fixed'){
@@ -1132,7 +1149,7 @@ const deleteoffers = async (req, res) => {
             product={category_id:{$in:offerdata.selectedItems}}
 
         }
-        else{
+        else if(offerdata.applicationType='all'){
           
                 console.log('yess');
                 
