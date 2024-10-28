@@ -38,6 +38,7 @@
                                                 <div class="dropdown-menu">
                                                     <a class="dropdown-item listrange" href="/admin/dashboard?range=7">Last 7 Days</a>
                                                     <a class="dropdown-item listrange" href="/admin/dashboard?range=30">Last 30 Days</a>
+                                                    <a class="dropdown-item listrange" href="/admin/dashboard?range=60">Last 60 Days</a>
                                                 
                                                     <!-- Custom date range input -->
                                                     <label class="dropdown-item">
@@ -203,7 +204,7 @@
                                 <% products.forEach(order=>{ %>
                                <% if(products.length>0){ %>
                                 <tr>
-                                    <td>#<%=order._id%></td>
+                                    <td>#<%=order.orderid%></td>
                                     <td><%=order.user.name%></td>
                                     <td>
                                         <% order.products.forEach(product => { %>
@@ -245,13 +246,15 @@
                                 </tr>
                                 <% }}) %>
                             </tbody>
+                            
                         </table>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-                  </div>
+                  
+</div>
                     
                 </div>
             </div>
@@ -440,11 +443,18 @@ function getRandomColor() {
       // ----------------------------------------------------------------------------------
       // avarege colloction 
       
-      let avarage=toatal/products.length
+      let avarage=(toatal/products.length)||0
       console.log(avarage);
-      document.getElementById('avarage').innerText='₹'+avarage.toFixed()
+      document.getElementById('avarage').innerText='₹'+Math.floor(avarage)
       
       </script>
+      <script>const today = new Date().toISOString().split('T')[0];
+        console.log(today);
+        
+  
+        document.getElementById('dateStart').setAttribute('max', today);
+        document.getElementById('dateEnd').setAttribute('max', today);
+        </script>
   <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js"></script>
 </body>

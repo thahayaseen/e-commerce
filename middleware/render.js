@@ -93,15 +93,34 @@ const adminlogin =async (req, res) => {
 // admin html rendering 
 // LADMIN MEANS LOGIN ADMIN 
 const admin = async (req, res) => {
-    const count = req.query.range || 7;
+     const startDate = req.query.startDate;
+    const endDate = req.query.endDate;
+    const count = req.query.range||7
+    let matchQuery
     const isLogin = req.session.ladmin;
 
     if (isLogin) {
-        const range = new Date(new Date().setDate(new Date().getDate() - parseInt(count)));
-        console.log(range);
+        if (startDate && endDate) {
+            matchQuery = {
+                createdAt: {
+                    $gte: new Date(startDate), $lte: new Date(endDate)
+                },
+                paymentStatus:{$in:['Pending','Paid']}
+            };
+        } else {
+
+            matchQuery = {
+                createdAt: {
+                    $gte: new Date(new Date().setDate(new Date().getDate() - parseInt(count)))
+                },
+                paymentStatus:{$in:['Pending','Paid']}
+            }
+            
+        }
+console.log(matchQuery);
 
         // Fetch products
-        const productsAndCategory = await ordersshema.find({ createdAt: { $gt: range },paymentStatus:{$in:['Pending','Paid']} })
+        const productsAndCategory = await ordersshema.find(matchQuery )
             .populate('user')
             .populate('products.productid')
             .sort({ createdAt: -1 });

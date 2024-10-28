@@ -331,11 +331,11 @@ const coupenedit = async (req, res) => {
     const id = req.params.id
     const cdata = await coupons.findById(id)
     const bdata = req.body
-    const unique = await coupons.findOne({ code: bdata.code })
+    // const unique = await coupons.findOne({ code: bdata.code })
 
-    if (unique) {
-        return res.status(200).json({ success: false, message: 'This coupon in aldredy exsist' })
-    }
+    // if (unique) {
+    //     return res.status(200).json({ success: false, message: 'This coupon in aldredy exsist' })
+    // }
     if (cdata) {
         Object.assign(cdata, req.body)
         await cdata.save()
@@ -752,7 +752,7 @@ const exportpdf = async (req, res) => {
 
 
             const rowData = [
-                formatOrderId(order._id),
+                (order._id),
                 formatCustomer(order.user),
                 formatProducts(order.products),
                 formatCoupon(order.coupon),

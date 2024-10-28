@@ -504,10 +504,17 @@ const placeorder = async (req, res) => {
 
             // updatestok(productdata,res)
          
+            const uniqueString = `${Date.now()}-${Math.random()}`;
 
+
+            const hash = crypto.createHash('sha256').update(uniqueString).digest('hex');
+
+
+            const orderId = `ORD-${hash.slice(0, 16).toUpperCase()}`;
             // Create order
             const order = new orderchema({
                 user: userid,
+                orderid:orderId,
                 products: productdata,
                 totalAmount: Math.floor(usercart.totalprice * 100) / 100,
                 paymentMethod: paymentmethods,
@@ -516,6 +523,7 @@ const placeorder = async (req, res) => {
                 'coupon.couponcode': cname    
             });
             console.log(discount);
+            console.log(paymentmethods);
             
             const ordersave = await order.save();
             if (paymentmethods === 'onlinePayment') {
@@ -537,7 +545,8 @@ const placeorder = async (req, res) => {
                     usercart.product = [];
                     await usercart.save();
                     console.log(productdata);
-                    
+                    ordersave.razorpay=razorpayOrder.id
+                    ordersave.save()
                     // updatestok(productdata,res)
                     return res.status(200).json({
                         success: true,
@@ -596,8 +605,9 @@ const placeorder = async (req, res) => {
                 }
             }
 
-            if (ordersave) {
-
+            else{
+                console.log('else');
+                
                 usercart.product = [];
                 await usercart.save();
 
@@ -605,7 +615,7 @@ const placeorder = async (req, res) => {
                 userdata.orders.push(ordersave._id);
                 await userdata.save();
 
-                return res.status(200).json({ success: true, message: 'The order was successfully placed' });
+                return res.status(200).json({ success: 'Cod', message: 'The order was successfully placed' });
             }
 
 
@@ -992,5 +1002,21 @@ const paymentfaied=async(req,res)=>{
     
     
 }
-
-module.exports = { signup, otpvarify, resent, varifylogin, viewproduct, logout, blockuser, glogincb, cartitemspush, cartupdata, cartitemdelete, addaddress, placeorder, deleteaddress, cancelorder, editname, changepass, productstockdata, cancelitem, patchwishlist, removewish, coupenapplaying, razorpayvarify, sendreset, resetpage, resetpasspost, returning,addressave,paymentfaied }     
+const retrypayment=async(req,res)=>{
+    const id=req.params.id
+    const order=await orderchema.findById(id)
+    const razorpayid=order.razorpay
+    console.log(order);
+    
+    console.log(razorpayid+order.totalAmount);
+    const total=(order.totalAmount-order.coupon.discount*100)
+    return res.status(200).json({
+        success: true,
+        order_id: razorpayid,
+        razorpay: true,
+        amount: total,
+        orderId: id
+    })
+    // res.status(200).json({success:true,datas:razorpayid,,})
+}
+module.exports = { signup, otpvarify, resent, varifylogin, viewproduct, logout, blockuser, glogincb, cartitemspush, cartupdata, cartitemdelete, addaddress, placeorder, deleteaddress, cancelorder, editname, changepass, productstockdata, cancelitem, patchwishlist, removewish, coupenapplaying, razorpayvarify, sendreset, resetpage, resetpasspost, returning,addressave,paymentfaied,retrypayment }     

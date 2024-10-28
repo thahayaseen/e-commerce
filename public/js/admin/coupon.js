@@ -132,12 +132,8 @@ if (coupons) {
           Swal.fire({
             text: data.message,
             icon: 'error',
-            timer: 1600, 
-            timerProgressBar: true, 
-            willClose: () => {
-              window.location.href = '/admin/coupon'; 
-                console.log('Error alert closed');
-            }
+            
+            
         });
           
          }

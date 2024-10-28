@@ -200,6 +200,26 @@ paymentForm.addEventListener('submit', async (e) => {
         
         const data = await response.json();
 
+        if(data.success==false){
+            console.log('nooo');
+            
+           return Swal.fire({
+                text: data.message,
+                icon: 'error',
+                timer: 3000, 
+                showConfirmButton: false,  
+                confirmButtonText: 'Go to Orders',
+                    
+                allowOutsideClick: false,
+                allowEscapeKey: false,
+                allowEnterKey: false,
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    // Redirect to orders page
+                    window.location.href = '/user/orders';
+                } 
+            })
+        }
         if (data.success) {
             if (data.razorpay) {
                 // Initialize Razorpay with order data from backend
@@ -229,12 +249,12 @@ paymentForm.addEventListener('submit', async (e) => {
                                     title: 'Order Placed!',
                                     text: 'Your order has been successfully placed.',
                                     icon: 'success',
-                                    confirmButtonText: 'Go to Home',
+                                    confirmButtonText: 'Go to Orders',
                                     allowOutsideClick: false,
                                     allowEscapeKey: false,
                                 }).then((result) => {
                                     if (result.isConfirmed) {
-                                        window.location.href = '/';
+                                        window.location.href = '/user/orders';
                                     }
                                 });
                             } else {
@@ -269,11 +289,22 @@ paymentForm.addEventListener('submit', async (e) => {
                         
                     })
                    await  Swal.fire({
-                        title: 'Payment Failed!',
-                        text: 'Your payment could not be processed. Please try again.',
-                        icon: 'error',
-                        confirmButtonText: 'Okay',
-                    });
+                    title: 'Payment Failed!',
+                    text: 'Your payment could not be processed. Please try again.',
+                    icon: 'error',
+                   
+                    confirmButtonText: 'Go to Orders',
+                    
+                    allowOutsideClick: false,
+                    allowEscapeKey: false,
+                    allowEnterKey: false,
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        // Redirect to orders page
+                        window.location.href = '/user/orders';
+                    } 
+                });
+                
                 });
                 rzp.open();
             } 
@@ -284,19 +315,60 @@ paymentForm.addEventListener('submit', async (e) => {
                     icon: 'error',
                     timer: 3000, 
                     showConfirmButton: false,  
-                });
-          
+                    confirmButtonText: 'Go to Orders',
+                    
+                    allowOutsideClick: false,
+                    allowEscapeKey: false,
+                    allowEnterKey: false,
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        // Redirect to orders page
+                        window.location.href = '/user/orders';
+                    } 
+                })
         }
         else if(data.success=='cartempty'){
             window.location.href='/'
         }
         else if(data.success==false){
+            console.log('nooo');
+            
             Swal.fire({
                 text: data.message,
                 icon: 'error',
                 timer: 3000, 
                 showConfirmButton: false,  
-            });
+                confirmButtonText: 'Go to Orders',
+                    
+                allowOutsideClick: false,
+                allowEscapeKey: false,
+                allowEnterKey: false,
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    // Redirect to orders page
+                    window.location.href = '/user/orders';
+                } 
+            })
+        }
+        else if(data.success=='Cod'){     
+            console.log('thissss');
+                               
+            Swal.fire({
+                text: data.message,                                                                                                     
+                icon: 'error',
+                timer: 3000, 
+                showConfirmButton: false,  
+                confirmButtonText: 'Go to Orders',
+                    
+                allowOutsideClick: false,
+                allowEscapeKey: false,
+                allowEnterKey: false,
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    // Redirect to orders page
+                    window.location.href = '/user/orders';
+                } 
+            })                                                                                              
         }
         else {
             throw new Error('Order placement failed due to the product you selected outofstock or unavailable' );
@@ -306,7 +378,17 @@ paymentForm.addEventListener('submit', async (e) => {
         Swal.fire({
             text: 'There was an error processing your request. Please try again.'+error,
             icon: 'error',
-        });
+            confirmButtonText: 'Go to Orders',
+                    
+            allowOutsideClick: false,
+            allowEscapeKey: false,
+            allowEnterKey: false,
+        }).then((result) => {
+            if (result.isConfirmed) {
+                // Redirect to orders page
+                window.location.href = '/';
+            } 
+        })
     }
 });
 

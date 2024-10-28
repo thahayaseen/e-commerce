@@ -9,12 +9,13 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" rel="stylesheet" />
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+`
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
   
     <!-- SweetAlert2 JS -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <!-- Toastr JS -->
+    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+    
 
     <style>
         .custom-popup {
@@ -247,7 +248,7 @@
                 <% orders.forEach(order=> { %>
                     <div class="card mb-3">
                         <div class="card-header d-flex justify-content-between align-items-center">
-                            <span>Order #<%= order._id %></span>
+                            <span>Order #<%= order.orderid %></span>
                             <span class="badge bg-<%= order.status === 'Delivered' ? 'success' : 'primary' %>">
                                 <%= order.status %>
                             </span>
@@ -337,7 +338,7 @@
         </div>
     </div>
 
-<!-- return moda  -->
+<!-- return modal  -->
     <div class="modal fade return-reason-modal" id="returnReasonModal" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
