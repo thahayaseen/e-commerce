@@ -252,13 +252,15 @@
                             <span class="badge bg-<%= order.status === 'Delivered' ? 'success' : 'primary' %>">
                                 <%= order.status %>
                             </span>
-                            <span class="badge bg-<% 
-                            if (order.paymentStatus === 'Paid') { %>success<% 
+                           <div>
+                            <span>Payment Status</span>
+                            <span class="badge bg-<% if (order.paymentStatus === 'Paid') { %>success<% 
                             } else if (order.paymentStatus === 'Pending') { %>warning<% 
                             } else if (order.paymentStatus === 'Failed') { %>danger<% 
-                            } %>">
-                            <%= order.paymentStatus %>
+                            } %>" >
+                           <%= order.paymentStatus %>
                         </span>
+                           </div>
                         
                         </div>
                         <div class="card-body">
@@ -334,6 +336,30 @@
                         </div>
                     </div>
                     <% }) %>
+                    <nav aria-label="Order pagination">
+                        <ul class="pagination justify-content-center mt-4">
+                            <!-- Previous Page Link -->
+                            <% if (currentPage > 1) { %>
+                                <li class="page-item">
+                                    <a class="page-link" href="?page=<%= currentPage - 1 %>">Previous</a>
+                                </li>
+                            <% } %>
+        
+                            <!-- Page Numbers -->
+                            <% for (let i = 1; i <= totalPages; i++) { %>
+                                <li class="page-item <%= currentPage === i ? 'active' : '' %>">
+                                    <a class="page-link" href="?page=<%= i %>"><%= i %></a>
+                                </li>
+                            <% } %>
+        
+                            <!-- Next Page Link -->
+                            <% if (currentPage < totalPages) { %>
+                                <li class="page-item">
+                                    <a class="page-link" href="?page=<%= currentPage + 1 %>">Next</a>
+                                </li>
+                            <% } %>
+                        </ul>
+                    </nav>
             </div>
         </div>
     </div>

@@ -494,7 +494,7 @@ const placeorder = async (req, res) => {
             if (selectedaddress.userid.toString() !== userid.toString()) {
                 return res.status(400).json({ success: false, message: 'User ID and address do not match' });
             }
-
+            
             const productdata = usercart.product.map(item => ({
                 productid: item.productid._id,
                 quantity: item.quantity,
@@ -599,8 +599,9 @@ const placeorder = async (req, res) => {
                     }
                     else {
                         console.log('here');
-                        
-                        return res.status(200).json({success:false, reson: 'nobalence', message: 'balence is low' })
+                        ordersave.paymentStatus='waiting Payment'
+                        ordersave.save()
+                        return res.status(200).json({success:false, reson: 'nobalence', message: 'insufficient balance' })
                     }
                 }
             }
@@ -615,7 +616,7 @@ const placeorder = async (req, res) => {
                 userdata.orders.push(ordersave._id);
                 await userdata.save();
 
-                return res.status(200).json({ success:false, message: 'The order was successfully placed' });
+                return res.status(200).json({ success:false,cod:true, message: 'The order was successfully placed' });
             }
 
 

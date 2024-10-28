@@ -194,7 +194,7 @@
                                     <th>Customer</th>
                                     <th>Product</th>
                                     <th>Original Price</th>
-                                    <th>Offer Applied</th>
+                                    <th>Coupon Applied</th>
                                     <th>Final Amount</th>
                                     <th>Status</th>
                                     <th>Date</th>
@@ -226,9 +226,13 @@
                                             <span class="product-offer">
                                                 Coupon: ₹<%=order.coupon.discount%> OFF
                                             </span>
-                                        <% } %>
+                                        <% }else{ %>
+                                            <span class="product-offer">
+                                                No Coupon
+                                            </span>
+                                            <% } %>
                                     </td>
-                                    <td class="final-price">₹<%=order.totalAmount - order.coupon.discount%></td>
+                                    <td class="final-price">₹<%=(order.totalAmount - order.coupon.discount)%></td>
                                     <td>
                                         <% if (order.status === 'Delivered') { %>
                                             <span class="badge badge-success">Delivered</span>

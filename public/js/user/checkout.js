@@ -200,22 +200,7 @@ paymentForm.addEventListener('submit', async (e) => {
         
         const data = await response.json();
 
-        if(data.success==false){
-            console.log('nooo');
-            
-           return  Swal.fire({
-            title: 'Order Placed!',
-            text: 'Your order has been successfully placed.',
-            icon: 'success',
-            confirmButtonText: 'Go to Orders',
-            allowOutsideClick: false,
-            allowEscapeKey: false,
-        }).then((result) => {
-            if (result.isConfirmed) {
-                window.location.href = '/user/orders';
-            }
-        });
-        }
+        
         if (data.success) {
             if (data.razorpay) {
                 // Initialize Razorpay with order data from backend
@@ -306,7 +291,7 @@ paymentForm.addEventListener('submit', async (e) => {
             } 
         } 
         else if(data.reson=='nobalence'){
-                Swal.fire({
+             return   Swal.fire({
                     text: "Insufficient balance!",
                     icon: 'error',
                     timer: 3000, 
@@ -316,15 +301,26 @@ paymentForm.addEventListener('submit', async (e) => {
                     allowOutsideClick: false,
                     allowEscapeKey: false,
                     allowEnterKey: false,
-                }).then((result) => {
-                    if (result.isConfirmed) {
-                        // Redirect to orders page
-                        window.location.href = '/user/orders';
-                    } 
                 })
         }
         else if(data.success=='cartempty'){
-            window.location.href='/'
+          return  window.location.href='/'
+        }
+        else if(data.cod==true){
+            console.log('nooo');
+            
+           return  Swal.fire({
+            title: 'Order Placed!',
+            text: 'Your order has been successfully placed.',
+            icon: 'success',
+            confirmButtonText: 'Go to Orders',
+            allowOutsideClick: false,
+            allowEscapeKey: false,
+        }).then((result) => {
+            if (result.isConfirmed) {
+                window.location.href = '/user/orders';
+            }
+        });
         }
         else if(data.success==false){
             console.log('nooo');
@@ -346,22 +342,7 @@ paymentForm.addEventListener('submit', async (e) => {
                 } 
             })
         }
-        else if(data.success=='Cod'){     
-            console.log('thissss');
-                               
-            Swal.fire({
-                title: 'Order Placed!',
-                text: 'Your order has been successfully placed.',
-                icon: 'success',
-                confirmButtonText: 'Go to Orders',
-                allowOutsideClick: false,
-                allowEscapeKey: false,
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    window.location.href = '/user/orders';
-                }
-            });                                                                                            
-        }
+        
         else {
             throw new Error('Order placement failed due to the product you selected outofstock or unavailable' );
         }

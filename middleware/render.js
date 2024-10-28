@@ -248,16 +248,22 @@ const useraddress = async (req, res) => {
 }
 const oredrs = async (req, res) => {
     try {
-
+        const itemsPerPage=6
+        const page=req.query.page||1
         const userid = req.session.ulogin
-        const orders = await ordersshema.find({ user: userid }).populate('products.productid').sort({ createdAt: -1 })
+        const orders = await ordersshema.find({ user: userid })
+        .populate('products.productid')
+        .skip((page - 1) * itemsPerPage)
+        .limit(itemsPerPage)
+        .sort({ createdAt: -1 })
 
         // console.log('\n datas \n'+orders)
         
-
+        const totalOrders = await ordersshema.countDocuments({ user: userid });
+        const totalPages = Math.ceil(totalOrders / itemsPerPage);
       
 
-        userid? res.render('userside/user dashbord/orders', { orders: orders }):res.redirect('/signin')
+        userid? res.render('userside/user dashbord/orders', { orders: orders ,totalPages,currentPage:page}):res.redirect('/signin')
     } catch (error) {
         console.log(error);
 

@@ -10,7 +10,7 @@ const Wallet = require('../model/wallet')
     passport.use(new GoogleStrategy({
       clientID: process.env.CLIENT_ID,
       clientSecret: process.env.CLIENT_SECRET,
-      callbackURL: process.env.GOOGLECB,
+      callbackURL:'http://localhost:4050/glogin/callback',
       passReqToCallback: true
     },
     async function(request, accessToken, refreshToken, profile, cb) {
