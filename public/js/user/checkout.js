@@ -203,22 +203,18 @@ paymentForm.addEventListener('submit', async (e) => {
         if(data.success==false){
             console.log('nooo');
             
-           return Swal.fire({
-                text: data.message,
-                icon: 'error',
-                timer: 3000, 
-                showConfirmButton: false,  
-                confirmButtonText: 'Go to Orders',
-                    
-                allowOutsideClick: false,
-                allowEscapeKey: false,
-                allowEnterKey: false,
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    // Redirect to orders page
-                    window.location.href = '/user/orders';
-                } 
-            })
+           return  Swal.fire({
+            title: 'Order Placed!',
+            text: 'Your order has been successfully placed.',
+            icon: 'success',
+            confirmButtonText: 'Go to Orders',
+            allowOutsideClick: false,
+            allowEscapeKey: false,
+        }).then((result) => {
+            if (result.isConfirmed) {
+                window.location.href = '/user/orders';
+            }
+        });
         }
         if (data.success) {
             if (data.razorpay) {
@@ -354,21 +350,17 @@ paymentForm.addEventListener('submit', async (e) => {
             console.log('thissss');
                                
             Swal.fire({
-                text: data.message,                                                                                                     
-                icon: 'error',
-                timer: 3000, 
-                showConfirmButton: false,  
+                title: 'Order Placed!',
+                text: 'Your order has been successfully placed.',
+                icon: 'success',
                 confirmButtonText: 'Go to Orders',
-                    
                 allowOutsideClick: false,
                 allowEscapeKey: false,
-                allowEnterKey: false,
             }).then((result) => {
                 if (result.isConfirmed) {
-                    // Redirect to orders page
                     window.location.href = '/user/orders';
-                } 
-            })                                                                                              
+                }
+            });                                                                                            
         }
         else {
             throw new Error('Order placement failed due to the product you selected outofstock or unavailable' );

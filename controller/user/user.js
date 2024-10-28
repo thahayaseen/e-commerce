@@ -615,7 +615,7 @@ const placeorder = async (req, res) => {
                 userdata.orders.push(ordersave._id);
                 await userdata.save();
 
-                return res.status(200).json({ success: 'Cod', message: 'The order was successfully placed' });
+                return res.status(200).json({ success:false, message: 'The order was successfully placed' });
             }
 
 
