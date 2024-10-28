@@ -2,7 +2,10 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 const orderSchema = new Schema({
-  user: {
+orderid:{
+  type:String
+}
+  ,user: {
     type: Schema.Types.ObjectId,
     ref: 'Users',  
     required: true
@@ -69,7 +72,10 @@ const orderSchema = new Schema({
     enum: ['onlinePayment', 'Cash on Delivery','wallet'],
     required: true
   },
-  paymentStatus: {
+ razorpay:{
+  type:String
+ }
+ , paymentStatus: {
     type: String,
     enum: ['Pending', 'Paid', 'Failed'],
     default: 'Pending'

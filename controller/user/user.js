@@ -464,6 +464,16 @@ const addaddress = async (req, res) => {
         res.redirect('/signin')
     }
 }
+async function updatestok (productdata,res){
+    for (const datas of productdata) {
+        const product = await product_schema.findById(datas.productid);
+        if (product.stock < datas.quantity) {
+            return res.status(400).json({ success: false, message: 'Insufficient stock for product |' + product.name+"|" });
+        }
+        product.stock -= parseInt(datas.quantity);
+        await product.save();
+    }
+}
 const placeorder = async (req, res) => {
     // console.log(req.body);
     const userid = req.session.ulogin
@@ -492,19 +502,19 @@ const placeorder = async (req, res) => {
                 discount:Math.abs(item.price-item.productid.price)
             }));
 
-            // Update stock for each product
-            for (const datas of productdata) {
-                const product = await product_schema.findById(datas.productid);
-                if (product.stock < datas.quantity) {
-                    return res.status(400).json({ success: false, message: 'Insufficient stock for product ' + product._id });
-                }
-                product.stock -= parseInt(datas.quantity);
-                await product.save();
-            }
+            // updatestok(productdata,res)
+         
+            const uniqueString = `${Date.now()}-${Math.random()}`;
 
+
+            const hash = crypto.createHash('sha256').update(uniqueString).digest('hex');
+
+
+            const orderId = `ORD-${hash.slice(0, 16).toUpperCase()}`;
             // Create order
             const order = new orderchema({
                 user: userid,
+                orderid:orderId,
                 products: productdata,
                 totalAmount: Math.floor(usercart.totalprice * 100) / 100,
                 paymentMethod: paymentmethods,
@@ -513,11 +523,13 @@ const placeorder = async (req, res) => {
                 'coupon.couponcode': cname    
             });
             console.log(discount);
+            console.log(paymentmethods);
             
             const ordersave = await order.save();
             if (paymentmethods === 'onlinePayment') {
 
                 if (ordersave) {
+                //   console.log();
                   
                     userdata.orders.push(ordersave._id);
 
@@ -532,6 +544,10 @@ const placeorder = async (req, res) => {
                     console.log('Razorpay order created:', razorpayOrder);
                     usercart.product = [];
                     await usercart.save();
+                    console.log(productdata);
+                    ordersave.razorpay=razorpayOrder.id
+                    ordersave.save()
+                    // updatestok(productdata,res)
                     return res.status(200).json({
                         success: true,
                         order_id: razorpayOrder.id,
@@ -565,7 +581,7 @@ const placeorder = async (req, res) => {
                             description: `purchesed `
                         });
                         order.status = 'Processing'
-                        order.pstatus=true
+                        order.paymentStatus='Paid'
                         await order.save()
                         usercart.product = [];
                         await usercart.save();
@@ -576,6 +592,8 @@ const placeorder = async (req, res) => {
 
                         wallet.balance -= toatal
                         await wallet.save()
+                    updatestok(productdata,res)
+
                         return res.status(200).json({ success: true, message: 'The order was successfully placed used Wallet' });
 
                     }
@@ -587,8 +605,9 @@ const placeorder = async (req, res) => {
                 }
             }
 
-            if (ordersave) {
-
+            else{
+                console.log('else');
+                
                 usercart.product = [];
                 await usercart.save();
 
@@ -596,13 +615,16 @@ const placeorder = async (req, res) => {
                 userdata.orders.push(ordersave._id);
                 await userdata.save();
 
-                return res.status(200).json({ success: true, message: 'The order was successfully placed' });
+                return res.status(200).json({ success:false, message: 'The order was successfully placed' });
             }
 
 
         } catch (error) {
             console.log('Error in placing order:', error);
-            return res.status(500).json({ success: false, message: 'Error placing order', error });
+            let errosis=error.error.description
+            console.log(errosis);
+            
+            return res.status(500).json({ success: false, message: 'Error placing order', errosis});
         }
     }
 
@@ -611,6 +633,8 @@ const placeorder = async (req, res) => {
 const deleteaddress = async (req, res) => {
     const id = req.params.id
     const userid = req.session.ulogin
+    console.log(id);
+    
     await address_scema.deleteOne({ _id: id })
     const user = await User.findById(userid)
     filteredarray = user.address.filter(addressId => !addressId.equals(id))
@@ -621,6 +645,19 @@ const deleteaddress = async (req, res) => {
 
 
 }
+const addressave=async(req,res)=>{
+    console.log(req.body);
+    const address=await address_scema.findById(req.body.id)
+    Object.assign(address,req.body)
+    console.log(address);
+    
+  const addresaveed=  await address.save()
+  console.log('saved'+addresaveed);
+  
+  if(addresaveed){
+   return res.status(200).json({success:true ,message:'address updated'})
+  }
+}
 const cancelorder = async (req, res) => {
     const userid = req.session.ulogin
     const orderid = req.params.id;
@@ -629,7 +666,7 @@ const cancelorder = async (req, res) => {
     if (order.status === 'Pending' || order.status === 'Processing') {
         console.log('in cancelation');
         
-        if (order.pstatus == true) {
+        if (order.paymentStatus == 'Paid') {
             const wallets = await Wallet.findOne({ userId: userid })
             console.log('yes');
             
@@ -827,8 +864,16 @@ const razorpayvarify = async (req, res) => {
         if (razorpay_signature === expectedSign) {
 
             const updatedOrder = await orderchema.findById(orderId);
+            const products=updatedOrder.products.map(item=>({
+                productid: item.productid._id,
+                quantity: item.quantity,
+                price: item.productid.price,
+                discount:Math.abs(item.price-item.productid.price)
+            }))
+
+            updatestok(products,res)
             updatedOrder.status = 'Processing'
-            updatedOrder.pstatus = true
+            updatedOrder.paymentStatus = 'Paid'
             await updatedOrder.save()
             if (!updatedOrder) {
                 throw new Error('Order not found');
@@ -842,7 +887,9 @@ const razorpayvarify = async (req, res) => {
                 order: updatedOrder
             });
         } else {
+            console.log('payment error or failed');
             throw new Error('Invalid signature');
+            
         }
     } catch (error) {
         console.error('Payment verification error:', error);
@@ -946,4 +993,30 @@ const returning = async (req, res) => {
     await orders.save()
 
 }
-module.exports = { signup, otpvarify, resent, varifylogin, viewproduct, logout, blockuser, glogincb, cartitemspush, cartupdata, cartitemdelete, addaddress, placeorder, deleteaddress, cancelorder, editname, changepass, productstockdata, cancelitem, patchwishlist, removewish, coupenapplaying, razorpayvarify, sendreset, resetpage, resetpasspost, returning }     
+const paymentfaied=async(req,res)=>{
+    console.log(req.params);
+    const orderdata=await orderchema.findById(req.params.id)
+    console.log(orderdata);
+    orderdata.paymentStatus='Failed'
+   await orderdata.save()
+    
+    
+}
+const retrypayment=async(req,res)=>{
+    const id=req.params.id
+    const order=await orderchema.findById(id)
+    const razorpayid=order.razorpay
+    console.log(order);
+    
+    console.log(razorpayid+order.totalAmount);
+    const total=(order.totalAmount-order.coupon.discount*100)
+    return res.status(200).json({
+        success: true,
+        order_id: razorpayid,
+        razorpay: true,
+        amount: total,
+        orderId: id
+    })
+    // res.status(200).json({success:true,datas:razorpayid,,})
+}
+module.exports = { signup, otpvarify, resent, varifylogin, viewproduct, logout, blockuser, glogincb, cartitemspush, cartupdata, cartitemdelete, addaddress, placeorder, deleteaddress, cancelorder, editname, changepass, productstockdata, cancelitem, patchwishlist, removewish, coupenapplaying, razorpayvarify, sendreset, resetpage, resetpasspost, returning,addressave,paymentfaied,retrypayment }     

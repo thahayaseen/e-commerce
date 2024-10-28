@@ -1,4 +1,4 @@
-const { signup, otpvarify, resent, varifylogin, logout, viewproduct, blockuser, glogincb, cartitemspush, cartupdata, cartitemdelete, addaddress, placeorder, deleteaddress, cancelorder, editname, changepass, productstockdata, cancelitem,patchwishlist,removewish,coupenapplaying,razorpayvarify,sendreset,resetpage,resetpasspost,returning } = require("../controller/user/user")
+const { signup, otpvarify, resent, varifylogin, logout, viewproduct, blockuser, glogincb, cartitemspush, cartupdata, cartitemdelete, addaddress, placeorder, deleteaddress, cancelorder, editname, changepass, productstockdata, cancelitem,patchwishlist,removewish,coupenapplaying,razorpayvarify,sendreset,resetpage,resetpasspost,returning,addressave,paymentfaied,retrypayment } = require("../controller/user/user")
 const { register, login, otp, userhome, productlist, myaccount, userdash, useraddress, oredrs, cartrender, checkout,wishlist,resetpass,walletrender, } = require('../middleware/render')
 // const plogin=require('../controller/user/ulogin')
 const { pregister } = require('../middleware/redirect')
@@ -63,8 +63,8 @@ router.get('/checkout', checkout)
 router.post('/orders', placeorder)
 //addres edit and update
 router.post('/address', addaddress)
-router.patch('/address/update/:id')
-router.patch('/address/:id', deleteaddress)
+router.patch('/address/update',addressave)
+router.delete('/address/:id', deleteaddress)
 router.post('/return/:proid',returning)
 //user data update
 // wallet 
@@ -83,7 +83,8 @@ router.get('/applaycoupon/:name',coupenapplaying)
 router.get('/glogin/callback', glogincb);
 //razorpay varify
 router.post('/verify-payment',razorpayvarify);
-
+router.patch('/payment-failed/:id',paymentfaied);
+router.post('/retrypayment/:id',retrypayment)
 
 
 //logout

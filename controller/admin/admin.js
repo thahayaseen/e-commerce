@@ -221,7 +221,7 @@ const savecat = async (req, res) => {
     try {
         const { newCategoryName, newProductDescription } = req.body
 
-        const cnames = newCategoryName.toLovercase()
+        const cnames = newCategoryName.toLowerCase()
         const uniqcategory = await categories.findOne({ name: cnames })
         if (uniqcategory) {
             console.log(uniqcategory);
@@ -230,7 +230,7 @@ const savecat = async (req, res) => {
 
 
         const newcategories = new categories({
-            name: newCategoryName.toLowercase(),
+            name: newCategoryName.toLowerCase(),
             description: newProductDescription
         })
         await newcategories.save()
@@ -331,11 +331,11 @@ const coupenedit = async (req, res) => {
     const id = req.params.id
     const cdata = await coupons.findById(id)
     const bdata = req.body
-    const unique = await coupons.findOne({ code: bdata.code })
+    // const unique = await coupons.findOne({ code: bdata.code })
 
-    if (unique) {
-        return res.status(200).json({ success: false, message: 'This coupon in aldredy exsist' })
-    }
+    // if (unique) {
+    //     return res.status(200).json({ success: false, message: 'This coupon in aldredy exsist' })
+    // }
     if (cdata) {
         Object.assign(cdata, req.body)
         await cdata.save()
@@ -752,7 +752,7 @@ const exportpdf = async (req, res) => {
 
 
             const rowData = [
-                formatOrderId(order._id),
+                (order._id),
                 formatCustomer(order.user),
                 formatProducts(order.products),
                 formatCoupon(order.coupon),

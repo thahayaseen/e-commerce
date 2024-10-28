@@ -92,26 +92,75 @@ const adminlogin =async (req, res) => {
 
 // admin html rendering 
 // LADMIN MEANS LOGIN ADMIN 
-const admin = async(req, res) => {
-    const count=req.query.range||7
-    const islogin = req.session.ladmin
+const admin = async (req, res) => {
+     const startDate = req.query.startDate;
+    const endDate = req.query.endDate;
+    const count = req.query.range||7
+    let matchQuery
+    const isLogin = req.session.ladmin;
 
-    if(islogin ) {
-    const range= new Date(new Date().setDate(new Date().getDate() - parseInt(count)))
- console.log(range);
- 
+    if (isLogin) {
+        if (startDate && endDate) {
+            matchQuery = {
+                createdAt: {
+                    $gte: new Date(startDate), $lte: new Date(endDate)
+                },
+                paymentStatus:{$in:['Pending','Paid']}
+            };
+        } else {
 
-    // req.session.ladmin
-    const productsandcategory=await ordersshema.find({createdAt:{$gt:range}})
-    .populate('user')
-    .populate('products.productid')
-    .sort({createdAt:-1})
-    
-    console.log(JSON.stringify(productsandcategory));
-    
-   res.render('admin/dashbord',{products:productsandcategory})} 
-   else res.redirect('/admin')
-}
+            matchQuery = {
+                createdAt: {
+                    $gte: new Date(new Date().setDate(new Date().getDate() - parseInt(count)))
+                },
+                paymentStatus:{$in:['Pending','Paid']}
+            }
+            
+        }
+console.log(matchQuery);
+
+        // Fetch products
+        const productsAndCategory = await ordersshema.find(matchQuery )
+            .populate('user')
+            .populate('products.productid')
+            .sort({ createdAt: -1 });
+
+        //  categories
+        const categories = await categoriesschema.find();
+        const categoryCounts = {};
+
+        // Initialize category counts
+        categories.forEach(category => {
+            categoryCounts[category._id] = { name: category.name, count: 0 }; 
+        });
+
+        // count products in each category
+        productsAndCategory.forEach(order => {
+            order.products.forEach(product => {
+                if (product.productid && categoryCounts[product.productid.category_id]) {
+                    categoryCounts[product.productid.category_id].count++;
+                }
+            });
+        });
+        let categorydata=Object.values(categoryCounts)
+        let filterobjs={}
+        categorydata.forEach((data,ind)=>{
+            filterobjs[data.name]=data.count
+            
+        })
+        console.log(filterobjs); 
+        // console.log(categorydata); 
+        // console.log(productsAndCategory); 
+
+   
+        res.render('admin/dashbord', {
+            products: productsAndCategory,
+            categoryCounts: filterobjs
+        });
+    } else {
+        res.redirect('/admin');
+    }
+};
 
 
 
@@ -129,9 +178,9 @@ const user = (req, res) => {
 //product
 
 
-const product = (req, res, next) => {
+const product = async(req, res, next) => {
     const aproducts = req.session.aproducts || '';
-    const cat = req.session.categories || '';
+    const cat = await categoriesschema.find();
     const pagination = req.session.pagination || { totalPages: 1, currentPage: 1 }; // Default pagination info
 
     delete req.session.aproducts;
