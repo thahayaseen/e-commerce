@@ -133,22 +133,35 @@
             <div class="form-group">
               <label for="couponCode">Coupon Code</label>
               <input type="text" class="form-control" id="couponCode" required>
+               <small class="error text-danger"></small>
+
+
             </div>
             <div class="form-group">
               <label for="discountAmount">Discount Amount (%)</label>
               <input type="number" class="form-control" min="0" max="100" maxlength="3" id="discountAmount" required>
+               <small class="error text-danger"></small>
+
+
             </div>
             <div class="form-group">
               <label for="minAmount">Minimum Amount</label>
               <input type="number" class="form-control" min="0" id="minAmount" required>
+               <small class="error text-danger"></small>
+
+
             </div>
             <div class="form-group">
               <label for="maxAmount">Maximum Amount</label>
               <input type="number" class="form-control" min="0" id="maxAmount" required>
+              <small class="error text-danger"></small>
+
             </div>
             <div class="form-group">
               <label for="expiryDate">Expiry Date</label>
               <input type="date" class="form-control" id="expiryDate" required>
+               <small class="error text-danger"></small>
+
             </div>
           </form>
         </div>
@@ -176,22 +189,27 @@
             <div class="form-group">
               <label for="editCouponCode">Coupon Code</label>
               <input type="text" class="form-control" id="editCouponCode" required>
+              <div class="text-danger small dateerror"></div>
             </div>
             <div class="form-group">
               <label for="editDiscountAmount">Discount Amount (%)</label>
               <input type="number" class="form-control" max="100" id="editDiscountAmount" required>
+              <div class="text-danger small dateerror"></div>
             </div>
             <div class="form-group">
               <label for="editMinAmount">Minimum Amount</label>
               <input type="number" class="form-control" id="editMinAmount" min="0" required>
+              <div class="text-danger small dateerror"></div>
             </div>
             <div class="form-group">
               <label for="editMaxAmount">Maximum Amount</label>
               <input type="number" class="form-control" min="0"  id="editMaxAmount" required>
+              <div class="text-danger small dateerror"></div>
             </div>
             <div class="form-group">
               <label for="editExpiryDate">Expiry Date</label>
               <input type="date" class="form-control" id="editExpiryDate" required>
+              <div class="text-danger small dateerror"></div>
             </div>
             <div class="form-group">
               <label for="editStatus">Status</label>
@@ -210,10 +228,27 @@
     </div>
   </div>
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-<script>const today = new Date().toISOString().split('T')[0];
+<script>
+const today = new Date().toISOString().split('T')[0];
+
+const expaidate = document.getElementById('expiryDate');
+
+expaidate.setAttribute('min', today);
+
+expaidate.addEventListener('change', (e) => {
+    const enteredDate = new Date(expaidate.value).toISOString().split('T')[0];
     
-  
-  document.getElementById('expiryDate').setAttribute('min', today);
+    // Compare the dates
+    if (enteredDate > today) {
+        console.log('The selected date is in the future.');
+    } else {
+        console.log('The selected date is today or in the past.');
+    }
+});
+
+
+  document.querySelector('.dateerror').value='The Date Cannot be past'
+
   document.getElementById('editExpiryDate').setAttribute('min', today);
   </script>
   <!-- Scripts -->

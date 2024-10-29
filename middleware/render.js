@@ -101,11 +101,12 @@ const admin = async (req, res) => {
 
     if (isLogin) {
         if (startDate && endDate) {
-            matchQuery = {
+             matchQuery = {
                 createdAt: {
-                    $gte: new Date(startDate), $lte: new Date(endDate)
+                    $gte: new Date(startDate), 
+                    $lt: new Date(new Date(endDate).setDate(new Date(endDate).getDate() + 1)) // Increment to next day
                 },
-                paymentStatus:{$in:['Pending','Paid']}
+                paymentStatus: { $in: ['Pending', 'Paid'] }
             };
         } else {
 
