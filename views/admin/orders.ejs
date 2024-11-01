@@ -78,7 +78,7 @@
                             </td>
                             <td><%= order._id %></td>
                             <td><%= order.user.name %></td>
-                            <td>$<%= order.totalAmount %></td>
+                            <td>₹<%= order.totalAmount %></td>
                             <td>
                               <select class="form-control status-select actionbtn" data-id="<%= order._id %>">
                                 <option value="Pending" <%= order.status === 'Pending' ? 'selected' : '' %>>Pending</option>

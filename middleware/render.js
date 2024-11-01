@@ -421,5 +421,26 @@ const datatoedit=async(req,res)=>{
     }
 }
 
+const placedorder=async (req,res)=>{
+    const orderid=req.session.orderid
+    delete req.session.orderid
+if(orderid){
+    const order=await ordersshema.findById(orderid)
+    .populate('products.productid')  
+ 
+    order.products.forEach(data=>{
+        // console.log(data.productid);
+        data.name=''
+       data.name=data.productid.name
+        console.log(data.name);
+    })
+    
+    res.render('userside/orderconformpage',{order});
+}
+else {
+    res.redirect('/')
+}
 
-module.exports = { register, login, adminlogin, otp, admin, user, product, catagory, userhome, productlist, myaccount, userdash, useraddress, oredrs, cartrender, checkout, orders, wishlist, coupenrender,resetpass,walletrender,offerpage,datatoedit }
+}
+
+module.exports = { register, login, adminlogin, otp, admin, user, product, catagory, userhome, productlist, myaccount, userdash, useraddress, oredrs, cartrender, checkout, orders, wishlist, coupenrender,resetpass,walletrender,offerpage,datatoedit,placedorder }

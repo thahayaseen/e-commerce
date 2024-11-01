@@ -624,8 +624,7 @@ const exportpdf = async (req, res) => {
             { $sort: { createdAt: -1 } }
         ])
 
-        // console.log(data);
-        console.log(JSON.stringify(data));
+   
 
         const doc = new PDFDocument({
             size: 'A3',

@@ -1,227 +1,87 @@
-[
-  {
-    "coupon": {
-      "discount": 0
-    },
-    "shippingAddress": {
-      "fullname": "Siyad Muhsin k",
-      "addressline1": "KANNANKUZHI PULPATTA 676123 MALAPPURAM",
-      "addressline2": "   ",
-      "city": "Malappuram",
-      "state": "Kerala",
-      "zipcode": "676123",
-      "country": "US",
-      "phone": "0000000000"
-    },
-    "_id": "671cb310ffe79d7147cb48d6",
-    "user": {
-      "_id": "671cb195ffe79d7147cb481f",
-      "name": "Siyad Muhsin",
-      "user_name": "siyadmuhsin574",
-      "email": "siyadsm4065@gmail.com",
-      "googleId": "100172364386964857164",
-      "phone": null,
-      "address": [
-        "671cb21affe79d7147cb4860",
-        "671cb254ffe79d7147cb4869"
-      ],
-      "uotp": null,
-      "varify": true,
-      "isadmin": false,
-      "orders": [],
-      "blocked": false,
-      "createdAt": "2024-10-26T09:08:37.851Z",
-      "updatedAt": "2024-10-26T09:11:48.050Z",
-      "__v": 2
-    },
-    "products": [
-      {
-        "productid": {
-          "_id": "670e8dd8b49b130e45f69ffb",
-          "name": "535",
-          "price": 535,
-          "stock": 519,
-          "unlist": false,
-          "images": [
-            "1729007064625.jpg"
-          ],
-          "description": "452345",
-          "offer": 5,
-          "category_id": "66fa26a5e8f8b40366d3d0e9",
-          "createdAt": "2024-10-15T15:44:24.649Z",
-          "updatedAt": "2024-10-26T09:14:56.196Z",
-          "__v": 0,
-          "dealoffertype": "percentage",
-          "offerdealprice": 0
-        },
-        "discount": 26.75,
-        "quantity": 2,
-        "price": 535,
-        "status": true,
-        "return": "returning",
-        "_id": "671cb310ffe79d7147cb48d7",
-        "returnExplanation": "Sadhan poora",
-        "returnReason": "wrong_size"
-      }
-    ],
-    "totalAmount": 1016.5,
-    "status": "Delivered",
-    "paymentMethod": "onlinePayment",
-    "paymentStatus": "Pending",
-    "pstatus": true,
-    "orderDate": "2024-10-26T09:14:56.206Z",
-    "createdAt": "2024-10-26T09:14:56.209Z",
-    "updatedAt": "2024-10-26T09:18:40.893Z",
-    "__v": 0
+{
+  "coupon": {
+    "discount": 0
   },
-  {
-    "coupon": {
-      "discount": 0
-    },
-    "shippingAddress": {
-      "fullname": "Siyad Muhsin k",
-      "addressline1": "KANNANKUZHI PULPATTA 676123 MALAPPURAM",
-      "addressline2": "   ",
-      "city": "Malappuram",
-      "state": "Kerala",
-      "zipcode": "676123",
-      "country": "US",
-      "phone": "0000000000"
-    },
-    "_id": "671cb273ffe79d7147cb4884",
-    "user": {
-      "_id": "671cb195ffe79d7147cb481f",
-      "name": "Siyad Muhsin",
-      "user_name": "siyadmuhsin574",
-      "email": "siyadsm4065@gmail.com",
-      "googleId": "100172364386964857164",
-      "phone": null,
-      "address": [
-        "671cb21affe79d7147cb4860",
-        "671cb254ffe79d7147cb4869"
-      ],
-      "uotp": null,
-      "varify": true,
-      "isadmin": false,
-      "orders": [],
-      "blocked": false,
-      "createdAt": "2024-10-26T09:08:37.851Z",
-      "updatedAt": "2024-10-26T09:11:48.050Z",
-      "__v": 2
-    },
-    "products": [
-      {
-        "productid": {
-          "_id": "66fd08e66988d06040bdc7cd",
-          "name": "Acer EK220Q 21.5 Inch ",
-          "price": 4799,
-          "stock": 37,
-          "unlist": false,
-          "images": [
-            "1727858918097.jpg",
-            "1727858918099.jpg",
-            "1727858918101.jpg"
-          ],
-          "description": "💥Full HD💥21.5 Inch Full HD 1920 x 1080 Resolution VA Panel Monitor I 250 Nits Brightness I 178 / 178 Degree View Angle I Edge to Edge Zero Frame Design\r\n💥1 MS💥 VRB Respose time helps Reduces Ghost & smearing effect also Elimination blur on fast moving object I 💥100 Hz💥 Refresh Rate for Outstanding fluidity of images & also provide gamers an excellent in-game experience",
-          "category_id": "66fa26a5e8f8b40366d3d0e9",
-          "createdAt": "2024-10-02T08:48:38.112Z",
-          "updatedAt": "2024-10-26T09:13:59.914Z",
-          "__v": 2,
-          "offer": 11,
-          "dealoffertype": "percentage",
-          "offerdealprice": 0
-        },
-        "discount": 527.8900000000003,
-        "quantity": 2,
-        "price": 4799,
-        "status": true,
-        "return": "notrequst",
-        "_id": "671cb273ffe79d7147cb4885"
-      }
-    ],
-    "totalAmount": 8542.21,
-    "status": "Cancelled",
-    "paymentMethod": "onlinePayment",
-    "paymentStatus": "Pending",
-    "pstatus": false,
-    "orderDate": "2024-10-26T09:12:19.498Z",
-    "createdAt": "2024-10-26T09:12:19.501Z",
-    "updatedAt": "2024-10-26T09:13:59.893Z",
-    "__v": 0
+  "shippingAddress": {
+    "fullname": "THAHA YASEEN",
+    "addressline1": "Kolathara, Kozhikode",
+    "addressline2": "India",
+    "city": "Kozhikode",
+    "state": "Kerala",
+    "zipcode": "673655",
+    "country": "IN",
+    "phone": "8089109152"
   },
-  {
-    "coupon": {
-      "discount": 0
+  "_id": "6724faa8c9da29794dabf388",
+  "orderid": "ORD-B6A2385626E0D7E2",
+  "user": "671f84f365914e4db506732b",
+  "products": [
+    {
+      "productid": {
+        "_id": "671e88270188dd16e106f981",
+        "name": "ALKETRON Icecube T100-Gaming",
+        "price": 250000,
+        "stock": 537,
+        "unlist": false,
+        "images": [
+          "1730054183239.jpg",
+          "1730054183247.jpg",
+          "1730054183254.jpg"
+        ],
+        "description": "ALKETRON Icecube T100-Gaming Desktop PC(Competition Edition) - i9 core 14th GEN(Raptor Lake Refresh) Processor; RTX 4060Ti Graphics-Fully Assembled PC with Remote Cabinet Aura Control(3Year Warranty)",
+        "offer": 2,
+        "category_id": "671e7f0a1b0f8702dda62e78",
+        "createdAt": "2024-10-27T18:36:23.265Z",
+        "updatedAt": "2024-11-01T15:59:21.074Z",
+        "__v": 0,
+        "dealoffertype": "percentage",
+        "offerdealprice": 125000
+      },
+      "discount": 125000,
+      "quantity": 1,
+      "price": 250000,
+      "status": true,
+      "return": "notrequst",
+      "_id": "6724faa8c9da29794dabf389"
     },
-    "shippingAddress": {
-      "fullname": "Siyad Muhsin k",
-      "addressline1": "KANNANKUZHI PULPATTA 676123 MALAPPURAM",
-      "addressline2": "   ",
-      "city": "Malappuram",
-      "state": "Kerala",
-      "zipcode": "676123",
-      "country": "US",
-      "phone": "0000000000"
-    },
-    "_id": "671cb26affe79d7147cb4879",
-    "user": {
-      "_id": "671cb195ffe79d7147cb481f",
-      "name": "Siyad Muhsin",
-      "user_name": "siyadmuhsin574",
-      "email": "siyadsm4065@gmail.com",
-      "googleId": "100172364386964857164",
-      "phone": null,
-      "address": [
-        "671cb21affe79d7147cb4860",
-        "671cb254ffe79d7147cb4869"
-      ],
-      "uotp": null,
-      "varify": true,
-      "isadmin": false,
-      "orders": [],
-      "blocked": false,
-      "createdAt": "2024-10-26T09:08:37.851Z",
-      "updatedAt": "2024-10-26T09:11:48.050Z",
-      "__v": 2
-    },
-    "products": [
-      {
-        "productid": {
-          "_id": "66fd08e66988d06040bdc7cd",
-          "name": "Acer EK220Q 21.5 Inch ",
-          "price": 4799,
-          "stock": 37,
-          "unlist": false,
-          "images": [
-            "1727858918097.jpg",
-            "1727858918099.jpg",
-            "1727858918101.jpg"
-          ],
-          "description": "💥Full HD💥21.5 Inch Full HD 1920 x 1080 Resolution VA Panel Monitor I 250 Nits Brightness I 178 / 178 Degree View Angle I Edge to Edge Zero Frame Design\r\n💥1 MS💥 VRB Respose time helps Reduces Ghost & smearing effect also Elimination blur on fast moving object I 💥100 Hz💥 Refresh Rate for Outstanding fluidity of images & also provide gamers an excellent in-game experience",
-          "category_id": "66fa26a5e8f8b40366d3d0e9",
-          "createdAt": "2024-10-02T08:48:38.112Z",
-          "updatedAt": "2024-10-26T09:13:59.914Z",
-          "__v": 2,
-          "offer": 11,
-          "dealoffertype": "percentage",
-          "offerdealprice": 0
-        },
-        "discount": 527.8900000000003,
-        "quantity": 2,
-        "price": 4799,
-        "status": true,
-        "return": "notrequst",
-        "_id": "671cb26affe79d7147cb487a"
-      }
-    ],
-    "totalAmount": 8542.21,
-    "status": "Pending",
-    "paymentMethod": "wallet",
-    "paymentStatus": "Pending",
-    "pstatus": false,
-    "orderDate": "2024-10-26T09:12:10.534Z",
-    "createdAt": "2024-10-26T09:12:10.539Z",
-    "updatedAt": "2024-10-26T09:12:10.539Z",
-    "__v": 0
-  }
-]
+    {
+      "productid": {
+        "_id": "671e87af103c05a992a0251a",
+        "name": "ASUS ROG Strix G13CHR 2024",
+        "price": 200000,
+        "stock": 34,
+        "unlist": false,
+        "images": [
+          "1730054063327.jpg",
+          "1730054063333.jpg",
+          "1730054063339.jpg"
+        ],
+        "description": "Crore, Intel® Core™ i7-14700F 14th Gen, Gaming Desktop (16GB/1TB SSD/8GB NVIDIA GeForce RTX 4060 Graphics/Windows 11/Extreme Dark Gray/8Kg), G13CHR-71470F004WS",
+        "offer": 3,
+        "category_id": "671e7f0a1b0f8702dda62e78",
+        "createdAt": "2024-10-27T18:34:23.354Z",
+        "updatedAt": "2024-11-01T15:59:21.969Z",
+        "__v": 0,
+        "dealoffertype": "percentage",
+        "offerdealprice": 100000
+      },
+      "discount": 100000,
+      "quantity": 2,
+      "price": 200000,
+      "status": true,
+      "return": "notrequst",
+      "_id": "6724faa8c9da29794dabf38a"
+    }
+  ],
+  "refund": 0,
+  "totalAmount": 325000,
+  "status": "Processing",
+  "paymentMethod": "onlinePayment",
+  "paymentStatus": "Paid",
+  "pstatus": false,
+  "orderDate": "2024-11-01T15:58:32.024Z",
+  "createdAt": "2024-11-01T15:58:32.026Z",
+  "updatedAt": "2024-11-01T15:59:20.962Z",
+  "__v": 0,
+  "razorpay": "order_PFwSVMf1lMVoJo"
+}

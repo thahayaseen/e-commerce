@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Order Confirmation</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        /* Animations */
+        @keyframes slideIn {
+            from {
+                transform: translateY(20px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        @keyframes checkmark {
+            0% {
+                transform: scale(0);
+            }
+            60% {
+                transform: scale(1.2);
+            }
+            100% {
+                transform: scale(1);
+            }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        /* Base Styles */
+        body {
+            font-family: 'Arial', sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 40px auto;
+            padding: 20px;
+            animation: fadeIn 1s ease-out;
+        }
+
+        .confirmation-card {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            padding: 40px;
+            animation: slideIn 0.8s ease-out;
+            position: relative;
+        }
+
+        /* Header Styles */
+        .success-header {
+            text-align: center;
+            color: #2ecc71;
+            margin-bottom: 40px;
+        }
+
+        .success-icon {
+            font-size: 64px;
+            margin-bottom: 20px;
+            display: block;
+            animation: checkmark 1s cubic-bezier(0.19, 1, 0.22, 1);
+            color: #2ecc71;
+        }
+
+        .success-header h1 {
+            margin: 10px 0;
+            color: #2c3e50;
+            font-size: 2.5em;
+        }
+
+        .success-header p {
+            color: #7f8c8d;
+            font-size: 1.2em;
+        }
+
+        /* Order Details Styles */
+        .order-details {
+            margin: 30px 0;
+            padding: 25px;
+            background: #f8f9fa;
+            border-radius: 15px;
+            border-left: 5px solid #3498db;
+            animation: slideIn 0.8s ease-out 0.2s backwards;
+        }
+
+        .order-details h2 {
+            color: #2c3e50;
+            margin-top: 0;
+        }
+
+        /* Order Items Styles */
+        .order-items {
+            margin: 25px 0;
+            background-color: #fff;
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            animation: slideIn 0.8s ease-out 0.4s backwards;
+        }
+
+        .order-items h2 {
+            color: #2c3e50;
+            margin-top: 0;
+        }
+
+        .item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px;
+            margin: 10px 0;
+            background: #f8f9fa;
+            border-radius: 10px;
+            transition: all 0.3s ease;
+        }
+
+        .item:hover {
+            transform: translateX(5px);
+            background: #f1f3f5;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        }
+
+        .item h4 {
+            margin: 0;
+            color: #2c3e50;
+        }
+
+        .item p {
+            margin: 5px 0;
+            color: #7f8c8d;
+        }
+
+        .price {
+            font-weight: bold;
+            color: #2c3e50;
+            font-size: 1.1em;
+        }
+
+        .total {
+            font-size: 1.3em;
+            font-weight: bold;
+            margin-top: 25px;
+            padding: 20px;
+            text-align: right;
+            color: #2c3e50;
+            border-top: 2px solid #eee;
+        }
+
+        /* Back to Order Button Styles */
+        .back-to-order {
+            display: inline-flex;
+            align-items: center;
+            padding: 12px 24px;
+            color: #3498db;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 16px;
+            border-radius: 25px;
+            background: white;
+            box-shadow: 0 4px 15px rgba(52, 152, 219, 0.15);
+            transition: all 0.3s ease;
+            position: absolute;
+            top: 20px;
+            left: 20px;
+        }
+
+        .back-to-order:before {
+            content: '←';
+            margin-right: 8px;
+            transition: transform 0.3s ease;
+            display: inline-block;
+        }
+
+        .back-to-order:hover {
+            transform: translateX(-5px);
+            box-shadow: 0 6px 20px rgba(52, 152, 219, 0.25);
+            color: #2980b9;
+        }
+
+        .back-to-order:hover:before {
+            transform: translateX(-3px);
+        }
+
+        /* Status Badge */
+        .status-badge {
+            display: inline-block;
+            padding: 5px 15px;
+            border-radius: 15px;
+            font-size: 0.9em;
+            font-weight: bold;
+            background: #2ecc71;
+            color: white;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .container {
+                margin: 20px auto;
+                padding: 10px;
+            }
+
+            .confirmation-card {
+                padding: 20px;
+            }
+
+            .success-icon {
+                font-size: 48px;
+            }
+
+            .success-header h1 {
+                font-size: 2em;
+            }
+
+            .back-to-order {
+                position: relative;
+                top: 0;
+                left: 0;
+                margin-top: 20px;
+                width: 100%;
+                justify-content: center;
+            }
+        }
+
+        /* Print Styles */
+        @media print {
+            body {
+                background: white;
+            }
+
+            .confirmation-card {
+                box-shadow: none;
+            }
+
+            .back-to-order {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="confirmation-card">
+            <a href="/user/orders" class="back-to-order">
+                Back to Order
+            </a>
+            
+            <div class="success-header">
+                <i class="fas fa-check-circle success-icon"></i>
+                <h1>Order Confirmed!</h1>
+                <p>Thank you for your purchase</p>
+            </div>
+
+            <div class="order-details">
+                <h2>Order Information</h2>
+                <p><strong>Order Number:</strong> <%= order.orderid %></p>
+                <p><strong>Payment Method:</strong> <%= order.paymentMethod %></p>
+                <p><strong>Payment Status:</strong> 
+                    <span class="status-badge">
+                        <%= order.paymentStatus %>
+                    </span>
+                </p>
+            </div>
+
+            <div class="order-items">
+                <h2>Order Items</h2>
+                <% order.products.forEach((item,index) => { %>
+                    <div class="item">
+                        <div>
+                            <h4><%= item.name %></h4>
+                            <p>Quantity: <%= item.quantity %></p>
+                        </div>
+                        <div class="price">
+                            $<%= ((item.price-item.discount) * item.quantity).toFixed(2) %>
+                        </div>
+                    </div>
+                <% }); %>
+
+                <div class="total">
+                    Total: $<%= (order.totalAmount - (order.coupon ? order.coupon.discount : 0)).toFixed(2) %>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

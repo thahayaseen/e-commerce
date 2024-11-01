@@ -226,18 +226,7 @@ paymentForm.addEventListener('submit', async (e) => {
 
                             const verifyResult = await verifyResponse.json();
                             if (verifyResult.success) {
-                                Swal.fire({
-                                    title: 'Order Placed!',
-                                    text: 'Your order has been successfully placed.',
-                                    icon: 'success',
-                                    confirmButtonText: 'Go to Orders',
-                                    allowOutsideClick: false,
-                                    allowEscapeKey: false,
-                                }).then((result) => {
-                                    if (result.isConfirmed) {
-                                        window.location.href = '/user/orders';
-                                    }
-                                });
+                                window.location.href='/orderplaced'
                             } else {
                                 throw new Error('Payment verification failed');
                             }
@@ -289,6 +278,14 @@ paymentForm.addEventListener('submit', async (e) => {
                 });
                 rzp.open();
             } 
+            else if(data.cod==true){
+               
+                
+          window.location.href='/orderplaced'
+            }
+            else{
+                window.location.href='/orderplaced'
+            }
         } 
         else if(data.reson=='nobalence'){
              return   Swal.fire({
@@ -303,25 +300,11 @@ paymentForm.addEventListener('submit', async (e) => {
                     allowEnterKey: false,
                 })
         }
+       
         else if(data.success=='cartempty'){
           return  window.location.href='/'
         }
-        else if(data.cod==true){
-            console.log('nooo');
-            
-           return  Swal.fire({
-            title: 'Order Placed!',
-            text: 'Your order has been successfully placed.',
-            icon: 'success',
-            confirmButtonText: 'Go to Orders',
-            allowOutsideClick: false,
-            allowEscapeKey: false,
-        }).then((result) => {
-            if (result.isConfirmed) {
-                window.location.href = '/user/orders';
-            }
-        });
-        }
+        
         else if(data.success==false){
             console.log('nooo');
             

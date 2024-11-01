@@ -24,7 +24,8 @@ ordercancelbtn.forEach(function(btn) {
         });
 
         if (result.isConfirmed) {
-            const id = e.target.dataset.orderid;
+            const orderid = e.target.dataset.orderid;
+            const productid=e.target.dataset.productid
             
             // Show loading state
             Swal.fire({
@@ -38,8 +39,12 @@ ordercancelbtn.forEach(function(btn) {
             });
 
             try {
-                const response = await fetch(`/orders/${id}`, {
-                    method: 'PATCH'
+                const response = await fetch(`/user/cancel-product`, {
+                    method: 'POST',
+                    headers:{
+                        'Content-Type':'application/json'
+                    },
+                    body:JSON.stringify({productid,orderid})
                 });
                 const data = await response.json();
 
@@ -54,7 +59,7 @@ ordercancelbtn.forEach(function(btn) {
                     });
                     
                    
-                    window.location.href = '/user/orders';
+                    window.location.reload(true)
                 } else {
                     
                     Swal.fire({
@@ -84,8 +89,10 @@ ordercancelbtn.forEach(function(btn) {
         }
     });
 });
-document.querySelectorAll('.retrypayment').forEach(item=>{
+document.querySelectorAll('#retrypayment').forEach(item=>{
     item.addEventListener('click',(e)=>{
+        console.log('haloo');
+        
         const orderid=item.dataset.orderid
         console.log(orderid);
         fetch('/retrypayment/'+orderid,{method:'POST'})
@@ -126,7 +133,7 @@ document.querySelectorAll('.retrypayment').forEach(item=>{
                                     allowEscapeKey: false,
                                 }).then((result) => {
                                     if (result.isConfirmed) {
-                                        window.location.href = '/user/orders';
+                                        window.location.reload(true)
                                     }
                                 });
                             } else {

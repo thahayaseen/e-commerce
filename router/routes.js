@@ -1,5 +1,5 @@
-const { signup, otpvarify, resent, varifylogin, logout, viewproduct, blockuser, glogincb, cartitemspush, cartupdata, cartitemdelete, addaddress, placeorder, deleteaddress, cancelorder, editname, changepass, productstockdata, cancelitem,patchwishlist,removewish,coupenapplaying,razorpayvarify,sendreset,resetpage,resetpasspost,returning,addressave,paymentfaied,retrypayment } = require("../controller/user/user")
-const { register, login, otp, userhome, productlist, myaccount, userdash, useraddress, oredrs, cartrender, checkout,wishlist,resetpass,walletrender, } = require('../middleware/render')
+const { signup, otpvarify, resent, varifylogin, logout, viewproduct, blockuser, glogincb, cartitemspush, cartupdata, cartitemdelete, addaddress, placeorder, deleteaddress, cancelorder, editname, changepass, productstockdata, cancelitem,patchwishlist,removewish,coupenapplaying,razorpayvarify,sendreset,resetpage,resetpasspost,returning,addressave,paymentfaied,retrypayment,invoice } = require("../controller/user/user")
+const { register, login, otp, userhome, productlist, myaccount, userdash, useraddress, oredrs, cartrender, checkout,wishlist,resetpass,walletrender,placedorder } = require('../middleware/render')
 // const plogin=require('../controller/user/ulogin')
 const { pregister } = require('../middleware/redirect')
 const { allproducts } = require('../controller/finding_all_admin')
@@ -44,9 +44,10 @@ router.get('/user/myaccount', myaccount)
 router.get('/user/mydash', userdash)
 router.get('/user/address', useraddress)
 router.get('/user/orders', oredrs)
-// router.post('/user/cancel-product', cancelitem)
+router.post('/user/cancel-product', cancelitem)
+router.get('/download-invoice/:orderid',invoice)
 
-router.patch('/orders/:id', cancelorder)
+// router.patch('/orders/:id', cancelorder)
 //google validation
 router.get('/glogin',
     passport.authenticate('google', { scope: ['email', 'profile'] })
@@ -61,6 +62,7 @@ router.delete('/cart/delete', cartitemdelete)
 //checkout page 
 router.get('/checkout', checkout)
 router.post('/orders', placeorder)
+router.get('/orderplaced',placedorder)
 //addres edit and update
 router.post('/address', addaddress)
 router.patch('/address/update',addressave)
