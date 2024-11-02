@@ -10,6 +10,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.7.0/chart.min.js"></script>
     <script>const categoryCounts=<%-JSON.stringify(categoryCounts)%>;</script>
     <script>const products=<%-JSON.stringify(products)%>;</script>
+    <script>const top10product=<%-JSON.stringify(topproduct)%>;</script>
 </head>
 
 <body>
@@ -36,6 +37,7 @@
                                                     <i class="mdi mdi-calendar-range"></i> Report
                                                 </button>
                                                 <div class="dropdown-menu">
+                                                    <a class="dropdown-item listrange" href="/admin/dashboard?range=1">Today</a>
                                                     <a class="dropdown-item listrange" href="/admin/dashboard?range=7">Last 7 Days</a>
                                                     <a class="dropdown-item listrange" href="/admin/dashboard?range=30">Last 30 Days</a>
                                                     <a class="dropdown-item listrange" href="/admin/dashboard?range=60">Last 60 Days</a>
@@ -73,7 +75,7 @@
 
                   
                     <div class="content">
-                      <!-- Page Title -->
+             
                      
   
                       <!-- Sales Statistics Cards -->
@@ -166,7 +168,8 @@
                               <div class="card">
                                   <div class="card-body">
                                       <h4 class="card-title">Sales Trend</h4>
-                                      <canvas id="salesChart"></canvas>
+                                      <canvas id="barChart"></canvas>
+                                     
                                   </div>
                               </div>
                           </div>
@@ -174,7 +177,7 @@
                               <div class="card">
                                   <div class="card-body">
                                       <h4 class="card-title">Sales by Category</h4>
-                                      <canvas id="pieChart"></canvas>
+                                       <canvas id="pieChart"></canvas>
                                   </div>
                               </div>
                           </div>
@@ -182,11 +185,11 @@
   
                       <!-- Recent Sales Table -->
                         <div class="row">
-        <div class="col-12 grid-margin">
-            <div class="card">
-                <div class="card-body">
-                    <h4 class="card-title">Recent Sales</h4>
-                    <div class="table-responsive">
+                        <div class="col-12 grid-margin">
+                        <div class="card">
+                        <div class="card-body">
+                        <h4 class="card-title">Recent Sales</h4>
+                        <div class="table-responsive">
                         <table class="table">
                             <thead>
                                 <tr>
@@ -209,7 +212,12 @@
                                     <td>
                                         <% order.products.forEach(product => { %>
                                             <div class="product-item mb-2">
-                                                <div><%=product.productid.name%></div>
+                                                <% if(product.status){ %>
+                                                   <div><%=  product.productid.name%></div> 
+                                                   <% }else{ %>
+                                                    <del><%=product.productid.name%></del>
+                                                    <% } %>
+                                           
                                                 <% if(product.productid.offer && product.productid.offer) { %>
                                                     <span class="product-offer">
                                                         <%=product.productid.offer%>% OFF
@@ -219,7 +227,16 @@
                                         <% }) %>
                                     </td>
                                     <td class="price-details">
-                                        <span class="original-price">₹<%=order.totalAmount%></span>
+                                        <% const total=order.products
+                                        .filter(data=>data.status===true)
+                                        .reduce((acc,data)=>{
+                                            return acc+(data.price-data.discount)*data.quantity
+                               },0)
+                                        
+                                        
+                                        %>
+
+                                        <span class="original-price"><%=total?'₹'+total :'Order cancelled'%></span>
                                     </td>
                                     <td>
                                         <% if(order.coupon && order.coupon.discount) { %>
@@ -232,7 +249,7 @@
                                             </span>
                                             <% } %>
                                     </td>
-                                    <td class="final-price">₹<%=(order.totalAmount - order.coupon.discount)%></td>
+                                    <td class="final-price">₹<%=(order.totalAmount - order.coupon.discount-order.refund)%></td>
                                     <td>
                                         <% if (order.status === 'Delivered') { %>
                                             <span class="badge badge-success">Delivered</span>
@@ -282,57 +299,75 @@
 
 
 <script>
+ 
+    function getRandomColor() {
+        const letters = '0123456789ABCDEF';
+        let color = '#';
+        for (let i = 0; i < 6; i++) {
+            color += letters[Math.floor(Math.random() * 16)];
+        }
+        return color;
+    }
 
+  
+    
+    // Process data for charts
+    const clabels = categoryCounts.map(item => item[0]);
+    const cvalues = categoryCounts.map(item => item[1]);
+    const colors = Array(clabels.length).fill().map(getRandomColor);
+    //products
+    const labels = top10product.map(item => item[0]);
+    const values = top10product.map(item => item[1]);
+    const pcolors = Array(clabels.length).fill().map(getRandomColor);
 
-function getRandomColor() {
-    const randomColor = Math.floor(Math.random() * 16777215).toString(16);
-    return `#${randomColor.padStart(6, '0')}`; // Ensure the color code is 6 characters
-}
-      // Sales Chart
-      const salesCtx = document.getElementById('salesChart').getContext('2d');
-      new Chart(salesCtx, {
-          type: 'line',
-          data: {
-              labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul'],
-              datasets: [{
-                  label: 'Sales',
-                  data: [65, 59, 80, 81, 56, 55, 40],
-                  borderColor: '#4B49AC',
-                  tension: 0.1,
-                  fill: false
-              }]
-          },
-          options: {
-              responsive: true,
-              plugins: {
-                  legend: {
-                      position: 'top',
-                  }
-              }
-          }
-      });
-
-      // Pie Chart
-      const pieCtx = document.getElementById('pieChart').getContext('2d');
-      new Chart(pieCtx, {
-          type: 'pie',
-          data: {
-            labels: Object.keys(categoryCounts),
+    // Create Pie Chart
+    const pieCtx = document.getElementById('pieChart').getContext('2d');
+    new Chart(pieCtx, {
+        type: 'pie',
+        data: {
+            labels: clabels,
             datasets: [{
-            data: Object.values(categoryCounts),
-                backgroundColor: Array.from({ length: Object.values(categoryCounts).length }, getRandomColor)
+                data: cvalues,
+                backgroundColor: colors,
             }]
-          },
-          options: {
-              responsive: true,
-              plugins: {
-                  legend: {
-                      position: 'bottom',
-                  }
-              }
-          }
-      });
-  </script>
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                legend: {
+                    position: 'bottom',
+                }
+            }
+        }
+    });
+
+    // Create Bar Chart
+    const barCtx = document.getElementById('barChart').getContext('2d');
+    new Chart(barCtx, {
+        type: 'bar',
+        data: {
+            labels: labels,
+            datasets: [{
+                label: 'Product Count',
+                data: values,
+                backgroundColor: pcolors,
+            }]
+        },
+        options: {
+            responsive: true,
+            scales: {
+                y: {
+                    beginAtZero: true
+                }
+            },
+            plugins: {
+                legend: {
+                    display: false
+                }
+            }
+        }
+    });
+</script>
     <script>
       console.log(products);
       

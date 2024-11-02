@@ -1053,7 +1053,7 @@ const returning = async (req, res) => {
     const index = orders.products.findIndex(p => p.productid.equals(productid));
 
     console.log(index);
-    orders.products[index].return = "returnreq"
+    orders.products[index].return = "Return requsted"
     orders.products[index].returnReason = returnReason
     orders.products[index].returnExplanation = returnDetails
 

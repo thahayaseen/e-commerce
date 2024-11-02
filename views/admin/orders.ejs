@@ -23,7 +23,12 @@
 
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.css">
 
-
+<style>.disabled-card {
+  opacity: 0.5; /* Makes the card semi-transparent */
+  pointer-events: none; /* Prevents interactions like clicks */
+  background-color: #f8f9fa; /* Light background to indicate disabled state */
+}
+</style>
 
   <!-- Layout styles -->
   <link rel="stylesheet" href="/assets/css/style.css">
@@ -68,6 +73,7 @@
                             <th>Customer</th>
                             <th>Total Price</th>
                             <th>Status</th>
+                            <th>Date</th>
                             <th>Action</th>
                           </tr>
                         </thead>
@@ -76,9 +82,15 @@
                           <tr>
                             <td><%= index + 1 + (pagination.currentPage - 1) * pagination.limit %> 
                             </td>
-                            <td><%= order._id %></td>
+                            <td><%= order.orderid %></td>
                             <td><%= order.user.name %></td>
-                            <td>₹<%= order.totalAmount %></td>
+                            <td><% const total=order.products
+                              .filter(data=>data.status===true)
+                              .reduce((acc,data)=>{
+                                  return acc+(data.price-data.discount)*data.quantity
+                                 },0)%>
+
+                              <span class="original-price"><%=total?'₹'+total :'Order cancelled'%></span></td>
                             <td>
                               <select class="form-control status-select actionbtn" data-id="<%= order._id %>">
                                 <option value="Pending" <%= order.status === 'Pending' ? 'selected' : '' %>>Pending</option>
@@ -88,6 +100,7 @@
                                 <option value="Cancelled" <%= order.status === 'Cancelled' ? 'selected' : '' %>>Cancelled</option>
                               </select>
                             </td>
+                            <td><%=new Date(order.createdAt).toISOString().split('T')[0]%></td>
                             <td>
                               <button class="btn btn-info btn-m view-btn vieworder" data-toggle="modal" data-target="#viewOrderModal" data-id="<%= order._id %>">View</button>
                             </td>

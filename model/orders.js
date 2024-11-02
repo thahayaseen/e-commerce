@@ -36,7 +36,7 @@ orderid:{
       },
       return: {
         type: String,
-        enum: ['returned','returning', 'noreturn', 'returnreq','notrequst'],
+        enum: ['Returned','Returning', 'CannotReturn', 'Return requsted','notrequst'],
         default: 'notrequst' 
       },
       returnReason: {
@@ -46,7 +46,7 @@ orderid:{
       returnExplanation: {
         type: String,
         required: function() {
-          return this.return === 'returnreq'; 
+          return this.return === 'Return requsted'; 
         }
       }
     }

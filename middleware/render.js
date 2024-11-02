@@ -126,37 +126,78 @@ console.log(matchQuery);
             .populate('products.productid')
             .sort({ createdAt: -1 });
 
+
+
+        const allproducts = await ordersshema.find()
+            .populate('user')
+            .populate('products.productid')
+            .sort({ createdAt: -1 });
         //  categories
         const categories = await categoriesschema.find();
+        const product = await product_schema.find();
         const categoryCounts = {};
+        const productcount={}
 
-        // Initialize category counts
         categories.forEach(category => {
             categoryCounts[category._id] = { name: category.name, count: 0 }; 
         });
+        product.forEach(product => {
+            productcount[product._id] = { name: product.name, count: 0 }; 
+        });
 
-        // count products in each category
-        productsAndCategory.forEach(order => {
+        allproducts.forEach(order => {
             order.products.forEach(product => {
                 if (product.productid && categoryCounts[product.productid.category_id]) {
                     categoryCounts[product.productid.category_id].count++;
                 }
             });
         });
+        //for product
+        allproducts.forEach(order => {
+            order.products.forEach(product => {
+                if (product.productid && productcount[product.productid._id]) {
+                    productcount[product.productid._id].count++;
+                }
+            });
+        });
+        // console.log('product');
+        // console.log(productcount);
+        // console.log('category');
+        // console.log(categoryCounts);
+        
         let categorydata=Object.values(categoryCounts)
+        let productdata=Object.values(productcount)
+       
         let filterobjs={}
         categorydata.forEach((data,ind)=>{
             filterobjs[data.name]=data.count
-            
+        })
+        let topproducts={}
+        productdata.forEach((data,ind)=>{
+            topproducts[data.name]=data.count
         })
         console.log(filterobjs); 
+        console.log(topproducts);
+
+
+        const top10product=Object.entries(topproducts)
+        .filter(([key,value])=>value>0)
+        .sort((a,b)=>a[1]-b[1])
+        console.log(top10product);
+        
+        const top10category=Object.entries(filterobjs)
+        .filter(([key,value])=>value>0)
+        .sort((a,b)=>a[1]-b[1])
+        console.log(top10category);
+        
         // console.log(categorydata); 
         // console.log(productsAndCategory); 
 
    
         res.render('admin/dashbord', {
             products: productsAndCategory,
-            categoryCounts: filterobjs
+            categoryCounts:top10category ,
+            topproduct:top10product
         });
     } else {
         res.redirect('/admin');
@@ -380,7 +421,9 @@ const walletrender = async (req, res) => {
             return res.redirect('/signin') 
         }
 
-        let userdata = await wallet.findOne({ userId: uid }).populate('userId')
+        let userdata = await wallet.findOne({ userId: uid })
+        .populate('userId')
+        .sort({createdAt:-1})
         console.log(uid);
         
         console.log(gid);

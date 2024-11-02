@@ -1012,12 +1012,13 @@ const returnadmin = async (req, res) => {
     console.log(action);
     console.log(product);
     if (action === 'accept') {
-        order.products[productindex].return = 'returning'
+        order.products[productindex].return = 'Returned'
     }
     else if (action === 'reject') {
-        order.products[productindex].return = 'noreturn'
+        order.products[productindex].return = 'CannotReturn'
     }
     await order.save()
+    return res.status(200).json({success:true,message:'action initiated'})
     // order.products.findIndex(a=>)
 
 }

@@ -96,7 +96,7 @@ document.addEventListener('DOMContentLoaded', function() {
           }
 
           order.products.forEach((item) => {
-              const { productid, quantity, price,discount, return: returnStatus } = item;
+              const { productid,status, quantity, price,discount, return: returnStatus } = item;
               if (!productid || !quantity || !price) {
                   console.warn('Incomplete product data:', item);
                   return;
@@ -108,18 +108,20 @@ document.addEventListener('DOMContentLoaded', function() {
               const productImage = images && images.length > 0 ? `/uploads/${images[0]}` : '/placeholder-image.jpg';
               const productTotal = (quantity * (price-discount)).toFixed(2);
 
-              const returnStatusHtml = returnStatus
-                  ? `
-                      <div class="mt-2">
+              let returnStatusHtml 
+                  if(returnStatus){ 
+                    returnStatusHtml =` <div class="mt-2">
                           <span class="badge badge-${getProductStatusBadgeClass(returnStatus)} mr-2">
                               ${returnStatus}
                           </span>
                           ${generateReturnButtons(returnStatus, order, productid, quantity)}
                       </div>
-                  `
-                  : '<div class="mt-2">No return request</div>';
+                  `}
+                 
+                  else {
+                    returnStatusHtml= '<div class="mt-2">No return request</div>'};
 
-              itemsHtml += generateProductCard(name, sku, price, quantity, productImage, productTotal, returnStatusHtml);
+              itemsHtml += generateProductCard(name, sku, price, quantity, productImage, productTotal, returnStatusHtml,status);
           });
 
           const orderItemsElement = document.getElementById('orderItems');
@@ -136,7 +138,37 @@ document.addEventListener('DOMContentLoaded', function() {
       }
   }
 
-  function generateProductCard(name, sku, price, quantity, productImage, productTotal, returnStatusHtml) {
+  function generateProductCard(name, sku, price, quantity, productImage, productTotal, returnStatusHtml,ostatus) {
+    console.log(ostatus);
+    
+    if(!ostatus){
+        return `
+        <div class="card mb-3 disabled-card">
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-2 p-0">
+                        <img src="${productImage}" alt="${name}" 
+                             class="img-fluid rounded" 
+                             
+                             onerror="this.src='/placeholder-image.jpg'">
+                    </div>
+                    <div class="col-md-6">
+                        <h5 class="card-title">${name}</h5>
+                        <p class="card-text">
+                            <small class="text-muted">SKU: ${sku || 'N/A'}</small><br>
+                            Price: ₹${price} | Quantity: ${quantity}
+                        </p>
+                    </div>
+                    <div class="col-4 ">
+                        <h5 class="text-right">Total: ₹${productTotal}</h5>
+                        ${returnStatusHtml}
+                    </div>
+                   
+                </div>
+            </div>
+        </div>
+    `;
+    }
       return `
           <div class="card mb-3">
               <div class="card-body">
@@ -165,7 +197,7 @@ document.addEventListener('DOMContentLoaded', function() {
   }
 
   function generateReturnButtons(returnStatus, order, productid, quantity) {
-      if (returnStatus !== 'returnreq') {
+      if (returnStatus !== 'Return requsted') {
           return '<br> actions unavailable';
       }
 
@@ -211,6 +243,8 @@ document.addEventListener('DOMContentLoaded', function() {
               const orderId = button.dataset.orderId;
               const productId = button.dataset.productId;
               const action = button.dataset.action;
+              console.log(orderId);
+              
 
               if (!orderId || !productId || !action) {
                   throw new Error('Missing required data for product action');
@@ -221,9 +255,13 @@ document.addEventListener('DOMContentLoaded', function() {
              fetch(`/admin/order/${orderId}/${productId}/${action}`, {
                   method: 'POST'
               })
-              .then(res=>res.json)
+              .then(res=>res.json())
               .then(res=>{
-
+                console.log(res.success);
+                
+                if(res.success){
+                    window.location.reload(true)
+                }
               })
              
               
@@ -252,7 +290,7 @@ document.addEventListener('DOMContentLoaded', function() {
       const statusMap = {
           returned: 'success',
           notrequst: 'danger',
-          returnreq: 'warning'
+          'Return requsted': 'warning'
       };
       return statusMap[status] || 'secondary';
   }

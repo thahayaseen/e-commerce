@@ -1,234 +1,111 @@
 <!DOCTYPE html>
 <html lang="en">
-<!-- Previous head section remains the same until the style section -->
 <head>
-    <!-- ... (previous head content) ... -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Product Analytics</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
     <style>
-        /* ... (previous styles) ... */
-        
-        .btn-details {
-            background: var(--secondary-color);
-            color: white;
-            border: none;
-            padding: 0.5rem 1rem;
-            border-radius: 20px;
-            transition: all 0.3s ease;
-        }
-
-        .btn-details:hover {
-            background: #5a6268;
-            transform: translateY(-2px);
-        }
-
-        .btn-invoice {
-            background: #6610f2;
-            color: white;
-            border: none;
-            padding: 0.5rem 1rem;
-            border-radius: 20px;
-            transition: all 0.3s ease;
-        }
-
-        .btn-invoice:hover {
-            background: #520dc2;
-            transform: translateY(-2px);
-        }
-
-        .order-summary {
-            background: var(--light-gray);
+        .chart-container {
+            width: 100%;
+            max-width: 600px;
+            margin: 20px auto;
+            padding: 20px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
             border-radius: 8px;
-            padding: 1rem;
-            margin-bottom: 1rem;
+            background: white;
         }
-
-        .order-summary-item {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 0.5rem;
+        .chart-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
+            gap: 20px;
+            padding: 20px;
         }
-
-        .shipping-details {
-            background: var(--light-gray);
-            border-radius: 8px;
-            padding: 1rem;
+        h2 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 20px;
         }
     </style>
 </head>
 <body>
-    <!-- ... (previous content until the order card) ... -->
-    
-    <div class="container">
-        <h2 class="mb-4">My Orders</h2>
-        
-        <% orders.forEach(order => { %>
-            <div class="order-card">
-                <div class="order-header">
-                    <span class="order-id">Order #<%= order.orderid %></span>
-                    <div class="d-flex gap-3">
-                        <span class="status-badge <%= order.status === 'Delivered' ? 'status-delivered' : 'status-processing' %>">
-                            <%= order.status %>
-                        </span>
-                        <span class="status-badge <%= order.paymentStatus === 'Paid' ? 'status-delivered' : 'status-processing' %>">
-                            Payment: <%= order.paymentStatus %>
-                        </span>
-                        <button class="btn btn-details" onclick="viewOrderDetails('<%= JSON.stringify(order) %>')">
-                            <i class="fas fa-info-circle me-1"></i> Details
-                        </button>
-                    </div>
-                </div>
-                
-                <!-- ... (rest of the order card content remains the same) ... -->
-            </div>
-        <% }) %>
-
-        <!-- ... (pagination remains the same) ... -->
-    </div>
-
-    <!-- ... (previous modals remain the same) ... -->
-
-    <!-- Order Details Modal -->
-    <div class="modal fade" id="orderDetailsModal" tabindex="-1">
-        <div class="modal-dialog modal-lg">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title">Order Details</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                </div>
-                <div class="modal-body">
-                    <div class="order-summary mb-4">
-                        <h6 class="mb-3">Order Summary</h6>
-                        <div class="order-summary-item">
-                            <span>Order ID:</span>
-                            <span id="modalOrderId"></span>
-                        </div>
-                        <div class="order-summary-item">
-                            <span>Order Date:</span>
-                            <span id="modalOrderDate"></span>
-                        </div>
-                        <div class="order-summary-item">
-                            <span>Status:</span>
-                            <span id="modalOrderStatus"></span>
-                        </div>
-                        <div class="order-summary-item">
-                            <span>Payment Status:</span>
-                            <span id="modalPaymentStatus"></span>
-                        </div>
-                    </div>
-
-                    <div class="product-details mb-4">
-                        <h6 class="mb-3">Products</h6>
-                        <div id="modalProductsList"></div>
-                    </div>
-
-                    <div class="shipping-details mb-4">
-                        <h6 class="mb-3">Shipping Details</h6>
-                        <div id="modalShippingDetails"></div>
-                    </div>
-
-                    <div class="price-summary">
-                        <h6 class="mb-3">Price Details</h6>
-                        <div class="order-summary-item">
-                            <span>Subtotal:</span>
-                            <span id="modalSubtotal"></span>
-                        </div>
-                        <div class="order-summary-item">
-                            <span>Shipping:</span>
-                            <span id="modalShipping"></span>
-                        </div>
-                        <div class="order-summary-item" id="modalDiscountContainer">
-                            <span>Discount:</span>
-                            <span id="modalDiscount"></span>
-                        </div>
-                        <div class="order-summary-item">
-                            <strong>Total:</strong>
-                            <strong id="modalTotal"></strong>
-                        </div>
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-invoice" onclick="downloadInvoice()">
-                        <i class="fas fa-download me-1"></i> Download Invoice
-                    </button>
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                </div>
-            </div>
+    <div class="chart-grid">
+        <div class="chart-container">
+            <h2>Top 10 Categories Distribution</h2>
+            <canvas id="pieChart"></canvas>
+        </div>
+        <div class="chart-container">
+            <h2>Top 10 Products by Count</h2>
+            <canvas id="barChart"></canvas>
         </div>
     </div>
 
-    <!-- ... (previous scripts) ... -->
-    
     <script>
-        // ... (previous script content) ...
-
-        function viewOrderDetails(orderData) {
-            const order = JSON.parse(orderData);
-            
-            // Set basic order information
-            document.getElementById('modalOrderId').textContent = order.orderid;
-            document.getElementById('modalOrderDate').textContent = new Date(order.createdAt).toLocaleDateString();
-            document.getElementById('modalOrderStatus').textContent = order.status;
-            document.getElementById('modalPaymentStatus').textContent = order.paymentStatus;
-
-            // Set products list
-            const productsList = document.getElementById('modalProductsList');
-            productsList.innerHTML = order.products.map(product => `
-                <div class="product-item">
-                    <div class="product-info">
-                        <img src="/uploads/${product.productid.images[0]}" alt="${product.productid.name}" class="product-image">
-                        <div class="product-details">
-                            <h5>${product.productid.name}</h5>
-                            <span class="product-price">₹${product.price} x ${product.quantity}</span>
-                        </div>
-                    </div>
-                </div>
-            `).join('');
-
-            // Set shipping details
-            document.getElementById('modalShippingDetails').innerHTML = `
-                <p class="mb-1">${order.shippingAddress.name}</p>
-                <p class="mb-1">${order.shippingAddress.address}</p>
-                <p class="mb-1">${order.shippingAddress.city}, ${order.shippingAddress.state} ${order.shippingAddress.pincode}</p>
-                <p class="mb-1">Phone: ${order.shippingAddress.phone}</p>
-            `;
-
-            // Set price details
-            const subtotal = order.totalAmount + (order.coupon ? order.coupon.discount : 0);
-            document.getElementById('modalSubtotal').textContent = `₹${subtotal.toFixed(2)}`;
-            document.getElementById('modalShipping').textContent = 'Free';
-            
-            const discountContainer = document.getElementById('modalDiscountContainer');
-            if (order.coupon) {
-                discountContainer.style.display = 'flex';
-                document.getElementById('modalDiscount').textContent = `-₹${order.coupon.discount.toFixed(2)}`;
-            } else {
-                discountContainer.style.display = 'none';
+        // Function to generate random colors
+        function getRandomColor() {
+            const letters = '0123456789ABCDEF';
+            let color = '#';
+            for (let i = 0; i < 6; i++) {
+                color += letters[Math.floor(Math.random() * 16)];
             }
-            
-            document.getElementById('modalTotal').textContent = `₹${order.totalAmount.toFixed(2)}`;
-
-            new bootstrap.Modal(document.getElementById('orderDetailsModal')).show();
+            return color;
         }
 
-        function downloadInvoice() {
-            // Replace with your actual invoice download logic
-            const orderId = document.getElementById('modalOrderId').textContent;
-            fetch(`/download-invoice/${orderId}`)
-                .then(response => response.blob())
-                .then(blob => {
-                    const url = window.URL.createObjectURL(blob);
-                    const a = document.createElement('a');
-                    a.href = url;
-                    a.download = `invoice-${orderId}.pdf`;
-                    document.body.appendChild(a);
-                    a.click();
-                    window.URL.revokeObjectURL(url);
-                    document.body.removeChild(a);
-                })
-                .catch(error => {
-                    console.error('Error:', error);
-                    alert('Error downloading invoice');
-                });
-        }
+        // Get data from EJS
+        const productData = <%- JSON.stringify(data) %>;
+        
+        // Process data for charts
+        const labels = productData.map(item => item[0]);
+        const values = productData.map(item => item[1]);
+        const colors = Array(labels.length).fill().map(getRandomColor);
+
+        // Create Pie Chart
+        const pieCtx = document.getElementById('pieChart').getContext('2d');
+        new Chart(pieCtx, {
+            type: 'pie',
+            data: {
+                labels: labels,
+                datasets: [{
+                    data: values,
+                    backgroundColor: colors,
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        position: 'bottom',
+                    }
+                }
+            }
+        });
+
+        // Create Bar Chart
+        const barCtx = document.getElementById('barChart').getContext('2d');
+        new Chart(barCtx, {
+            type: 'bar',
+            data: {
+                labels: labels,
+                datasets: [{
+                    label: 'Product Count',
+                    data: values,
+                    backgroundColor: colors,
+                }]
+            },
+            options: {
+                responsive: true,
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                },
+                plugins: {
+                    legend: {
+                        display: false
+                    }
+                }
+            }
+        });
     </script>
 </body>
 </html>
