@@ -130,7 +130,7 @@ document.addEventListener('DOMContentLoaded', function() {
           }
 
           // Update totals
-          updateOrderTotals(subtotal, order.coupon);
+          updateOrderTotals(subtotal, order.coupon,order);
 
       } catch (error) {
           console.error('Error in populateOrderModal:', error);
@@ -219,12 +219,12 @@ document.addEventListener('DOMContentLoaded', function() {
       `;
   }
 
-  function updateOrderTotals(subtotal, coupon) {
+  function updateOrderTotals(subtotal, coupon,order) {
       const elements = {
           orderSubtotal: subtotal.toFixed(2),
-          orderShipping: 'Free',
+          orderShipping: order.shippingcharg?order.shippingcharg:'Free',
           coupon: coupon.couponcode ? `${coupon.couponcode} (-₹${coupon.discount})` : 'No coupon applied',
-          orderTotal: (subtotal - (coupon ? coupon.discount : 0)).toFixed(2)
+          orderTotal: (subtotal+order.shippingcharg - (coupon ? coupon.discount : 0)).toFixed(2)
       };
 
       Object.entries(elements).forEach(([id, value]) => {

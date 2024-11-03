@@ -51,7 +51,7 @@ const allproducts = async (req, res, next) => {
                 sortCondition = { name: -1 };
                 break;
             default:
-                sortCondition = { featured: -1 };
+                sortCondition = { name: 1 };
         }
 
         if (categoryName === 'all') {
@@ -60,7 +60,7 @@ const allproducts = async (req, res, next) => {
 
         let search = {};
         if (query) {
-            search = { name: { $regex: `^${query}`, $options: 'i' } };
+            search = { name: { $regex: `${query}`, $options: 'i' } };
         }
 
         let categoryFilter = {};

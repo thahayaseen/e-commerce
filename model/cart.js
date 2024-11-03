@@ -1,22 +1,21 @@
 const mongoose = require('mongoose')
 
-
 const cart = new mongoose.Schema({
-
     userid: {
         type: mongoose.Schema.ObjectId,
         ref: 'User'
     },
-    
-  coupon:{ 
-    couponcode:String,
-    discount:{
-      type:Number,
-      default:0
-    }
-  
-  }
-  ,
+    coupon: { 
+        couponcode: String,
+        discount: {
+            type: Number,
+            default: 0
+        }
+    },
+    shippingcharge: {
+        type: Number,
+        default: 0
+    },
     product: [
         {
             productid: {
@@ -27,27 +26,31 @@ const cart = new mongoose.Schema({
                 type: Number,
                 min: 1
             },
-            price:{
-                type:Number
+            price: {
+                type: Number
             }
         }
     ],
-    totalprice:{
-        type:Number,
-        default:0
+    totalprice: {
+        type: Number,
+        default: 0
     }
-}, { timestamps: true })
+}, { timestamps: true });
 
 cart.pre('save', function (next) {
     let totalprice = 0;
 
     this.product.forEach(item => {
-        totalprice += item.quantity * item.price; // Do the math without converting to a string
+        totalprice += item.quantity * item.price; 
     });
 
-    // Now apply .toFixed(2) to the total sum
-    this.totalprice = totalprice.toFixed(2);
-
+    this.totalprice = totalprice; 
+    if (this.totalprice < 500000) {
+        this.shippingcharge = 2000;
+    } else {
+        this.shippingcharge = 0;
+    }
+    
     next();
 });
 

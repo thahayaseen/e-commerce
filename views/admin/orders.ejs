@@ -28,6 +28,22 @@
   pointer-events: none; /* Prevents interactions like clicks */
   background-color: #f8f9fa; /* Light background to indicate disabled state */
 }
+.badge-dot {
+    width: 10px;        /* Size of the dot */
+    height: 10px;
+    background-color: red;   /* Color of the dot */
+    border-radius: 50%;      /* Make it round */
+    display: inline-block;
+    position: absolute;
+    top:0;
+    right: 0;
+    
+    
+
+    
+    
+}
+
 </style>
 
   <!-- Layout styles -->
@@ -90,19 +106,32 @@
                                   return acc+(data.price-data.discount)*data.quantity
                                  },0)%>
 
-                              <span class="original-price"><%=total?'₹'+total :'Order cancelled'%></span></td>
+                              <span class="original-price"><%=total?'₹'+(total+order.shippingcharg) :'Order cancelled'%></span></td>
                             <td>
                               <select class="form-control status-select actionbtn" data-id="<%= order._id %>">
+                                <% if(order.status === 'Pending'&&order.status !== 'Processing') {%>
                                 <option value="Pending" <%= order.status === 'Pending' ? 'selected' : '' %>>Pending</option>
+                                <% } if ((order.status == 'Processing' || order.status == 'Pending') && order.status !== 'Shipped') { %>
+
                                 <option value="Processing" <%= order.status === 'Processing' ? 'selected' : '' %>>Processing</option>
+                                <% }if((order.status === 'Processing'||order.status === 'Shipped')&&order.status !== 'Delivered') {%>
                                 <option value="Shipped" <%= order.status === 'Shipped' ? 'selected' : '' %>>Shipped</option>
+                                <% } %>
                                 <option value="Delivered" <%= order.status === 'Delivered' ? 'selected' : '' %>>Delivered</option>
                                 <option value="Cancelled" <%= order.status === 'Cancelled' ? 'selected' : '' %>>Cancelled</option>
                               </select>
                             </td>
                             <td><%=new Date(order.createdAt).toISOString().split('T')[0]%></td>
                             <td>
-                              <button class="btn btn-info btn-m view-btn vieworder" data-toggle="modal" data-target="#viewOrderModal" data-id="<%= order._id %>">View</button>
+                              <%const x=  order.products.filter(a=>a.return=='Return requsted')%>
+                              <button class="btn btn-info btn-m view-btn vieworder position-relative" data-toggle="modal" data-target="#viewOrderModal" data-id="<%= order._id %>">
+                                View
+                                <%if(x.length>0){ %>
+                                  <span class="translate-middle badge-dot"></span>
+                                  <% }%>
+                                <!-- <span class="  translate-middle badge-dot"></span> -->
+                            </button>
+                            
                             </td>
                           </tr>
                           <% }) %>

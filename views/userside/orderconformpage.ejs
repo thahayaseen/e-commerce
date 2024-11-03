@@ -284,13 +284,13 @@
                             <p>Quantity: <%= item.quantity %></p>
                         </div>
                         <div class="price">
-                            $<%= ((item.price-item.discount) * item.quantity).toFixed(2) %>
+                            ₹<%= ((item.price-item.discount) * item.quantity).toFixed(2) %>
                         </div>
                     </div>
                 <% }); %>
 
                 <div class="total">
-                    Total: $<%= (order.totalAmount - (order.coupon ? order.coupon.discount : 0)).toFixed(2) %>
+                    Total: ₹<%= (order.totalAmount+order.shippingcharg - (order.coupon ? order.coupon.discount : 0)).toFixed(2) %>
                 </div>
             </div>
         </div>

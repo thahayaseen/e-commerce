@@ -12,6 +12,14 @@ const walletSchema = new mongoose.Schema({
         default: 0,
         min: 0 
     },
+    income:{
+        type:Number,
+        default:0
+    },
+    outcome:{
+        type:Number,
+        default:0
+    },
     transactions: [{
         type: {
             type: String, 
@@ -33,6 +41,7 @@ const walletSchema = new mongoose.Schema({
         }
     }]
 },{timestamps:true});
+
 
 
 const Wallet = mongoose.model('Wallet', walletSchema);

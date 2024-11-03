@@ -529,6 +529,7 @@ const placeorder = async (req, res) => {
 
 
             if (paymentmethods === 'onlinePayment') {
+          
                 const order = new orderchema({
                     user: userid,
                     orderid: orderId,
@@ -537,7 +538,8 @@ const placeorder = async (req, res) => {
                     paymentMethod: paymentmethods,
                     shippingAddress: selectedaddress,
                     'coupon.discount': discount,
-                    'coupon.couponcode': cname
+                    'coupon.couponcode': cname,
+                    shippingcharg:usercart.shippingcharge
                 });
 
                 const ordersave = await order.save();
@@ -545,7 +547,7 @@ const placeorder = async (req, res) => {
                     userdata.orders.push(ordersave._id);
 
                     const options = {
-                        amount: Math.floor((ordersave.totalAmount * 100) - (ordersave.coupon.discount * 100)),
+                        amount: Math.floor((ordersave.totalAmount * 100)+(ordersave.shippingcharg * 100) - (ordersave.coupon.discount * 100)),
                         currency: 'INR',
                         receipt: ordersave._id.toString()
                     };
@@ -579,13 +581,15 @@ const placeorder = async (req, res) => {
                             paymentMethod: paymentmethods,
                             shippingAddress: selectedaddress,
                             'coupon.discount': discount,
-                            'coupon.couponcode': cname
+                            'coupon.couponcode': cname,
+                            shippingcharg:usercart.shippingcharge
                         });
 
                         const ordersave = await order.save();
+                        wallet.outcome+=total+ordersave.shippingcharg
                         wallet.transactions.push({
                             type: 'debit',
-                            amount: total,
+                            amount: total+ordersave.shippingcharg,
                             date: new Date(),
                             description: 'Purchased'
                         });
@@ -593,14 +597,19 @@ const placeorder = async (req, res) => {
                         order.paymentStatus = 'Paid';
                         const orderda = await order.save();
 
-                        usercart.product = [];
-                        await usercart.save();
-
                         userdata.orders.push(ordersave._id);
-                        await userdata.save();
-
                         wallet.balance -= total;
-                        await wallet.save();
+                        const walletsave=await wallet.save();
+                        if (walletsave) {
+                            usercart.product = [];
+                            await usercart.save();
+                            
+                        }
+                        else{
+                            res.status(400).json({success:false,message:'error in wallet'})
+                        }
+
+                       
                         req.session.orderid = orderda._id
 
 
@@ -610,6 +619,9 @@ const placeorder = async (req, res) => {
                     }
                 }
             } else {
+                if((usercart.totalprice+usercart.shippingcharge)>100000){
+                    return res.status(200).json({success:false,message:'Maximum COD allowed less than 100000 INR'})
+                }
                 const order = new orderchema({
                     user: userid,
                     orderid: orderId,
@@ -618,7 +630,8 @@ const placeorder = async (req, res) => {
                     paymentMethod: paymentmethods,
                     shippingAddress: selectedaddress,
                     'coupon.discount': discount,
-                    'coupon.couponcode': cname
+                    'coupon.couponcode': cname,
+                    shippingcharg:usercart.shippingcharge
                 });
 
                 const ordersave = await order.save();
@@ -783,7 +796,9 @@ const cancelitem = async (req, res) => {
         if (index === -1) {
             return res.status(404).json({ success: false, message: "Product not found in order" });
         }
-
+        if(orderdata.status=='Shipped'){
+            return res.status(200).json({success:false,message:'Cannot cancel shipped Product'})
+        }
         // Update product status to false
         orderdata.products[index].status = false;
 
@@ -803,9 +818,31 @@ const cancelitem = async (req, res) => {
         }
 
         if(orderdata.paymentStatus=='Paid'){
+            // console.log((orderdata.totalAmount-orderdata.coupon.discount) - orderdata.refund == 0);
+            // console.log((orderdata.totalAmount-orderdata.coupon.discount) - orderdata.refund );
+            console.log(Object.values);
+            let count = 0;
+            for (const orders of orderdata.products) {
+                console.log(orders.status);
+            
+                
+                count += !orders.status ? 1 : -1;
+            }
+            
+            console.log(count);
+            console.log('length is '+orderdata.products.length);
+            console.log(count-orderdata.products.length==0);
+            
+            // Check if count is exactly zero
+            if (count-orderdata.products.length==0) {
+                console.log('last one');
+                refundprice += orderdata.shippingcharg; 
+            }
+            
+       
             const wallet=await Wallet.findOne({userId:orderdata.user})
             wallet.balance += refundprice
-        
+            wallet.income+=refundprice
             wallet.transactions.push({
                 type: 'credit',
                 amount: refundprice,
@@ -813,18 +850,19 @@ const cancelitem = async (req, res) => {
                 description: `refund of ${orderdata.products[index].productid.name}`
             });
             await wallet.save()
-        }
-        orderdata.refund = orderdata.refund || 0;
-        orderdata.refund += refundprice;
-        
-        if ((orderdata.totalAmount-orderdata.coupon.discount) - orderdata.refund == 0) {
-            console.log('yes');
-            orderdata.status = 'Cancelled'
-
-        }
-        else {
-            console.log('no');
-
+            orderdata.refund = orderdata.refund 
+            orderdata.refund += refundprice;
+            
+            if (count-orderdata.products.length==0) {
+                console.log('yes');
+                orderdata.status = 'Cancelled'
+                
+    
+            }
+            else {
+                console.log('no');
+    
+            }
         }
         // const change = true;
         const change = await orderdata.save();
@@ -1088,6 +1126,7 @@ const retrypayment = async (req, res) => {
     // res.status(200).json({success:true,datas:razorpayid,,})
 }
 const invoice = async (req,res) => {
+    try {
     const orderid = req.params.orderid
     const orderData = await orderchema.findOne({ orderid: orderid }).populate('products.productid')
     console.log(Object.keys(orderData).length );
@@ -1096,7 +1135,7 @@ const invoice = async (req,res) => {
     
    
     console.log(JSON.stringify(orderData));
-    try {
+  
 
         const doc = new PDFDocument({
             size: 'A4',
@@ -1109,9 +1148,8 @@ const invoice = async (req,res) => {
         });
         
         res.setHeader('Content-Type', 'application/pdf');
-        res.setHeader('Content-Disposition', 'attachment; filename="fgsdfgdf.pdf"');
+        res.setHeader('Content-Disposition', 'attachment; filename="invoice.pdf"');
         doc.pipe(res);
-        
 
 
         doc.font('Helvetica-Bold').fontSize(16);
@@ -1186,9 +1224,10 @@ const invoice = async (req,res) => {
         doc.font('Helvetica').fontSize(10)
             .fillColor('black')
             .text(`Subtotal:${subtoatal} Rs`, { align: 'right' })
+            .text(`Shipping: ${orderData.shippingcharg} Rs`, { align: 'right' })
             .text(`Coupon Discount: ${coupondiscount()} Rs`, { align: 'right' })
             .font('Helvetica-Bold')
-            .text(`Total: ${(orderData.totalAmount - orderData.refund - orderData.coupon.discount).toLocaleString()} Rs`, { align: 'right' });
+            .text(`Total: ${(orderData.totalAmount+orderData.shippingcharg - orderData.refund - orderData.coupon.discount).toLocaleString()} Rs`, { align: 'right' });
 
 
         doc.moveDown();

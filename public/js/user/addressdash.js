@@ -60,7 +60,8 @@ document.getElementById('newAddressForm').addEventListener('submit', async funct
 
 // Edit button setup with dataset value handling
 function setupEditButtons() {
-    const editBtns = document.querySelectorAll('.btn-outline-primary');
+    document.addEventListener('DOMContentLoaded',(e)=>{
+        const editBtns = document.querySelectorAll('.btn-outline-primary');
     editBtns.forEach((btn) => {
         btn.addEventListener('click', function (e) {
             const { name, line1, line2, city, country, phone, state, id: addresid, zip } = e.target.dataset;
@@ -77,6 +78,7 @@ function setupEditButtons() {
             document.getElementById('ephone').value = phone || '';
         });
     });
+    })
 }
 setupEditButtons();
 

@@ -221,9 +221,7 @@
                         <h4 class="mb-1">Welcome, <%= wallet.userId.name %></h4>
                         <p class="text-muted mb-0">Here's your financial overview</p>
                     </div>
-                    <button class="btn btn-primary">
-                        <i class="fas fa-plus me-2"></i>Add Funds
-                    </button>
+                    
                 </div>
 
                 <div class="row g-4">
@@ -261,7 +259,7 @@
                                 </div>
                                 <div class="ms-3">
                                     <h6 class="mb-1">Expenses</h6>
-                                    <h3 class="mb-0 text-warning">₹<%= wallet.expenses || 0 %></h3>
+                                    <h3 class="mb-0 text-warning">₹<%= wallet.outcome || 0 %></h3>
                                 </div>
                             </div>
                         </div>
@@ -273,20 +271,18 @@
                         <div class="box">
                             <div class="d-flex justify-content-between align-items-center mb-4">
                                 <h5 class="mb-0">Recent Transactions</h5>
-                                <div class="dropdown">
-                                    <button class="btn btn-light dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown">
-                                        Filter
-                                    </button>
-                                    <ul class="dropdown-menu">
-                                        <li><a class="dropdown-item" href="#">All</a></li>
-                                        <li><a class="dropdown-item" href="#">Income</a></li>
-                                        <li><a class="dropdown-item" href="#">Expenses</a></li>
-                                    </ul>
-                                </div>
+                            
                             </div>
                             
                             <% if (wallet.transactions && wallet.transactions.length > 0) { %>
-                                <% wallet.transactions.forEach((transaction) => { %>
+                                <%
+                                 const trancitiondatas=Object.entries(wallet.transactions).sort(([,a],[,b])=>new Date(b.date)-new Date(a.date))
+                                console.log(trancitiondatas);
+                                %>
+                              
+                                
+                                
+                                <% trancitiondatas.forEach(([,transaction]) => { %>
                                     <div class="transaction-item">
                                         <div class="d-flex justify-content-between align-items-center">
                                             <div class="d-flex align-items-center">

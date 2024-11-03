@@ -249,7 +249,7 @@
                                             </span>
                                             <% } %>
                                     </td>
-                                    <td class="final-price">₹<%=(order.totalAmount - order.coupon.discount-order.refund)%></td>
+                                    <td class="final-price">₹<%=(order.totalAmount+order.shippingcharg - order.coupon.discount-order.refund)%></td>
                                     <td>
                                         <% if (order.status === 'Delivered') { %>
                                             <span class="badge badge-success">Delivered</span>

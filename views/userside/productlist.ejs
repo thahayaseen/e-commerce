@@ -201,7 +201,7 @@
                         <div class="d-flex justify-content-between align-items-center mb-3">
                             <h5 class="mb-0">Products</h5>
                             <div>
-                                <form id="sortForm" method="GET">
+                                <form id="sortForm">
                                     <select class="form-select" name="sort">
                                         <option value=" ">Sort By</option>
                                         <option value="priceLowToHigh">Price: Low to High</option>
@@ -279,7 +279,8 @@
         </div>
     </div>
     <script>
-     document.addEventListener('DOMContentLoaded', function () {
+        // sortForm
+    document.addEventListener('DOMContentLoaded', function () {
     const filterForm = document.getElementById('filterForm');
     const sortForm = document.getElementById('sortForm');
     const paginationLinks = document.querySelectorAll('.pagination .page-link');
@@ -294,25 +295,28 @@
         return params.toString();
     }
 
-    function applyFiltersAndSort(page = null, search = '') {
+    function applyFiltersAndSort(page = null, search = null) {
         const filterData = new FormData(filterForm);
         const sortData = new FormData(sortForm);
         const currentParams = getUrlParams();
 
         filterData.set('limit', currentParams.get('limit') || '6');
 
-        // Retain current sort if not changed
         const currentSort = currentParams.get('sort');
         if (currentSort && !sortData.get('sort')) {
             sortData.set('sort', currentSort);
         }
 
-        if (page) {
-            filterData.append('page', page);
+        // Retain current search if not provided
+        if (search === null && currentParams.has('search')) {
+            search = currentParams.get('search');
+        }
+        if (search) {
+            filterData.set('search', search);
         }
 
-        if (search) {
-            filterData.set('search', search);  // Change to set instead of a string
+        if (page) {
+            filterData.append('page', page);
         }
 
         const queryString = updateQueryString(filterData) + '&' + updateQueryString(sortData);
@@ -336,7 +340,6 @@
         });
     });
 
-  
     function debounce(func, delay) {
         let timeout;
         return function (...args) {
@@ -345,7 +348,6 @@
         };
     }
 
-    // Search input with debouncing
     const handleSearch = debounce((e) => {
         applyFiltersAndSort(null, e.target.value);
     }, 600);
@@ -362,12 +364,11 @@
             } else if (element.type === 'checkbox') {
                 element.checked = (value === element.value);
             } else {
-                element.value = value; // This will retain the input value
+                element.value = value;
             }
         }
     });
 
-    // Set the initial search input value from URL parameters
     if (urlParams.has('search')) {
         searchInput.value = urlParams.get('search');
     }

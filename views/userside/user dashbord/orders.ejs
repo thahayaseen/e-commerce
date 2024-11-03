@@ -319,7 +319,9 @@
                                     Payment:
                                     <%if(order.status=='Cancelled'&&order.paymentStatus==='Paid'){%>
                                         <%= 'Refunded' %>
-                                            <%}else if (order.paymentStatus==='Failed' ) { %>
+                                            <%}else if((order.paymentStatus=='Paid'||order.paymentStatus=='Pending')&&order.status!=='Cancelled'){%>
+                                                <%= order.paymentStatus %>
+                                           <%} else if (order.paymentStatus==='Failed' ) { %>
                                                 <%= order.paymentStatus + ' - Retry' %>
                                                     <% } else { %>
                                                        None
@@ -386,7 +388,7 @@
                             </div>
                             <div>
                                 <strong>Total:</strong> ₹<%= (order.totalAmount-order.refund - (order.coupon ?
-                                    order.coupon.discount : 0)).toFixed(2) %>
+                                    order.coupon.discount : 0)+order.shippingcharg) %>
                             </div>
                         </div>
                     </div>
@@ -527,7 +529,7 @@
                             <span id="modalShipping"></span>
                         </div>
                         <div class="order-summary-item" id="modalDiscountContainer">
-                            <span>Discount:</span>
+                            <span>Coupon Discount:</span>
                             <span id="modalDiscount"></span>
                         </div>
                         <div class="order-summary-item">
@@ -537,9 +539,9 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" id="invoicebtn" class="btn btn-invoice disabled" onclick="downloadInvoice()">
+                    <a type="button" id="invoicebtn" class="btn btn-invoice disabled" onclick="downloadInvoice()">
                         <i class="fas fa-download me-1"></i> Download Invoice
-                    </button>
+                    </a>
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                 </div>
             </div>
@@ -697,7 +699,7 @@
 
             const subtotal = order.totalAmount - canceledproductprice;
             document.getElementById('modalSubtotal').textContent = `₹${subtotal.toFixed(2)}`;
-            document.getElementById('modalShipping').textContent = order.shipping ? order.shipping : 'Free';
+            document.getElementById('modalShipping').textContent = order.shippingcharg ? order.shippingcharg : 'Free';
 
 
             const discountContainer = document.getElementById('modalDiscountContainer');
@@ -708,8 +710,8 @@
                 discountContainer.style.display = 'none';
             }
 
-            document.getElementById('modalTotal').textContent = `₹${toatals}`;
-            
+            document.getElementById('modalTotal').textContent = `₹${(order.totalAmount-order.refund - (order.coupon ?order.coupon.discount : 0)+order.shippingcharg)}`;
+            // (order.totalAmount-order.refund - (order.coupon ?order.coupon.discount : 0)+order.shippingcharg)
             const invoicebtn=document.getElementById('invoicebtn')
             console.log(order.status);
             if(order.status!=='Cancelled'){
@@ -728,35 +730,8 @@
         function downloadInvoice() {
 
             const orderId = document.getElementById('modalOrderId').textContent;
-            fetch(`/download-invoice/${orderId}`)
-                .then(response => {
-                    console.log(response);
-                    
-                    if (response.ok) {
-
-                        return response.blob();
-                    }
-                    if (!response.ok) {
-
-                    return console.log('error');
-                    
-                    }
-                })
-                .then(blob => {
-                    
-                    
-                    const url = window.URL.createObjectURL(blob);
-                    const a = document.createElement('a');
-                    a.style.display = 'none';
-                    a.href = url;
-                    a.download = 'invoice.pdf';
-                    document.body.appendChild(a);
-                    a.click();
-                    window.URL.revokeObjectURL(url);
-                })
-                .catch(error => {
-                    console.error('There has been a problem with your fetch operation:', error);
-                });
+            window.location.href=`/download-invoice/${orderId}`
+            
         }
     </script>
 </body>
