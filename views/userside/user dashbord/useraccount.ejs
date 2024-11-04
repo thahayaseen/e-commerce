@@ -13,6 +13,12 @@
 
     <!-- Custom CSS -->
     <link rel="stylesheet" href="/css/myprofile.css">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.js"></script>
+
     <style>
         .profile-header {
             background-color: #dfdfdf;
@@ -195,23 +201,33 @@
             const ename = document.getElementById('ename').value;
 
             fetch('/userupdate', {
-                method: 'PATCH',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({ ename }),
-            })
-            .then(res => res.json())
-            .then(res => {
-                if (res.success) {
-                    alert('The name has been successfully changed');
-                    const modalElement = document.getElementById('editProfileModal');
-                    const modalInstance = bootstrap.Modal.getInstance(modalElement);
-                    modalInstance.hide();
+    method: 'PATCH',
+    headers: {
+        'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({ ename }),
+})
+.then(res => res.json())
+.then(res => {
+    if (res.success) {
 
-                    window.location.href = '/user/myaccount';
-                }
-            });
+        Swal.fire('The name has been successfully changed').then((result) => {
+            if (result.isConfirmed) { 
+                const modalElement = document.getElementById('editProfileModal');
+                const modalInstance = bootstrap.Modal.getInstance(modalElement);
+                modalInstance.hide(); 
+
+              
+                window.location.reload(true);
+            }
+        });
+    }
+})
+.catch(error => {
+    console.error('Error updating the user:', error);
+    Swal.fire('An error occurred while updating the name.'); // Handle error with SweetAlert
+});
+
         });
         changepass.addEventListener('submit', (e) => {
         e.preventDefault(); // Prevent the default form submission
@@ -221,7 +237,7 @@
         const newPassword = changepass.newpass.value.trim();
         const confirmPassword = changepass.newpass2.value.trim();
 
-        // Basic validation
+       
         if (!currentPassword) {
             alert('Please enter your current password.');
             return;
@@ -247,6 +263,20 @@
                 currentPassword,newPassword
             })
         })
+        .then(res=>res.json())
+        .then(res=>{
+            res.success?
+        (Swal.fire('The password has been successfully changed').then((result) => {
+            if (result.isConfirmed) { 
+                const modalElement = document.getElementById('editProfileModal');
+                const modalInstance = bootstrap.Modal.getInstance(modalElement);
+                modalInstance.hide(); 
+
+              
+                window.location.reload(true);
+            }
+        })):
+        Swal.fire(res.message)})
     })
     </script>
 
