@@ -1,5 +1,5 @@
-const { signup, otpvarify, resent, varifylogin, logout, viewproduct, blockuser, glogincb, cartitemspush, cartupdata, cartitemdelete, addaddress, placeorder, deleteaddress, cancelorder, editname, changepass, productstockdata, cancelitem,patchwishlist,removewish,coupenapplaying,razorpayvarify,sendreset,resetpage,resetpasspost,returning,addressave,paymentfaied,retrypayment,invoice } = require("../controller/user/user")
-const { register, login, otp, userhome, productlist, myaccount, userdash, useraddress, oredrs, cartrender, checkout,wishlist,resetpass,walletrender,placedorder } = require('../middleware/render')
+const { signup, otpvarify, resent, varifylogin, logout, viewproduct, blockuser, glogincb, cartitemspush, cartupdata, cartitemdelete, addaddress, placeorder, deleteaddress, cancelorder, editname, changepass, productstockdata, cancelitem, patchwishlist, removewish, coupenapplaying, razorpayvarify, sendreset, resetpage, resetpasspost, returning, addressave, paymentfaied, retrypayment, invoice } = require("../controller/user/user")
+const { register, login, otp, userhome, productlist, myaccount, userdash, useraddress, oredrs, cartrender, checkout, wishlist, resetpass, walletrender, placedorder } = require('../middleware/render')
 // const plogin=require('../controller/user/ulogin')
 const { pregister } = require('../middleware/redirect')
 const { allproducts } = require('../controller/finding_all_admin')
@@ -14,8 +14,8 @@ router.post('/signup', signup, pregister)
 router.get('/signin', login)
 router.post('/signin', varifylogin)
 
-router.get('/resetpass',resetpass )
-router.post('/reset',sendreset )
+router.get('/resetpass', resetpass)
+router.post('/reset', sendreset)
 
 // otp 
 router.get('/otp', otp)
@@ -29,8 +29,8 @@ router.post('/resendotp', resent)
 router.get('/reset-password/:token', resetpage);
 // Route to update the password
 router.post('/reset-password/:token', resetpasspost);
-  
-  
+
+
 // user side 
 
 router.get('/', blockuser, allproducts, userhome)
@@ -45,7 +45,7 @@ router.get('/user/mydash', userdash)
 router.get('/user/address', useraddress)
 router.get('/user/orders', oredrs)
 router.post('/user/cancel-product', cancelitem)
-router.get('/download-invoice/:orderid',invoice)
+router.get('/download-invoice/:orderid', invoice)
 
 // router.patch('/orders/:id', cancelorder)
 //google validation
@@ -62,31 +62,31 @@ router.delete('/cart/delete', cartitemdelete)
 //checkout page 
 router.get('/checkout', checkout)
 router.post('/orders', placeorder)
-router.get('/orderplaced',placedorder)
+router.get('/orderplaced', placedorder)
 //addres edit and update
 router.post('/address', addaddress)
-router.patch('/address/update',addressave)
+router.patch('/address/update', addressave)
 router.delete('/address/:id', deleteaddress)
-router.post('/return/:proid',returning)
+router.post('/return/:proid', returning)
 //user data update
 // wallet 
-router.get('/user/wallet',walletrender)
+router.get('/user/wallet', walletrender)
 router.patch('/userupdate', editname)
 router.patch('/changepass', changepass)
 
 // wishlist 
-router.get('/wishlist',wishlist)
-router.patch('/wishlist/remove',removewish)
-router.patch('/wishlist/:id',patchwishlist)
+router.get('/wishlist', wishlist)
+router.patch('/wishlist/remove', removewish)
+router.patch('/wishlist/:id', patchwishlist)
 
-router.get('/applaycoupon/:name',coupenapplaying)
+router.get('/applaycoupon/:name', coupenapplaying)
 
 
 router.get('/glogin/callback', glogincb);
 //razorpay varify
-router.post('/verify-payment',razorpayvarify);
-router.patch('/payment-failed/:id',paymentfaied);
-router.post('/retrypayment/:id',retrypayment)
+router.post('/verify-payment', razorpayvarify);
+router.patch('/payment-failed/:id', paymentfaied);
+router.post('/retrypayment/:id', retrypayment)
 
 
 //logout

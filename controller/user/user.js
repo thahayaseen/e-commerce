@@ -816,18 +816,15 @@ const cancelitem = async (req, res) => {
             console.log('quantity ' + orderdata.products[index].quantity);
             refundprice = (orderdata.products[index].price - orderdata.products[index].discount) * orderdata.products[index].quantity;
         }
+        let count = 0;
 
+        for (const orders of orderdata.products) {
+            console.log(orders.status);
+            count += !orders.status ? 1 : -1; 
+        }
         if(orderdata.paymentStatus=='Paid'){
-            // console.log((orderdata.totalAmount-orderdata.coupon.discount) - orderdata.refund == 0);
-            // console.log((orderdata.totalAmount-orderdata.coupon.discount) - orderdata.refund );
-            console.log(Object.values);
-            let count = 0;
-            for (const orders of orderdata.products) {
-                console.log(orders.status);
             
-                
-                count += !orders.status ? 1 : -1;
-            }
+            console.log(Object.values);
             
             console.log(count);
             console.log('length is '+orderdata.products.length);
@@ -853,16 +850,16 @@ const cancelitem = async (req, res) => {
             orderdata.refund = orderdata.refund 
             orderdata.refund += refundprice;
             
-            if (count-orderdata.products.length==0) {
-                console.log('yes');
-                orderdata.status = 'Cancelled'
-                
-    
-            }
-            else {
-                console.log('no');
-    
-            }
+        }
+        if (count-orderdata.products.length==0) {
+            console.log('yes');
+            orderdata.status = 'Cancelled'
+            
+
+        }
+        else {
+            console.log('no');
+
         }
         // const change = true;
         const change = await orderdata.save();
