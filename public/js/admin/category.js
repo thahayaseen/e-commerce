@@ -17,7 +17,7 @@ deletebtn.forEach((categories)=>{
         )
         .then(res=>{
             if (res.success===true) {
-                window.location.href='/admin/category'
+                window.location.reload(true)
             }
         })
         .catch((err)=>console.log('the deletion error'+err)

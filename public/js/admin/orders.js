@@ -90,20 +90,31 @@ document.addEventListener('DOMContentLoaded', function() {
           // Populate order items
           let itemsHtml = '';
           let subtotal = 0;
+          let presentage = 0;
 
           if (!Array.isArray(order.products)) {
               throw new Error('Products data is invalid');
           }
-
-          order.products.forEach((item) => {
+         
+          order.products.forEach((item,index) => {
               const { productid,status, quantity, price,discount, return: returnStatus } = item;
               if (!productid || !quantity || !price) {
                   console.warn('Incomplete product data:', item);
                   return;
               }
-
               const { name, images, sku } = productid;
-              subtotal += quantity * (price-discount)
+                            const notcanceled=order.products.filter(data=>data.status==true).reduce((acc,data)=>{return acc+(data.price-data.discount)*data.quantity},0)
+                          
+                            console.log(notcanceled);
+                            console.log();
+                            console.log(order.coupon.discount);
+                            presentage=(order.coupon.discount*100)/(order.totalAmount)
+                            console.log('persentage'+presentage);
+                            
+                            // console.log(adnf);
+                            
+
+              subtotal = notcanceled
 
               const productImage = images && images.length > 0 ? `/uploads/${images[0]}` : '/placeholder-image.jpg';
               const productTotal = (quantity * (price-discount)).toFixed(2);
@@ -121,7 +132,7 @@ document.addEventListener('DOMContentLoaded', function() {
                   else {
                     returnStatusHtml= '<div class="mt-2">No return request</div>'};
 
-              itemsHtml += generateProductCard(name, sku, price, quantity, productImage, productTotal, returnStatusHtml,status);
+              itemsHtml += generateProductCard(name, sku, price, quantity, productImage, productTotal, returnStatusHtml,status,notcanceled);
           });
 
           const orderItemsElement = document.getElementById('orderItems');
@@ -130,7 +141,7 @@ document.addEventListener('DOMContentLoaded', function() {
           }
 
           // Update totals
-          updateOrderTotals(subtotal, order.coupon,order);
+          updateOrderTotals(subtotal, order.coupon,order,presentage);
 
       } catch (error) {
           console.error('Error in populateOrderModal:', error);
@@ -138,7 +149,7 @@ document.addEventListener('DOMContentLoaded', function() {
       }
   }
 
-  function generateProductCard(name, sku, price, quantity, productImage, productTotal, returnStatusHtml,ostatus) {
+  function generateProductCard(name, sku, price, quantity, productImage, productTotal, returnStatusHtml,ostatus,notcanceled) {
     console.log(ostatus);
     
     if(!ostatus){
@@ -219,12 +230,12 @@ document.addEventListener('DOMContentLoaded', function() {
       `;
   }
 
-  function updateOrderTotals(subtotal, coupon,order) {
+  function updateOrderTotals(subtotal, coupon,order,presentage) {
       const elements = {
           orderSubtotal: subtotal.toFixed(2),
           orderShipping: order.shippingcharg?order.shippingcharg:'Free',
-          coupon: coupon.couponcode ? `${coupon.couponcode} (-₹${coupon.discount})` : 'No coupon applied',
-          orderTotal: (subtotal+order.shippingcharg - (coupon ? coupon.discount : 0)).toFixed(2)
+          coupon: coupon.couponcode ? `${coupon.couponcode} (-₹${(subtotal*presentage)/100})` : 'No coupon applied',
+          orderTotal: (subtotal+order.shippingcharg - (coupon ? (subtotal*presentage)/100 : 0)).toFixed(2)
       };
 
       Object.entries(elements).forEach(([id, value]) => {
@@ -311,10 +322,10 @@ document.addEventListener('DOMContentLoaded', function() {
       } = address;
 
       return `
-          ${addressline1}<br>
+          ${addressline1} <br>
           ${addressline2}
-          ${city}, ${state} ${zipcode}<br>
-          ${phone}<br>
+          ${city}, ${state} ${zipcode} <br>
+          ${phone} <br>
           ${country}
       `.trim();
   }

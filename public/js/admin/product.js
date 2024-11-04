@@ -15,7 +15,7 @@ unlistButtons.forEach((btn) => {
             return;
         }
 
-        // Send the PATCH request to update product status
+        //  product status
         fetch(`/admin/product/unlist/${productId}`, { method: 'PATCH' })
             .then(response => {
                 if (!response.ok) {
@@ -230,7 +230,7 @@ document.addEventListener('DOMContentLoaded', function () {
     form.addEventListener('submit', handleFormSubmission);
 
     function handleEditButtonClick() {
-        // Get product data from button attributes
+        
         const productImages = JSON.parse(this.getAttribute('data-images'));
         productId = this.getAttribute('data-id');
         const productName = this.getAttribute('data-name');
@@ -264,11 +264,11 @@ document.addEventListener('DOMContentLoaded', function () {
         document.getElementById('productprice').value = price;
         document.getElementById('productOffer').value = offer;
 
-        // Set the correct category in the dropdown
+        //  correct category in the dropdown
         const categorySelect = document.getElementById('productCategory');
-        categorySelect.value = productCategoryId; // This sets the selected option based on the product's category ID
+        categorySelect.value = productCategoryId; 
 
-        // Set form action to the correct product ID
+        // form action to the correct product ID
         form.action = `/admin/product/images/edit/${productId}`;
 
         // Show the modal
@@ -303,7 +303,7 @@ document.addEventListener('DOMContentLoaded', function () {
         .then(response => response.json())
         .then(data => {
             if (data.success) {
-                window.location.href = '/admin/product';
+                window.location.reload(true)
             } else {
                 alert('Failed to update product: ' + data.message);
             }

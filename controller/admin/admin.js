@@ -1011,19 +1011,22 @@ const returnadmin = async (req, res) => {
     console.log(productindex);
     const coupon=order.coupon.discount
     let coupondiscount=(order.coupon.discount*100)/order.totalAmount
-    let refundamount=((order.products[productindex].price-order.products[productindex].discount))-(((order.products[productindex].price-order.products[productindex].discount)*coupondiscount)/100)
-    console.log(JSON.stringify(order));
-    console.log(coupondiscount);
-    console.log(refundamount);
+    const productprice=(order.products[productindex].price-order.products[productindex].discount)*order.products[productindex].quantity
+    let refundamount=(productprice-(productprice*coupondiscount)/100)
+    // console.log(JSON.stringify(order));
+    console.log('coupon'+coupondiscount);
+    console.log('amount is '+refundamount);
  
     console.log(orderid);
     console.log(action);
-    console.log(product);
+    // console.log(product);
     if (action === 'accept') {
         order.products[productindex].return = 'Returned'
+        order.products[productindex].status = false
         wallet.balance+=refundamount
         console.log(wallet.balance);
         wallet.income+=refundamount
+        order.refund+=refundamount
         wallet.transactions.push({
             type: 'credit',
             amount: refundamount,
