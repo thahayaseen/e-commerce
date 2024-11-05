@@ -1063,12 +1063,15 @@ const offers = async (req, res) => {
             console.log(req.body.isActive=='false');
             
             if(req.body.isActive=='false'){
+                offerdatas.isActive=false
             offerdesaable( data.selectedItems,data.applicationType,offerdatas)
             console.log('disabling');
+            await offerdatas.save()
             
             return res.status(200).json({ success: true, message: 'The Offer Updated successfully' })
 
             }
+            offerdatas.isActive=true
             await offerdatas.save()
             offerapplayinproduct( data.selectedItems,data.applicationType,offerdatas)
             return res.status(200).json({ success: true, message: 'The Offer Updated successfully' })
@@ -1194,15 +1197,15 @@ const offerdesaable=async(selscted,type,offer)=>{
         const pdatas=await Product.find({_id:{$in:selscted}}) 
          if(offer.discountType=='fixed'){
             pdatas.forEach(async(data)=>{
-                data.offerdealprice=data.price-offer.discountValue
-                data.dealoffertype='fixed'
+                data.offerdealprice=undefined
+                data.dealoffertype=undefined
                 data.save()
             })
         }
             else if(offer.discountType=='percentage'){
                 pdatas.forEach(async(data)=>{
-                    data.offerdealprice=data.price-(data.price*offer.discountValue)/100
-                data.dealoffertype='percentage'
+                    data.offerdealprice=undefined
+                data.dealoffertype=undefined
 
                     data.save()
                 })

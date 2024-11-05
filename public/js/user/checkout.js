@@ -208,7 +208,7 @@ paymentForm.addEventListener('submit', async (e) => {
                     key: data.razorpay_key,
                     amount: data.amount,
                     currency: "INR",
-                    name: "Your E-Commerce Site",
+                    name: "Weebscorner",
                     description: "Purchase Description",
                     order_id: data.order_id,
                     handler: async function (response) {

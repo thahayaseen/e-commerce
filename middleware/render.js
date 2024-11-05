@@ -42,6 +42,23 @@ const otp = (req, res) => {
 // home page 
 const userhome = async (req, res) => {
     const product = req.session.products
+    product.forEach(product=>{
+    let poffer=product.price-(product.price*product.offer)/100
+    console.log(poffer);
+    
+    if (poffer<product.offerdealprice||product.offerdealprice==0) {
+        
+        product.dealprice=poffer
+    }
+    else{
+        product.dealprice=product.offerdealprice
+        product.offtype=product.dealoffertype
+
+        
+    }
+ 
+})
+
     
     delete req.session.products
 
@@ -183,11 +200,13 @@ console.log(matchQuery);
         const top10product=Object.entries(topproducts)
         .filter(([key,value])=>value>0)
         .sort((a,b)=>a[1]-b[1])
+        .slice(0,10)
         console.log(top10product);
         
         const top10category=Object.entries(filterobjs)
         .filter(([key,value])=>value>0)
         .sort((a,b)=>a[1]-b[1])
+        .slice(0,10)
         console.log(top10category);
         
         // console.log(categorydata); 
@@ -336,6 +355,8 @@ const cartrender = async (req, res) => {
 const checkout = async (req, res) => {
     const login = req.session.ulogin
     const uid = req.session.ulogin
+    const coupons=await coupon.find({})
+
     
     if (req.session.ulogin) {
         const cart = await cartschema.findOne({ userid: uid }).populate('product.productid')
@@ -350,7 +371,7 @@ const checkout = async (req, res) => {
        
 
 
-        res.render('userside/checkout', { savedAddresses: popuser.address, cart: cart })
+        res.render('userside/checkout', { savedAddresses: popuser.address, cart: cart,coupons })
     }
     else {
         res.redirect('/signin')

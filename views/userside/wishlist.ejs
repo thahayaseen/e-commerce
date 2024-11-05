@@ -169,10 +169,10 @@
                             <!-- <p class="text-muted mb-0">XL Size</p> -->
                         </div>
                         <div class="col-md-2 text-end">
-                            <h5 class="mb-0">$24.99</h5>
+                            <h5 class="mb-0">₹<%=data.price-(((data.price*data.offer)/100))  %></h5>
                         </div>
                         <div class="col text-end">
-                            <a class="btn btn-primary btn-sm" id="wishlistbtn"  data-pid="<%=data._id%>"  data-price="<%=data.price  %>" >Add to Cart</a>
+                            <a class="btn btn-primary btn-sm" id="wishlistbtn"  data-pid="<%=data._id%>"  data-price="<%=data.price-(((data.price*data.offer)/100))  %>  %>" >Add to Cart</a>
                             <button class="btn btn-outline-danger btn-sm " id="removewish" data-index="<%= ind %>" data-wishlistid="<%=wishlist._id%>">Remove</button>
                         </div>
                     </div>

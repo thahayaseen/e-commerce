@@ -1,111 +1,128 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Product Analytics</title>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
+<!-- Add this CSS in the existing <style> section -->
     <style>
-        .chart-container {
-            width: 100%;
-            max-width: 600px;
-            margin: 20px auto;
-            padding: 20px;
-            box-shadow: 0 0 10px rgba(0,0,0,0.1);
-            border-radius: 8px;
-            background: white;
-        }
-        .chart-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
-            gap: 20px;
-            padding: 20px;
-        }
-        h2 {
-            text-align: center;
-            color: #333;
+        .coupon-section {
+            position: relative;
             margin-bottom: 20px;
         }
-    </style>
-</head>
-<body>
-    <div class="chart-grid">
-        <div class="chart-container">
-            <h2>Top 10 Categories Distribution</h2>
-            <canvas id="pieChart"></canvas>
-        </div>
-        <div class="chart-container">
-            <h2>Top 10 Products by Count</h2>
-            <canvas id="barChart"></canvas>
-        </div>
-    </div>
-
-    <script>
-        // Function to generate random colors
-        function getRandomColor() {
-            const letters = '0123456789ABCDEF';
-            let color = '#';
-            for (let i = 0; i < 6; i++) {
-                color += letters[Math.floor(Math.random() * 16)];
-            }
-            return color;
-        }
-
-        // Get data from EJS
-        const productData = <%- JSON.stringify(data) %>;
         
-        // Process data for charts
-        const labels = productData.map(item => item[0]);
-        const values = productData.map(item => item[1]);
-        const colors = Array(labels.length).fill().map(getRandomColor);
-
-        // Create Pie Chart
-        const pieCtx = document.getElementById('pieChart').getContext('2d');
-        new Chart(pieCtx, {
-            type: 'pie',
-            data: {
-                labels: labels,
-                datasets: [{
-                    data: values,
-                    backgroundColor: colors,
-                }]
-            },
-            options: {
-                responsive: true,
-                plugins: {
-                    legend: {
-                        position: 'bottom',
-                    }
-                }
-            }
+        .coupon-input {
+            margin-bottom: 10px;
+        }
+        
+        .available-coupons-toggle {
+            color: #3b5998;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            font-size: 0.9rem;
+            margin-bottom: 10px;
+        }
+        
+        .available-coupons-toggle i {
+            transition: transform 0.3s ease;
+        }
+        
+        .available-coupons-toggle.active i {
+            transform: rotate(180deg);
+        }
+        
+        .available-coupons {
+            background: #f8f9fa;
+            border: 1px solid #e9ecef;
+            border-radius: 8px;
+            padding: 15px;
+            display: none;
+            margin-top: 10px;
+        }
+        
+        .available-coupons.show {
+            display: block;
+        }
+        
+        .coupon-card {
+            border: 1px dashed #3b5998;
+            border-radius: 6px;
+            padding: 12px;
+            margin-bottom: 10px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        
+        .coupon-card:hover {
+            background-color: #e9ecef;
+        }
+        
+        .coupon-card:last-child {
+            margin-bottom: 0;
+        }
+        
+        .coupon-code {
+            font-weight: bold;
+            color: #3b5998;
+            background: #e9ecef;
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-size: 0.9rem;
+        }
+        
+        .coupon-description {
+            font-size: 0.85rem;
+            color: #6c757d;
+            margin-top: 5px;
+        }
+        
+        .coupon-valid {
+            font-size: 0.8rem;
+            color: #28a745;
+            margin-top: 5px;
+        }
+        </style>
+        
+    
+        <div class="coupon-section">
+            <div class="coupenerror">
+                <div class="coupon-input">
+                    <input type="text" class="form-control" id="apply" maxlength="7" placeholder="Enter coupon code">
+                    <button class="btn btn-primary" id="applysubmit">Apply</button>
+                </div>
+                <small id="applayerror" class="ms-1 text-danger"></small>
+            </div>
+            
+            <div class="available-coupons-toggle">
+                <span>Show available coupons</span>
+                <i class="fas fa-chevron-down ms-2"></i>
+            </div>
+            
+            <div class="available-coupons">
+                <div class="coupon-card" data-code="FIRST50">
+                    <div class="coupon-code">FIRST50</div>
+                    <div class="coupon-valid">Valid until 31st Dec 2024</div>
+                </div>
+                
+           
+            </div>
+        </div>
+        
+      
+        <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const toggleButton = document.querySelector('.available-coupons-toggle');
+            const availableCoupons = document.querySelector('.available-coupons');
+            const couponInput = document.querySelector('#apply');
+            
+        
+            toggleButton.addEventListener('click', function() {
+                availableCoupons.classList.toggle('show');
+                toggleButton.classList.toggle('active');
+            });
+            
+            
+            document.querySelectorAll('.coupon-card').forEach(card => {
+                card.addEventListener('click', function() {
+                    const couponCode = this.dataset.code;
+                    couponInput.value = couponCode;
+                   
+                });
+            });
         });
-
-        // Create Bar Chart
-        const barCtx = document.getElementById('barChart').getContext('2d');
-        new Chart(barCtx, {
-            type: 'bar',
-            data: {
-                labels: labels,
-                datasets: [{
-                    label: 'Product Count',
-                    data: values,
-                    backgroundColor: colors,
-                }]
-            },
-            options: {
-                responsive: true,
-                scales: {
-                    y: {
-                        beginAtZero: true
-                    }
-                },
-                plugins: {
-                    legend: {
-                        display: false
-                    }
-                }
-            }
-        });
-    </script>
-</body>
-</html>
+        </script>

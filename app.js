@@ -3,6 +3,8 @@ const passport = require('passport');
 const session = require('express-session');
 const adminrout = require('./router/adminrout');
 const router = require('./router/routes');
+const corne=require('node-cron')
+
 const mongoose=require('./router/mongoose')
 
 require('dotenv').config();
@@ -44,7 +46,12 @@ app.use(passport.session());
 // Use routes
 app.use('/admin', adminrout);
 app.use('/', router);
-
+app.get('*',(req,res)=>{
+  res.render('404.ejs')
+})
+// app.use((req, res, next) => {
+//   res.status(404).render('404.ejs');
+// });
 // Start the server
 const PORT = 4050;
 app.listen(PORT, () => {

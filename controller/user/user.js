@@ -954,8 +954,7 @@ const razorpayvarify = async (req, res) => {
 
         // Verify the payment signature
         const sign = razorpay_order_id + "|" + razorpay_payment_id;
-        console.log(sign);
-        console.log(razorpay_signature);
+
 
         const expectedSign = crypto
             .createHmac("sha256", process.env.RAZORPAYSCECRET)
