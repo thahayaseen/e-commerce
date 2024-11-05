@@ -561,7 +561,8 @@ const exportpdf = async (req, res) => {
         matchQuery = {
             createdAt: {
                 $gte: new Date(startDate), $lte: new Date(endDate)
-            }
+            },
+
         };
     } else {
 
@@ -572,10 +573,12 @@ const exportpdf = async (req, res) => {
         };
     }
     // console.log(matchQuery)
+ 
 
     try {
         const data = await orders.aggregate([
-            { $match: { status: 'Delivered' } },
+            { $match: { status: 'Delivered', "products.status": true } },
+
             {
                 $lookup: {
                     from: 'users',
@@ -665,9 +668,16 @@ const exportpdf = async (req, res) => {
                 return `${name} (${price}-${Math.floor(p.discount)})Rs × ${p.quantity.toString().padStart(3, ' ')}`;
             }).join('\n');
         };
-        const formatCoupon = (coupon) => {
+        const formatCoupon = (coupon,order) => {
             if (!coupon) return '0';
-            // console.log(coupon.discount)
+            console.log(coupon.discount)
+            // console.log(order);
+            
+            const offer=((coupon.discount*100)/order.totalAmount)||0
+            console.log(offer);
+            console.log((order.totalAmount*offer)/100);
+
+            
             return `${coupon.couponcode ? coupon.couponcode : 'No Coupon'}(-${coupon.couponcode ? coupon.discount : 0}Rs) `;
         };
 
@@ -685,10 +695,11 @@ const exportpdf = async (req, res) => {
         // Calculate Statistics
         const stats = {
             totalOrders: data.length,
-            totalRevenue: Math.floor(data.reduce((sum, order) => sum + order.totalAmount, 0)),
+            totalRevenue: Math.floor(data.reduce((sum, order) => sum + order.totalAmount+order.shippingcharg - order.coupon.discount-order.refund, 0)),
             averageOrderValue: Math.floor(data.length ? data.reduce((sum, order) => sum + order.totalAmount, 0) / data.length : 0)
         };
-
+        console.log(stats.totalRevenue);
+        
         // Render PDF stats
         const statsData = [
             ['Total Completed Orders', stats.totalOrders],
@@ -756,7 +767,7 @@ const exportpdf = async (req, res) => {
                 (order._id),
                 formatCustomer(order.user),
                 formatProducts(order.products),
-                formatCoupon(order.coupon),
+                formatCoupon(order.coupon,order),
                 formatCurrency(order.totalAmount, order.coupon, order), // Use the calculated discount
                 formatDate(order.orderDate)
             ];
@@ -947,7 +958,7 @@ const exportexcel = async (req, res) => {
                 order._id.toString(),
                 formatCustomer(order.user),
                 formatProducts(order.products),
-                formatCoupon(order.coupon),
+                formatCoupon(order.coupon,order),
                 order.totalAmount - order.coupon.discount,
                 formatDate(order.orderDate)
             ];

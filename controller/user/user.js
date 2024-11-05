@@ -529,6 +529,7 @@ const placeorder = async (req, res) => {
 
 
             if (paymentmethods === 'onlinePayment') {
+               
           
                 const order = new orderchema({
                     user: userid,
@@ -541,8 +542,11 @@ const placeorder = async (req, res) => {
                     'coupon.couponcode': cname,
                     shippingcharg:usercart.shippingcharge
                 });
-
                 const ordersave = await order.save();
+                if(Math.floor((ordersave.totalAmount * 100)+(ordersave.shippingcharg * 100) - (ordersave.coupon.discount * 100))>500000){
+                    return res.status(201).json({success:false,message:'cannot pay morethan 5 lack in onlin payment'})
+                   }
+             
                 if (ordersave) {
                     userdata.orders.push(ordersave._id);
 

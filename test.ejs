@@ -1,128 +1,45 @@
-<!-- Add this CSS in the existing <style> section -->
-    <style>
-        .coupon-section {
-            position: relative;
-            margin-bottom: 20px;
-        }
-        
-        .coupon-input {
-            margin-bottom: 10px;
-        }
-        
-        .available-coupons-toggle {
-            color: #3b5998;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            font-size: 0.9rem;
-            margin-bottom: 10px;
-        }
-        
-        .available-coupons-toggle i {
-            transition: transform 0.3s ease;
-        }
-        
-        .available-coupons-toggle.active i {
-            transform: rotate(180deg);
-        }
-        
-        .available-coupons {
-            background: #f8f9fa;
-            border: 1px solid #e9ecef;
-            border-radius: 8px;
-            padding: 15px;
-            display: none;
-            margin-top: 10px;
-        }
-        
-        .available-coupons.show {
-            display: block;
-        }
-        
-        .coupon-card {
-            border: 1px dashed #3b5998;
-            border-radius: 6px;
-            padding: 12px;
-            margin-bottom: 10px;
-            cursor: pointer;
-            transition: background-color 0.3s ease;
-        }
-        
-        .coupon-card:hover {
-            background-color: #e9ecef;
-        }
-        
-        .coupon-card:last-child {
-            margin-bottom: 0;
-        }
-        
-        .coupon-code {
-            font-weight: bold;
-            color: #3b5998;
-            background: #e9ecef;
-            padding: 3px 8px;
-            border-radius: 4px;
-            font-size: 0.9rem;
-        }
-        
-        .coupon-description {
-            font-size: 0.85rem;
-            color: #6c757d;
-            margin-top: 5px;
-        }
-        
-        .coupon-valid {
-            font-size: 0.8rem;
-            color: #28a745;
-            margin-top: 5px;
-        }
-        </style>
-        
-    
-        <div class="coupon-section">
-            <div class="coupenerror">
-                <div class="coupon-input">
-                    <input type="text" class="form-control" id="apply" maxlength="7" placeholder="Enter coupon code">
-                    <button class="btn btn-primary" id="applysubmit">Apply</button>
+<!DOCTYPE html>
+<html lang="en">
+<!-- Previous head and style sections remain the same -->
+
+<body>
+    <!-- Previous header and content sections remain the same -->
+
+    <!-- Fixed Order Details Modal -->
+    <div class="modal fade" id="orderDetailsModal" tabindex="-1">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Order Details</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                 </div>
-                <small id="applayerror" class="ms-1 text-danger"></small>
-            </div>
-            
-            <div class="available-coupons-toggle">
-                <span>Show available coupons</span>
-                <i class="fas fa-chevron-down ms-2"></i>
-            </div>
-            
-            <div class="available-coupons">
-                <div class="coupon-card" data-code="FIRST50">
-                    <div class="coupon-code">FIRST50</div>
-                    <div class="coupon-valid">Valid until 31st Dec 2024</div>
+                <div class="modal-body">
+                    <div class="order-summary mb-4">
+                        <h6 class="mb-3">Order Summary</h6>
+                        <div class="order-summary-item">
+                            <span>Order ID:</span>
+                            <span id="modalOrderId"></span>
+                        </div>
+                        <div class="order-summary-item">
+                            <span>Order Date:</span>
+                            <span id="modalOrderDate"></span>
+                        </div>
+                        <div class="order-summary-item">
+                            <span>Status:</span>
+                            <span id="modalOrderStatus"></span>
+                        </div>
+                        <div class="order-summary-item">
+                            <span>Payment Status:</span>
+                            <span id="modalPaymentStatus"></span>
+                        </div>
+                    </div>
+
+                    <!-- Rest of the modal content remains the same -->
                 </div>
-                
-           
             </div>
         </div>
-        
-      
-        <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const toggleButton = document.querySelector('.available-coupons-toggle');
-            const availableCoupons = document.querySelector('.available-coupons');
-            const couponInput = document.querySelector('#apply');
-            
-        
-            toggleButton.addEventListener('click', function() {
-                availableCoupons.classList.toggle('show');
-                toggleButton.classList.toggle('active');
-            });
-            
-            
-            document.querySelectorAll('.coupon-card').forEach(card => {
-                card.addEventListener('click', function() {
-                    const couponCode = this.dataset.code;
-                    couponInput.value = couponCode;
-                   
-                });
-            });
-        });
-        </script>
+    </div>
+
+    <!-- Rest of the body content remains the same -->
+</body>
+</html>
