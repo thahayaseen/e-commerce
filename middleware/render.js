@@ -397,7 +397,7 @@ const orders = async (req, res) => {
     const limit = parseInt(req.query.limit) || 5;
     const skip = (page - 1) * limit;
     const adlogin=req.session.ladmin
-    let orders = await ordersshema.find({}).populate('user').skip(skip).limit(limit).sort({createdAt:-1})
+    let orders = await ordersshema.find({paymentStatus:{$ne:'Failed'}}).populate('user').skip(skip).limit(limit).sort({createdAt:-1})
     console.log('order data is'+orders);
     
 
