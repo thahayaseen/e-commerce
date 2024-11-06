@@ -856,7 +856,8 @@ const exportexcel = async (req, res) => {
     }
     try {
         const data = await orders.aggregate([
-            { $match: { status: 'Delivered' } },
+            { $match: { status:{$in:['Processing', 'Shipped', 'Delivered']}, paymentStatus:{$in:['Pending','Paid']} } },
+
             {
                 $lookup: {
                     from: 'users',
@@ -904,7 +905,7 @@ const exportexcel = async (req, res) => {
             { $project: { productDetails: 0 } },
             { $match: matchQuery },
             { $sort: { createdAt: -1 } }
-        ]);
+        ])
 
         // Create a new workbook
         const workbook = new excel.Workbook();
@@ -956,8 +957,8 @@ const exportexcel = async (req, res) => {
         // Add statistics
         const stats = {
             totalOrders: data.length,
-            totalRevenue: data.reduce((sum, order) => sum + order.totalAmount, 0),
-            averageOrderValue: data.length ? data.reduce((sum, order) => sum + order.totalAmount, 0) / data.length : 0
+            totalRevenue: Math.floor(data.reduce((sum, order) => sum + order.totalAmount+order.shippingcharg - order.coupon.discount-order.refund, 0)),
+            averageOrderValue: Math.floor(data.length ? data.reduce((sum, order) => sum + order.totalAmount+order.shippingcharg - order.coupon.discount-order.refund, 0) / data.length : 0)
         };
 
         worksheet.mergeCells('A4:C4');
