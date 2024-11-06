@@ -136,13 +136,17 @@ const admin = async (req, res) => {
             
         }
 console.log(matchQuery);
+const page = parseInt(req.query.page) || 1; 
+const limit = parseInt(req.query.limit) || 9;
+const skip = (page - 1) * limit; 
 
         // Fetch products
         const productsAndCategory = await ordersshema.find(matchQuery )
             .populate('user')
             .populate('products.productid')
-            .sort({ createdAt: -1 });
-
+            .sort({ createdAt: -1 })
+            .skip(skip)
+            .limit(limit)
 
             const psstatus=[ 'Processing', 'Shipped', 'Delivered']
 
@@ -214,14 +218,17 @@ console.log(matchQuery);
         .sort((a,b)=>a[1]-b[1])
         .slice(0,10)
         console.log(top10category);
+        const totalItems = allproducts.length;
+        const totalPages = Math.ceil(50)
         
-        // console.log(categorydata); 
-        // console.log(productsAndCategory); 
 
    
         res.render('admin/dashbord', {
             products: productsAndCategory,
             categoryCounts:top10category ,
+            currentPage: page,
+            totalPages,
+            limit,
             topproduct:top10product
         });
     } else {
