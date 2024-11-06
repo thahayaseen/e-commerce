@@ -180,7 +180,7 @@
                         <div class="row mb-3">
                             <div class="col-md-6">
                                 <label for="zipCode" class="form-label">ZIP Code</label>
-                                <input type="text" class="form-control" maxlength="6" pattern="\d{6}" id="zipCode" name="zipCode" required>
+                                <input type="text" class="form-control" maxlength="6" minlength="5" pattern="\d{6}" id="zipCode" name="zipCode" required>
                             </div>
                             <div class="col-md-6">
                                 <label for="country" class="form-label">Country</label>
@@ -195,7 +195,7 @@
                         </div>
                         <div class="mb-3">
                             <label for="phoneNumber" class="form-label">Phone Number</label>
-                            <input type="text" id="phoneNumber" name="phoneNumber" class="form-control" pattern="[0-9]*" maxlength="10" required>
+                            <input type="text" id="phoneNumber" name="phoneNumber" minlength="10" class="form-control" pattern="[0-9]*" maxlength="10" required>
                         </div>
                         <div class="mb-3">
                             <label for="addressType" class="form-label">Address Type</label>
@@ -252,7 +252,7 @@
                         <div class="row mb-3">
                             <div class="col-md-6">
                                 <label class="form-label">ZIP Code</label>
-                                <input type="text" class="form-control" id="ezip" name="zipcode" required>
+                                <input type="text" class="form-control" minlength="5" id="ezip" name="zipcode" required>
                             </div>
                             <div class="col-md-6">
                                 <label class="form-label">Country</label>
@@ -267,7 +267,7 @@
                         </div> 
                         <div class="mb-3">
                             <label class="form-label">Phone Number</label>
-                            <input type="text" id="ephone" name="phone" class="form-control" pattern="[0-9]*" maxlength="10" required>
+                            <input type="text" id="ephone" name="phone" class="form-control" pattern="[0-9]*" minlength="10" maxlength="10" required>
 
                         </div>
                         <div class="mb-3">

@@ -22,7 +22,7 @@ function validateForm() {
     if (!addressType) errorMessage += 'Address Type is required.\n';
 
     const phonePattern = /^[0-9]+$/;
-    if (!phonePattern.test(phoneNumber)) errorMessage += 'Please provide a valid phone number (digits only).';
+    if (!phonePattern.test(phoneNumber)&&phoneNumber.length==10) errorMessage += 'Please provide a valid phone number (digits only).';
 
     if (errorMessage) {
         Swal.fire({
@@ -60,7 +60,6 @@ document.getElementById('newAddressForm').addEventListener('submit', async funct
 
 // Edit button setup with dataset value handling
 function setupEditButtons() {
-    document.addEventListener('DOMContentLoaded',(e)=>{
         const editBtns = document.querySelectorAll('.btn-outline-primary');
     editBtns.forEach((btn) => {
         btn.addEventListener('click', function (e) {
@@ -78,9 +77,11 @@ function setupEditButtons() {
             document.getElementById('ephone').value = phone || '';
         });
     });
-    })
 }
+document.addEventListener('DOMContentLoaded',(e)=>{
+
 setupEditButtons();
+})
 
 // Remove button setup 
 function setupRemoveButtons() {
@@ -145,11 +146,13 @@ function evalidateForm() {
     if (!zipCode) errorMessage += 'ZIP Code is required.\n';
     if (!country) errorMessage += 'Country is required.\n';
     if (!phoneNumber) errorMessage += 'Phone Number is required.\n';
+    
     if (!addressType) errorMessage += 'Address Type is required.\n';
-
+    
     const phonePattern = /^[0-9]+$/;
-    if (!phonePattern.test(phoneNumber)) errorMessage += 'Please provide a valid phone number (digits only).';
-
+    // if (!phonePattern.test(phoneNumber)) errorMessage += 'Please provide a valid phone number (digits only).';
+    
+    if (!phonePattern.test(phoneNumber)&&phoneNumber.length==10) errorMessage += 'Please provide a valid phone number (digits only).';
     if (errorMessage) {
         Swal.fire({
             icon: 'error',
