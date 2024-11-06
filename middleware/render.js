@@ -301,7 +301,8 @@ const userdash = (req, res) => {
     const ulogined = req.session.ulogin
     const glogin = req.session.glogin
     if (ulogined || glogin) {
-        res.render('userside/user dashbord/userdash')
+        // res.render('userside/user dashbord/userdash')
+        res.redirect('/user/myaccount')
     }
     else {
         res.redirect('/signin')
