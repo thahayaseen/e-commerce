@@ -115,9 +115,27 @@ const admin = async (req, res) => {
     const count = req.query.range||7
     let matchQuery
     const isLogin = req.session.ladmin;
+console.log('range is '+count);
 
     if (isLogin) {
-        if (startDate && endDate) {
+    
+        if (count == 1) {
+   
+            const startOfToday = new Date();
+            startOfToday.setUTCHours(0, 0, 0, 0);
+        
+            matchQuery = {
+                createdAt: {
+                    $gte: startOfToday
+                },
+                paymentStatus: { $in: ['Pending', 'Paid'] }
+            };
+
+        }
+        
+            
+        
+        else if (startDate && endDate) {
              matchQuery = {
                 createdAt: {
                     $gte: new Date(startDate), 
@@ -135,6 +153,7 @@ const admin = async (req, res) => {
             }
             
         }
+console.log('qury is ');
 console.log(matchQuery);
 const page = parseInt(req.query.page) || 1; 
 const limit = parseInt(req.query.limit) || 9;
@@ -149,6 +168,8 @@ const skip = (page - 1) * limit;
             .limit(limit)
 
             const psstatus=[ 'Processing', 'Shipped', 'Delivered']
+console.log('answer is ');
+console.log(JSON.stringify(productsAndCategory));
 
         const allproducts = await ordersshema.find({status:{$in:psstatus},paymentStatus: { $in: ['Pending', 'Paid'] }})
             .populate('user')
@@ -159,13 +180,13 @@ const skip = (page - 1) * limit;
         const product = await product_schema.find();
         const categoryCounts = {};
         const productcount={}
-        console.log(product);
+        // console.log(product);
         
         categories.forEach(category => {
             categoryCounts[category._id] = { name: category.name, count: 0 }; 
         });
         product.forEach(product => {
-            console.log('is it '+product._id);
+            // console.log('is it '+product._id);
             productcount[product._id] = { name: product.name, count: 0 }; 
             
         });
@@ -219,7 +240,7 @@ const skip = (page - 1) * limit;
         .slice(0,10)
         console.log(top10category);
         const totalItems = allproducts.length;
-        const totalPages = Math.ceil(50)
+        const totalPages = Math.ceil(totalItems/limit)
         
 
    
