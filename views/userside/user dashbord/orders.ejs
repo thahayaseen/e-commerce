@@ -240,6 +240,42 @@
             border-radius: 8px;
             padding: 1rem;
         }
+        .empty-state {
+            text-align: center;
+            padding: 4rem 2rem;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+        }
+
+        .empty-state-icon {
+            font-size: 5rem;
+            color: var(--primary-color);
+            margin-bottom: 1.5rem;
+            opacity: 0.8;
+        }
+
+        .empty-state-text {
+            color: var(--secondary-color);
+            margin-bottom: 2rem;
+        }
+
+        .shop-now-btn {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 0.75rem 2rem;
+            border-radius: 25px;
+            border: none;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            text-decoration: none;
+        }
+
+        .shop-now-btn:hover {
+            background-color: #4935c4;
+            transform: translateY(-2px);
+            color: white;
+        }
     </style>
 </head>
 
@@ -303,8 +339,24 @@
 
             </div>
             <div class="col-lg-9 my-lg-0">
-
-                <% orders.forEach(order=> { %>
+                
+                <% if(orders.length==0){ %>
+                    <div class="col-lg-9 my-lg-0">
+                        <div class="empty-state">
+                            <div class="empty-state-icon">
+                                <i class="fas fa-shopping-bag"></i>
+                            </div>
+                            <h3 class="mb-3">No Orders Yet</h3>
+                            <p class="empty-state-text">
+                                Looks like you haven't made any orders yet.<br>
+                                Start shopping to see your orders here!
+                            </p>
+                            <a href="/product" class="shop-now-btn">
+                                <i class="fas fa-shopping-cart me-2"></i>Start Shopping
+                            </a>
+                        </div>
+                    </div>
+                    <% }else orders.forEach(order=> { %>
                     <div class="order-card">
                         <div class="order-header">
                             <span class="order-id">Order #<%= order.orderid %></span>
