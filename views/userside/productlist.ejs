@@ -166,25 +166,9 @@
                                             <% }) %>
                                     
                             </div>
-                            <h6 class="mb-3">Price Range</h6>
+                          
 
-                            <h6 class="mb-3">Ratings</h6>
-                            <div class="mb-3">
-                                <% for(let i=5; i> 0; i--) { %>
-                                    <div class="form-check">
-                                        <input class="form-check-input" type="checkbox" name="rating" value="<%= i %>"
-                                            id="rating<%= i %>">
-                                        <label class="form-check-label" for="rating<%= i %>">
-                                            <% for(let j=0; j < i; j++) { %>
-                                                <i class="fas fa-star text-warning"></i>
-                                                <% } %>
-                                                    <% for(let j=i; j < 5; j++) { %>
-                                                        <i class="far fa-star text-warning"></i>
-                                                        <% } %>
-                                        </label>
-                                    </div>
-                                    <% } %>
-                            </div>
+                  
                             <button type="submit" class="btn btn-primary w-100">Apply Filters</button>
                         </form>
                     </div>
