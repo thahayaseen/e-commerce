@@ -493,7 +493,14 @@ const placeorder = async (req, res) => {
             if (selectedaddress.userid.toString() !== userid.toString()) {
                 return res.status(400).json({ success: false, message: 'User ID and address do not match' });
             }
-
+            console.log('cart items');
+            console.log(Object.values(usercart));
+            console.log(usercart.product.length);
+            if(usercart.product.length==0){
+                console.log('going home');
+                
+                return res.status(200).json({success:false,re:true})
+            }
             const productdata = usercart.product.map(item => ({
                 productid: item.productid._id,
                 quantity: item.quantity,
@@ -535,8 +542,9 @@ const placeorder = async (req, res) => {
                     user: userid,
                     orderid: orderId,
                     products: productdata,
-                    totalAmount: Math.floor(usercart.totalprice * 100) / 100,
+                    totalAmount: Math.floor((usercart.totalprice) * 100) / 100,
                     paymentMethod: paymentmethods,
+                    paymentStatus:'Failed',
                     shippingAddress: selectedaddress,
                     'coupon.discount': discount,
                     'coupon.couponcode': cname,
@@ -546,6 +554,9 @@ const placeorder = async (req, res) => {
                 // if(Math.floor((ordersave.totalAmount * 100)+(ordersave.shippingcharg * 100) - (ordersave.coupon.discount * 100))>500000){
                 //     return res.status(201).json({success:false,message:'cannot pay morethan 5 lack in onlin payment'})
                 //    }
+                const toatsl=Math.floor((ordersave.totalAmount)+(ordersave.shippingcharg ) - (ordersave.coupon.discount ))
+             console.log('code value is'+ordersave.coupon);
+             console.log(`${ordersave.totalAmount}\n ${ordersave.shippingcharg} \n ${ordersave.coupon.discount}` );
              
                 if (ordersave) {
                     userdata.orders.push(ordersave._id);
@@ -652,6 +663,9 @@ const placeorder = async (req, res) => {
             console.error('Error in placing order:', error);
             return res.status(500).json({ success: false, message: 'Error placing order', error: error.message });
         }
+    }
+    else{
+        res.redirect('/')
     }
 }
 
@@ -941,9 +955,10 @@ const coupenapplaying = async (req, res) => {
         return res.status(200).json({ success: false, erromsg: `The coupon can apply between ${coupen.min} - ${coupen.max} ` })
     }
     const discount = (cart.totalprice * coupen.discount) / 100
+    const shipping=cart.shippingcharge
 
 
-    res.status(200).json({ success: true, coupon: coupen.code, discount, toatal: cart.totalprice })
+    return res.status(200).json({ success: true, coupon: coupen.code, discount, toatal: cart.totalprice,shipping })
 
 
 }
@@ -1009,10 +1024,15 @@ const sendreset = async (req, res) => {
     try {
         const { email } = req.body;
         req.session.username = email;
+        console.log('insideofir');
+        console.log(email);
+        
 
         const user = await User.findOne({ email });
         if (!user) {
-            return res.status(404).send('User not found');
+        console.log('nouser');
+
+            return res.status(404).json({success:false,message:'Email Not Fount'})
         }
 
 
@@ -1025,12 +1045,12 @@ const sendreset = async (req, res) => {
         await user.save();
 
         // Construct the reset link
-        const resetLink = `http://localhost:4050/reset-password/${resetToken}`;
+        const resetLink = process.env.DOMAIN+`/reset-password/${resetToken}`;
 
         // Send the reset link to the user's email
         await sendPasswordResetOTP(email, resetLink, user.user_name);
 
-        res.send('Password reset email sent.');
+        return res.status(200).json({success:true,message:'Reset password token has been sented'})
     } catch (error) {
         console.error(error);
         res.status(500).send('Error sending reset email.');

@@ -144,8 +144,9 @@ console.log(matchQuery);
             .sort({ createdAt: -1 });
 
 
+            const psstatus=[ 'Processing', 'Shipped', 'Delivered']
 
-        const allproducts = await ordersshema.find()
+        const allproducts = await ordersshema.find({status:{$in:psstatus},paymentStatus: { $in: ['Pending', 'Paid'] }})
             .populate('user')
             .populate('products.productid')
             .sort({ createdAt: -1 });
@@ -154,14 +155,16 @@ console.log(matchQuery);
         const product = await product_schema.find();
         const categoryCounts = {};
         const productcount={}
-
+        console.log(product);
+        
         categories.forEach(category => {
             categoryCounts[category._id] = { name: category.name, count: 0 }; 
         });
         product.forEach(product => {
+            console.log('is it '+product._id);
             productcount[product._id] = { name: product.name, count: 0 }; 
+            
         });
-
         allproducts.forEach(order => {
             order.products.forEach(product => {
                 if (product.productid && categoryCounts[product.productid.category_id]) {
@@ -169,21 +172,24 @@ console.log(matchQuery);
                 }
             });
         });
-        //for product
+
         allproducts.forEach(order => {
             order.products.forEach(product => {
                 if (product.productid && productcount[product.productid._id]) {
                     productcount[product.productid._id].count++;
                 }
+                else{
+                    console.log('najhhi');
+                    
+                }
             });
         });
-        // console.log('product');
-        // console.log(productcount);
-        // console.log('category');
-        // console.log(categoryCounts);
+  
         
         let categorydata=Object.values(categoryCounts)
         let productdata=Object.values(productcount)
+       console.log('is'+productdata);
+       console.log('is'+categorydata);
        
         let filterobjs={}
         categorydata.forEach((data,ind)=>{

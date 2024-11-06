@@ -90,7 +90,7 @@ applaysubmit.addEventListener('click',(e)=>{
             document.getElementById('applayerror').innerText=''
 
             document.querySelector('.discount-charge').classList.add('d-flex')
-             rate=res.toatal-res.discount
+             rate=res.toatal-res.discount+res.shipping
             discountprice=res.discount
             cname=res.coupon
             console.log(rate);
@@ -192,6 +192,15 @@ paymentForm.addEventListener('submit', async (e) => {
     formData.cname = cname;
 
     try {
+        Swal.fire({
+            title: 'Processing',
+            text: 'Sending your reset link...',
+            allowOutsideClick: false,
+            showConfirmButton: false,
+            willOpen: () => {
+                Swal.showLoading();
+            }
+        });
         const response = await fetch('/orders', {
             method: 'POST',
             headers: {'Content-Type': 'application/json'},
@@ -199,6 +208,7 @@ paymentForm.addEventListener('submit', async (e) => {
         });
         
         const data = await response.json();
+        Swal.close()
 
         
         if (data.success) {
@@ -306,6 +316,9 @@ paymentForm.addEventListener('submit', async (e) => {
         }
         
         else if(data.success==false){
+            if(data.re){
+                return window.location.href='/'
+            }
             console.log('nooo');
             
             Swal.fire({

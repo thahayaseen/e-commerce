@@ -546,14 +546,13 @@ const Wallet = require('../../model/wallet');
 // };
 
 const exportpdf = async (req, res) => {
-    // const count = req.params.number;
-    // const date = new Date()
+
     const startDate = req.query.startDate;
     const endDate = req.query.endDate;
     const count = req.query.range
     let matchQuery
     console.log(endDate);
-    // console.log(range);
+
 
 
 
@@ -564,7 +563,15 @@ const exportpdf = async (req, res) => {
             },
 
         };
-    } else {
+    }
+    else if (count==1){
+        matchQuery = {
+            createdAt: {
+                $gte: new Date(now)
+            }
+        };
+    }
+         else {
 
         matchQuery = {
             createdAt: {
@@ -577,7 +584,7 @@ const exportpdf = async (req, res) => {
 
     try {
         const data = await orders.aggregate([
-            { $match: { status: 'Delivered', "products.status": true } },
+            { $match: { status:{$in:['Processing', 'Shipped', 'Delivered']}, paymentStatus:{$in:['Pending','Paid']} } },
 
             {
                 $lookup: {
@@ -627,8 +634,8 @@ const exportpdf = async (req, res) => {
             { $match: matchQuery },
             { $sort: { createdAt: -1 } }
         ])
-
-   
+        
+        
 
         const doc = new PDFDocument({
             size: 'A3',
@@ -646,13 +653,36 @@ const exportpdf = async (req, res) => {
         doc.pipe(res);
 
         // Helper functions
-        const formatCurrency = (amount, coupon, datass) => {
-            let amounts = 0
+        const formatCurrency = (amount, coupon, order) => {
+         
+            
+            let amounts =0
 
             return `${Math.floor(amount - (coupon ? coupon.discount : 0))} Rs`
         };
+        const formatCurrency2 = (amount, coupon, order) => {
+            console.log('order');
+            console.log(order);
+            
+            let toataldiscount=0
+            const offer=((coupon.discount*100)/order.totalAmount)
+            console.log(offer);
+            order.products.forEach(a=>{
+                if(a.status){
+                    console.log('p price'+a.price);
+                    
+                    toataldiscount+=((a.price-a.discount)*offer)/100
+                }
+            })
+            console.log('the is refund is '+order.refund);
+            console.log('the is disco is '+toataldiscount);
+            
+            let amounts = (amount-order.refund-order.coupon.discount+order.shippingcharg)
+
+            return `${Math.floor(amounts || 0)} Rs`
+        };
         const formatDate = (date) => new Date(date).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
-        const formatOrderId = (id) => id.length > 12 ? `${id.substring(0, 6)}...${id.slice(-4)}` : id;
+        // const formatOrderId = (id) => id.length > 12 ? `${id.substring(0, 6)}...${id.slice(-4)}` : id;
         const formatCustomer = (user) => {
             if (!user) return 'N/A';
             const name = user.name || 'N/A';
@@ -664,21 +694,32 @@ const exportpdf = async (req, res) => {
                 const price = p.price
                 const name = p.name.padEnd(10, ' ');
                 discountprice=0
-              
+                if(p.status){
                 return `${name} (${price}-${Math.floor(p.discount)})Rs × ${p.quantity.toString().padStart(3, ' ')}`;
+                }
+                else{
+                    
+                }
             }).join('\n');
         };
-        const formatCoupon = (coupon,order) => {
+        const formatCoupon = (coupon,order,products) => {
             if (!coupon) return '0';
-            console.log(coupon.discount)
+      
             // console.log(order);
-            
-            const offer=((coupon.discount*100)/order.totalAmount)||0
-            console.log(offer);
-            console.log((order.totalAmount*offer)/100);
+            let toataldiscount=0
+            const offer=((coupon.discount*100)/order.totalAmount)
+       
+            products.forEach(a=>{
+                if(a.status){
+                    console.log('p price'+a.price);
+                    
+                    toataldiscount+=((a.price-a.discount)*offer)/100
+                }
+            })
+     
 
             
-            return `${coupon.couponcode ? coupon.couponcode : 'No Coupon'}(-${coupon.couponcode ? coupon.discount : 0}Rs) `;
+            return `${coupon.couponcode ? coupon.couponcode : 'No Coupon'}(-${coupon.couponcode ? toataldiscount : 0}Rs) `;
         };
 
         // Generate PDF Header
@@ -693,10 +734,11 @@ const exportpdf = async (req, res) => {
             .text(`Generated on ${formatDate(new Date())}`, centerX + 30, doc.y);
 
         // Calculate Statistics
+        
         const stats = {
             totalOrders: data.length,
             totalRevenue: Math.floor(data.reduce((sum, order) => sum + order.totalAmount+order.shippingcharg - order.coupon.discount-order.refund, 0)),
-            averageOrderValue: Math.floor(data.length ? data.reduce((sum, order) => sum + order.totalAmount, 0) / data.length : 0)
+            averageOrderValue: Math.floor(data.length ? data.reduce((sum, order) => sum + order.totalAmount+order.shippingcharg - order.coupon.discount-order.refund, 0) / data.length : 0)
         };
         console.log(stats.totalRevenue);
         
@@ -767,8 +809,8 @@ const exportpdf = async (req, res) => {
                 (order._id),
                 formatCustomer(order.user),
                 formatProducts(order.products),
-                formatCoupon(order.coupon,order),
-                formatCurrency(order.totalAmount, order.coupon, order), // Use the calculated discount
+                formatCoupon(order.coupon,order,order.products),
+                formatCurrency2(order.totalAmount, order.coupon, order), 
                 formatDate(order.orderDate)
             ];
 
