@@ -921,6 +921,7 @@ const exportexcel = async (req, res) => {
             year: 'numeric',
             month: 'long',
             day: 'numeric'
+            
         });
         const formatCustomer = (user) => {
             if (!user) return 'N/A';
