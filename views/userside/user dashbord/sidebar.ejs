@@ -1,7 +1,7 @@
 <div id="sidebar" class="bg-purple">
     <div class="h4 text-white">Account</div>
     <ul>
-        <li  class="<%= activePage === 'udash' ? 'active' : '' %>">
+        <!-- <li  class="<%= activePage === 'udash' ? 'active' : '' %>">
             <a href="/user/mydash" class="text-decoration-none d-flex align-items-start">
                 <div class="fas fa-box pt-2 me-3"></div>
                 <div class="d-flex flex-column">
@@ -9,8 +9,8 @@
                     <div class="link-desc">View & Manage orders and returns</div>
                 </div>
             </a>
-        </li>
-        <!-- <li class="<%= activePage === 'myprofile' ? 'active' : '' %>">
+        </li> -->
+        <li class="<%= activePage === 'myprofile' ? 'active' : '' %>">
             <a href="/user/myaccount" class="text-decoration-none d-flex align-items-start">
                 <div class="far fa-user pt-2 me-3"></div>
                 <div class="d-flex flex-column">
@@ -18,7 +18,7 @@
                     <div class="link-desc">Change your profile details & password</div>
                 </div>
             </a>
-        </li> -->
+        </li>
         <li class="<%= activePage === 'orders' ? 'active' : '' %>">
             <a href="/user/orders" class="text-decoration-none d-flex align-items-start">
                 <div class="fas fa-box-open pt-2 me-3"></div>
