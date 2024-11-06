@@ -401,7 +401,7 @@ const orders = async (req, res) => {
     console.log('order data is'+orders);
     
 
-    const totalProducts = await ordersshema.countDocuments();
+    const totalProducts = await ordersshema.countDocuments({paymentStatus:{ne:'Failed'}});
     const countedorders = orders.length;
     console.log(countedorders);
 
