@@ -353,197 +353,6 @@ const PDFDocument = require('pdfkit');
 const Wallet = require('../../model/wallet');
 
 
-// const exportpdf = async (req, res) => {
-//     const count = req.params.number;
-//     const data = await orders.find({})
-//         .populate('user')
-//         .populate('products.productid')
-//         .sort({createdAt:-1})
-//         .limit(count)
-
-//     const doc = new PDFDocument({
-//         size: 'A3',
-//         margin: 40, 
-//         bufferPages: true,
-//         info: {
-//             Title: 'Sales Report',
-//             Author: 'System Generated',
-//             CreationDate: new Date()
-//         }
-//     });
-
-//     const pageWidth = doc.page.width - 80;
-//     const pageHeight = doc.page.height - 80;
-//     const marginLeft = 40;
-//     const marginTop = 40;
-
-//     const stream = fs.createWriteStream('sales_report.pdf');
-//     doc.pipe(stream);
-
-//     stream.on('error', (err) => {
-//         console.error('Stream error:', err);
-//         return res.status(500).json({ error: 'PDF generation failed' });
-//     });
-
-//     const formatCurrency = (amount) => `$${amount.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
-//     const formatDate = (date) => new Date(date).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
-
-//     const centerX = pageWidth / 2 + marginLeft;
-//     doc.font('Helvetica-Bold')
-//         .fontSize(40)
-//         .fillColor('#2c3e50')
-//         .text('Sales Report', centerX, marginTop, { align: 'center' })
-//         .fontSize(20)
-//         .font('Helvetica')
-//         .fillColor('#7f8c8d')
-//         .text(`Generated on ${formatDate(new Date())}`, centerX, doc.y + 10, { align: 'center' });
-
-//     const stats = {
-//         totalOrders: data.length,
-//         totalRevenue: data.reduce((sum, order) => sum + order.totalAmount, 0),
-//         pendingOrders: data.filter(order => order.status === 'Pending').length,
-//         completedOrders: data.filter(order => order.status === 'Completed').length,
-//         averageOrderValue: data.length ? data.reduce((sum, order) => sum + order.totalAmount, 0) / data.length : 0
-//     };
-
-//     const statsData = [
-//         ['Total Orders', stats.totalOrders],
-//         ['Total Revenue', formatCurrency(stats.totalRevenue)],
-//         ['Pending Orders', stats.pendingOrders],
-//         ['Completed Orders', stats.completedOrders],
-//         ['Average Order Value', formatCurrency(stats.averageOrderValue)]
-//     ];
-
-//     const boxesPerRow = 3;
-//     const boxWidth = (pageWidth - (boxesPerRow - 1) * 30) / boxesPerRow;
-//     const boxHeight = 120;
-//     const boxSpacing = 30;
-//     let currentY = doc.y + 30;
-
-//     statsData.forEach((stat, index) => {
-//         const row = Math.floor(index / boxesPerRow);
-//         const col = index % boxesPerRow;
-//         const xPos = marginLeft + (col * (boxWidth + boxSpacing));
-//         const yPos = currentY + (row * (boxHeight + boxSpacing));
-
-//         doc.save().rect(xPos + 3, yPos + 3, boxWidth, boxHeight).fill('#e0e0e0').restore();
-//         doc.rect(xPos, yPos, boxWidth, boxHeight).fillAndStroke('#ffffff', '#3498db');
-
-//         const valueY = yPos + boxHeight * 0.3;
-//         const labelY = yPos + boxHeight * 0.6;
-
-//         doc.font('Helvetica-Bold')
-//             .fontSize(28)
-//             .fillColor('#2c3e50')
-//             .text(stat[1].toString(), xPos, valueY, { width: boxWidth, align: 'center' })
-//             .font('Helvetica')
-//             .fontSize(18)
-//             .fillColor('#7f8c8d')
-//             .text(stat[0], xPos, labelY, { width: boxWidth, align: 'center' });
-//     });
-
-//     currentY += (Math.ceil(statsData.length / boxesPerRow) * (boxHeight + boxSpacing)) + 30;
-
-//     doc.font('Helvetica-Bold').fontSize(24).fillColor('#2c3e50').text('Order Details', marginLeft, currentY);
-//     currentY += 30;
-
-//     const columns = [
-//         { header: 'Order ID', width: pageWidth * 0.15 },
-//         { header: 'Customer', width: pageWidth * 0.15 },
-//         { header: 'Products', width: pageWidth * 0.20 },
-//         { header: 'Amount', width: pageWidth * 0.10 },
-//         { header: 'Payment', width: pageWidth * 0.15 },
-//         { header: 'Status', width: pageWidth * 0.15 },
-//         { header: 'Date', width: pageWidth * 0.16 }
-//     ];
-
-//     let xPosition = marginLeft;
-//     doc.rect(marginLeft, currentY, pageWidth, 30).fill('#f5f6fa');
-
-//     doc.font('Helvetica-Bold').fontSize(14).fillColor('#2c3e50');
-//     columns.forEach(column => {
-//         doc.text(column.header, xPosition + 0, currentY + 10, { width: column.width - 20, align: 'left' });
-//         xPosition += column.width;
-//     });
-
-//     currentY += 50;
-
-//     doc.font('Helvetica').fontSize(12).fillColor('#34495e');
-
-//     data.forEach((order, rowIndex) => {
-//         if (currentY > pageHeight - 60) {
-//             doc.addPage();
-//             currentY = marginTop;
-//             xPosition = marginLeft;
-//             doc.rect(marginLeft, currentY, pageWidth, 50).fill('#f5f6fa');
-//             doc.font('Helvetica-Bold').fontSize(14).fillColor('#2c3e50');
-
-//             columns.forEach(column => {
-//                 doc.text(column.header, xPosition + 10, currentY + 12, { width: column.width - 20, align: 'left' });
-//                 xPosition += column.width;
-//             });
-
-//             currentY += 30;
-//             doc.font('Helvetica').fontSize(12).fillColor('#34495e');
-//         }
-
-//         if (rowIndex % 2 === 0) {
-//             doc.rect(marginLeft, currentY, pageWidth, 30).fill('#f8f9fa');
-//         }
-
-//         xPosition = marginLeft;
-//         const rowData = [
-//             order._id + '...',
-//             order.user?.name || 'N/A',
-//             order.products.map(p => `${p.productid.name} (x${p.quantity})`).join(', '),
-//             formatCurrency(order.totalAmount),
-//             order.paymentMethod,
-//             order.status,
-//             formatDate(order.orderDate)
-//         ];
-
-//         columns.forEach((column, columnIndex) => {
-//             let text = rowData[columnIndex];
-//             if (columnIndex === 2) {
-//                 text = text.length > 50 ? text.substring(0, 47) + '...' : text;
-//             }
-
-//             if (columnIndex === 5) {
-//                 const statusColor = {
-//                     'Pending': '#f1c40f',
-//                     'Completed': '#2ecc71',
-//                     'Cancelled': '#e74c3c'
-//                 }[order.status] || '#7f8c8d';
-//                 doc.fillColor(statusColor);
-//             }
-
-//             doc.text(text, xPosition + 10, currentY + 8, { width: column.width - 20, align: columnIndex === 3 ? 'right' : 'left' });
-
-//             if (columnIndex === 5) {
-//                 doc.fillColor('#34495e');
-//             }
-
-//             xPosition += column.width;
-//         });
-
-//         currentY += 30;
-//     });
-
-//     const pageCount = doc.bufferedPageRange().count;
-//     for (let i = 0; i < pageCount; i++) {
-//         doc.switchToPage(i);
-//         doc.font('Helvetica').fontSize(10).fillColor('#95a5a6')
-//             .text(`Page ${i + 1} of ${pageCount}`, marginLeft, pageHeight + 30, { align: 'center', width: pageWidth });
-//     }
-
-//     doc.end();
-
-//     return new Promise((resolve, reject) => {
-//         stream.on('finish', () => {
-//             resolve(res.status(200).json({ message: 'PDF generated successfully', format: 'A3' }));
-//         });
-//     });
-// };
 
 const exportpdf = async (req, res) => {
 
@@ -564,12 +373,18 @@ const exportpdf = async (req, res) => {
 
         };
     }
-    else if (count==1){
+    else if  (count == 1) {
+   
+        const startOfToday = new Date();
+        startOfToday.setUTCHours(0, 0, 0, 0);
+    
         matchQuery = {
             createdAt: {
-                $gte: new Date(now)
-            }
+                $gte: startOfToday
+            },
+            paymentStatus: { $in: ['Pending', 'Paid'] }
         };
+
     }
          else {
 
@@ -844,9 +659,24 @@ const exportexcel = async (req, res) => {
         matchQuery = {
             createdAt: {
                 $gte: new Date(startDate), $lte: new Date(endDate)
-            }
+            },
+
         };
-    } else {
+    }
+    else if  (count == 1) {
+   
+        const startOfToday = new Date();
+        startOfToday.setUTCHours(0, 0, 0, 0);
+    
+        matchQuery = {
+            createdAt: {
+                $gte: startOfToday
+            },
+            paymentStatus: { $in: ['Pending', 'Paid'] }
+        };
+
+    }
+         else {
 
         matchQuery = {
             createdAt: {
@@ -854,6 +684,7 @@ const exportexcel = async (req, res) => {
             }
         };
     }
+  
     try {
         const data = await orders.aggregate([
             { $match: { status:{$in:['Processing', 'Shipped', 'Delivered']}, paymentStatus:{$in:['Pending','Paid']} } },
@@ -912,10 +743,33 @@ const exportexcel = async (req, res) => {
         const worksheet = workbook.addWorksheet('Sales Report');
 
         // Helper functions
-        const formatCurrency = (amount, coupon) => {
+        const formatCurrency = (amount, coupon, order) => {
+         
+            
+            let amounts =0
 
+            return `${Math.floor(amount - (coupon ? coupon.discount : 0))} Rs`
+        };
+        const formatCurrency2 = (amount, coupon, order) => {
+            console.log('order');
+            console.log(order);
+            
+            let toataldiscount=0
+            const offer=((coupon.discount*100)/order.totalAmount)
+            console.log(offer);
+            order.products.forEach(a=>{
+                if(a.status){
+                    console.log('p price'+a.price);
+                    
+                    toataldiscount+=((a.price-a.discount)*offer)/100
+                }
+            })
+            console.log('the is refund is '+order.refund);
+            console.log('the is disco is '+toataldiscount);
+            
+            let amounts = (amount-order.refund-order.coupon.discount+order.shippingcharg)
 
-            return `${amount - (coupon ? coupon.discount : 0)} Rs`
+            return `${Math.floor(amounts || 0)} Rs`
         };
         const formatDate = (date) => new Date(date).toLocaleDateString('en-US', {
             year: 'numeric',
@@ -931,14 +785,35 @@ const exportexcel = async (req, res) => {
         };
         const formatProducts = (products) => {
             return products.map((p) => {
-                const price = p.price;
-                return `${p.name} (${price}-${(p.price * p.offer) / 100})Rs × ${p.quantity}`;
-            }).join(', ');
+                const price = p.price
+                const name = p.name.padEnd(10, ' ');
+                discountprice=0
+                if(p.status){
+                return `${name} (${price}-${Math.floor(p.discount)})Rs × ${p.quantity.toString().padStart(3, ' ')}`;
+                }
+                else{
+                    
+                }
+            }).join('\n');
         };
-        const formatCoupon = (coupon) => {
+        const formatCoupon = (coupon,order,products) => {
             if (!coupon) return '0';
-            console.log(coupon.discount)
-            return `${coupon.couponcode ? coupon.couponcode : 'No Coupon'}(-${coupon.couponcode ? coupon.discount : 0}Rs) `;
+      
+            // console.log(order);
+            let toataldiscount=0
+            const offer=((coupon.discount*100)/order.totalAmount)
+       
+            products.forEach(a=>{
+                if(a.status){
+                    console.log('p price'+a.price);
+                    
+                    toataldiscount+=((a.price-a.discount)*offer)/100
+                }
+            })
+     
+
+            
+            return `${coupon.couponcode ? coupon.couponcode : 'No Coupon'}(-${coupon.couponcode ? toataldiscount : 0}Rs) `;
         };
 
         // Add title
@@ -1003,8 +878,8 @@ const exportexcel = async (req, res) => {
                 order._id.toString(),
                 formatCustomer(order.user),
                 formatProducts(order.products),
-                formatCoupon(order.coupon,order),
-                order.totalAmount - order.coupon.discount,
+                formatCoupon(order.coupon,order,order.products),
+                formatCurrency2(order.totalAmount, order.coupon, order), 
                 formatDate(order.orderDate)
             ];
             row.alignment = { vertical: 'middle', wrapText: true };
