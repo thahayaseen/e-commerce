@@ -985,6 +985,7 @@ const exportexcel = async (req, res) => {
             'Coupon',
             'Amount',
             'Date'
+    
         ];
 
         const startRow = 9;
