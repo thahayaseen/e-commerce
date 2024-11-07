@@ -25,6 +25,7 @@ const signup = async (req, res, next) => {
                 { email: email }
             ]
         })
+        console.log('exsist');
         console.log(exsist);
 
         if (exsist.length > 0) {
@@ -65,7 +66,8 @@ const signup = async (req, res, next) => {
                 });
                 await userdata.save();
                 getotp(email, otp, userid)
-                req.session.username = name
+                req.session.username = name 
+                req.session.email = email
                 req.session.blocked = a.blocked
                 next()
                 console.log(a);
@@ -109,26 +111,34 @@ const blockuser = async (req, res, next) => {
 const otpvarify = async (req, res, next) => {
     try {
         // fetch data from usets
-        const email = req.session.username;
+        const email =req.session.email;
+        console.log(email);
+        
         const otp = req.body.otp;
         // find user data
-        const data = await User.findOne({ name: email });
+        const data = await User.findOne({ email: email });
         // cheking user exist or not
         if (!data) {
-            req.session.otperror = "otp not match";
-            return res.redirect("/otp");
+            
+            return res.status(200).json({success:false,message:'user not found'})
+
         }
 
         //timer
         const created_date = data.updatedAt;
         const now_time = new Date();
+        console.log(created_date);
+        console.log(now_time);
+        
         const time = now_time.getTime() - created_date.getTime();
+        console.log('time is '+time);
+        
         // otp expaire
-        if (time > 60000) {
-            req.session.otperror = "otp expaired";
+        if (time > 100000) {
+            // req.session.otperror = "otp expaired";
             data.uotp = 0;
             await data.save();
-            return res.redirect("/otp");
+            return res.status(200).json({success:false,message:'OTP expaired'})
         }
         const rotp = Number(otp);
 
@@ -138,12 +148,12 @@ const otpvarify = async (req, res, next) => {
             data.varify = true
             data.uotp = null
             await data.save()
-            res.redirect('/signin')
-            // delete req.session.username
-            // res.send("gdfgsdgsdsjhd")
+          return  res.status(200).json({success:true,})
+           
         } else {
             req.session.otperror = "please enter valid otp";
-            return res.redirect("/otp");
+            return res.status(200).json({success:false,message:'please enter valid OTP'})
+
         }
     } catch (error) {
         console.error("Error during OTP verification:", error);
@@ -170,7 +180,7 @@ const resent = async (req, res, next) => {
         console.log('resent otp succsesfully');
 
 
-    await getotp(users.email, nwotp)
+    await getotp(users.email, nwotp,users.name)
 
     console.log(users);
     res.redirect('/otp')

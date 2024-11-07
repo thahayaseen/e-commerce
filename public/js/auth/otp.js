@@ -12,18 +12,35 @@ columns.forEach((input, index) => {
 });
 
 // Submitting
-form.addEventListener('submit', () => {
+form.addEventListener('submit', (e) => {
+    e.preventDefault()
     const botp = Array.from(columns).map(inpt => inpt.value).join('');
     parsotp.value = botp;
+    fetch('/otp',{
+        method:'POST',
+        headers:{
+            'Content-Type':'application/json'
+        },
+        body:JSON.stringify({otp:botp})
+    })
+    .then(res=>res.json())
+    .then(res=>{
+        if(res.success){
+            window.location.href='/signin'
+        }
+        else{
+            document.querySelector('.errorspace').inneText=res.message
+        }
+    })
 });
 
 // Timer for Resend OTP
 const timeDisplay = document.getElementById('time');
 const resendLink = document.getElementById('resend-link');
 
-// Get the stored countdown from localStorage or set it to 30 if not present
+
 let countdown = localStorage.getItem('countdown') ? parseInt(localStorage.getItem('countdown')) : 30;
-timeDisplay.textContent = countdown; // Display the initial countdown value
+timeDisplay.textContent = countdown; 
 
 const timer = setInterval(() => {
     countdown--;
@@ -40,25 +57,23 @@ const timer = setInterval(() => {
 
 // Resend OTP link click event
 resendLink.addEventListener('click', () => {
-    // alert("OTP has been resent!");
-
-    // Reset the timer and UI after resending OTP
+    
     countdown = 30;
     timeDisplay.textContent = countdown;
-    localStorage.setItem('countdown', countdown); // Store the reset countdown value
+    localStorage.setItem('countdown', countdown); 
     document.getElementById('countdown').style.display = 'block';
-    resendLink.style.display = 'none'; // Hide resend link again
+    resendLink.style.display = 'none';
 
     const newTimer = setInterval(() => {
         countdown--;
         timeDisplay.textContent = countdown;
-        localStorage.setItem('countdown', countdown); // Update the countdown in localStorage
+        localStorage.setItem('countdown', countdown); 
 
         if (countdown <= 0) {
             clearInterval(newTimer);
             document.getElementById('countdown').style.display = 'none';
-            resendLink.style.display = 'inline'; // Show the resend link again
-            localStorage.removeItem('countdown'); // Remove countdown from localStorage
+            resendLink.style.display = 'inline'; 
+            localStorage.removeItem('countdown'); 
         }
     }, 1000);
 });

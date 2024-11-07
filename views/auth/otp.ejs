@@ -42,9 +42,9 @@
                 <div class="card p-4">
                     <h3 class="mb-4 text-center">Enter OTP</h3>
                     <p class="text-center">Please enter the 6-digit OTP sent to your email</p>
-                    <form id="otp-form" action="otp" method="post">
+                    <form id="otp-form" >
                         <!-- OTP Inputs -->
-                         <div class="text-danger text-center mt-1 mb-1"> <%=error%> </div>
+                         <div class="text-danger text-center mt-1 mb-1 errorspace"> <%=error%> </div>
                         <div class="otp-container mb-4">
                             <input type="text" class="otp-input" maxlength="1" id="otp1" required>
                             <input type="text" class="otp-input" maxlength="1" id="otp2" required>
