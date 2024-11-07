@@ -346,7 +346,7 @@ const cartitemspush = async (req, res) => {
                 let cart = await cartschema.findOne({ userid: userid });
 
                 if (!cart) {
-                    res.status(404).json({ success: false, message: 'user not fount' })
+                    res.status(404).json({ success: false, message: 'user not found' })
 
                 }
                 const existingProductIndex = cart.product.findIndex(item => item.productid.toString() === productId);
@@ -380,7 +380,7 @@ const cartitemspush = async (req, res) => {
     }
     else {
         req.session.login = 'before product select please login :)'
-        res.status(200).json({ success: 'notlogind', message: 'user need to login' })
+        res.status(200).json({ success: 'notlogind', message: 'Please login before continued' })
     }
     // const cart=cartschema
 
