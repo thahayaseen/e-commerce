@@ -21,7 +21,7 @@
     "pdfkit": "^0.15.0",
     "puppeteer": "^23.6.0",
     "razorpay": "^2.9.5",
-    "sweetalert2": "^11.14.4"
+    "sweetalert2": "^11.14.5"
   },
   "name": "e-commers_website",
   "version": "1.0.0",

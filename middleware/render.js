@@ -58,11 +58,12 @@ const userhome = async (req, res) => {
     }
  
 })
+console.log('is'+req.cartcount);
 
     
     delete req.session.products
 
-    return res.render('userside/dashbord', { products: product })
+    return res.render('userside/dashbord', { products: product,cartcount: req.cartcount })
 }
 
 const productlist = async (req, res) => {
@@ -91,7 +92,7 @@ const productlist = async (req, res) => {
     
     delete req.session.categories
     delete req.session.products
-    res.render('userside/productlist', { products: product, categories: categ, pagination,dealprice })
+    res.render('userside/productlist', { products: product, categories: categ, pagination,dealprice,cartcount:req.cartcount })
 }
 
 //admin section----------------------------------------------------------------------------------------
@@ -314,7 +315,7 @@ const myaccount = async (req, res) => {
     if (id) {
         const userdata = await user_scema.findById(id)
         console.log(userdata);
-        res.render('userside/user dashbord/useraccount', { user: userdata })
+        res.render('userside/user dashbord/useraccount', { user: userdata ,cartcount:req.cartcount})
     }
     else res.redirect('/signin')
 }
@@ -335,7 +336,7 @@ const useraddress = async (req, res) => {
 
         const userid = req.session.ulogin
         const addres = await user_scema.findById(userid).populate('address')
-         userid? res.render('userside/user dashbord/address', { address: addres.address }):res.redirect('/signin')
+         userid? res.render('userside/user dashbord/address', { address: addres.address ,cartcount:req.cartcount}):res.redirect('/signin')
 
     } catch (error) {
         console.log(error);
@@ -359,7 +360,7 @@ const oredrs = async (req, res) => {
         const totalPages = Math.ceil(totalOrders / itemsPerPage);
       
 
-        userid? res.render('userside/user dashbord/orders', { orders: orders ,totalPages,currentPage:page}):res.redirect('/signin')
+        userid? res.render('userside/user dashbord/orders', { orders: orders ,totalPages,currentPage:page,cartcount:req.cartcount}):res.redirect('/signin')
     } catch (error) {
         console.log(error);
 
@@ -406,7 +407,7 @@ const checkout = async (req, res) => {
        
 
 
-        res.render('userside/checkout', { savedAddresses: popuser.address, cart: cart,coupons })
+        res.render('userside/checkout', { savedAddresses: popuser.address, cart: cart,coupons,cartcount:req.cartcount })
     }
     else {
         res.redirect('/signin')
@@ -447,7 +448,7 @@ const wishlist = async (req, res) => {
        
         }
 
-        res.render('userside/wishlist', { wishlist: list })
+        res.render('userside/wishlist', { wishlist: list,cartcount:req.cartcount })
     }
     else{
         req.session.login='please login before enter wishlist'
@@ -490,7 +491,7 @@ const walletrender = async (req, res) => {
         }
 
       
-        res.render('userside/user dashbord/walet', { wallet: userdata });
+        res.render('userside/user dashbord/walet', { wallet: userdata,cartcount:req.cartcount });
     } catch (error) {
         console.error('Error rendering wallet:', error);
         res.status(500).send('Internal server error');

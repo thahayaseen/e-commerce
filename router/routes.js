@@ -5,7 +5,8 @@ const { pregister } = require('../middleware/redirect')
 const { allproducts } = require('../controller/finding_all_admin')
 const passport = require('passport');
 const gauth = require('../controller/gauth');
-const express = require('express')
+const express = require('express');
+const cart = require("../model/cart");
 const router = express.Router()
 
 
@@ -16,6 +17,20 @@ router.post('/signin', varifylogin)
 
 router.get('/resetpass', resetpass)
 router.post('/reset', sendreset)
+router.use(async(req,res,next)=>{
+   const userid=req.session.ulogin
+   if(userid){
+    const cartitem=await cart.findOne({userid:userid})
+    console.log('wallet is');
+    console.log(cartitem.product)
+    console.log(cartitem.product.length)
+   req.cartcount=cartitem.product.length
+next()
+    
+   }else{
+    next()
+   }
+})
 
 // otp 
 router.get('/otp', otp)

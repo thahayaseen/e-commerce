@@ -135,7 +135,7 @@ const otpvarify = async (req, res, next) => {
         
         // otp expaire
         if (time > 100000) {
-            // req.session.otperror = "otp expaired";
+           
             data.uotp = 0;
             await data.save();
             return res.status(200).json({success:false,message:'OTP expaired'})
@@ -269,6 +269,7 @@ const viewproduct = async (req, res, next) => {
         res.render('userside/product_over_view', {
             product: productdata,
             sameProducts: sameProducts,
+            cartcount:req.cartcount
 
         });
 
@@ -333,7 +334,7 @@ const cartitemspush = async (req, res) => {
         const productId = req.body.priductisdata
         const price = req.body.price
 
-        const quantity = req.body.quantity
+        const quantity = req.body.quantity||1
         const userid = req.session.ulogin
         console.log(productId + ' ' + userid + " " + price);
 
@@ -352,7 +353,7 @@ const cartitemspush = async (req, res) => {
 
                 if (existingProductIndex > -1) {
 
-                    return res.status(200).json({ success: false })
+                    return res.status(200).json({ success: false,message:'Product alredy in cart' })
                 } else {
 
                     cart.product.push({ productid: productId, quantity: quantity, price: price });
