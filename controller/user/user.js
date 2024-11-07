@@ -180,7 +180,7 @@ const resent = async (req, res, next) => {
         console.log('resent otp succsesfully');
 
 
-    await getotp(users.email, nwotp,users.name)
+    await getotp(users.email, nwotp,users.user_name)
 
     console.log(users);
     res.redirect('/otp')

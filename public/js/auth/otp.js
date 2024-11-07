@@ -1,6 +1,8 @@
 const columns = document.querySelectorAll('.otp-input');
 const parsotp = document.getElementById('chkotp');
 const form = document.querySelector('#otp-form');
+document.addEventListener('DOMContentLoaded',()=>{
+    let countdown
 
 // Auto focus next input
 columns.forEach((input, index) => {
@@ -10,9 +12,10 @@ columns.forEach((input, index) => {
         }
     });
 });
+document.querySelector('.errorspace')
 
 // Submitting
-form.addEventListener('submit', (e) => {
+form.addEventListener('submit', (e) => {  
     e.preventDefault()
     const botp = Array.from(columns).map(inpt => inpt.value).join('');
     parsotp.value = botp;
@@ -28,8 +31,11 @@ form.addEventListener('submit', (e) => {
         if(res.success){
             window.location.href='/signin'
         }
-        else{
-            document.querySelector('.errorspace').inneText=res.message
+        if (!res.success) {
+            console.log('false');
+            
+            document.querySelector('.errorspace').innerText=res.message
+            
         }
     })
 });
@@ -38,20 +44,21 @@ form.addEventListener('submit', (e) => {
 const timeDisplay = document.getElementById('time');
 const resendLink = document.getElementById('resend-link');
 
+// document.addEventListener('DOMContentLoaded',()=>{
 
-let countdown = localStorage.getItem('countdown') ? parseInt(localStorage.getItem('countdown')) : 30;
+    countdown = 30;
 timeDisplay.textContent = countdown; 
 
 const timer = setInterval(() => {
     countdown--;
     timeDisplay.textContent = countdown;
-    localStorage.setItem('countdown', countdown); // Save the countdown in localStorage
+    localStorage.setItem('countdown', countdown);
 
     if (countdown <= 0) {
         clearInterval(timer);
         document.getElementById('countdown').style.display = 'none';
-        resendLink.style.display = 'inline'; // Show the resend link
-        localStorage.removeItem('countdown'); // Remove countdown from localStorage once it reaches 0
+        resendLink.style.display = 'inline'; 
+        localStorage.removeItem('countdown'); 
     }
 }, 1000);
 
@@ -76,4 +83,5 @@ resendLink.addEventListener('click', () => {
             localStorage.removeItem('countdown'); 
         }
     }, 1000);
-});
+})
+})
