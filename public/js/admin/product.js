@@ -137,7 +137,8 @@ addbtn.addEventListener('click', (e) => {
     .then((res) => {
         console.log(res);
         if (res.success === true) {
-            window.location.href = '/admin/product';
+            
+            window.location.reload(true) 
         }
     })
     .catch(err => console.log(err));
@@ -369,10 +370,10 @@ function loadImageToCrop(file) {
 saveCroppedImageBtn.addEventListener('click', function () {
     const canvas = cropper.getCroppedCanvas();
 
-    // Convert the canvas to Blob and append it to the FormData with a filename
+  
     canvas.toBlob((blob) => {
         const formData = new FormData();
-        formData.append('croppedImage', blob, 'croppedImage.jpg'); // Give a proper name and extension
+        formData.append('croppedImage', blob, 'croppedImage.jpg');
 
         // Show the cropped image preview
         const imgPreview = document.createElement('img');
@@ -391,6 +392,8 @@ saveCroppedImageBtn.addEventListener('click', function () {
         .then(data => {
             if (data.success) {
                 alert('Cropped image uploaded successfully');
+                window.location.reload(true)
+
             } else {
                 alert('Upload failed: ' + data.message);
             }
