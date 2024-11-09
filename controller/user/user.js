@@ -1175,7 +1175,7 @@ const invoice = async (req,res) => {
     
         // Logo and Shop Name
       // Logo and Shop Name
-        doc.image(paths + '/public' + process.env.COMPANY_LOGO, 50, 50, { width: 100 });
+        // doc.image(paths + '/public' + process.env.COMPANY_LOGO, 50, 50, { width: 100 });
         doc.font('Helvetica-Bold')
         .fontSize(18)
         .fillColor('#2C3E50')
