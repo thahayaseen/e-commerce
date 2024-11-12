@@ -851,19 +851,19 @@ const cancelitem = async (req, res) => {
             console.log(orders.status);
             count += !orders.status ? 1 : -1; 
         }
+        console.log(Object.values);
+        
+        console.log(count);
+        console.log('length is '+orderdata.products.length);
+        console.log(count-orderdata.products.length==0);
+        
+        // Check if count is exactly zero
+        if (count-orderdata.products.length==0) {
+            console.log('last one');
+            refundprice += orderdata.shippingcharg; 
+        }
+        
         if(orderdata.paymentStatus=='Paid'){
-            
-            console.log(Object.values);
-            
-            console.log(count);
-            console.log('length is '+orderdata.products.length);
-            console.log(count-orderdata.products.length==0);
-            
-            // Check if count is exactly zero
-            if (count-orderdata.products.length==0) {
-                console.log('last one');
-                refundprice += orderdata.shippingcharg; 
-            }
             
        
             const wallet=await Wallet.findOne({userId:orderdata.user})
@@ -879,6 +879,10 @@ const cancelitem = async (req, res) => {
             orderdata.refund = orderdata.refund 
             orderdata.refund += refundprice;
             
+        }
+        else {
+            orderdata.refund += refundprice;
+
         }
         if (count-orderdata.products.length==0) {
             console.log('yes');
