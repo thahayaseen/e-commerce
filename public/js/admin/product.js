@@ -1,6 +1,7 @@
 const unlistButtons = document.querySelectorAll('.unlist-btn');
 const editButtons = document.querySelectorAll('.edit-btn');
 let imagedata = '';
+// import Cropper from 'cropperjs';
 
 // Handle unlist button clicks
 unlistButtons.forEach((btn) => {

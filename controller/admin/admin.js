@@ -13,9 +13,11 @@ const Swal = require('sweetalert2')
 const auth = async (req, res, next) => {
     try {
         const { username, password } = req.body
+console.log(username);
 
 
-        const exsist = await User.findOne({ name: username })
+        const exsist = await User.findOne({ user_name: username })
+console.log(exsist,'data');
 
 
         if (!exsist) {
