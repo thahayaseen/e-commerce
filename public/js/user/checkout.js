@@ -215,7 +215,7 @@ paymentForm.addEventListener('submit', async (e) => {
             if (data.razorpay) {
                 // Initialize Razorpay with order data from backend
                 const options = {
-                    key: data.razorpay_key,
+                    key: 'rzp_test_9qmTVL5YIuQUdW',
                     amount: data.amount,
                     currency: "INR",
                     name: "Weebscorner",
