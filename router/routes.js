@@ -1,8 +1,10 @@
-const { signup, otpvarify, resent, varifylogin, logout, viewproduct, blockuser, glogincb, cartitemspush, cartupdata, cartitemdelete, addaddress, placeorder, deleteaddress, cancelorder, editname, changepass, productstockdata, cancelitem, patchwishlist, removewish, coupenapplaying, razorpayvarify, sendreset, resetpage, resetpasspost, returning, addressave, paymentfaied, retrypayment, invoice } = require("../controller/user/user")
+const { signup, viewproduct, blockuser,  cartitemspush, cartupdata, cartitemdelete, addaddress,  deleteaddress, editname, changepass, productstockdata,  patchwishlist, removewish, coupenapplaying,  sendreset, resetpage, resetpasspost, addressave,  } = require("../controller/user/user")
 const { register, login, otp, userhome, productlist, myaccount, userdash, useraddress, oredrs, cartrender, checkout, wishlist, resetpass, walletrender, placedorder } = require('../middleware/render')
-// const plogin=require('../controller/user/ulogin')
+const {invoice}=require('../controller/product/productUtils.controller')
 const { pregister } = require('../middleware/redirect')
 const { allproducts } = require('../controller/finding_all_admin')
+const {cancelitem,cancelorder,paymentfaied,placeorder,razorpayvarify,   retrypayment,returning}=require('../controller/user/order.controller')
+const {glogincb,logout,otpvarify,resent,varifylogin}=require('../controller/user/auth.controller')
 const passport = require('passport');
 const gauth = require('../controller/gauth');
 const express = require('express');
