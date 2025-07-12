@@ -1,4 +1,14 @@
+const User = require('../../model/user_scema')
+
+
+require('dotenv').config()
+const bcrypt = require('bcrypt')
+
+
+
 // otp varifing 
+
+
 const otpvarify = async (req, res, next) => {
     try {
         // fetch data from usets

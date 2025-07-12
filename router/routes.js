@@ -10,8 +10,6 @@ const gauth = require('../controller/gauth');
 const express = require('express');
 const cart = require("../model/cart");
 const router = express.Router()
-
-
 router.get('/signup', register)
 router.post('/signup', signup, pregister)
 router.get('/signin', login)
@@ -37,24 +35,15 @@ next()
 // otp 
 router.get('/otp', otp)
 router.post('/otp', otpvarify)
-
-
-
 // resendotp 
 router.post('/resendotp', resent)
-
 router.get('/reset-password/:token', resetpage);
 // Route to update the password
 router.post('/reset-password/:token', resetpasspost);
-
-
 // user side 
-
 router.get('/', blockuser, allproducts, userhome)
-
 router.get('/product/:ids', blockuser, allproducts, viewproduct)
 router.get('/productstock/:id', productstockdata)
-
 router.get('/product', blockuser, allproducts, productlist)
 //user dashbord 
 router.get('/user/myaccount', myaccount)

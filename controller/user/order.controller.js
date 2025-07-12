@@ -1,5 +1,21 @@
 
 const orderchema = require('../../model/orders')
+const User = require('../../model/user_scema')
+const product_schema = require('../../model/product_schema');
+const cartschema = require('../../model/cart');
+const address_scema = require('../../model/address');
+const orderchema = require('../../model/orders')
+const wishlist = require('../../model/wishlist')
+const passport = require('passport');
+const coupencode = require('../../model/coupon')
+const Wallet = require('../../model/wallet')
+const razorpay = require('../../config/razorpay')
+const wishlistschema = require('../../model/wishlist')
+const crypto = require('crypto')
+const PDFDocument = require('pdfkit');
+require('dotenv').config()
+const bcrypt = require('bcrypt')
+const fs = require('fs');
 const returning = async (req, res) => {
     const productid = req.params.proid
     console.log(productid);
