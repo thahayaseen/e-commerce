@@ -339,7 +339,7 @@
                                                     <%= transaction.status %>
                                                 </span>
                                                 <div class="amount <%= transaction.type === 'credit' ? 'positive' : 'negative' %>">
-                                                    <%= transaction.type === 'credit' ? '+' : '-' %>₹<%= Math.abs(transaction.amount) %>
+                                                    <%= transaction.type === 'credit' ? '+' : '-' %>₹<%= Math.round(transaction.amount) %>
                                                 </div>
                                             </div>
                                         </div>
