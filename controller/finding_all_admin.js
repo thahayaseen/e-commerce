@@ -5,11 +5,17 @@ const categories = require('../model/categories')
 
 const alluser = async (req, res, next) => {
     try {
+        const filter=req.query.search
         const page = parseInt(req.query.page) || 1
         const limit = parseInt(req.query.limit) || 6
         const skip = (page - 1) * limit;
-
-        const user = await User.find().skip(skip).limit(limit)
+let filterobjs={}
+if(typeof filter=='string'&&filter.length>0){
+    filterobjs['user_name']=new RegExp(`${filter}`,'i')
+}
+        const user = await User.find(filterobjs).skip(skip).limit(limit)
+        console.log(user,filter,filterobjs);
+        
         const totalProducts = await User.countDocuments();
         const totalPages = Math.ceil(totalProducts / limit);
         req.session.users = { user, totalPages, currentPage: page, limit: limit }

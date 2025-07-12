@@ -268,7 +268,7 @@ const user = (req, res) => {
     console.log(limit);
 
     delete req.session.users
-    islogin ? res.render('admin/users', { Users: user, totalPages, currentPage, limit }) : res.redirect('/admin')
+    islogin ? res.render('admin/users', { Users: user, totalPages, currentPage, limit ,search:req.query.search||''}) : res.redirect('/admin')
 }
 
 //product
