@@ -1,9 +1,10 @@
 const User = require('../../model/user_scema')
 
+const passport = require('passport');
 
 require('dotenv').config()
 const bcrypt = require('bcrypt')
-
+// const fs = require('fs');
 
 
 // otp varifing 
