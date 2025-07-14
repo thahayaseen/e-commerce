@@ -35,7 +35,7 @@ if (coupons) {
     }
 
     const newCoupon = {
-      code: document.getElementById('couponCode').value.toLowerCase(),
+      code: document.getElementById('couponCode').value.toLowerCase().trim(),
       discount: parseInt(document.getElementById('discountAmount').value),
       expiryDate,
       status: true,
