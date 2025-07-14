@@ -3,13 +3,14 @@ const router = express.Router()
 const { auth, accses, list, padd, savecat, imageadding, submitedit, useredit, categoryunlist, updateorder, getiingorderdetials,addcoupen,coupenedit,deletecupen, } = require('../controller/admin/admin')
 const { adminlogin, admin, user, product, catagory, orders,coupenrender,offerpage,datatoedit } = require('../middleware/render')
 const { alluser, adproducts,categorydatas } = require('../controller/finding_all_admin')
-const {exportpdf,exportexcel,invoice}=require('../controller/product/productUtils.controller')
+// const {exportpdf,exportexcel,invoice}=require('../controller/product/productUtils.controller')
 const nocach = require('../middleware/nocach')
 const upload = require('../middleware/uplodimage')
 const Product = require('../model/product_schema')
 const coupon = require('../model/coupon')
 const {deleteoffers,offers}=require('../controller/product/offer.controller')
 const { returnadmin } = require('../controller/product/product.controller')
+const { generateExcelReport, generatePdfReport } = require('../controller/product/sales-report-service')
 router.get('/', nocach, adminlogin)
 
 // postinf
@@ -18,8 +19,8 @@ router.post('/', nocach, auth)
 
 // dashbord 
 router.get('/dashboard', nocach, admin)
-router.get('/exporttopdf',exportpdf)
-router.get('/exporttoexcel',exportexcel)
+router.get('/exporttopdf',generatePdfReport)
+router.get('/exporttoexcel',generateExcelReport)
 
 
 

@@ -169,9 +169,11 @@ if (coupons) {
       console.log('no code');
     }
     else couponcode.parentElement.children[2].innerHTML = ''
+// alert(Number(discountAmount.value))
+// console.log(Number(discountAmount.value)<99);
 
-    if (discountAmount.value.trim() == '') {
-      discountAmount.parentElement.children[2].innerText = 'DiscountAmount cannot make empty'
+    if (discountAmount.value.trim() == ''||!Number(discountAmount.value)<99) {
+      discountAmount.parentElement.children[2].innerText = 'DiscountAmount cannot make empty and should less than 100 '
       error=true
     }
 

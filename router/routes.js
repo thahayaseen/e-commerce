@@ -1,6 +1,6 @@
 const { signup, viewproduct, blockuser,  cartitemspush, cartupdata, cartitemdelete, addaddress,  deleteaddress, editname, changepass, productstockdata,  patchwishlist, removewish, coupenapplaying,  sendreset, resetpage, resetpasspost, addressave,  } = require("../controller/user/user")
 const { register, login, otp, userhome, productlist, myaccount, userdash, useraddress, oredrs, cartrender, checkout, wishlist, resetpass, walletrender, placedorder } = require('../middleware/render')
-const {invoice}=require('../controller/product/productUtils.controller')
+// const {invoice}=require('../controller/product/productUtils.controller')
 const { pregister } = require('../middleware/redirect')
 const { allproducts } = require('../controller/finding_all_admin')
 const {cancelitem,cancelorder,paymentfaied,placeorder,razorpayvarify,   retrypayment,returning}=require('../controller/user/order.controller')
@@ -9,6 +9,7 @@ const passport = require('passport');
 const gauth = require('../controller/gauth');
 const express = require('express');
 const cart = require("../model/cart");
+const { generateInvoice } = require("../controller/product/sales-report-service")
 const router = express.Router()
 router.get('/signup', register)
 router.post('/signup', signup, pregister)
@@ -51,7 +52,7 @@ router.get('/user/mydash', userdash)
 router.get('/user/address', useraddress)
 router.get('/user/orders', oredrs)
 router.post('/user/cancel-product', cancelitem)
-router.get('/download-invoice/:orderid', invoice)
+router.get('/download-invoice/:orderid', generateInvoice)
 
 // router.patch('/orders/:id', cancelorder)
 //google validation
