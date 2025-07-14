@@ -563,4 +563,4 @@ const resetpasspost = async (req, res) => {
 }
 
 
-module.exports = { signup,   viewproduct,  blockuser, cartitemspush, cartupdata, cartitemdelete, addaddress,  deleteaddress,  editname, changepass, productstockdata, patchwishlist, removewish, coupenapplaying, sendreset, resetpage, resetpasspost, addressave }     
+module.exports = { signup,   viewproduct,  blockuser, cartitemspush, cartupdata, cartitemdelete, addaddress,  deleteaddress,  editname, changepass, productstockdata, patchwishlist, removewish, coupenapplaying, sendreset, resetpage, resetpasspost, addressave,updatestok }     

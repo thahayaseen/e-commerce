@@ -16,6 +16,7 @@ const PDFDocument = require('pdfkit');
 require('dotenv').config()
 const bcrypt = require('bcrypt')
 const fs = require('fs');
+const { updatestok } = require('./user');
 const returning = async (req, res) => {
     const productid = req.params.proid
     console.log(productid);
