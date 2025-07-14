@@ -14,6 +14,7 @@ const PDFDocument = require('pdfkit');
 require('dotenv').config()
 const bcrypt = require('bcrypt')
 const fs = require('fs');
+const { sendPasswordResetOTP } = require('../../middleware/getotp');
 // register and send otp 
 const signup = async (req, res, next) => {
     try {
@@ -445,6 +446,8 @@ const patchwishlist = async (req, res) => {
 
 const coupenapplaying = async (req, res) => {
     const cname = req.params.name
+    console.log(cname);
+    
     const coupen = await coupencode.findOne({ code: cname })
     if (!coupen) {
         return res.status(200).json({ success: false, erromsg: 'Entered couponcode is invalid' })
