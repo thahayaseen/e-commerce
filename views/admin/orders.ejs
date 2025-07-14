@@ -100,11 +100,11 @@
                             </td>
                             <td><%= order.orderid %></td>
                             <td><%= order.user.name %></td>
-                            <td><% const total=order.products
+                            <td><% const total=(order.products
                               .filter(data=>data.status===true)
                               .reduce((acc,data)=>{
-                                  return acc+(data.price-data.discount)*data.quantity
-                                 },0)%>
+                                  return Number((acc+(data.price-data.discount)*data.quantity).toFixed(1))
+                                 },0))%>
 
                               <span class="original-price"><%=total?'₹'+(total+order.shippingcharg) :'Order cancelled'%></span></td>
                             <td>
