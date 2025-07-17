@@ -6,7 +6,7 @@ const wishlistschema = require('../model/wishlist');
 require('dotenv').config
 const Wallet = require('../model/wallet')
 console.log(process.env.GOOGLE_CLIENT_ID,
-  'enf is'
+  'enf is', process.env.DOMAIN + '/glogin/callback',
 );
 
 
