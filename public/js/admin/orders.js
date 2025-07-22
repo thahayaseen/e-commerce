@@ -1,3 +1,4 @@
+
 document.addEventListener('DOMContentLoaded', function() {
   // Handle action buttons
   const actionButtons = document.querySelectorAll('.actionbtn');
@@ -145,7 +146,18 @@ document.addEventListener('DOMContentLoaded', function() {
 
       } catch (error) {
           console.error('Error in populateOrderModal:', error);
-          alert('Failed to populate order details');
+        //   alert('Failed to populate order details');
+            Swal.fire({
+                icon: 'error',
+                title: 'Oops...',
+                text: `Failed to populate order details`,
+                background: '#f8d7da',
+                color: '#721c24',
+                iconColor: '#721c24',
+                customClass: {
+                    popup: 'rounded-lg',
+                },
+            });
       }
   }
 

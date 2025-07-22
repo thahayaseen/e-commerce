@@ -22,7 +22,7 @@ function validateForm() {
     if (!addressType) errorMessage += 'Address Type is required.\n';
 
     const phonePattern = /^[0-9]+$/;
-    if (!phonePattern.test(phoneNumber)&&phoneNumber.length==10) errorMessage += 'Please provide a valid phone number (digits only).';
+    if (!phonePattern.test(phoneNumber) && phoneNumber.length == 10) errorMessage += 'Please provide a valid phone number (digits only).';
 
     if (errorMessage) {
         Swal.fire({
@@ -60,7 +60,7 @@ document.getElementById('newAddressForm').addEventListener('submit', async funct
 
 // Edit button setup with dataset value handling
 function setupEditButtons() {
-        const editBtns = document.querySelectorAll('.btn-outline-primary');
+    const editBtns = document.querySelectorAll('.btn-outline-primary');
     editBtns.forEach((btn) => {
         btn.addEventListener('click', function (e) {
             const { name, line1, line2, city, country, phone, state, id: addresid, zip } = e.target.dataset;
@@ -78,9 +78,9 @@ function setupEditButtons() {
         });
     });
 }
-document.addEventListener('DOMContentLoaded',(e)=>{
+document.addEventListener('DOMContentLoaded', (e) => {
 
-setupEditButtons();
+    setupEditButtons();
 })
 
 // Remove button setup 
@@ -89,15 +89,39 @@ function setupRemoveButtons() {
     removeBtns.forEach(button => {
         button.addEventListener('click', (e) => {
             e.preventDefault();
-            if (confirm('Do you want to delete this address?')) {
-                const id = button.dataset.id;
-                console.log(id);
-                fetch(`/address/${id}`, { method: 'DELETE' })
-                    .then(res => res.json())
-                    .then(res => {
-                        if (res.success) window.location.href = '/user/address';
-                    });
-            }
+            Swal.fire({
+                title: 'Are you sure?',
+                text: 'Do you want to delete this address?',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#d33',
+                cancelButtonColor: '#3085d6',
+                confirmButtonText: 'Yes, delete it!',
+                cancelButtonText: 'Cancel',
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    const id = button.dataset.id;
+                    console.log(id);
+                    fetch(`/address/${id}`, { method: 'DELETE' })
+                        .then(res => res.json())
+                        .then(res => {
+                            if (res.success) {
+                                Swal.fire({
+                                    icon: 'success',
+                                    title: 'Deleted!',
+                                    text: 'Address has been deleted.',
+                                    timer: 1500,
+                                    showConfirmButton: false
+                                }).then(() => {
+                                    window.location.href = '/user/address';
+                                });
+                            } else {
+                                Swal.fire('Error', res.message || 'Failed to delete address.', 'error');
+                            }
+                        });
+                }
+            });
+
         });
     });
 }
@@ -146,13 +170,13 @@ function evalidateForm() {
     if (!zipCode) errorMessage += 'ZIP Code is required.\n';
     if (!country) errorMessage += 'Country is required.\n';
     if (!phoneNumber) errorMessage += 'Phone Number is required.\n';
-    
+
     if (!addressType) errorMessage += 'Address Type is required.\n';
-    
+
     const phonePattern = /^[0-9]+$/;
     // if (!phonePattern.test(phoneNumber)) errorMessage += 'Please provide a valid phone number (digits only).';
-    
-    if (!phonePattern.test(phoneNumber)&&phoneNumber.length==10) errorMessage += 'Please provide a valid phone number (digits only).';
+
+    if (!phonePattern.test(phoneNumber) && phoneNumber.length == 10) errorMessage += 'Please provide a valid phone number (digits only).';
     if (errorMessage) {
         Swal.fire({
             icon: 'error',

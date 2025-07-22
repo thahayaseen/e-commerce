@@ -274,22 +274,74 @@
         const confirmPassword = changepass.newpass2.value.trim();
 
        
-        if (!currentPassword) {
-            alert('Please enter your current password.');
-            return;
-        }
-        if (!newPassword) {
-            alert('Please enter a new password.');
-            return;
-        }
-        if (newPassword.length < 6) {
-            alert('New password must be at least 6 characters long.');
-            return;
-        }
-        if (newPassword !== confirmPassword) {
-            alert('New password and confirm password do not match!');
-            return;
-        }
+   if (!currentPassword) {
+    Swal.fire({
+        icon: 'warning',
+        title: 'Missing Field',
+        text: 'Please enter your current password.',
+        background: '#fff3cd',
+        color: '#856404',
+        iconColor: '#856404',
+        confirmButtonText: 'Okay',
+        confirmButtonColor: '#ffc107',
+        customClass: {
+            popup: 'rounded-lg',
+        },
+    });
+    return;
+}
+
+if (!newPassword) {
+    Swal.fire({
+        icon: 'warning',
+        title: 'Missing Field',
+        text: 'Please enter a new password.',
+        background: '#fff3cd',
+        color: '#856404',
+        iconColor: '#856404',
+        confirmButtonText: 'Okay',
+        confirmButtonColor: '#ffc107',
+        customClass: {
+            popup: 'rounded-lg',
+        },
+    });
+    return;
+}
+
+if (newPassword.length < 6) {
+    Swal.fire({
+        icon: 'error',
+        title: 'Weak Password',
+        text: 'New password must be at least 6 characters long.',
+        background: '#f8d7da',
+        color: '#721c24',
+        iconColor: '#721c24',
+        confirmButtonText: 'Okay',
+        confirmButtonColor: '#d33',
+        customClass: {
+            popup: 'rounded-lg',
+        },
+    });
+    return;
+}
+
+if (newPassword !== confirmPassword) {
+    Swal.fire({
+        icon: 'error',
+        title: 'Password Mismatch',
+        text: 'New password and confirm password do not match!',
+        background: '#f8d7da',
+        color: '#721c24',
+        iconColor: '#721c24',
+        confirmButtonText: 'Okay',
+        confirmButtonColor: '#d33',
+        customClass: {
+            popup: 'rounded-lg',
+        },
+    });
+    return;
+}
+
         fetch('/changepass',{
             method:'PATCH',
             headers:{

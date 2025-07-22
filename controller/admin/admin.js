@@ -360,4 +360,4 @@ const Wallet = require('../../model/wallet');
 
 
 
-module.exports = { auth, accses, list, padd, imageadding, submitedit, savecat, useredit, categoryunlist, updateorder, getiingorderdetials, addcoupen, coupenedit,  deletecupen }
+module.exports = { auth, accses, list, padd, imageadding, submitedit, savecat, useredit, categoryunlist, updateorder, getiingorderdetials, addcoupen, coupenedit, deletecupen }

@@ -126,16 +126,55 @@ if (coupons) {
       .catch(error => console.error('Error updating coupon:', error));
   }
 
-  function deleteCoupon(id) {
-    if (confirm('Are you sure you want to delete this coupon?')) {
-      fetch(`/admin/coupon/${id}`, { method: 'DELETE' })
-        .then(() => {
-          coupons = coupons.filter(c => c._id !== id);
-          renderCouponCards();
-        })
-        .catch(error => console.error('Error deleting coupon:', error));
+  async function deleteCoupon(id) {
+  const result = await Swal.fire({
+    title: 'Are you sure?',
+    text: 'This action will delete the coupon permanently.',
+    icon: 'warning',
+    showCancelButton: true,
+    confirmButtonColor: '#d33',
+    cancelButtonColor: '#3085d6',
+    confirmButtonText: 'Yes, delete it!',
+    cancelButtonText: 'Cancel',
+  });
+
+  if (!result.isConfirmed) return;
+
+  try {
+    const response = await fetch(`/admin/coupon/${id}`, {
+      method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+
+    if (!response.ok) {
+      const data = await response.json();
+      throw new Error(data.message || 'Failed to delete coupon');
     }
+
+    // Remove coupon from list and re-render
+    coupons = coupons.filter(c => c._id !== id);
+    renderCouponCards();
+
+    await Swal.fire({
+      icon: 'success',
+      title: 'Deleted!',
+      text: 'Coupon has been deleted successfully.',
+      confirmButtonColor: '#3085d6',
+    });
+
+  } catch (error) {
+    console.error('Error deleting coupon:', error);
+    await Swal.fire({
+      icon: 'error',
+      title: 'Error!',
+      text: error.message || 'Something went wrong.',
+      confirmButtonColor: '#d33',
+    });
   }
+}
+
 
   function openModal(modalId) {
     const modal = document.getElementById(modalId);

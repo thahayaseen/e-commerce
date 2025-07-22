@@ -1,199 +1,215 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-  <title>Offers Management</title>
-  <!-- Bootstrap CSS -->
-  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
-  <!-- Plugins CSS -->
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@mdi/font/css/materialdesignicons.min.css">
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <title>Offers Management</title>
+    <!-- Bootstrap CSS -->
+    <link
+      rel="stylesheet"
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" />
+    <!-- Plugins CSS -->
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/@mdi/font/css/materialdesignicons.min.css" />
 
-  <!-- croper js  -->
+    <!-- croper js  -->
 
+    <!-- Layout styles -->
+    <link rel="stylesheet" href="/assets/css/style.css" />
+    <style>
+      /* Updated checkbox styles for dark theme compatibility */
+      .checkbox-group {
+        margin: 20px 0;
+        padding: 15px;
+        border-radius: 8px;
+        background: #2a2b2c; /* Darker background for dark theme */
+        border: 1px solid #404040;
+        display: none; /* Hidden by default */
+      }
+      #toast-container > div {
+        opacity: 1;
+        box-shadow: 0 0 12px rgba(0, 0, 0, 0.1);
+        border-radius: 4px;
+      }
 
+      #toast-container > .toast-success {
+        background-color: #28a745;
+      }
 
+      #toast-container > .toast-error {
+        background-color: #dc3545;
+      }
 
+      #toast-container > .toast-warning {
+        background-color: #ffc107;
+      }
 
-  <!-- Layout styles -->
-  <link rel="stylesheet" href="/assets/css/style.css">
-  <style>
-    /* Updated checkbox styles for dark theme compatibility */
-    .checkbox-group {
-      margin: 20px 0;
-      padding: 15px;
-      border-radius: 8px;
-      background: #2a2b2c;  /* Darker background for dark theme */
-      border: 1px solid #404040;
-      display: none;  /* Hidden by default */
-    }
-    #toast-container > div {
-      opacity: 1;
-      box-shadow: 0 0 12px rgba(0,0,0,0.1);
-      border-radius: 4px;
-    }
-    
-    #toast-container > .toast-success {
-      background-color: #28a745;
-    }
-    
-    #toast-container > .toast-error {
-      background-color: #dc3545;
-    }
-    
-    #toast-container > .toast-warning {
-      background-color: #ffc107;
-    }
-    
-    #toast-container > .toast-info {
-      background-color: #17a2b8;
-    }
-    .checkbox-group h3 {
-      color: #ffffff;
-      font-size: 1.2rem;
-      margin-bottom: 15px;
-      font-weight: 500;
-    }
-    
-    .checkbox-container {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-      gap: 12px;
-    }
-    
-    .checkbox-wrapper {
-      position: relative;
-      padding: 8px;
-    }
-    
-    .checkbox-wrapper input[type="checkbox"] {
-      position: absolute;
-      opacity: 0;
-      cursor: pointer;
-      height: 0;
-      width: 0;
-    }
-    
-    .checkbox-wrapper label {
-      display: flex;
-      align-items: center;
-      padding: 12px 15px;
-      background: #2d2d2d;  /* Darker background for dark theme */
-      border: 2px solid #404040;
-      border-radius: 6px;
-      cursor: pointer;
-      transition: all 0.2s ease;
-      color: #ffffff;  /* Light text for dark theme */
-    }
-    
-    .checkbox-wrapper label:before {
-      content: '';
-      width: 18px;
-      height: 18px;
-      margin-right: 10px;
-      border: 2px solid #666;
-      border-radius: 4px;
-      transition: all 0.2s ease;
-    }
-    
-    .checkbox-wrapper input[type="checkbox"]:checked + label {
-      border-color: #4299e1;
-      background: #1a1a1a;  /* Even darker when selected */
-    }
-    
-    .checkbox-wrapper input[type="checkbox"]:checked + label:before {
-      background: #4299e1;
-      border-color: #4299e1;
-      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='white' width='18px' height='18px'%3E%3Cpath d='M0 0h24v24H0z' fill='none'/%3E%3Cpath d='M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z'/%3E%3C/svg%3E");
-      background-size: 12px;
-      background-position: center;
-      background-repeat: no-repeat;
-    }
-    
-    .checkbox-wrapper input[type="checkbox"]:focus + label {
-      box-shadow: 0 0 0 3px rgba(66, 153, 225, 0.3);
-    }
-    
-    .checkbox-wrapper label:hover {
-      border-color: #4299e1;
-      background: #353535;  /* Slightly lighter on hover */
-    }
+      #toast-container > .toast-info {
+        background-color: #17a2b8;
+      }
+      .checkbox-group h3 {
+        color: #ffffff;
+        font-size: 1.2rem;
+        margin-bottom: 15px;
+        font-weight: 500;
+      }
+
+      .checkbox-container {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+        gap: 12px;
+      }
+
+      .checkbox-wrapper {
+        position: relative;
+        padding: 8px;
+      }
+
+      .checkbox-wrapper input[type="checkbox"] {
+        position: absolute;
+        opacity: 0;
+        cursor: pointer;
+        height: 0;
+        width: 0;
+      }
+
+      .checkbox-wrapper label {
+        display: flex;
+        align-items: center;
+        padding: 12px 15px;
+        background: #2d2d2d; /* Darker background for dark theme */
+        border: 2px solid #404040;
+        border-radius: 6px;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        color: #ffffff; /* Light text for dark theme */
+      }
+
+      .checkbox-wrapper label:before {
+        content: "";
+        width: 18px;
+        height: 18px;
+        margin-right: 10px;
+        border: 2px solid #666;
+        border-radius: 4px;
+        transition: all 0.2s ease;
+      }
+
+      .checkbox-wrapper input[type="checkbox"]:checked + label {
+        border-color: #4299e1;
+        background: #1a1a1a; /* Even darker when selected */
+      }
+
+      .checkbox-wrapper input[type="checkbox"]:checked + label:before {
+        background: #4299e1;
+        border-color: #4299e1;
+        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='white' width='18px' height='18px'%3E%3Cpath d='M0 0h24v24H0z' fill='none'/%3E%3Cpath d='M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z'/%3E%3C/svg%3E");
+        background-size: 12px;
+        background-position: center;
+        background-repeat: no-repeat;
+      }
+
+      .checkbox-wrapper input[type="checkbox"]:focus + label {
+        box-shadow: 0 0 0 3px rgba(66, 153, 225, 0.3);
+      }
+
+      .checkbox-wrapper label:hover {
+        border-color: #4299e1;
+        background: #353535; /* Slightly lighter on hover */
+      }
     </style>
-</head>
-<body>
-  <div class="container-scroller">
-    <div class="sidebar bg-light">
-      <%- include('./admin_parts/sidebar') %>
-    </div>
-
-    <div class="container-fluid page-body-wrapper">
-      <div class="header">
-        <%- include("./admin_parts/hedder") %>
+  </head>
+  <body>
+    <div class="container-scroller">
+      <div class="sidebar bg-light">
+        <%- include('./admin_parts/sidebar') %>
       </div>
 
-      <div class="main-panel">
-        <div class="content-wrapper">
-          <!-- Add Offer Button -->
-          <div class="row mb-3">
-            <div class="col-12">
-              <button class="btn btn-primary" data-toggle="modal" data-target="#addOfferModal">
-                <i class="mdi mdi-plus"></i> Add New Offer
-              </button>
-            </div>
-          </div>
+      <div class="container-fluid page-body-wrapper">
+        <div class="header"><%- include("./admin_parts/hedder") %></div>
 
-          <!-- Offers Table -->
-          <div class="row">
-            <div class="col-12 grid-margin">
-              <div class="card">
-                <div class="card-body">
-                  <h4 class="card-title">Manage Offers</h4>
-                  <div class="table-responsive">
-                    <table class="table table-hover">
-                      <thead>
-                        <tr>
-                          <th>#</th>
-                          <th>Offer Name</th>
-                          <th>Type</th>
-                          <th>Discount</th>
-                          <th>Applied To</th>
-                          <th>Valid Until</th>
-                          <th>Status</th>
-                          <th>Actions</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        <% offers.forEach((offer, index) => { %>
-                        <tr>
-                          <td><%= index + 1 %></td>
-                          <td><%= offer.name %></td>
-                          <td><%= offer.discountType %></td>
-                          <td>
-                            <%= offer.discountType === 'percentage' ? offer.discountValue + '%' : '₹' + offer.discountValue %>
-                          </td>
-                          <td><%= offer.applicationType %></td>
-                          <td>
-                            <%= new Date(offer.validUntil).toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' }) %>
-                          </td>
-                          
-                          <td>
-                            <div class="badge <%= offer.isActive ? 'badge-success' : 'badge-danger' %>">
-                              <%= offer.isActive   ? 'Active' : 'Inactive' %>
-                            </div>
-                          </td>
-                          <td>
-                            <button class="btn btn-info btn-sm edit-offer" data-id="<%= offer._id %>">
-                              <i class="mdi mdi-pencil"></i>
-                            </button>
-                            <button class="btn btn-danger btn-sm delete-offer" data-id="<%= offer._id %>">
-                              <i class="mdi mdi-delete"></i>
-                            </button>
-                          </td>
-                        </tr>
-                        <% }) %>
-                      </tbody>
-                    </table>
+        <div class="main-panel">
+          <div class="content-wrapper">
+            <!-- Add Offer Button -->
+            <div class="row mb-3">
+              <div class="col-12">
+                <button
+                  class="btn btn-primary"
+                  data-toggle="modal"
+                  data-target="#addOfferModal">
+                  <i class="mdi mdi-plus"></i> Add New Offer
+                </button>
+              </div>
+            </div>
+
+            <!-- Offers Table -->
+            <div class="row">
+              <div class="col-12 grid-margin">
+                <div class="card">
+                  <div class="card-body">
+                    <h4 class="card-title">Manage Offers</h4>
+                    <div class="table-responsive">
+                      <table class="table table-hover">
+                        <thead>
+                          <tr>
+                            <th>#</th>
+                            <th>Offer Name</th>
+                            <th>Type</th>
+                            <th>Discount</th>
+                            <th>Applied To</th>
+                            <th>Valid Until</th>
+                            <th>Status</th>
+                            <th>Actions</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <% offers.forEach((offer, index) => { %>
+                          <tr>
+                            <td><%= index + 1 %></td>
+                            <td><%= offer.name %></td>
+                            <td><%= offer.discountType %></td>
+                            <td>
+                              <%= offer.discountType === 'percentage' ?
+                              offer.discountValue + '%' : '₹' +
+                              offer.discountValue %>
+                            </td>
+                            <td><%= offer.applicationType %></td>
+                            <td>
+                              <%= new
+                              Date(offer.validUntil).toLocaleDateString('en-GB',
+                              { day: '2-digit', month: 'short', year: 'numeric'
+                              }) %>
+                            </td>
+
+                            <td>
+                              <div
+                                class="badge <%= offer.isActive ? 'badge-success' : 'badge-danger' %>">
+                                <%= offer.isActive ? 'Active' : 'Inactive' %>
+                              </div>
+                            </td>
+                            <td>
+                              <button
+                                class="btn btn-info btn-sm edit-offer"
+                                data-id="<%= offer._id %>">
+                                <i class="mdi mdi-pencil"></i>
+                              </button>
+                              <button
+                                class="btn btn-danger btn-sm delete-offer"
+                                data-id="<%= offer._id %>">
+                                <i class="mdi mdi-delete"></i>
+                              </button>
+                            </td>
+                          </tr>
+                          <% }) %>
+                        </tbody>
+                      </table>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -202,331 +218,372 @@
         </div>
       </div>
     </div>
-  </div>
 
-  <!-- Add/Edit Offer Modal -->
-  <div class="modal fade" id="addOfferModal"  tabindex="-1">
-    <div class="modal-dialog modal-lg">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title">Add New Offer</h5>
-          <button type="button" class="close" data-dismiss="modal">
-            <span>&times;</span>
-          </button>
-        </div>
-        <div class="modal-body">
-          <form id="offerForm">
-            <div class="form-group">
-              <label>Offer Name</label>
-              <input type="text" class="form-control" name="name" required>
-            </div>
+    <!-- Add/Edit Offer Modal -->
+    <div class="modal fade" id="addOfferModal" tabindex="-1">
+      <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title">Add New Offer</h5>
+            <button type="button" class="close" data-dismiss="modal">
+              <span>&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <form id="offerForm">
+              <div class="form-group">
+                <label>Offer Name</label>
+                <input type="text" class="form-control" name="name" required />
+              </div>
 
-            <div class="form-row">
-              <div class="form-group col-md-6">
-                <label>Discount Type</label>
-                <select class="form-control" name="discountType" required>
-                  <option value="percentage">Percentage</option>
-                  <option value="fixed">Fixed Amount</option>
+              <div class="form-row">
+                <div class="form-group col-md-6">
+                  <label>Discount Type</label>
+                  <select class="form-control" name="discountType" required>
+                    <option value="percentage">Percentage</option>
+                    <option value="fixed">Fixed Amount</option>
+                  </select>
+                </div>
+                <div class="form-group col-md-6">
+                  <label>Discount Value</label>
+                  <input
+                    type="number"
+                    class="form-control"
+                    name="discountValue"
+                    required />
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label>Apply To</label>
+                <select
+                  class="form-control"
+                  name="applicationType"
+                  id="applicationType"
+                  required>
+                  <option value="all">Select One</option>
+                  <option value="all">All Products</option>
+                  <option value="product">Product</option>
+                  <option value="category">Product Categories</option>
                 </select>
               </div>
-              <div class="form-group col-md-6">
-                <label>Discount Value</label>
-                <input type="number" class="form-control" name="discountValue" required>
-              </div>
-            </div>
-
-            <div class="form-group">
-              <label>Apply To</label>
-              <select class="form-control" name="applicationType" id="applicationType" required>
-                <option value="all">Select One</option>
-                <option value="all">All Products</option>
-                <option value="product">Product</option>
-                <option value="category">Product Categories</option>
-              </select>
-            </div>
-            <input type="hidden" name="offerid"">
-            <div class="checkbox-group" id="categorySelection">
-              <h3>Select Categories</h3>
-              <div class="checkbox-container">
-                <% categories.forEach(category => { %>
+              <input type="hidden" name="offerid"">
+              <div class="checkbox-group" id="categorySelection">
+                <h3>Select Categories</h3>
+                <div class="checkbox-container">
+                  <% categories.forEach(category => { %>
                   <div class="checkbox-wrapper">
-                    <input 
-                      type="checkbox" 
-                      id="category-<%= category._id %>" 
-                      name="categories" 
-                      value="<%= category._id %>"
-                    >
+                    <input
+                      type="checkbox"
+                      id="category-<%= category._id %>"
+                      name="categories"
+                      value="<%= category._id %>" />
                     <label for="category-<%= category._id %>">
                       <%= category.name %>
                     </label>
                   </div>
-                <% }) %>
+                  <% }) %>
+                </div>
               </div>
-            </div>
-          
-            <div class="checkbox-group" id="productSelection">
-              <h3>Select Products</h3>
-              <div class="checkbox-container">
-                <% products.forEach(product => { %>
+
+              <div class="checkbox-group" id="productSelection">
+                <h3>Select Products</h3>
+                <div class="checkbox-container">
+                  <% products.forEach(product => { %>
                   <div class="checkbox-wrapper">
-                    <input 
-                      type="checkbox" 
-                      id="product-<%= product._id %>" 
-                      name="products" 
-                      value="<%= product._id %>"
-                    >
+                    <input
+                      type="checkbox"
+                      id="product-<%= product._id %>"
+                      name="products"
+                      value="<%= product._id %>" />
                     <label for="product-<%= product._id %>">
                       <%= product.name %>
                     </label>
                   </div>
-                <% }) %>
+                  <% }) %>
+                </div>
               </div>
-            </div>
 
-
-
-            <div class="form-row">
-              <div class="form-group col-md-6">
-                <label>Valid From</label>
-                <input type="date" class="form-control" name="validFrom" required>
+              <div class="form-row">
+                <div class="form-group col-md-6">
+                  <label>Valid From</label>
+                  <input
+                    type="date"
+                    class="form-control"
+                    name="validFrom"
+                    required />
+                </div>
+                <div class="form-group col-md-6">
+                  <label>Valid Until</label>
+                  <input
+                    type="date"
+                    class="form-control"
+                    name="validUntil"
+                    required />
+                </div>
               </div>
-              <div class="form-group col-md-6">
-                <label>Valid Until</label>
-                <input type="date" class="form-control" name="validUntil" required>
-              </div>
-            </div>
 
-            <div class="form-group">
-              <label>Minimum Purchase Amount (Optional)</label>
-              <input type="number" class="form-control" name="minPurchaseAmount">
-            </div>
-
-            <div class="form-group">
-              <div class="custom-control custom-switch">
-                <input type="checkbox" class="custom-control-input" id="isActive" name="isActive" value='true' checked>
-                <input type="hidden" class="custom-control-input"  name="isActive" value="false" >
-                <label class="custom-control-label" for="isActive">Active</label>
+              <div class="form-group">
+                <label>Minimum Purchase Amount (Optional)</label>
+                <input
+                  type="number"
+                  class="form-control"
+                  name="minPurchaseAmount" />
               </div>
-            </div>
-          </form>
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-          <button type="button" class="btn btn-primary" id="saveOffer">Save Offer</button>
+
+              <div class="form-group">
+                <div class="custom-control custom-switch">
+                  <input
+                    type="checkbox"
+                    class="custom-control-input"
+                    id="isActive"
+                    name="isActive"
+                    value="true"
+                    checked />
+                  <input
+                    type="hidden"
+                    class="custom-control-input"
+                    name="isActive"
+                    value="false" />
+                  <label class="custom-control-label" for="isActive"
+                    >Active</label
+                  >
+                </div>
+              </div>
+            </form>
+          </div>
+          <div class="modal-footer">
+            <button
+              type="button"
+              class="btn btn-secondary"
+              data-dismiss="modal">
+              Close
+            </button>
+            <button type="button" class="btn btn-primary" id="saveOffer">
+              Save Offer
+            </button>
+          </div>
         </div>
       </div>
     </div>
-  </div>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+
+    <script>
+         document.addEventListener('DOMContentLoaded', function() {
+
+          toastr.options = {
+            closeButton: true,
+            progressBar: true,
+            positionClass: "toast-top-right",
+            timeOut: 3000,
+            extendedTimeOut: 1000,
+            preventDuplicates: true,
+            newestOnTop: true,
+            showEasing: 'swing',
+            hideEasing: 'linear',
+            showMethod: 'fadeIn',
+            hideMethod: 'fadeOut'
+          };
 
 
-  
-  <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
-  
-  <script>
-   document.addEventListener('DOMContentLoaded', function() {
-   
-    toastr.options = {
-      closeButton: true,
-      progressBar: true,
-      positionClass: "toast-top-right",
-      timeOut: 3000,
-      extendedTimeOut: 1000,
-      preventDuplicates: true,
-      newestOnTop: true,
-      showEasing: 'swing',
-      hideEasing: 'linear',
-      showMethod: 'fadeIn',
-      hideMethod: 'fadeOut'
-    };
+          document.querySelectorAll('#categorySelection, #productSelection').forEach(el => el.style.display = 'none');
+
+          document.getElementById('applicationType').addEventListener('change', function() {
+            const selected = this.value;
+            const categorySelection = document.getElementById('categorySelection');
+            const productSelection = document.getElementById('productSelection');
+
+            categorySelection.style.display = 'none';
+            productSelection.style.display = 'none';
+
+            if (selected === 'category') {
+              categorySelection.style.display = 'block';
+              document.querySelectorAll('input[name="products"]').forEach(input => input.checked = false);
+            } else if (selected === 'product') {
+              productSelection.style.display = 'block';
+              document.querySelectorAll('input[name="categories"]').forEach(input => input.checked = false);
+            }
+          });
+          let errors=''
+          function validation(formData){
+            const {name,discountType,discountValue,applicationType,products,validFrom,validUntil,selectedItems}=formData
+            let isvalid=true
+            if(name.trim()==''){
+              isvalid=false
+              errors='\n Please enter the offer name'
+            }
+            if(discountType.trim()==''){
+              isvalid=false
+              errors='\n Please enter the offer discountType'
+            }
+
+            value=Number(discountValue)
 
 
-    document.querySelectorAll('#categorySelection, #productSelection').forEach(el => el.style.display = 'none');
-    
-    document.getElementById('applicationType').addEventListener('change', function() {
-      const selected = this.value;
-      const categorySelection = document.getElementById('categorySelection');
-      const productSelection = document.getElementById('productSelection');
-      
-      categorySelection.style.display = 'none';
-      productSelection.style.display = 'none';
-      
-      if (selected === 'category') {
-        categorySelection.style.display = 'block';
-        document.querySelectorAll('input[name="products"]').forEach(input => input.checked = false);
-      } else if (selected === 'product') {
-        productSelection.style.display = 'block';
-        document.querySelectorAll('input[name="categories"]').forEach(input => input.checked = false);
-      }
-    });
-    let errors=''
-    function validation(formData){
-      const {name,discountType,discountValue,applicationType,products,validFrom,validUntil,selectedItems}=formData
-      let isvalid=true
-      if(name.trim()==''){
-        isvalid=false
-        errors='\n Please enter the offer name'
-      }
-      if(discountType.trim()==''){
-        isvalid=false
-        errors='\n Please enter the offer discountType'
-      }
-     
-      value=Number(discountValue)
-     
 
-      
-      if(discountValue.trim()==''){
-        isvalid=false
-        // console.log(discountValue);
-        errors='\n Please check the offer discountValue'
-      }
-      if(applicationType.trim()==''){
-        isvalid=false
-        errors='\n Please enter the offer applicationType'
-      }
-      
-      if(validFrom.trim()==''){
-        isvalid=false
-        errors='\n Please enter the offer validFrom date'
-      }
-      if(validUntil.trim()==''){
-        isvalid=false
-        errors='\n Please enter the offer validUntil'
-      }
-      if(!selectedItems||selectedItems.length==0){
-        isvalid=false
-        errors='\n Please enter the offer select item'
-      }
-      return isvalid
-     console.log(name);
-     console.log(selectedItems);
-     
-    }
-    document.getElementById('saveOffer').addEventListener('click', async function(e) {
-      e.preventDefault();
-      const form = document.getElementById('offerForm');
-      const active=document.getElementById('isActive')
-      if(active.checked){
-        form.querySelector('input[name=isActive][type=hidden]').disabled=true 
-      }
-      const formData = new FormData(form);
-      console.log(formData);
-      
-      
-      const applicationType = document.getElementById('applicationType').value;
-      if (applicationType === 'category') {
-        const selectedCategories = Array.from(document.querySelectorAll('input[name="categories"]:checked'))
-        .map(input => input.value);
-        formData.set('selectedItems', JSON.stringify(selectedCategories));
-      } else if (applicationType === 'product') {
-        const selectedProducts = Array.from(document.querySelectorAll('input[name="products"]:checked'))
-        .map(input => input.value);
-        formData.set('selectedItems', JSON.stringify(selectedProducts));
-      }
-      else if(applicationType=='all'){
-        selectedProducts=['all']
-        formData.set('selectedItems', JSON.stringify(selectedProducts));
-      }
-      let datas = {};
-      for (let [key, value] of formData) {
-        datas[key] = value;
-      }
-      console.log(datas);
+            if(discountValue.trim()==''){
+              isvalid=false
+              // console.log(discountValue);
+              errors='\n Please check the offer discountValue'
+            }
+            if(applicationType.trim()==''){
+              isvalid=false
+              errors='\n Please enter the offer applicationType'
+            }
 
-    //  console.log(datas);
-    //  console.log(applicationType);
-     
-      if(!validation(datas)){
-       return toastr.error(errors)
-      }
-      
-      
-      try {
-        const response = await fetch('/admin/offers/save', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify(datas),
-        });
-        
-        const data = await response.json();
-        
-        if (data.success) {
-          toastr.success('Offer saved successfully');
-          setTimeout(() => {
-            window.location.reload();
-          }, 1000);
-        } else if(!data.success) {
-          toastr.error(data.message || 'Failed to save offer');
-        }
-         else {
-          toastr.error(data.message || 'Failed to save offer');
-        }
-      } catch (error) {
-        toastr.error(error.message || 'An unexpected error occurred');
-      }
-    });
-  
+            if(validFrom.trim()==''){
+              isvalid=false
+              errors='\n Please enter the offer validFrom date'
+            }
+            if(validUntil.trim()==''){
+              isvalid=false
+              errors='\n Please enter the offer validUntil'
+            }
+            if(!selectedItems||selectedItems.length==0){
+              isvalid=false
+              errors='\n Please enter the offer select item'
+            }
+            return isvalid
+           console.log(name);
+           console.log(selectedItems);
 
-    document.querySelectorAll('.edit-offer').forEach(button => {
-      button.addEventListener('click', async function() {
-        const offerId = this.dataset.id;
-        
-        try {
-          const response = await fetch(`/admin/offers/${offerId}`);
-          const offer = await response.json();
-          
-          document.getElementById('offerForm').reset();
-          
-          document.querySelector('input[name="name"]').value = offer.name;
-          document.querySelector('input[name="offerid"]').value = offerId;
-          document.querySelector('select[name="discountType"]').value = offer.discountType;
-          document.querySelector('input[name="discountValue"]').value = offer.discountValue;
-          
-          const applicationTypeSelect = document.querySelector('select[name="applicationType"]');
-          applicationTypeSelect.value = offer.applicationType;
-          applicationTypeSelect.dispatchEvent(new Event('change'));
-          
-          document.querySelector('input[name="validFrom"]').value = offer.validFrom.split('T')[0];
-          document.querySelector('input[name="validUntil"]').value = offer.validUntil.split('T')[0];
-          document.querySelector('input[name="minPurchaseAmount"]').value = offer.minPurchaseAmount;
-          document.querySelector('input[name="isActive"]').checked = offer.isActive;
-          
-          if (offer.applicationType === 'category') {
-            offer.selectedItems.forEach(catId => {
-              document.getElementById(`category-${catId}`).checked = true;
-            });
-          } else if (offer.applicationType === 'product') {
-            offer.selectedItems.forEach(prodId => {
-              document.getElementById(`product-${prodId}`).checked = true;
-            });
           }
-          
-          const modal = new bootstrap.Modal(document.getElementById('addOfferModal'));
-          // document.getElementById('offerForm').reset();
-          modal.show();
-        } catch (error) {
-          toastr.error('Failed to fetch offer details');
-        }
-      });
-    });
-  
-    // Handle delete with Toastr confirmation
-    document.querySelectorAll('.delete-offer').forEach(button => {
-      button.addEventListener('click', async function() {
-        const offerId = this.dataset.id;
-        
-        if (confirm('Are you sure you want to delete this offer?')) {
+          document.getElementById('saveOffer').addEventListener('click', async function(e) {
+            e.preventDefault();
+            const form = document.getElementById('offerForm');
+            const active=document.getElementById('isActive')
+            if(active.checked){
+              form.querySelector('input[name=isActive][type=hidden]').disabled=true
+            }
+            const formData = new FormData(form);
+            console.log(formData);
+
+
+            const applicationType = document.getElementById('applicationType').value;
+            if (applicationType === 'category') {
+              const selectedCategories = Array.from(document.querySelectorAll('input[name="categories"]:checked'))
+              .map(input => input.value);
+              formData.set('selectedItems', JSON.stringify(selectedCategories));
+            } else if (applicationType === 'product') {
+              const selectedProducts = Array.from(document.querySelectorAll('input[name="products"]:checked'))
+              .map(input => input.value);
+              formData.set('selectedItems', JSON.stringify(selectedProducts));
+            }
+            else if(applicationType=='all'){
+              selectedProducts=['all']
+              formData.set('selectedItems', JSON.stringify(selectedProducts));
+            }
+            let datas = {};
+            for (let [key, value] of formData) {
+              datas[key] = value;
+            }
+            console.log(datas);
+
+          //  console.log(datas);
+          //  console.log(applicationType);
+
+            if(!validation(datas)){
+             return toastr.error(errors)
+            }
+
+
+            try {
+              const response = await fetch('/admin/offers/save', {
+                method: 'POST',
+                headers: {
+                  'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(datas),
+              });
+
+              const data = await response.json();
+
+              if (data.success) {
+                toastr.success('Offer saved successfully');
+                setTimeout(() => {
+                  window.location.reload();
+                }, 1000);
+              } else if(!data.success) {
+                toastr.error(data.message || 'Failed to save offer');
+              }
+               else {
+                toastr.error(data.message || 'Failed to save offer');
+              }
+            } catch (error) {
+              toastr.error(error.message || 'An unexpected error occurred');
+            }
+          });
+
+
+          document.querySelectorAll('.edit-offer').forEach(button => {
+            button.addEventListener('click', async function() {
+              const offerId = this.dataset.id;
+
+              try {
+                const response = await fetch(`/admin/offers/${offerId}`);
+                const offer = await response.json();
+
+                document.getElementById('offerForm').reset();
+
+                document.querySelector('input[name="name"]').value = offer.name;
+                document.querySelector('input[name="offerid"]').value = offerId;
+                document.querySelector('select[name="discountType"]').value = offer.discountType;
+                document.querySelector('input[name="discountValue"]').value = offer.discountValue;
+
+                const applicationTypeSelect = document.querySelector('select[name="applicationType"]');
+                applicationTypeSelect.value = offer.applicationType;
+                applicationTypeSelect.dispatchEvent(new Event('change'));
+
+                document.querySelector('input[name="validFrom"]').value = offer.validFrom.split('T')[0];
+                document.querySelector('input[name="validUntil"]').value = offer.validUntil.split('T')[0];
+                document.querySelector('input[name="minPurchaseAmount"]').value = offer.minPurchaseAmount;
+                document.querySelector('input[name="isActive"]').checked = offer.isActive;
+
+                if (offer.applicationType === 'category') {
+                  offer.selectedItems.forEach(catId => {
+                    document.getElementById(`category-${catId}`).checked = true;
+                  });
+                } else if (offer.applicationType === 'product') {
+                  offer.selectedItems.forEach(prodId => {
+                    document.getElementById(`product-${prodId}`).checked = true;
+                  });
+                }
+
+                const modal = new bootstrap.Modal(document.getElementById('addOfferModal'));
+                // document.getElementById('offerForm').reset();
+                modal.show();
+              } catch (error) {
+                toastr.error('Failed to fetch offer details');
+              }
+            });
+          });
+
+          // Handle delete with Toastr confirmation
+          document.querySelectorAll('.delete-offer').forEach(button => {
+            button.addEventListener('click', async function() {
+              const offerId = this.dataset.id;
+
+             Swal.fire({
+        title: 'Are you sure?',
+        text: 'Do you really want to delete this offer?',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#d33',
+        cancelButtonColor: '#3085d6',
+        confirmButtonText: 'Yes, delete it!',
+        cancelButtonText: 'Cancel',
+      }).then(async (result) => {
+        if (result.isConfirmed) {
           try {
             const response = await fetch(`/admin/offers/delete/${offerId}`, {
               method: 'POST'
             });
-            
+
             const data = await response.json();
-            
+
             if (data.success) {
               toastr.success('Offer deleted successfully');
               setTimeout(() => {
@@ -540,8 +597,9 @@
           }
         }
       });
-    });
-  });
-  </script>
-</body>
+
+          });
+        });
+    </script>
+  </body>
 </html>
