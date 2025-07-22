@@ -101,7 +101,7 @@ const createPdfDocument = async (data, res) => {
 
     let xPos = 40
     const rowData = [
-      order._id,
+      order.orderid,
       formatCustomer(order.user),
       formatProducts(order.products),
       formatCoupon(order.coupon, order, order.products),

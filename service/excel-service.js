@@ -57,7 +57,7 @@ const createExcelWorkbook = async (data, res) => {
   data.forEach((order, index) => {
     const row = worksheet.getRow(startRow + index + 1)
     row.values = [
-      order._id.toString(),
+      order.orderid.toString(),
       formatCustomer(order.user),
       formatProducts(order.products),
       formatCoupon(order.coupon, order, order.products),
