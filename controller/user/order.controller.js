@@ -46,9 +46,20 @@ const paymentfaied = async (req, res) => {
 }
 const retrypayment = async (req, res) => {
     const id = req.params.id
-    const order = await orderchema.findById(id)
+    const order = await orderchema.findById(id).populate('products.productid')
     const razorpayid = order.razorpay
     console.log(order);
+      for (const item of order.products) {
+      const product = item.productid;
+      const quantityOrdered = item.quantity;
+
+      if (!product || product.stock < quantityOrdered) {
+        return res.status(400).json({
+          success: false,
+          message: `Product "${product?.name || 'Unknown'}" is out of stock`,
+        });
+      }
+    }
 
     console.log(razorpayid + order.totalAmount);
     const total = (order.totalAmount - order.coupon.discount * 100)
