@@ -238,7 +238,7 @@
                                             <% if(product.offer > 0) { %>
                                                 <span class="original-price">₹<%= product.price %></span>
                                                 <span class="offer-price">₹<%= product.dealprice %></span>
-                                                <span class="saving-text">Save ₹<%= product.price - product.dealprice %></span>
+                                                <span class="saving-text">Save ₹<%=Math.floor( product.price - product.dealprice) %></span>
                                             <% } else { %>
                                                 <span class="offer-price">₹<%= product.price %></span>
                                             <% } %>
