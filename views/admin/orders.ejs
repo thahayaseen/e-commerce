@@ -147,7 +147,7 @@
                     <a href="?page=<%= pagination.currentPage - 1 %>&limit=<%= pagination.limit %>" class="btn  btn-secondary"> Previous </a>
                 <% } %>
               
-                <span class="mx-5" >Page <%= pagination.currentPage %> of <%= pagination.totalPages %></span>
+                <span class="mx-5" >Page <%= pagination.currentPage %> of <%= pagination.totalPages==0?1:pagination.totalPages %></span>
               
                 <% if (pagination.currentPage < pagination.totalPages) { %>
                     <a href="?page=<%= pagination.currentPage + 1 %>&limit=<%= pagination.limit %>" class="btn  btn-secondary"> Next </a>

@@ -75,13 +75,13 @@ document.addEventListener('DOMContentLoaded', function () {
     const productImageInput = document.getElementById('addproductImageInput');
     const addbtn = document.getElementById('addproductbtn')
     productImageInput.addEventListener('change', (event) => {
-        const files = event.target.files;
-        console.log(files.length);
+        let files = Array.from(event.target.files);
+
         if (files.length > 3) {
             Swal.fire({
                 icon: 'error',
                 title: 'Limit Reached',
-                text: 'Cannot add more than 3 images.',
+                text: 'Only the first 3 images will be used. First 3 of them will be upload Please corp ',
                 background: '#f8d7da',
                 color: '#721c24',
                 iconColor: '#721c24',
@@ -90,17 +90,18 @@ document.addEventListener('DOMContentLoaded', function () {
                 },
             });
 
-            // return alert('cannot add morethan 3 images')
+            files = files.slice(0, 3); // take only first 3 files
         }
-        imagesToCrop = Array.from(files);
+
+        imagesToCrop = files;
         currentImageIndex = 0;
 
         if (imagesToCrop.length > 0) {
-            // Show cropping controls
             cropControls.style.display = 'block';
             loadImageToCrop(imagesToCrop[currentImageIndex]);
         }
     });
+
 
     function loadImageToCrop(file) {
         const reader = new FileReader();
@@ -130,7 +131,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 croppedImages.push(blob);
                 currentImageIndex++;
 
-                if (currentImageIndex < imagesToCrop.length) {
+                if (currentImageIndex < imagesToCrop.length || currentImageIndex >= 4) {
                     loadImageToCrop(imagesToCrop[currentImageIndex]);
                 } else {
 
@@ -169,9 +170,29 @@ document.addEventListener('DOMContentLoaded', function () {
                 if (res.success === true) {
 
                     window.location.reload(true)
+                } if (res.success === false) {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Already Exists',
+                        text: res.message,
+                        background: '#f8d7da',
+                        color: '#721c24',
+                        iconColor: '#721c24',
+                        customClass: {
+                            popup: 'rounded-lg',
+                        },
+                    });
                 }
             })
-            .catch(err => console.log(err));
+            .catch(err => {
+                console.log(err)
+
+
+
+
+            }
+
+            );
     });
 
     // Validation
@@ -181,6 +202,7 @@ document.addEventListener('DOMContentLoaded', function () {
         const productCategory = document.getElementById('newProductCategory');
         const productDescription = document.getElementById('newProductDescription');
         const productPrice = document.getElementById('newProductPrice');
+        const ProductOffer = document.getElementById('newProductOffer');
         const productStock = document.getElementById('newProductStock');
         const images = productImageInput.files;
 
@@ -209,10 +231,14 @@ document.addEventListener('DOMContentLoaded', function () {
             displayError(productPrice, 'Please enter a valid price');
             isValid = false;
         }
+        if (ProductOffer.value.trim() === "" || parseFloat(ProductOffer.value) <= 0 || parseFloat(ProductOffer.value) >= 100) {
+            displayError(ProductOffer, 'Please enter a valid offer');
+            isValid = false;
+        }
 
 
         if (productStock.value.trim() === "" || parseInt(productStock.value) < 0) {
-            displayError(productStock, 'Please enter a valid stock');
+            displayError(productStock, 'Please enter a valid offer 0-99');
             isValid = false;
         }
 
@@ -279,7 +305,7 @@ document.addEventListener('DOMContentLoaded', function () {
             const imageWrapper = document.createElement('div');
             imageWrapper.classList.add('position-relative', 'm-2');
             imageWrapper.innerHTML = `
-                <img src="/uploads/${image}" class="product-image img-thumbnail" style="width: 100px; height: 100px;" alt="Product Image">
+                <img src="${image}" class="product-image img-thumbnail" style="width: 100px; height: 100px;" alt="Product Image">
                 <button type="button" class="btn btn-danger btn-sm delete-image-btn position-absolute" style="top: 5px; right: 5px;" data-image="${image}" aria-label="Delete image">&times;</button>
             `;
             imageContainer.appendChild(imageWrapper);

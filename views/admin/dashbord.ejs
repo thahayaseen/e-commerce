@@ -255,7 +255,7 @@
                             <a  onclick="redirect('?page=<%= currentPage - 1 %>&limit=<%= limit%>')" class="btn btn-secondary">Previous</a>
                           <% } %>
                           
-                          <span class="mx-5">Page <%= currentPage %> of <%= totalPages %></span>
+                          <span class="mx-5">Page <%= currentPage %> of <%= totalPages==0?1:totalPages %></span>
                           
                           <% if (currentPage < totalPages) { %>
                             <a  onclick="redirect('?page=<%= currentPage + 1 %>&limit=<%= limit%>')" class="btn btn-secondary">Next</a>

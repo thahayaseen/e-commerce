@@ -437,7 +437,7 @@
               <li class="product-item">
                 <div class="product-info">
                   <img
-                    src="/uploads/<%= product.productid.images[0] %>"
+                    src="<%= product.productid.images[0] %>"
                     alt="<%= product.productid.name %>"
                     class="product-image"
                     onerror="this.onerror=null; this.src='/uploads/default-image.png';" />
@@ -712,7 +712,7 @@
 
         document.getElementById(
           "modalProductImage"
-        ).src = `/uploads/${product.images[0]}`;
+        ).src = `${product.images[0]}`;
         document.getElementById("modalProductName").textContent = product.name;
         document.getElementById("modalProductDescription").textContent =
           product.description;
@@ -790,7 +790,7 @@
             if (product.status) {
               return `<div class="product-item">
                     <div class="product-info">
-                        <img src="/uploads/${
+                        <img src="${
                           product.productid.images[0]
                         }" alt="${
                 product.productid.name
@@ -808,7 +808,7 @@
             } else {
               return `<div class="product-item">
                     <div class="product-info">
-                        <img src="/uploads/${
+                        <img src="${
                           product.productid.images[0]
                         }" alt="${
                 product.productid.name

@@ -112,11 +112,21 @@ const list = async (req, res, next) => {
 //add product
 const padd = async (req, res, next) => {
     const { newProductName, newProductCategory, newProductDescription, newProductPrice, newProductStock, newProductOffer } = req.body
-    const fiels = req.files
+   const exsist= await Product.findOne({name:newProductName})
+   console.log(exsist);
+   
+   if(exsist){
+    res.status(409).json({
+        success:false,
+        message:'Same name Product aldredy exsist'
+    })
+   }
+    else{
+        const fiels = req.files
     console.log(fiels);
     let image = []
     fiels.forEach(num => {
-        image.push(num.filename)
+        image.push(num.path)
     })
     console.log(image);
     console.log(newProductCategory);
@@ -135,6 +145,7 @@ const padd = async (req, res, next) => {
     await newProduct.save()
 
     res.status(200).json({ success: true })
+    }
 
 }
 const submitedit = async (req, res) => {
@@ -170,8 +181,8 @@ const imageadding = async function updateProduct(req, res) {
 
         if (files && files.length > 0) {
             files.forEach(file => {
-                if (!product.images.includes(file.filename)) {
-                    product.images.push(file.filename);
+                if (!product.images.includes(file.path)) {
+                    product.images.push(file.path);
                 }
             });
         }
@@ -353,6 +364,7 @@ const deletecupen = async (req, res) => {
 }
 const PDFDocument = require('pdfkit');
 const Wallet = require('../../model/wallet');
+const { log } = require('console');
 
 
 

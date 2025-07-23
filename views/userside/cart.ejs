@@ -182,7 +182,7 @@
                         <% cart.product.forEach(product => { %>
                         <div class="row mb-4 align-items-center">
                             <div class="col-md-2">
-                                <img src="/uploads/<%= product.productid.images[0] %>" alt="<%= product.productid.name %>" class="img-fluid rounded">
+                                <img src="<%= product.productid.images[0] %>" alt="<%= product.productid.name %>" class="img-fluid rounded">
                             </div>
                             <div class="col-md-4">
                                 <h5 class="card-title mb-1"><%= product.productid.name %></h5>

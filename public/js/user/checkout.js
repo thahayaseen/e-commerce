@@ -194,7 +194,7 @@ paymentForm.addEventListener('submit', async (e) => {
     try {
         Swal.fire({
             title: 'Processing',
-            text: 'Sending your reset link...',
+            text: 'Processing payment...',
             allowOutsideClick: false,
             showConfirmButton: false,
             willOpen: () => {

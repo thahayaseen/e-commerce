@@ -18,7 +18,7 @@
             margin: 20px auto;
             overflow: hidden;
             background: #000;
-            --url: url(/uploads/<%= product.images[0] %>);
+            --url: url(<%= product.images[0] %>);
             --zoom-x: 0%;
             --zoom-y: 0%;
             --display: none;
@@ -179,7 +179,7 @@
                 <!-- Enhanced Image Section -->
                 <aside class="flex flex-col items-center">
                     <div id="maininagediv" class="mb-3 rounded-lg shadow-lg">
-                        <img id="mainImage" src="/uploads/<%= product.images[0] %>" alt="Product Image" />
+                        <img id="mainImage" src="<%= product.images[0] %>" alt="Product Image" />
                     </div>
                     <div class="flex justify-center mb-3 gap-4">
                         <% product.images.forEach((image, index) => { %>
@@ -359,7 +359,7 @@
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
             <% sameProducts.forEach(product => { %>
                 <a href="/product/<%= product._id %>" class="related-product block bg-white rounded-lg overflow-hidden">
-                    <img src="/uploads/<%= product.images[0] %>" alt="<%= product.name %>" class="w-full h-48 object-cover">
+                    <img src="<%= product.images[0] %>" alt="<%= product.name %>" class="w-full h-48 object-cover">
                     <div class="p-4">
                         <h3 class="font-semibold text-gray-900"><%= product.name %></h3>
                         <p class="text-lg font-bold text-indigo-600 mt-2">₹<%= product.price %></p>

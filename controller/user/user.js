@@ -332,7 +332,7 @@ async function updatestok(productdata, res) {
         if (product.stock < datas.quantity) {
             console.log('yse');
 
-            return res.status(400).json({ success: false, message: 'Insufficient stock for product |' + product.name + "|" });
+            throw new Error('Insufficient stock for product |' + product.name + "| if money debited it will be refund within 24 hourse" );
         }
         product.stock -= parseInt(datas.quantity);
         await product.save();

@@ -117,7 +117,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
               subtotal = notcanceled
 
-              const productImage = images && images.length > 0 ? `/uploads/${images[0]}` : '/placeholder-image.jpg';
+              const productImage = images && images.length > 0 ? `${images[0]}` : '/placeholder-image.jpg';
               const productTotal = (quantity * (price-discount)).toFixed(2);
 
               let returnStatusHtml 
