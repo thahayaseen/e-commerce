@@ -9,7 +9,7 @@ const passport = require('passport');
 const gauth = require('../controller/gauth');
 const express = require('express');
 const cart = require("../model/cart");
-const { generateInvoice } = require("../controller/product/sales-report-service")
+const { generateInvoice } = require("../controller/product/sales-report-service.controller")
 const router = express.Router()
 router.get('/signup', register)
 router.post('/signup', signup, pregister)
