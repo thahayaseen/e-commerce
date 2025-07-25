@@ -9,12 +9,20 @@ const toatals = document.querySelector('.toatals');
 quantities.forEach((quantity, index) => {
     let number = parseInt(quantity.dataset.quntity);
     let id = quantity.dataset.productid;
+    let isLoading = false; // Flag to throttle
 
     const updateDisplay = () => {
         quantity.textContent = number;
     };
 
     const checkAndUpdateQuantity = (increase) => {
+        if (isLoading) return; // Throttle: don't allow if a request is in progress
+        isLoading = true;
+
+        // Disable buttons during request
+        addbtn[index].disabled = true;
+        minusbtn[index].disabled = true;
+
         fetch(`/cart/update/${id}`, {
             method: 'PATCH',
             headers: {
@@ -26,12 +34,13 @@ quantities.forEach((quantity, index) => {
         .then(data => {
             if (data.success) {
                 if (increase) number++;
+                else number--;
+                
                 toatalprice[index].textContent = Math.floor(data.totalprice);
                 summerytoatal.textContent = data.sumtoatal.toFixed();
                 toatals.textContent = data.sumtoatal.toFixed();
                 quantity.textContent = number;
             } else {
-                // Handle unlist scenario
                 if (data.unlist) {
                     Swal.fire({
                         icon: 'warning',
@@ -44,7 +53,6 @@ quantities.forEach((quantity, index) => {
                         }
                     });
                 } else {
-                    // Handle other error cases
                     Swal.fire({
                         icon: 'error',
                         title: 'Unable to Update',
@@ -60,6 +68,12 @@ quantities.forEach((quantity, index) => {
                 title: 'Connection Error',
                 text: 'An error occurred while updating the quantity. Please try again.'
             });
+        })
+        .finally(() => {
+            // Always re-enable buttons and reset loading state
+            isLoading = false;
+            addbtn[index].disabled = false;
+            minusbtn[index].disabled = false;
         });
     };
 
@@ -68,13 +82,12 @@ quantities.forEach((quantity, index) => {
 
     minusButton.addEventListener('click', () => {
         if (number > 1) {
-            number--;
             checkAndUpdateQuantity(false);
         }
     });
 
     plusButton.addEventListener('click', () => {
-        if(number < 5){
+        if (number < 5) {
             checkAndUpdateQuantity(true);
         } else {
             Swal.fire({
@@ -86,21 +99,16 @@ quantities.forEach((quantity, index) => {
     });
 
     updateDisplay();
-const deletebtn = document.querySelectorAll('.deletebtn');
-console.log(deletebtn);
-
-// Add event listener to each delete button
-
-
 });
+
 
 // Optional: Add a function to handle unlisted products by hiding them
 function handleUnlistedProducts() {
     const productRows = document.querySelectorAll('[data-product-row]');
-    
+
     productRows.forEach((row, index) => {
         const productId = quantities[index]?.dataset.productid;
-        
+
         if (productId) {
             // You can add logic here to check if product is unlisted
             // and hide the row if needed
@@ -110,7 +118,7 @@ function handleUnlistedProducts() {
                     if (data.unlist) {
                         row.style.opacity = '0.5';
                         row.querySelector('.card-title').innerHTML += ' <span class="badge bg-danger">Unavailable</span>';
-                        
+
                         // Disable quantity controls
                         const plusBtn = row.querySelector('.plusbtn');
                         const minusBtn = row.querySelector('.minusbtn');
