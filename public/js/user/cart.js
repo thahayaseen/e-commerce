@@ -27,8 +27,8 @@ quantities.forEach((quantity, index) => {
             if (data.success) {
                 if (increase) number++;
                 toatalprice[index].textContent = Math.floor(data.totalprice);
-                summerytoatal.textContent = data.sumtoatal;
-                toatals.textContent = data.sumtoatal;
+                summerytoatal.textContent = data.sumtoatal.toFixed();
+                toatals.textContent = data.sumtoatal.toFixed();
                 quantity.textContent = number;
             } else {
                 // Handle unlist scenario
