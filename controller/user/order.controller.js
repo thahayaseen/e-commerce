@@ -23,10 +23,10 @@ const returning = async (req, res) => {
     const { returnReason, returnDetails, orderid } = req.body
     // console.log(bodydata);
     const orders = await orderchema.findById(orderid)
-    if(orders.status=='Cancelled'){
-       return res.status(409).json({
-            success:false,
-            message:'This Order aldredu canceled'
+    if (orders.status == 'Cancelled') {
+        return res.status(409).json({
+            success: false,
+            message: 'This Order aldredu canceled'
         })
     }
     console.log(orders);
@@ -55,16 +55,16 @@ const retrypayment = async (req, res) => {
     const order = await orderchema.findById(id).populate('products.productid')
     const razorpayid = order.razorpay
     console.log(order);
-      for (const item of order.products) {
-      const product = item.productid;
-      const quantityOrdered = item.quantity;
+    for (const item of order.products) {
+        const product = item.productid;
+        const quantityOrdered = item.quantity;
 
-      if (!product || product.stock < quantityOrdered) {
-        return res.status(400).json({
-          success: false,
-          message: `Product "${product?.name || 'Unknown'}" is out of stock`,
-        });
-      }
+        if (!product || product.stock < quantityOrdered) {
+            return res.status(400).json({
+                success: false,
+                message: `Product "${product?.name || 'Unknown'}" is out of stock`,
+            });
+        }
     }
 
     console.log(razorpayid + order.totalAmount);
@@ -106,25 +106,25 @@ const razorpayvarify = async (req, res) => {
                 discount: Math.abs(item.price - item.productid.price)
             }))
 
-           try{
-            await updatestok(products, res)
-           }catch(err){
-          const wallet=await Wallet.findOne({userId:updatedOrder.user})
-            wallet.balance +=  updatedOrder.totalAmount+updatedOrder.refund - updatedOrder.coupon.discount
-            wallet.income+= updatedOrder.totalAmount+updatedOrder.refund - updatedOrder.coupon.discount
-            wallet.transactions.push({
-                type: 'credit',
-                amount: updatedOrder.totalAmount+updatedOrder.refund - updatedOrder.coupon.discount,
-                date: new Date(),
-                description: `refund of Order ${updatedOrder.orderid}}`
-            });
-            updatedOrder.refund=updatedOrder.totalAmount+updatedOrder.refund - updatedOrder.coupon.discount
-                 updatedOrder.status = 'Cancelled'
-                 updatedOrder.paymentStatus = 'Refunded'
-                   await updatedOrder.save()
-            await wallet.save()
-            throw new Error(err.message)
-           }
+            try {
+                await updatestok(products, res)
+            } catch (err) {
+                const wallet = await Wallet.findOne({ userId: updatedOrder.user })
+                wallet.balance += updatedOrder.totalAmount + updatedOrder.refund - updatedOrder.coupon.discount
+                wallet.income += updatedOrder.totalAmount + updatedOrder.refund - updatedOrder.coupon.discount
+                wallet.transactions.push({
+                    type: 'credit',
+                    amount: updatedOrder.totalAmount + updatedOrder.refund - updatedOrder.coupon.discount,
+                    date: new Date(),
+                    description: `refund of Order ${updatedOrder.orderid}}`
+                });
+                updatedOrder.refund = updatedOrder.totalAmount + updatedOrder.refund - updatedOrder.coupon.discount
+                updatedOrder.status = 'Cancelled'
+                updatedOrder.paymentStatus = 'Refunded'
+                await updatedOrder.save()
+                await wallet.save()
+                throw new Error(err.message)
+            }
             updatedOrder.status = 'Processing'
             updatedOrder.paymentStatus = 'Paid'
             await updatedOrder.save()
@@ -149,7 +149,7 @@ const razorpayvarify = async (req, res) => {
         console.error('Payment verification error:', error);
         res.status(400).json({
             success: false,
-            message: error.message||"Payment verification failed",
+            message: error.message || "Payment verification failed",
             error: error.message
         });
     }
@@ -164,13 +164,13 @@ const cancelitem = async (req, res) => {
             return res.status(404).json({ success: false, message: "Order not found" });
         }
         console.log(JSON.stringify(orderdata));
-        
+
         const index = orderdata.products.findIndex(product => product._id == productid);
         if (index === -1) {
             return res.status(404).json({ success: false, message: "Product not found in order" });
         }
-        if(orderdata.status=='Shipped'){
-            return res.status(200).json({success:false,message:'Cannot cancel shipped Product'})
+        if (orderdata.status == 'Shipped') {
+            return res.status(200).json({ success: false, message: 'Cannot cancel shipped Product' })
         }
         // Update product status to false
         orderdata.products[index].status = false;
@@ -193,26 +193,26 @@ const cancelitem = async (req, res) => {
 
         for (const orders of orderdata.products) {
             console.log(orders.status);
-            count += !orders.status ? 1 : -1; 
+            count += !orders.status ? 1 : -1;
         }
         console.log(Object.values);
-        
+
         console.log(count);
-        console.log('length is '+orderdata.products.length);
-        console.log(count-orderdata.products.length==0);
-        
+        console.log('length is ' + orderdata.products.length);
+        console.log(count - orderdata.products.length == 0);
+
         // Check if count is exactly zero
-        if (count-orderdata.products.length==0) {
+        if (count - orderdata.products.length == 0) {
             console.log('last one');
-            refundprice += orderdata.shippingcharg; 
+            refundprice += orderdata.shippingcharg;
         }
-        
-        if(orderdata.paymentStatus=='Paid'){
-            
-       
-            const wallet=await Wallet.findOne({userId:orderdata.user})
+
+        if (orderdata.paymentStatus == 'Paid') {
+
+
+            const wallet = await Wallet.findOne({ userId: orderdata.user })
             wallet.balance += refundprice
-            wallet.income+=refundprice
+            wallet.income += refundprice
             wallet.transactions.push({
                 type: 'credit',
                 amount: refundprice,
@@ -220,18 +220,18 @@ const cancelitem = async (req, res) => {
                 description: `refund of ${orderdata.products[index].productid.name}`
             });
             await wallet.save()
-            orderdata.refund = orderdata.refund 
+            orderdata.refund = orderdata.refund
             orderdata.refund += refundprice;
-            
+
         }
         else {
             orderdata.refund += refundprice;
 
         }
-        if (count-orderdata.products.length==0) {
+        if (count - orderdata.products.length == 0) {
             console.log('yes');
             orderdata.status = 'Cancelled'
-            
+
 
         }
         else {
@@ -330,10 +330,10 @@ const placeorder = async (req, res) => {
             console.log('cart items');
             console.log(Object.values(usercart));
             console.log(usercart.product.length);
-            if(usercart.product.length==0){
+            if (usercart.product.length == 0) {
                 console.log('going home');
-                
-                return res.status(200).json({success:false,re:true})
+
+                return res.status(200).json({ success: false, re: true })
             }
             const productdata = usercart.product.map(item => ({
                 productid: item.productid._id,
@@ -370,33 +370,33 @@ const placeorder = async (req, res) => {
 
 
             if (paymentmethods === 'onlinePayment') {
-               
-          
+
+ 
                 const order = new orderchema({
                     user: userid,
                     orderid: orderId,
                     products: productdata,
                     totalAmount: Math.floor((usercart.totalprice) * 100) / 100,
                     paymentMethod: paymentmethods,
-                    paymentStatus:'Failed',
+                    paymentStatus: 'Failed',
                     shippingAddress: selectedaddress,
                     'coupon.discount': discount,
                     'coupon.couponcode': cname,
-                    shippingcharg:usercart.shippingcharge
+                    shippingcharg: usercart.shippingcharge
                 });
                 const ordersave = await order.save();
                 // if(Math.floor((ordersave.totalAmount * 100)+(ordersave.shippingcharg * 100) - (ordersave.coupon.discount * 100))>500000){
                 //     return res.status(201).json({success:false,message:'cannot pay morethan 5 lack in onlin payment'})
                 //    }
-                const toatsl=Math.floor((ordersave.totalAmount)+(ordersave.shippingcharg ) - (ordersave.coupon.discount ))
-             console.log('code value is'+ordersave.coupon);
-             console.log(`${ordersave.totalAmount}\n ${ordersave.shippingcharg} \n ${ordersave.coupon.discount}` );
-             
+                const toatsl = Math.floor((ordersave.totalAmount) + (ordersave.shippingcharg) - (ordersave.coupon.discount))
+                console.log('code value is' + ordersave.coupon);
+                console.log(`${ordersave.totalAmount}\n ${ordersave.shippingcharg} \n ${ordersave.coupon.discount}`);
+
                 if (ordersave) {
                     userdata.orders.push(ordersave._id);
 
                     const options = {
-                        amount: Math.floor((ordersave.totalAmount * 100)+(ordersave.shippingcharg * 100) - (ordersave.coupon.discount * 100)),
+                        amount: Math.floor((ordersave.totalAmount * 100) + (ordersave.shippingcharg * 100) - (ordersave.coupon.discount * 100)),
                         currency: 'INR',
                         receipt: ordersave._id.toString()
                     };
@@ -421,7 +421,7 @@ const placeorder = async (req, res) => {
                     const total = Math.floor(usercart.totalprice * 100) / 100;
 
                     if (wallet.balance >= total) {
-                        updatestok(productdata, res)
+                       await updatestok(productdata, res)
                         const order = new orderchema({
                             user: userid,
                             orderid: orderId,
@@ -431,14 +431,14 @@ const placeorder = async (req, res) => {
                             shippingAddress: selectedaddress,
                             'coupon.discount': discount,
                             'coupon.couponcode': cname,
-                            shippingcharg:usercart.shippingcharge
+                            shippingcharg: usercart.shippingcharge
                         });
 
                         const ordersave = await order.save();
-                        wallet.outcome+=total+ordersave.shippingcharg
+                        wallet.outcome += total + ordersave.shippingcharg
                         wallet.transactions.push({
                             type: 'debit',
-                            amount: total+ordersave.shippingcharg,
+                            amount: total + ordersave.shippingcharg,
                             date: new Date(),
                             description: 'Purchased'
                         });
@@ -448,17 +448,17 @@ const placeorder = async (req, res) => {
 
                         userdata.orders.push(ordersave._id);
                         wallet.balance -= total;
-                        const walletsave=await wallet.save();
+                        const walletsave = await wallet.save();
                         if (walletsave) {
                             usercart.product = [];
                             await usercart.save();
-                            
+
                         }
-                        else{
-                            res.status(400).json({success:false,message:'error in wallet'})
+                        else {
+                            res.status(400).json({ success: false, message: 'error in wallet' })
                         }
 
-                       
+
                         req.session.orderid = orderda._id
 
 
@@ -468,8 +468,8 @@ const placeorder = async (req, res) => {
                     }
                 }
             } else {
-                if((usercart.totalprice+usercart.shippingcharge)>100000){
-                    return res.status(200).json({success:false,message:'Maximum COD allowed less than 100000 INR'})
+                if ((usercart.totalprice + usercart.shippingcharge) > 100000) {
+                    return res.status(200).json({ success: false, message: 'Maximum COD allowed less than 100000 INR' })
                 }
                 const order = new orderchema({
                     user: userid,
@@ -480,11 +480,11 @@ const placeorder = async (req, res) => {
                     shippingAddress: selectedaddress,
                     'coupon.discount': discount,
                     'coupon.couponcode': cname,
-                    shippingcharg:usercart.shippingcharge
+                    shippingcharg: usercart.shippingcharge
                 });
 
                 const ordersave = await order.save();
-                updatestok(productdata, res)
+               await updatestok(productdata, res)
                 usercart.product = [];
                 await usercart.save();
 
@@ -495,11 +495,11 @@ const placeorder = async (req, res) => {
             }
         } catch (error) {
             console.error('Error in placing order:', error);
-            return res.status(500).json({ success: false, message: 'Error placing order', error: error.message });
+            return res.status(500).json({ success: false, message: error.message||'Error placing order', error: error.message });
         }
     }
-    else{
+    else {
         res.redirect('/')
     }
 }
-module.exports = {placeorder, cancelorder,cancelitem, razorpayvarify, returning,  paymentfaied, retrypayment }     
+module.exports = { placeorder, cancelorder, cancelitem, razorpayvarify, returning, paymentfaied, retrypayment }     

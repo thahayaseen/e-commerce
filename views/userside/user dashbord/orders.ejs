@@ -466,11 +466,13 @@
                   <button class="btn btn-primary">
                     <i class="fas fa-check"></i> Cancelled
                   </button>
-                  <% } else if (product.return=='notrequst'&&order.status!=='Cancelled' ) { %>
+                  <% } else if
+                  (product.return=='notrequst'&&order.status!=='Cancelled' ) {
+                  %>
                   <button
                     class="btn btn-return"
                     onclick="initiateReturn('<%= order._id %>', '<%= product.productid._id %>')">
-                    <i class="fas fa-undo-alt me-1"></i> Return 
+                    <i class="fas fa-undo-alt me-1"></i> Return
                   </button>
                   <% } else if(order.status !=='Cancelled' ){ %>
                   <button class="btn btn-return">
@@ -490,8 +492,8 @@
               </div>
               <div>
                 <strong>Total:</strong> ₹<%= ((order.totalAmount-order.refund -
-                (order.coupon ? order.coupon.discount : 0)+order.shippingcharg)).toFixed(2)
-                %>
+                (order.coupon ? order.coupon.discount :
+                0)+order.shippingcharg)).toFixed(2) %>
               </div>
             </div>
           </div>
@@ -732,16 +734,20 @@
       }
 
       function submitReturn() {
-        const returnReason = document.getElementById("returnReason").value.trim()
-        const returnDetails = document.getElementById("returnDetails").value.trim()
+        const returnReason = document
+          .getElementById("returnReason")
+          .value.trim();
+        const returnDetails = document
+          .getElementById("returnDetails")
+          .value.trim();
 
         if (!returnReason || !returnDetails) {
-           Swal.fire({
-      title: 'Failed!',
-      text: 'Please fill required fields',
-      icon: 'error',
-      confirmButtonText: 'OK'
-    });
+          Swal.fire({
+            title: "Failed!",
+            text: "Please fill required fields",
+            icon: "error",
+            confirmButtonText: "OK",
+          });
           return;
         }
 
@@ -761,15 +767,31 @@
           .then((response) => response.json())
           .then((data) => {
             if (data.success) {
-              alert("Return request submitted successfully");
-              location.reload();
+              Swal.fire({
+                title: "success!",
+                text: "Return request submitted successfully",
+                icon: "success",
+                confirmButtonText: "OK",
+              }).then(() => {
+                window.location.reload();
+              });
             } else {
-              alert("Error submitting return request");
+              Swal.fire({
+                icon: "error",
+                title: "Submission Failed",
+                text: "Error submitting return request",
+              });
             }
           })
           .catch((error) => {
             console.error("Error:", error);
-            alert("Error submitting return request");
+
+            Swal.fire({
+              title: "error!",
+              text: error.message || "error while request",
+              icon: "error",
+              confirmButtonText: "OK",
+            });
           });
 
         bootstrap.Modal.getInstance(
@@ -795,9 +817,7 @@
             if (product.status) {
               return `<div class="product-item">
                     <div class="product-info">
-                        <img src="${
-                          product.productid.images[0]
-                        }" alt="${
+                        <img src="${product.productid.images[0]}" alt="${
                 product.productid.name
               }" class="product-image">
                         <div class="product-details">
@@ -813,9 +833,7 @@
             } else {
               return `<div class="product-item">
                     <div class="product-info">
-                        <img src="${
-                          product.productid.images[0]
-                        }" alt="${
+                        <img src="${product.productid.images[0]}" alt="${
                 product.productid.name
               }" class="product-image">
                         <div class="product-details">
@@ -909,12 +927,12 @@
           discountContainer.style.display = "none";
         }
 
-        document.getElementById("modalTotal").textContent = `₹${
-          (order.totalAmount -
+        document.getElementById("modalTotal").textContent = `₹${(
+          order.totalAmount -
           order.refund -
           (order.coupon ? order.coupon.discount : 0) +
-          order.shippingcharg).toFixed(2)
-        }`;
+          order.shippingcharg
+        ).toFixed(2)}`;
         // (order.totalAmount-order.refund - (order.coupon ?order.coupon.discount : 0)+order.shippingcharg)
         const invoicebtn = document.getElementById("invoicebtn");
         console.log(order.status);

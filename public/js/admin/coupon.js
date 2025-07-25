@@ -66,7 +66,15 @@ if (coupons) {
           });
         }
       })
-      .catch(error => console.error('Error adding coupon:', error));
+      .catch(error => {console.error('Error adding coupon:', error)
+         Swal.fire({
+            text: data.message||'An error while create coupon',
+            icon: 'error',
+            timer: 1600,
+            timerProgressBar: true,
+            willClose: () => window.location.href = '/admin/coupon'
+          });
+      });
   }
 
   function editCoupon(id) {
@@ -197,48 +205,63 @@ if (coupons) {
 
   
   function validateDate(date) {
-    let error=false
-    const couponcode = document.getElementById('couponCode')
-    const discountAmount = document.getElementById('discountAmount')
-    const minAmount = document.getElementById('minAmount')
-    const maxAmount = document.getElementById('maxAmount')
-    const expiryDate = document.getElementById('expiryDate')
-    if (couponcode.value.trim() == '') {
-      couponcode.parentElement.children[2].innerText = 'couponCode cannot make empty'
-      console.log('no code');
-    }
-    else couponcode.parentElement.children[2].innerHTML = ''
-// alert(Number(discountAmount.value))
-// console.log(Number(discountAmount.value)<99);
+  let error = false;
+  const couponcode = document.getElementById('couponCode');
+  const discountAmount = document.getElementById('discountAmount');
+  const minAmount = document.getElementById('minAmount');
+  const maxAmount = document.getElementById('maxAmount');
+  const expiryDate = document.getElementById('expiryDate');
 
-    if (discountAmount.value.trim() == ''||Number(discountAmount.value)>99) {
-      discountAmount.parentElement.children[2].innerText = 'DiscountAmount cannot make empty and should less than 100 '
-      error=true
-    }
-
-    else discountAmount.parentElement.children[2].innerHTML = ''
-
-    if (minAmount.value.trim() == '') {
-      minAmount.parentElement.children[2].innerText = 'MinAmount cannot make empty'
-      error=true
-    }
-    else minAmount.parentElement.children[2].innerHTML = ''
-
-    if (maxAmount.value.trim() == '') {
-      maxAmount.parentElement.children[2].innerText = 'MaxAmount cannot make empty'
-      error=true
-    }
-    else maxAmount.parentElement.children[2].innerHTML = ''
-
-    const today = new Date().toISOString().split('T')[0];
-    if (date <= today) {
-      expiryDate.parentElement.children[2].innerText = 'expaid date cannot make empty and cannot past'
-      error=true
-    }
-    else expiryDate.parentElement.children[2].innerHTML = ''
-
-    return error
+  // Coupon Code Validation
+  if (couponcode.value.trim() === '') {
+    couponcode.parentElement.children[2].innerText = 'Coupon code cannot be empty';
+    error = true;
+  } else {
+    couponcode.parentElement.children[2].innerText = '';
   }
+
+  // Discount Amount Validation
+  const discountVal = Number(discountAmount.value);
+  if (discountAmount.value.trim() === '' || isNaN(discountVal) || discountVal > 99) {
+    discountAmount.parentElement.children[2].innerText = 'Discount must be a number and less than 100';
+    error = true;
+  } else {
+    discountAmount.parentElement.children[2].innerText = '';
+  }
+
+  // Min and Max Amount Validation
+  const minVal = Number(minAmount.value);
+  const maxVal = Number(maxAmount.value);
+
+  if (minAmount.value.trim() === '' || isNaN(minVal)) {
+    minAmount.parentElement.children[2].innerText = 'Minimum amount cannot be empty';
+    error = true;
+  } else {
+    minAmount.parentElement.children[2].innerText = '';
+  }
+
+  if (maxAmount.value.trim() === '' || isNaN(maxVal)) {
+    maxAmount.parentElement.children[2].innerText = 'Maximum amount cannot be empty';
+    error = true;
+  } else if (maxVal < minVal) {
+    maxAmount.parentElement.children[2].innerText = 'Maximum amount cannot be less than minimum amount';
+    error = true;
+  } else {
+    maxAmount.parentElement.children[2].innerText = '';
+  }
+
+  // Expiry Date Validation
+  const today = new Date().toISOString().split('T')[0];
+  if (!date || date <= today) {
+    expiryDate.parentElement.children[2].innerText = 'Expiry date must be in the future';
+    error = true;
+  } else {
+    expiryDate.parentElement.children[2].innerText = '';
+  }
+
+  return error;
+}
+
   // edit secrion
   function uvalidateDate(date) {
     let error=false

@@ -331,6 +331,10 @@ const updateorder = async (req, res) => {
             orderdata.refund+=refund
         }
     }
+    if(action=="Delivered"){
+        orderdata.pstatus=true
+        orderdata.paymentStatus='Paid'
+    }
     orderdata.status = action
     await orderdata.save()
     res.status(200).json({ success: true, message: 'the action changed success' })

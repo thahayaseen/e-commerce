@@ -275,7 +275,7 @@
                                 </div>
                                 <div class="ms-3">
                                     <h6 class="mb-1">Income</h6>
-                                    <h3 class="mb-0 text-success">₹<%= wallet.income || 0 %></h3>
+                                    <h3 class="mb-0 text-success">₹<%= wallet.income.toFixed(2) || 0 %></h3>
                                 </div>
                             </div>
                         </div>
@@ -288,7 +288,7 @@
                                 </div>
                                 <div class="ms-3">
                                     <h6 class="mb-1">Expenses</h6>
-                                    <h3 class="mb-0 text-warning">₹<%= wallet.outcome || 0 %></h3>
+                                    <h3 class="mb-0 text-warning">₹<%= wallet.outcome.toFixed(2) || 0 %></h3>
                                 </div>
                             </div>
                         </div>

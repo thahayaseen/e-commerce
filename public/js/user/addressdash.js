@@ -76,7 +76,7 @@ function setupEditButtons() {
 
             document.getElementById('efullName').value = name || '';
             document.getElementById('eaddressLine1').value = line1 || '';
-            document.getElementById('eaddressLine2').value = line2 || '';
+            // document.getElementById('eaddressLine2').value = line2 || '';
             document.getElementById('ecity').value = city || '';
             document.getElementById('estate').value = state || '';
             document.getElementById('econtry').value = country || '';

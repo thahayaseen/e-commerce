@@ -391,7 +391,12 @@ document.addEventListener('DOMContentLoaded', function () {
             })
             .catch(error => {
                 console.error("Error:", error);
-                alert("An error occurred while processing your request. Please try again.");
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error',
+                    text: 'An error occurred while processing your request. Please try again.',
+                });
+
             });
     }
 
@@ -489,7 +494,6 @@ document.addEventListener('DOMContentLoaded', function () {
                         window.location.reload(true)
 
                     } else {
-                        // alert('Upload failed: ' + data.message);
                         Swal.fire({
                             icon: 'error',
                             title: 'Update Failed',

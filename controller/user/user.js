@@ -382,6 +382,9 @@ async function updatestok(productdata, res) {
 
     for (const datas of productdata) {
         const product = await product_schema.findById(datas.productid);
+        if(product.unlist){
+            throw new Error('The product is'+product.name +' unavailabele right now')
+        }
         if (product.stock < datas.quantity) {
             console.log('yse');
 

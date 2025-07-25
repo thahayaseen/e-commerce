@@ -52,81 +52,63 @@ const offers = async (req, res) => {
 
     const offerdata = await new offerschema(data)
     await offerdata.save()
-    offerapplayinproduct(data.selectedItems, data.applicationType, offerdata)
+   const datas=await offerapplayinproduct(data.selectedItems, data.applicationType, offerdata)
+   if(!datas.success){
+   return res.status(200).json(datas)
+   }
 
     return res.status(200).json({ success: true, message: 'The Offer Created Successfully' })
 
 
 }
-const offerapplayinproduct = async (selscted, type, offer) => {
-    let finddata
-    if (type == 'all') {
-        console.log('okke');
+const offerapplayinproduct = async (selected, type, offer) => {
+    let pdatas = [];
 
-        const pdatas = await Product.find({})
-        if (offer.discountType == 'fixed') {
-            pdatas.forEach(async (data) => {
-                data.offerdealprice = data.price - offer.discountValue
-                data.dealoffertype = 'fixed'
-                data.save()
-            })
-        }
-        else if (offer.discountType == 'percentage') {
-            pdatas.forEach(async (data) => {
-                data.offerdealprice = data.price - (data.price * offer.discountValue) / 100
-                data.dealoffertype = 'percentage'
-
-                data.save()
-            })
-        }
-
-
+    if (type === 'all') {
+        pdatas = await Product.find({});
+    } else if (type === 'product') {
+        pdatas = await Product.find({ _id: { $in: selected } });
+    } else if (type === 'category') {
+        pdatas = await Product.find({ category_id: { $in: selected } });
     }
 
-    else if (type == 'product') {
-        const pdatas = await Product.find({ _id: { $in: selscted } })
-        if (offer.discountType == 'fixed') {
-            pdatas.forEach(async (data) => {
-                data.offerdealprice = data.price - offer.discountValue
-                data.dealoffertype = 'fixed'
-                data.save()
-            })
-        }
-        else if (offer.discountType == 'percentage') {
-            pdatas.forEach(async (data) => {
-                data.offerdealprice = data.price - (data.price * offer.discountValue) / 100
-                data.dealoffertype = 'percentage'
+    const failedProducts = [];
 
-                data.save()
-            })
-        }
-        console.log('products id ' + pdatas.length);
+    // Loop through products and apply discounts only to valid ones
+    for (const product of pdatas) {
+        let newPrice;
 
-    }
-    else if (type == 'category') {
-        const pdatas = await Product.find({ category_id: { $in: selscted } })
-        console.log('products id ' + pdatas);
-        if (offer.discountType == 'fixed') {
-            pdatas.forEach(async (data) => {
-                data.offerdealprice = data.price - offer.discountValue
-                data.dealoffertype = 'fixed'
-                data.save()
-            })
-        }
-        else if (offer.discountType == 'percentage') {
-            pdatas.forEach(async (data) => {
-                data.offerdealprice = data.price - (data.price * offer.discountValue) / 100
-                data.dealoffertype = 'percentage'
-
-                data.save()
-            })
+        if (offer.discountType === 'fixed') {
+            newPrice = product.price - offer.discountValue;
+        } else if (offer.discountType === 'percentage') {
+            newPrice = product.price - (product.price * offer.discountValue) / 100;
         }
 
-
+        if (newPrice >= 100) {
+            product.offerdealprice = newPrice;
+            product.dealoffertype = offer.discountType;
+            await product.save();
+        } else {
+            failedProducts.push({
+                name: product.name,
+                originalPrice: product.price,
+                attemptedDealPrice: newPrice
+            });
+        }
     }
 
+    // If any product failed, return error info
+    if (failedProducts.length > 0) {
+        return {
+            success: false,
+            message: 'Some products could not be updated due to minimum price restriction (₹100).',
+            failedProducts: failedProducts
+        };
+    }
 
+    return { success: true, message: 'Offer applied successfully to all valid products.' };
 }
+
 const offerdesaable = async (selscted, type, offer) => {
     let finddata
     if (type == 'all') {
