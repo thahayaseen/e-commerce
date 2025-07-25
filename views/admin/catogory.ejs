@@ -50,6 +50,20 @@
               <div class="card">
                 <div class="card-body">
                   <h4 class="card-title">Manage Categories</h4>
+                   <%
+const searchConfig = {
+  route: '/admin/category',
+  method: 'GET',
+  placeholder: 'Search product by name...',
+  debounceDelay: 300,
+  filters: [
+  ],
+  additionalParams: {
+    limit: 50
+  }
+}
+%>
+<%- include('./admin_parts/search-component', { searchConfig }) %>
                   <div class="table-responsive">
                     <table class="table table-hover">
                       <thead>
@@ -104,17 +118,22 @@
               </div>
             </div>
           </div>
-          <div class="pagination ">
-            <% if (pagination.currentPage > 1) { %>
-              <a href="?page=<%= pagination.currentPage - 1 %>&limit=<%= pagination.limit %>" class="btn  btn-secondary"> Previous </a>
-          <% } %>
-        
-          <span class="mx-5" >Page <%= pagination.currentPage %> of <%= pagination.totalPages %></span>
-        
-          <% if (pagination.currentPage < pagination.totalPages) { %>
-              <a href="?page=<%= pagination.currentPage + 1 %>&limit=<%= pagination.limit %>" class="btn  btn-secondary"> Next </a>
-          <% } %>
-        </div> 
+         <div class="pagination">
+  <% if (pagination.currentPage > 1) { %>
+    <button class="btn btn-secondary pagination-btn" data-page="<%= pagination.currentPage - 1 %>" data-limit="<%= pagination.limit %>">
+      Previous
+    </button>
+  <% } %>
+
+  <span class="mx-5">Page <%= pagination.currentPage %> of <%= pagination.totalPages == 0 ? 1 : pagination.totalPages %></span>
+
+  <% if (pagination.currentPage < pagination.totalPages) { %>
+    <button class="btn btn-secondary pagination-btn" data-page="<%= pagination.currentPage + 1 %>" data-limit="<%= pagination.limit %>">
+      Next
+    </button>
+  <% } %>
+</div>
+
           <!-- Add Category Modal -->
           <div class="modal fade" id="addCategoryModal" tabindex="-1" role="dialog" aria-labelledby="addCategoryModalLabel" aria-hidden="true">
             <div class="modal-dialog" role="document">
@@ -172,7 +191,26 @@
         </div>
       </div>
     </div>
+    
   </div>
+<script>
+  document.querySelectorAll('.pagination-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const newPage = btn.getAttribute('data-page');
+      const limit = btn.getAttribute('data-limit');
+
+      const params = new URLSearchParams(window.location.search);
+
+      // Update only page and limit
+      params.set('page', newPage);
+      params.set('limit', limit);
+
+      // Redirect with updated URL
+      window.location.search = params.toString();
+    });
+  });
+</script>
+    <script src="/js/admin/search-component.js"></script>
 
   <!-- Scripts -->
    <script src="/js/admin/category.js"></script>

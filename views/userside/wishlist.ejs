@@ -162,10 +162,11 @@
         </nav>
     </header>
 
-    <main class="container my-5">
-        <h1 class="text-white mb-4">My Wishlist</h1>
-        <div class="card">
-            <div class="card-body">
+  <main class="container my-5">
+    <h1 class="text-white mb-4">My Wishlist</h1>
+    <div class="card">
+        <div class="card-body">
+            <% if (wishlist.productid && wishlist.productid.length > 0) { %>
                 <% wishlist.productid.forEach((data,ind)=>{ %>
                 <div class="wishlist-item">
                     <div class="row align-items-center">
@@ -186,9 +187,19 @@
                     </div>
                 </div>
                 <% }) %>
-            </div>
+            <% } else { %>
+                <div class="text-center py-5">
+                    <div class="mb-3">
+                        <i class="fas fa-heart-broken" style="font-size: 4rem; color: #ccc;"></i>
+                    </div>
+                    <h4 class="text-muted mb-2">Your wishlist is empty</h4>
+                    <p class="text-muted mb-3">Start adding items to your wishlist to see them here</p>
+                    <a href="/product" class="btn btn-primary">Continue Shopping</a>
+                </div>
+            <% } %>
         </div>
-    </main>
+    </div>
+</main>
     <script>
     const removebtn=document.querySelectorAll('#removewish')
 

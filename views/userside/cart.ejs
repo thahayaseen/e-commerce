@@ -113,6 +113,36 @@
             transform: translateY(-3px);
         }
 
+        /* Unlisted product styles */
+        .unlisted-product {
+            opacity: 0.6;
+            background-color: #f8f9fa;
+            border-left: 4px solid #dc3545;
+        }
+
+        .unlisted-badge {
+            background-color: #dc3545;
+            color: white;
+            font-size: 0.75rem;
+            padding: 2px 8px;
+            border-radius: 12px;
+            display: inline-block;
+            margin-left: 8px;
+        }
+
+        .disabled-controls {
+            pointer-events: none;
+            opacity: 0.5;
+        }
+
+        .checkout-warning {
+            background-color: #fff3cd;
+            border: 1px solid #ffeaa7;
+            border-radius: 8px;
+            padding: 12px;
+            margin-bottom: 20px;
+        }
+
         @media (max-width: 768px) {
             .navbar-brand {
                 font-size: 24px;
@@ -173,29 +203,53 @@
         </div>
     </div>
     <% } else { %>
+    <%
+        // Check if there are any unlisted products
+        let hasUnlistedProducts = false;
+        cart.product.forEach(product => {
+            if (product.productid.unlist === true) {
+                hasUnlistedProducts = true;
+            }
+        });
+    %>
     <div class="container py-5">
         <div class="row">
             <div class="col-lg-8">
                 <h1 class="mb-4">Your Shopping Cart</h1>
+                
+                <% if (hasUnlistedProducts) { %>
+                <div class="checkout-warning">
+                    <i class="fas fa-exclamation-triangle text-warning me-2"></i>
+                    <strong>Notice:</strong> Some items in your cart are currently unavailable and have been marked for removal. Please remove these items to proceed with checkout.
+                </div>
+                <% } %>
+
                 <div class="card mb-3">
                     <div class="card-body">
                         <% cart.product.forEach(product => { %>
-                        <div class="row mb-4 align-items-center">
+                        <div class="row mb-4 align-items-center <%= product.productid.unlist === true ? 'unlisted-product' : '' %>">
                             <div class="col-md-2">
                                 <img src="<%= product.productid.images[0] %>" alt="<%= product.productid.name %>" class="img-fluid rounded">
                             </div>
                             <div class="col-md-4">
-                                <h5 class="card-title mb-1"><%= product.productid.name %></h5>
-                                <p class="star-rating mb-1">
-                                    <i class="fas fa-star"></i>
-                                    <i class="fas fa-star"></i>
-                                    <i class="fas fa-star"></i>
-                                    <i class="fas fa-star"></i>
-                                    <i class="fas fa-star-half-alt"></i>
-                                    <span class="text-muted ms-1">4.6 (384 reviews)</span>
+                                <h5 class="card-title mb-1">
+                                    <%= product.productid.name %>
+                                    <% if (product.productid.unlist === true) { %>
+                                        <span class="unlisted-badge">Unavailable</span>
+                                    <% } %>
+                                </h5>
+                                <% if (product.productid.unlist !== true) { %>
+                          
+                                <% } else { %>
+                                <p class="text-danger mb-1">
+                                    <i class="fas fa-times-circle me-1"></i>
+                                    This item is currently unavailable
                                 </p>
+                                <% } %>
+                                
                             </div>
                             <div class="col-md-3">
+                                <% if (product.productid.unlist !== true) { %>
                                 <div class="input-group">
                                     <button class="btn btn-outline-secondary minusbtn" type="button">
                                         <i class="fas fa-minus"></i>
@@ -207,16 +261,40 @@
                                         <i class="fas fa-plus"></i>
                                     </button>
                                 </div>
+                                <% } else { %>
+                                <div class="disabled-controls">
+                                    <div class="input-group">
+                                        <button class="btn btn-outline-secondary" type="button" disabled>
+                                            <i class="fas fa-minus"></i>
+                                        </button>
+                                        <span class="quantity-input py-2 bg-light text-muted">
+                                            <%= product.quantity %>
+                                        </span>
+                                        <button class="btn btn-outline-secondary" type="button" disabled>
+                                            <i class="fas fa-plus"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                                <% } %>
                             </div>
                             <div class="col-md-3 text-end">
+                                <% if (product.productid.unlist !== true) { %>
                                 <p class="fw-bold mb-0">
                                     Total: ₹<span class="productprice"><%=Math.floor(product.price* product.quantity ) %></span>
                                 </p>
                                 <p class="mb-1 text-muted">
                                     Price: ₹<span><%= Math.floor(product.price) %></span>
                                 </p>
-                                <button class="btn btn-link text-muted p-0 hover-text-danger deletebtn">
-                                    <i class="fas fa-trash"></i> Remove
+                                <% } else { %>
+                                <p class="fw-bold mb-0 text-muted text-decoration-line-through">
+                                    Total: ₹<span><%=Math.floor(product.price* product.quantity ) %></span>
+                                </p>
+                                <p class="mb-1 text-danger small">
+                                    Item unavailable
+                                </p>
+                                <% } %>
+                                <button class="btn btn-link text-muted p-0 hover-text-danger deletebtn" onclick="remove(event,'<%= product.productid._id %>')" data-productid="<%= product.productid._id %>">
+                                    <i class="fas fa-trash"></i> Removes
                                 </button>
                             </div>
                         </div>
@@ -244,9 +322,20 @@
                             <span class="fw-bold">Total</span>
                             <span class="fw-bold toatals">₹<%= cart.totalprice.toFixed(2) %></span>
                         </div>
+                        
+                        <% if (hasUnlistedProducts) { %>
+                        <button class="btn btn-secondary w-100 py-2" disabled>
+                            <i class="fas fa-exclamation-triangle me-2"></i>Cannot Checkout - Remove Unavailable Items
+                        </button>
+                        <p class="text-danger small mt-2 text-center">
+                            <i class="fas fa-info-circle me-1"></i>
+                            Remove unavailable items to proceed
+                        </p>
+                        <% } else { %>
                         <a href="/checkout" class="btn btn-primary w-100 py-2">
                             <i class="fas fa-lock me-2"></i>Proceed to Checkout
                         </a>
+                        <% } %>
                     </div>
                 </div>
             </div>
@@ -254,7 +343,73 @@
     </div>
     <% } %>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script>
+   function remove(e,pid){
+    
 
+        console.log('clicked',e);
+        
+        // Get the product ID from the data attribute
+        const productId = pid
+        console.log(productId);
+        
+        Swal.fire({
+            title: 'Are you sure?',
+            text: "Do you want to remove this item from the cart?",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes, remove it!'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                fetch('/cart/delete', {
+                    method: 'DELETE',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ 
+                        // index: index,  // Use the index from forEach
+                        productId: productId  // Also send product ID for additional verification
+                    }),
+                })
+                .then(res => res.json())
+                .then(res => {
+                    if (res.success) {
+                        window.location.href = '/cart';
+                    } else {
+                        // Handle delete failure
+                        if (res.unlist) {
+                            Swal.fire({
+                                icon: 'info',
+                                title: 'Product Unavailable',
+                                text: res.message || 'This product is no longer available.',
+                                confirmButtonText: 'Refresh Cart'
+                            }).then(() => {
+                                window.location.href = '/cart';
+                            });
+                        } else {
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Unable to Remove',
+                                text: res.message || 'An error occurred while removing the item.'
+                            });
+                        }
+                    }
+                })
+                .catch(error => {
+                    console.error('Error deleting item from cart:', error);
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Connection Error',
+                        text: 'An error occurred while removing the item from the cart. Please try again.'
+                    });
+                });
+            }
+        });
+ 
+}
+</script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.1.3/js/bootstrap.bundle.min.js"></script>
     <script src="/js/user/cart.js"></script>
 </body>

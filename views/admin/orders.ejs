@@ -70,7 +70,7 @@
             <!-- Add Product Button -->
             <div class="row mb-3">
               <div class="col-12">
-                <button class="btn btn-primary" data-toggle="modal" data-target="#addProductModal">Add Product</button>
+                <!-- <button class="btn btn-primary" data-toggle="modal" data-target="#addProductModal">Add Product</button> -->
               </div>
             </div>
             
@@ -80,6 +80,41 @@
                 <div class="card">
                   <div class="card-body">
                     <h4 class="card-title">Manage Orders</h4>
+                    <!-- ['Pending', 'Paid', 'Failed','waiting Payment','Refunded'] -->
+                     <%
+const searchConfig = {
+  route: '/admin/orders',
+  method: 'GET',
+  placeholder: 'Search product by name...',
+  debounceDelay: 300,
+  filters: [
+  
+    {
+      key: 'paymentStatus',
+      label: 'Type',
+      options: [
+        { value: 'Pending', label: 'Pending' },
+        { value: 'Failed', label: 'Failed' },
+        { value: 'waiting Payment', label: 'waiting Payment' },
+        { value: 'Refunded', label: 'Refunded' },
+        { value: 'Paid', label: 'Paid' }
+      ]
+    },
+    {
+      key: 'requested',
+      label: 'Type',
+      options: [
+        { value: 'return', label: 'Return' },
+        
+      ]
+    },
+  ],
+  additionalParams: {
+    limit: 50
+  }
+}
+%>
+<%- include('./admin_parts/search-component', { searchConfig }) %>
                     <div class="table-responsive">
                       <table class="table table-hover">
                         <thead>
@@ -142,17 +177,21 @@
                 </div>
               </div>
             </div>
-            <div class="pagination ">
-                <% if (pagination.currentPage > 1) { %>
-                    <a href="?page=<%= pagination.currentPage - 1 %>&limit=<%= pagination.limit %>" class="btn  btn-secondary"> Previous </a>
-                <% } %>
-              
-                <span class="mx-5" >Page <%= pagination.currentPage %> of <%= pagination.totalPages==0?1:pagination.totalPages %></span>
-              
-                <% if (pagination.currentPage < pagination.totalPages) { %>
-                    <a href="?page=<%= pagination.currentPage + 1 %>&limit=<%= pagination.limit %>" class="btn  btn-secondary"> Next </a>
-                <% } %>
-          </div>
+            <div class="pagination">
+  <% if (pagination.currentPage > 1) { %>
+    <button class="btn btn-secondary pagination-btn" data-page="<%= pagination.currentPage - 1 %>" data-limit="<%= pagination.limit %>">
+      Previous
+    </button>
+  <% } %>
+
+  <span class="mx-5">Page <%= pagination.currentPage %> of <%= pagination.totalPages == 0 ? 1 : pagination.totalPages %></span>
+
+  <% if (pagination.currentPage < pagination.totalPages) { %>
+    <button class="btn btn-secondary pagination-btn" data-page="<%= pagination.currentPage + 1 %>" data-limit="<%= pagination.limit %>">
+      Next
+    </button>
+  <% } %>
+</div>
         </div>
       </div>
       <!-- Page body wrapper ends -->
@@ -237,7 +276,24 @@
      <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
      <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js"></script>
      
+<script>
+  document.querySelectorAll('.pagination-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const newPage = btn.getAttribute('data-page');
+      const limit = btn.getAttribute('data-limit');
 
+      const params = new URLSearchParams(window.location.search);
+
+      // Update only page and limit
+      params.set('page', newPage);
+      params.set('limit', limit);
+
+      // Redirect with updated URL
+      window.location.search = params.toString();
+    });
+  });
+</script>
+    <script src="/js/admin/search-component.js"></script>
   
     
   </body>

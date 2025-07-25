@@ -81,7 +81,7 @@ orderid:{
  }
  , paymentStatus: {
     type: String,
-    enum: ['Pending', 'Paid', 'Failed','waiting Payment'],
+    enum: ['Pending', 'Paid', 'Failed','waiting Payment','Refunded'],
     default: 'Pending'
   },
   pstatus: {

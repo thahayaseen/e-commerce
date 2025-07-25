@@ -10,7 +10,7 @@ const Product = require('../model/product_schema')
 const coupon = require('../model/coupon')
 const {deleteoffers,offers}=require('../controller/product/offer.controller')
 const { returnadmin } = require('../controller/product/product.controller')
-const { generateExcelReport, generatePdfReport } = require('../controller/product/sales-report-service')
+const { generateExcelReport, generatePdfReport } = require('../controller/product/sales-report-service.controller')
 router.get('/', nocach, adminlogin)
 
 // postinf

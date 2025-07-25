@@ -53,6 +53,14 @@ document.getElementById('newAddressForm').addEventListener('submit', async funct
         })
             .then(res => res.json())
             .then(res => {
+                console.log(res);
+                if(!res.success){
+                     Swal.fire({
+            icon: 'error',
+            title: 'Oops...',
+            text: res.message,
+        });
+                }
                 if (res.success) window.location.href = '/user/address';
             });
     }

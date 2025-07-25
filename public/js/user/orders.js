@@ -137,12 +137,12 @@ document.querySelectorAll('#retrypayment').forEach(item=>{
                                     }
                                 });
                             } else {
-                                throw new Error('Payment verification failed');
+                                throw new Error(verifyResult.message);
                             }
                         } catch (error) {
                             console.error('Verification Error:', error);
                             Swal.fire({
-                                text: 'Payment verification failed. Please contact support.',
+                                text: error.message||'Payment verification failed. Please contact support.',
                                 icon: 'error',
                             });
                         }

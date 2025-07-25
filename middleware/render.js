@@ -4,9 +4,9 @@ const ordersshema = require('../model/orders')
 const wishlistschema = require('../model/wishlist')
 const coupon = require('../model/coupon')
 const product_schema = require('../model/product_schema')
-const wallet=require('../model/wallet')
-const categoriesschema=require('../model/categories')
-const offer=require('../model/offer')
+const wallet = require('../model/wallet')
+const categoriesschema = require('../model/categories')
+const offer = require('../model/offer')
 //register-------------------------------------------------------
 const register = (req, res) => {
     const registerMessage = req.session.register || '';
@@ -42,89 +42,89 @@ const otp = (req, res) => {
 // home page 
 const userhome = async (req, res) => {
     const product = req.session.products
-    product.forEach(product=>{
-    let poffer=product.price-(product.price*product.offer)/100
-    console.log(poffer);
-    
-    if (poffer<product.offerdealprice||product.offerdealprice==0) {
-        
-        product.dealprice=poffer
-    }
-    else{
-        product.dealprice=product.offerdealprice
-        product.offtype=product.dealoffertype
+    product.forEach(product => {
+        let poffer = product.price - (product.price * product.offer) / 100
+        console.log(poffer);
 
-        
-    }
- 
-})
-console.log('is'+req.cartcount);
+        if (poffer < product.offerdealprice || product.offerdealprice == 0) {
 
-    
+            product.dealprice = poffer
+        }
+        else {
+            product.dealprice = product.offerdealprice
+            product.offtype = product.dealoffertype
+
+
+        }
+
+    })
+    console.log('is' + req.cartcount);
+
+
     delete req.session.products
 
-    return res.render('userside/dashbord', { products: product,cartcount: req.cartcount })
+    return res.render('userside/dashbord', { products: product, cartcount: req.cartcount })
 }
 
 const productlist = async (req, res) => {
-    let dealprice=0
+    let dealprice = 0
     const product = req.session.products
     const categ = req.session.categories || ''
     const pagination = req.session.pagination || { totalPages: 1, currentPage: 1 };
-    product.forEach(product=>{
+    product.forEach(product => {
 
-    
-        let poffer=product.price-(product.price*product.offer)/100
+
+        let poffer = product.price - (product.price * product.offer) / 100
         console.log(poffer);
-        
-        if (poffer<product.offerdealprice||product.offerdealprice==0) {
-            
-            product.dealprice=poffer
-        }
-        else{
-            product.dealprice=product.offerdealprice
-            product.offtype=product.dealoffertype
-    
-            
-        }
-       })
 
-    
+        if (poffer < product.offerdealprice || product.offerdealprice == 0) {
+
+            product.dealprice = poffer
+        }
+        else {
+            product.dealprice = product.offerdealprice
+            product.offtype = product.dealoffertype
+
+
+        }
+    })
+
+
     delete req.session.categories
     delete req.session.products
-    res.render('userside/productlist', { products: product, categories: categ, pagination,dealprice,cartcount:req.cartcount })
+    res.render('userside/productlist', { products: product, categories: categ, pagination, dealprice, cartcount: req.cartcount })
 }
 
 //admin section----------------------------------------------------------------------------------------
 //adminlogin
 
-const adminlogin =async (req, res) => {
+const adminlogin = async (req, res) => {
     const notadmin = req.session.admin || ''
     const islogin = req.session.ladmin
     delete req.session.admin
-    if(islogin) {
-        res.redirect('/admin/dashboard') 
+    if (islogin) {
+        res.redirect('/admin/dashboard')
 
-    }else{ res.render('auth/admin', { ans: notadmin })}
+    } else { res.render('auth/admin', { ans: notadmin }) }
 }
 
 // admin html rendering 
 // LADMIN MEANS LOGIN ADMIN 
 const admin = async (req, res) => {
-     const startDate = req.query.startDate;
+    const startDate = req.query.startDate;
     const endDate = req.query.endDate;
-    const count = req.query.range||7
+    const count = req.query.range || 7
     let matchQuery
     const isLogin = req.session.ladmin;
-console.log('range is '+count);
+    console.log('range is ' + count);
 
     if (isLogin) {
-    
+
         if (count == 1) {
-   
+
             const startOfToday = new Date();
             startOfToday.setUTCHours(0, 0, 0, 0);
-        
+
             matchQuery = {
                 createdAt: {
                     $gte: startOfToday
@@ -133,13 +133,13 @@ console.log('range is '+count);
             };
 
         }
-        
-            
-        
+
+
+
         else if (startDate && endDate) {
-             matchQuery = {
+            matchQuery = {
                 createdAt: {
-                    $gte: new Date(startDate), 
+                    $gte: new Date(startDate),
                     $lt: new Date(new Date(endDate).setDate(new Date(endDate).getDate() + 1)) // Increment to next day
                 },
                 paymentStatus: { $in: ['Pending', 'Paid'] }
@@ -150,29 +150,29 @@ console.log('range is '+count);
                 createdAt: {
                     $gte: new Date(new Date().setDate(new Date().getDate() - parseInt(count)))
                 },
-                paymentStatus:{$in:['Pending','Paid']}
+                paymentStatus: { $in: ['Pending', 'Paid'] }
             }
-            
+
         }
-console.log('qury is ');
-console.log(matchQuery);
-const page = parseInt(req.query.page) || 1; 
-const limit = parseInt(req.query.limit) || 9;
-const skip = (page - 1) * limit; 
+        console.log('qury is ');
+        console.log(matchQuery);
+        const page = parseInt(req.query.page) || 1;
+        const limit = parseInt(req.query.limit) || 9;
+        const skip = (page - 1) * limit;
 
         // Fetch products
-        const productsAndCategory = await ordersshema.find(matchQuery )
+        const productsAndCategory = await ordersshema.find(matchQuery)
             .populate('user')
             .populate('products.productid')
             .sort({ createdAt: -1 })
             .skip(skip)
             .limit(limit)
 
-            const psstatus=[ 'Processing', 'Shipped', 'Delivered']
-console.log('answer is ');
-console.log(JSON.stringify(productsAndCategory));
+        const psstatus = ['Processing', 'Shipped', 'Delivered']
+        console.log('answer is ');
+        console.log(JSON.stringify(productsAndCategory));
 
-        const allproducts = await ordersshema.find({status:{$in:psstatus},paymentStatus: { $in: ['Pending', 'Paid'] }})
+        const allproducts = await ordersshema.find({ status: { $in: psstatus }, paymentStatus: { $in: ['Pending', 'Paid'] } })
             .populate('user')
             .populate('products.productid')
             .sort({ createdAt: -1 });
@@ -180,16 +180,16 @@ console.log(JSON.stringify(productsAndCategory));
         const categories = await categoriesschema.find();
         const product = await product_schema.find();
         const categoryCounts = {};
-        const productcount={}
+        const productcount = {}
         // console.log(product);
-        
+
         categories.forEach(category => {
-            categoryCounts[category._id] = { name: category.name, count: 0 }; 
+            categoryCounts[category._id] = { name: category.name, count: 0 };
         });
         product.forEach(product => {
             // console.log('is it '+product._id);
-            productcount[product._id] = { name: product.name, count: 0 }; 
-            
+            productcount[product._id] = { name: product.name, count: 0 };
+
         });
         allproducts.forEach(order => {
             order.products.forEach(product => {
@@ -204,54 +204,54 @@ console.log(JSON.stringify(productsAndCategory));
                 if (product.productid && productcount[product.productid._id]) {
                     productcount[product.productid._id].count++;
                 }
-                else{
+                else {
                     console.log('najhhi');
-                    
+
                 }
             });
         });
-  
-        
-        let categorydata=Object.values(categoryCounts)
-        let productdata=Object.values(productcount)
-       console.log('is'+productdata);
-       console.log('is'+categorydata);
-       
-        let filterobjs={}
-        categorydata.forEach((data,ind)=>{
-            filterobjs[data.name]=data.count
+
+
+        let categorydata = Object.values(categoryCounts)
+        let productdata = Object.values(productcount)
+        console.log('is' + productdata);
+        console.log('is' + categorydata);
+
+        let filterobjs = {}
+        categorydata.forEach((data, ind) => {
+            filterobjs[data.name] = data.count
         })
-        let topproducts={}
-        productdata.forEach((data,ind)=>{
-            topproducts[data.name]=data.count
+        let topproducts = {}
+        productdata.forEach((data, ind) => {
+            topproducts[data.name] = data.count
         })
-        console.log(filterobjs); 
+        console.log(filterobjs);
         console.log(topproducts);
 
 
-        const top10product=Object.entries(topproducts)
-        .filter(([key,value])=>value>0)
-        .sort((a,b)=>a[1]-b[1])
-        .slice(0,10)
+        const top10product = Object.entries(topproducts)
+            .filter(([key, value]) => value > 0)
+            .sort((a, b) => a[1] - b[1])
+            .slice(0, 10)
         console.log(top10product);
-        
-        const top10category=Object.entries(filterobjs)
-        .filter(([key,value])=>value>0)
-        .sort((a,b)=>a[1]-b[1])
-        .slice(0,10)
+
+        const top10category = Object.entries(filterobjs)
+            .filter(([key, value]) => value > 0)
+            .sort((a, b) => a[1] - b[1])
+            .slice(0, 10)
         console.log(top10category);
         const totalItems = allproducts.length;
-        const totalPages = Math.ceil(totalItems/limit)
-        
+        const totalPages = Math.ceil(totalItems / limit)
 
-   
+
+
         res.render('admin/dashbord', {
             products: productsAndCategory,
-            categoryCounts:top10category ,
+            categoryCounts: top10category,
             currentPage: page,
             totalPages,
             limit,
-            topproduct:top10product
+            topproduct: top10product
         });
     } else {
         res.redirect('/admin');
@@ -261,20 +261,20 @@ console.log(JSON.stringify(productsAndCategory));
 
 
 //user 
-const user = (req, res) => { 
+const user = (req, res) => {
     req.session.ladmin
     const islogin = req.session.ladmin
     const { user, totalPages, currentPage, limit } = req.session.users
     console.log(limit);
 
     delete req.session.users
-    islogin ? res.render('admin/users', { Users: user, totalPages, currentPage, limit ,search:req.query.search||''}) : res.redirect('/admin')
+    islogin ? res.render('admin/users', { Users: user, totalPages, currentPage, limit, search: req.query.search || '' }) : res.redirect('/admin')
 }
 
 //product
 
 
-const product = async(req, res, next) => {
+const product = async (req, res, next) => {
     const aproducts = req.session.aproducts || '';
     const cat = await categoriesschema.find();
     const pagination = req.session.pagination || { totalPages: 1, currentPage: 1 }; // Default pagination info
@@ -291,7 +291,7 @@ const product = async(req, res, next) => {
 // catogory 
 const catagory = (req, res, next) => {
     const categ = req.session.categories || ''
-    const islogin = req.session.ladmin||true
+    const islogin = req.session.ladmin
     const pagination = req.session.pagination || { totalPages: 1, currentPage: 1 };
 
     delete req.session.categories
@@ -315,7 +315,7 @@ const myaccount = async (req, res) => {
     if (id) {
         const userdata = await user_scema.findById(id)
         console.log(userdata);
-        res.render('userside/user dashbord/useraccount', { user: userdata ,cartcount:req.cartcount})
+        res.render('userside/user dashbord/useraccount', { user: userdata, cartcount: req.cartcount })
     }
     else res.redirect('/signin')
 }
@@ -336,7 +336,7 @@ const useraddress = async (req, res) => {
 
         const userid = req.session.ulogin
         const addres = await user_scema.findById(userid).populate('address')
-         userid? res.render('userside/user dashbord/address', { address: addres.address ,cartcount:req.cartcount}):res.redirect('/signin')
+        userid ? res.render('userside/user dashbord/address', { address: addres.address, cartcount: req.cartcount }) : res.redirect('/signin')
 
     } catch (error) {
         console.log(error);
@@ -345,22 +345,22 @@ const useraddress = async (req, res) => {
 }
 const oredrs = async (req, res) => {
     try {
-        const itemsPerPage=6
-        const page=req.query.page||1
+        const itemsPerPage = 6
+        const page = req.query.page || 1
         const userid = req.session.ulogin
         const orders = await ordersshema.find({ user: userid })
-        .populate('products.productid')
-        .skip((page - 1) * itemsPerPage)
-        .limit(itemsPerPage)
-        .sort({ createdAt: -1 })
+            .populate('products.productid')
+            .skip((page - 1) * itemsPerPage)
+            .limit(itemsPerPage)
+            .sort({ createdAt: -1 })
 
         // console.log('\n datas \n'+orders)
-        
+
         const totalOrders = await ordersshema.countDocuments({ user: userid });
         const totalPages = Math.ceil(totalOrders / itemsPerPage);
-      
 
-        userid? res.render('userside/user dashbord/orders', { orders: orders ,totalPages,currentPage:page,cartcount:req.cartcount}):res.redirect('/signin')
+
+        userid ? res.render('userside/user dashbord/orders', { orders: orders, totalPages, currentPage: page, cartcount: req.cartcount }) : res.redirect('/signin')
     } catch (error) {
         console.log(error);
 
@@ -375,7 +375,7 @@ const cartrender = async (req, res) => {
         let cart = await cartschema.findOne({ userid: ulogin })
         if (!cart) {
 
-           res.status(404).json({success:false,message:'user not fount'})
+            res.status(404).json({ success: false, message: 'user not fount' })
         }
         const ucart = await cartschema.findOne({ userid: ulogin }).populate('product.productid').exec()
         res.render('userside/cart', { cart: ucart })
@@ -391,23 +391,23 @@ const cartrender = async (req, res) => {
 const checkout = async (req, res) => {
     const login = req.session.ulogin
     const uid = req.session.ulogin
-    const coupons=await coupon.find({})
+    const coupons = await coupon.find({})
 
-    
+
     if (req.session.ulogin) {
         const cart = await cartschema.findOne({ userid: uid }).populate('product.productid')
-        if(cart.product.length==0){
+        if (cart.product.length == 0) {
             res.redirect('/')
         }
         console.log(cart);
-        
+
         const popuser = await user_scema.findById(login).populate('address')
         console.log(popuser);
         console.log(cart);
-       
 
 
-        res.render('userside/checkout', { savedAddresses: popuser.address, cart: cart,coupons,cartcount:req.cartcount })
+
+        res.render('userside/checkout', { savedAddresses: popuser.address, cart: cart, coupons, cartcount: req.cartcount })
     }
     else {
         res.redirect('/signin')
@@ -415,56 +415,147 @@ const checkout = async (req, res) => {
 }
 
 const orders = async (req, res) => {
-    const page = parseInt(req.query.page) || 1;
-    const limit = parseInt(req.query.limit) || 5;
-    const skip = (page - 1) * limit;
-    const adlogin=req.session.ladmin
-    let orders = await ordersshema.find({paymentStatus:{$ne:'Failed'}}).populate('user').skip(skip).limit(limit).sort({createdAt:-1})
-    console.log('order data is'+orders);
-    
+    try {
+        const page = parseInt(req.query.page) || 1;
+        const limit = parseInt(req.query.limit) || 5;
+        const skip = (page - 1) * limit;
+        const adlogin = req.session.ladmin;
+        const { q, paymentStatus, requested } = req.query;
 
-    const totalProducts = await ordersshema.countDocuments({paymentStatus:{$ne:'Failed'}});
-    const countedorders = orders.length;
-    console.log(countedorders);
+        // Build search filter
+        let searchQuery = {};
 
-    let totalPages = Math.ceil(totalProducts / limit);
-    if(totalPages<=0){
-        totalPages=1
+        // Handle paymentStatus filter
+        if (paymentStatus && paymentStatus !== 'all') {
+            searchQuery.paymentStatus = paymentStatus;
+        } else {
+            // default exclude Failed
+            searchQuery.paymentStatus = { $ne: 'Failed' };
+        }
+        if (requested) {
+            searchQuery['products.return'] = 'Return requsted';
+
+        }
+
+        // Search by orderid or user name
+        if (q) {
+            // Find matching users
+            const users = await user_scema.find({ name: { $regex: q, $options: 'i' } }).select('_id');
+            const userIds = users.map(user => user._id);
+
+            searchQuery.$or = [
+                { orderid: { $regex: q, $options: 'i' } },
+                { user: { $in: userIds } }
+            ];
+        }
+        console.log(searchQuery, 'qury is ');
+
+        // Fetch filtered orders
+        const orders = await ordersshema
+            .find(searchQuery)
+            .populate('user')
+            .sort({ createdAt: -1 })
+            .skip(skip)
+            .limit(limit);
+
+        const totalOrders = await ordersshema.countDocuments(searchQuery);
+        const totalPages = Math.ceil(totalOrders / limit) || 1;
+
+        const pagination = {
+            total: totalOrders,
+            totalPages,
+            currentPage: page,
+            limit,
+            q: q || '',
+            paymentStatus: paymentStatus || 'all'
+        };
+
+        return adlogin
+            ? res.render('admin/orders', { Orders: orders, pagination })
+            : res.redirect('/admin');
+    } catch (error) {
+        console.error('Error in orders controller:', error);
+        res.status(500).send('Internal Server Error');
     }
+};
 
-    pagination = { totalPages, currentPage: page, limit: limit };
-   
-
-    adlogin?res.render('admin/orders', { Orders: orders, pagination }):res.redirect('/admin')
-}
 const wishlist = async (req, res) => {
     const uid = req.session.ulogin
     if (uid) {
         const list = await wishlistschema.findOne({ userid: uid }).populate('productid')
         console.log(list);
         if (!list) {
-         res.status(404).json({success:false,message:'user not fount'})
-         
-       
+            res.status(404).json({ success: false, message: 'user not fount' })
+
+
         }
 
-        res.render('userside/wishlist', { wishlist: list,cartcount:req.cartcount })
+        res.render('userside/wishlist', { wishlist: list, cartcount: req.cartcount })
     }
-    else{
-        req.session.login='please login before enter wishlist'
+    else {
+        req.session.login = 'please login before enter wishlist'
         res.redirect('/signin')
     }
 }
 const coupenrender = async (req, res) => {
-    const coupons = await coupon.find({}) || ''
-    const adlogin=req.session.ladmin
 
-    console.log(coupons);
+    try {
+        const islogin = req.session.ladmin
+        if (!islogin) {
+            res.redirect('/admin')
+            return
+        }
 
-    adlogin? res.render('admin/coupen', { coupons }):res.redirect('/admin')
+        const { q, status, limit = 1, page = 1 } = req.query
+
+        // Build search query
+        const searchQuery = {}
+
+        // Text search
+        if (q) {
+            searchQuery.$or = [
+                { code: { $regex: q, $options: "i" } },
+
+            ]
+        }
+
+
+        // Filter by status
+        if (status) {
+            searchQuery.isActive = status === "active"
+        }
+
+        console.log(searchQuery, 'squrys');
+
+        // Execute search with pagination
+        const skip = (page - 1) * limit
+        const coupons = await coupon.find(searchQuery)
+            .sort({ createdAt: -1 })
+            .skip(skip)
+            .limit(Number.parseInt(limit))
+
+
+        const total = await coupon.countDocuments(searchQuery)
+
+        res.render('admin/coupen', {
+
+            coupons: coupons,
+            pagination: {
+                total, limit,
+                currentPage: Number.parseInt(page),
+                totalPages: Math.ceil(total / limit),
+            }
+        })
+    } catch (error) {
+        console.error("Search error:", error)
+        res.status(500).json({
+            success: false,
+            message: "Search failed",
+        })
+    }
 
 }
-const resetpass=(req,res)=>{
+const resetpass = (req, res) => {
     res.render('auth/resetpass.ejs')
 }
 
@@ -472,75 +563,134 @@ const resetpass=(req,res)=>{
 const walletrender = async (req, res) => {
 
     try {
-        const uid = req.session.ulogin; 
-        const gid = req.session.glogin; 
+        const uid = req.session.ulogin;
+        const gid = req.session.glogin;
         if (!uid) {
-            return res.redirect('/signin') 
+            return res.redirect('/signin')
         }
 
         let userdata = await wallet.findOne({ userId: uid })
-        .populate('userId')
-        .sort({createdAt:-1})
+            .populate('userId')
+            .sort({ createdAt: -1 })
         console.log(uid);
-        
+
         console.log(gid);
         console.log(userdata);
-        
+
         if (!userdata) {
-           res.status(404).json({success:false,message:"user not fount"})
+            res.status(404).json({ success: false, message: "user not fount" })
         }
 
-      
-        res.render('userside/user dashbord/walet', { wallet: userdata,cartcount:req.cartcount });
+
+        res.render('userside/user dashbord/walet', { wallet: userdata, cartcount: req.cartcount });
     } catch (error) {
         console.error('Error rendering wallet:', error);
         res.status(500).send('Internal server error');
     }
 };
 
-const offerpage=async (req,res)=>{
+const offerpage = async (req, res) => {
 
-    const products=await product_schema.find()
-  const categories=await categoriesschema.find()
- const offers=await offer.find().populate('selectedItems.categories')
 
-      
-     
-    res.render('admin/offers',{offers,categories,products})
-}
-const datatoedit=async(req,res)=>{
     try {
-        const offerid=req.params.id
-    const offerdatas=await offer.findById(offerid)
-    console.log(offerdatas);
-    
-    return res.status(200).json(offerdatas)
+        const islogin = req.session.ladmin
+        if (!islogin) {
+            res.redirect('/admin')
+            return
+        }
+        const products = await product_schema.find()
+        const { q, discountType, applicationType, status, limit = 1, page = 1 } = req.query
+
+        // Build search query
+        const searchQuery = {}
+
+        // Text search
+        if (q) {
+            searchQuery.$or = [
+                { name: { $regex: q, $options: "i" } },
+                { discountType: { $regex: q, $options: "i" } },
+                { applicationType: { $regex: q, $options: "i" } },
+            ]
+        }
+
+        // Filter by discount type
+        if (discountType) {
+            searchQuery.discountType = discountType
+        }
+
+        // Filter by application type
+        if (applicationType) {
+            searchQuery.applicationType = applicationType
+        }
+
+        // Filter by status
+        if (status) {
+            searchQuery.isActive = status === "active"
+        }
+        const categories = await categoriesschema.find()
+        console.log(searchQuery, 'squrys');
+
+        // Execute search with pagination
+        const skip = (page - 1) * limit
+        const offers = await offer.find(searchQuery)
+            .sort({ createdAt: -1 })
+            .skip(skip)
+            .limit(Number.parseInt(limit))
+            .populate("selectedItems.categories") // 
+
+        const total = await offer.countDocuments(searchQuery)
+
+        res.render('admin/offers', {
+            products,
+            categories,
+            offers: offers,
+            pagination: {
+                total,
+                currentPage: Number.parseInt(page),
+                totalPages: Math.ceil(total / limit), limit
+            }
+        })
     } catch (error) {
-        console.log('error in fetchinf offer '+error);
-        
+        console.error("Search error:", error)
+        res.status(500).json({
+            success: false,
+            message: "Search failed",
+        })
+    }
+}
+const datatoedit = async (req, res) => {
+    try {
+        const offerid = req.params.id
+        const offerdatas = await offer.findById(offerid)
+        console.log(offerdatas);
+
+        return res.status(200).json(offerdatas)
+    } catch (error) {
+        console.log('error in fetchinf offer ' + error);
+
     }
 }
 
-const placedorder=async (req,res)=>{
-    const orderid=req.session.orderid
+const placedorder = async (req, res) => {
+    const orderid = req.session.orderid
     delete req.session.orderid
-if(orderid){
-    const order=await ordersshema.findById(orderid)
-    .populate('products.productid')  
- 
-    order.products.forEach(data=>{
-        // console.log(data.productid);
-        data.name=''
-       data.name=data.productid.name
-        console.log(data.name);
-    })
-    
-    res.render('userside/orderconformpage',{order});
-}
-else {
-    res.redirect('/')
-}
+    if (orderid) {
+        const order = await ordersshema.findById(orderid)
+            .populate('products.productid')
+
+        order.products.forEach(data => {
+            // console.log(data.productid);
+            data.name = ''
+            data.name = data.productid.name
+            console.log(data.name);
+        })
+
+        res.render('userside/orderconformpage', { order });
+    }
+    else {
+        res.redirect('/')
+    }
 
 }
 
-module.exports = { register, login, adminlogin, otp, admin, user, product, catagory, userhome, productlist, myaccount, userdash, useraddress, oredrs, cartrender, checkout, orders, wishlist, coupenrender,resetpass,walletrender,offerpage,datatoedit,placedorder }
+module.exports = { register, login, adminlogin, otp, admin, user, product, catagory, userhome, productlist, myaccount, userdash, useraddress, oredrs, cartrender, checkout, orders, wishlist, coupenrender, resetpass, walletrender, offerpage, datatoedit, placedorder }

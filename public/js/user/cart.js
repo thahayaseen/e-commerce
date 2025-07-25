@@ -1,5 +1,3 @@
-
-
 const addbtn = document.querySelectorAll('.plusbtn');
 const minusbtn = document.querySelectorAll('.minusbtn');
 const quantities = document.querySelectorAll('.quantityid');
@@ -33,19 +31,34 @@ quantities.forEach((quantity, index) => {
                 toatals.textContent = data.sumtoatal;
                 quantity.textContent = number;
             } else {
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Oops...',
-                    text: data.message || 'This is the maximum quantity that you can take.'
-                });
+                // Handle unlist scenario
+                if (data.unlist) {
+                    Swal.fire({
+                        icon: 'warning',
+                        title: 'Product Unavailable',
+                        text: data.message || 'This product is no longer available.',
+                        confirmButtonText: 'Refresh Page'
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            window.location.reload();
+                        }
+                    });
+                } else {
+                    // Handle other error cases
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Unable to Update',
+                        text: data.message || 'This is the maximum quantity that you can take.'
+                    });
+                }
             }
         })
         .catch(error => {
             console.error('Error updating quantity:', error);
             Swal.fire({
                 icon: 'error',
-                title: 'Error',
-                text: 'An error occurred while updating the quantity.'
+                title: 'Connection Error',
+                text: 'An error occurred while updating the quantity. Please try again.'
             });
         });
     };
@@ -73,41 +86,44 @@ quantities.forEach((quantity, index) => {
     });
 
     updateDisplay();
+const deletebtn = document.querySelectorAll('.deletebtn');
+console.log(deletebtn);
 
-    // Delete button
-    deletebtn[index].addEventListener('click', (e) => {
-        Swal.fire({
-            title: 'Are you sure?',
-            text: "Do you want to remove this item from the cart?",
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonColor: '#3085d6',
-            cancelButtonColor: '#d33',
-            confirmButtonText: 'Yes, remove it!'
-        }).then((result) => {
-            if (result.isConfirmed) {
-                fetch('/cart/delete', {
-                    method: 'DELETE',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({ index }),
-                })
-                .then(res => res.json())
-                .then(res => {
-                    if (res.success) {
-                        window.location.href = '/cart';
+// Add event listener to each delete button
+
+
+});
+
+// Optional: Add a function to handle unlisted products by hiding them
+function handleUnlistedProducts() {
+    const productRows = document.querySelectorAll('[data-product-row]');
+    
+    productRows.forEach((row, index) => {
+        const productId = quantities[index]?.dataset.productid;
+        
+        if (productId) {
+            // You can add logic here to check if product is unlisted
+            // and hide the row if needed
+            fetch(`/product/check/${productId}`)
+                .then(response => response.json())
+                .then(data => {
+                    if (data.unlist) {
+                        row.style.opacity = '0.5';
+                        row.querySelector('.card-title').innerHTML += ' <span class="badge bg-danger">Unavailable</span>';
+                        
+                        // Disable quantity controls
+                        const plusBtn = row.querySelector('.plusbtn');
+                        const minusBtn = row.querySelector('.minusbtn');
+                        if (plusBtn) plusBtn.disabled = true;
+                        if (minusBtn) minusBtn.disabled = true;
                     }
                 })
                 .catch(error => {
-                    console.error('Error deleting item from cart:', error);
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'Error',
-                        text: 'An error occurred while removing the item from the cart.'
-                    });
+                    console.error('Error checking product status:', error);
                 });
-            }
-        });
+        }
     });
-});
+}
+
+// Call this function when page loads if you want to check product status
+// handleUnlistedProducts();

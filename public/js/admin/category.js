@@ -10,19 +10,33 @@ deletebtn.forEach((categories) => {
         console.log(id2);
 
         fetch(`/admin/category/unlist/${id}`, {
-            method: 'PATCH',
+        method: 'PATCH',
+    })
+        .then((res) => res.json())
+        .then((res) => {
+            if (res.success === true) {
+                // Get the clicked button
+                const button = e.target;
 
+                // Find the row
+                const row = button.closest('tr');
+
+                // 1. Update the status button (first status column)
+                const statusButton = row.querySelector('.unlist-btn');
+
+                const isListed = statusButton.innerText === 'Listed';
+
+                statusButton.innerText = isListed ? 'Unlist' : 'Listed';
+                statusButton.classList.toggle('btn-success', !isListed);
+                statusButton.classList.toggle('btn-danger', isListed);
+
+                // 2. Update the action button (the one clicked)
+                button.innerText = isListed ? 'list' : 'unlist';
+                button.classList.toggle('btn-success', isListed); // if listed, now change to green for list
+                button.classList.toggle('btn-danger', !isListed); // if unlisted, now red for unlist
+            }
         })
-            .then((res) => res.json()
-            )
-            .then(res => {
-                if (res.success === true) {
-                    window.location.reload(true)
-                }
-            })
-            .catch((err) => console.log('the deletion error' + err)
-            )
-
+        .catch((err) => console.log('Error updating category:', err));
     })
 })
 

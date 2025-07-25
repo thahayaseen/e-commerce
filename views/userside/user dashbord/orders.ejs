@@ -466,13 +466,13 @@
                   <button class="btn btn-primary">
                     <i class="fas fa-check"></i> Cancelled
                   </button>
-                  <% } else if (product.return=='notrequst' ) { %>
+                  <% } else if (product.return=='notrequst'&&order.status!=='Cancelled' ) { %>
                   <button
                     class="btn btn-return"
                     onclick="initiateReturn('<%= order._id %>', '<%= product.productid._id %>')">
-                    <i class="fas fa-undo-alt me-1"></i> Return
+                    <i class="fas fa-undo-alt me-1"></i> Return 
                   </button>
-                  <% } else if(product.status !=='Cancelled' ){ %>
+                  <% } else if(order.status !=='Cancelled' ){ %>
                   <button class="btn btn-return">
                     <i class="fas fa-undo-alt me-1"></i>
                     <%= product.return %>
@@ -732,11 +732,16 @@
       }
 
       function submitReturn() {
-        const returnReason = document.getElementById("returnReason").value;
-        const returnDetails = document.getElementById("returnDetails").value;
+        const returnReason = document.getElementById("returnReason").value.trim()
+        const returnDetails = document.getElementById("returnDetails").value.trim()
 
         if (!returnReason || !returnDetails) {
-          alert("Please fill all the required fields");
+           Swal.fire({
+      title: 'Failed!',
+      text: 'Please fill required fields',
+      icon: 'error',
+      confirmButtonText: 'OK'
+    });
           return;
         }
 

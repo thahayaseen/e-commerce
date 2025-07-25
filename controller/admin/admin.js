@@ -235,7 +235,7 @@ const savecat = async (req, res) => {
         const { newCategoryName, newProductDescription } = req.body
 
         const cnames = newCategoryName.toLowerCase()
-        const uniqcategory = await categories.findOne({ name: cnames })
+        const uniqcategory = await categories.findOne({ name: cnames.trim() })
         if (uniqcategory) {
             console.log(uniqcategory);
             return res.status(200).json({ success: false, message: 'This categoty in aldredy exsist' })
@@ -243,7 +243,7 @@ const savecat = async (req, res) => {
 
 
         const newcategories = new categories({
-            name: newCategoryName.toLowerCase(),
+            name: newCategoryName.toLowerCase().trim(),
             description: newProductDescription
         })
         await newcategories.save()
@@ -311,6 +311,26 @@ const categoryunlist = async (req, res, next) => {
 const updateorder = async (req, res) => {
     const { action, orderId } = req.body
     const orderdata = await orders.findById(orderId)
+    if(action=='Cancelled'){
+         const wallet=await Wallet.findOne({userId:orderdata.user})
+         console.log(orderdata.totalAmount,orderdata.refund,orderdata?.coupon,'dataisss');
+         
+         const refund=(orderdata.totalAmount-orderdata.refund)-(orderdata?.coupon?orderdata.coupon.discount:0)
+         console.log(refund,orderdata);
+         
+        if(refund!==0){
+                wallet.balance +=refund
+            wallet.income+=refund
+            wallet.transactions.push({
+                type: 'credit',
+                amount:refund,
+                date: new Date(),
+                description: `refund of ${orderdata.orderid}`
+            });
+            await wallet.save()
+            orderdata.refund+=refund
+        }
+    }
     orderdata.status = action
     await orderdata.save()
     res.status(200).json({ success: true, message: 'the action changed success' })

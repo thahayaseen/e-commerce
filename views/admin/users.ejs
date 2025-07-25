@@ -143,7 +143,7 @@
                         <tbody>
                           <% Users.forEach((User, index) => { %>
                           <tr>
-                            <td><%= index + 1 %></td>
+                            <td><%= index + 1 + (currentPage - 1) * limit %> %></td>
                             <td><%= User.user_name %></td>
                             <td><%= User.email %></td>
 
@@ -170,33 +170,43 @@
                 </div>
               </div>
             </div>
-            <div class="pagination">
-              <% if (currentPage > 1) { %>
-              <a
-                href="?page=<%= currentPage - 1 %>&limit=<%= limit %>"
-                class="btn btn-secondary">
-                Previous
-              </a>
-              <% } %>
+               <div class="pagination">
+  <% if (currentPage > 1) { %>
+    <button class="btn btn-secondary pagination-btn" data-page="<%= currentPage - 1 %>" data-limit="<%= limit %>">
+      Previous
+    </button>
+  <% } %>
 
-              <span class="mx-5"
-                >Page <%=currentPage %> of <%=totalPages %></span
-              >
+  <span class="mx-5">Page <%= currentPage %> of <%= totalPages == 0 ? 1 : totalPages %></span>
 
-              <% if (currentPage < totalPages) { %>
-              <a
-                href="?page=<%= currentPage + 1 %>&limit=<%= limit %>"
-                class="btn btn-secondary">
-                Next
-              </a>
-              <% } %>
-            </div>
+  <% if (currentPage < totalPages) { %>
+    <button class="btn btn-secondary pagination-btn" data-page="<%= currentPage + 1 %>" data-limit="<%= limit %>">
+      Next
+    </button>
+  <% } %>
+</div>
           </div>
         </div>
         <!-- Main panel ends -->
       </div>
     </div>
+<script>
+  document.querySelectorAll('.pagination-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const newPage = btn.getAttribute('data-page');
+      const limit = btn.getAttribute('data-limit');
 
+      const params = new URLSearchParams(window.location.search);
+
+      // Update only page and limit
+      params.set('page', newPage);
+      params.set('limit', limit);
+
+      // Redirect with updated URL
+      window.location.search = params.toString();
+    });
+  });
+</script>
     <!-- clicking actions  -->
     <script src="/js/admin/users.js"></script>
     <!-- Plugins JS -->

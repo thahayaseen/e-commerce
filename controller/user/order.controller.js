@@ -23,6 +23,12 @@ const returning = async (req, res) => {
     const { returnReason, returnDetails, orderid } = req.body
     // console.log(bodydata);
     const orders = await orderchema.findById(orderid)
+    if(orders.status=='Cancelled'){
+       return res.status(409).json({
+            success:false,
+            message:'This Order aldredu canceled'
+        })
+    }
     console.log(orders);
     const index = orders.products.findIndex(p => p.productid.equals(productid));
 
@@ -100,7 +106,25 @@ const razorpayvarify = async (req, res) => {
                 discount: Math.abs(item.price - item.productid.price)
             }))
 
-            updatestok(products, res)
+           try{
+            await updatestok(products, res)
+           }catch(err){
+          const wallet=await Wallet.findOne({userId:updatedOrder.user})
+            wallet.balance +=  updatedOrder.totalAmount+updatedOrder.refund - updatedOrder.coupon.discount
+            wallet.income+= updatedOrder.totalAmount+updatedOrder.refund - updatedOrder.coupon.discount
+            wallet.transactions.push({
+                type: 'credit',
+                amount: updatedOrder.totalAmount+updatedOrder.refund - updatedOrder.coupon.discount,
+                date: new Date(),
+                description: `refund of Order ${updatedOrder.orderid}}`
+            });
+            updatedOrder.refund=updatedOrder.totalAmount+updatedOrder.refund - updatedOrder.coupon.discount
+                 updatedOrder.status = 'Cancelled'
+                 updatedOrder.paymentStatus = 'Refunded'
+                   await updatedOrder.save()
+            await wallet.save()
+            throw new Error(err.message)
+           }
             updatedOrder.status = 'Processing'
             updatedOrder.paymentStatus = 'Paid'
             await updatedOrder.save()
@@ -125,7 +149,7 @@ const razorpayvarify = async (req, res) => {
         console.error('Payment verification error:', error);
         res.status(400).json({
             success: false,
-            message: "Payment verification failed",
+            message: error.message||"Payment verification failed",
             error: error.message
         });
     }

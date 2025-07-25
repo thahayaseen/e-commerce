@@ -139,6 +139,13 @@ address.addEventListener('submit', async function (e) {
                 if (res.success) {
                     window.location.href = '/checkout'
                 }
+                if(!res.success){
+                        Swal.fire({
+            icon: 'error',
+            title: 'Oops...',
+            text: res.message,
+        });
+                }
             })
     }
 })
@@ -243,7 +250,7 @@ paymentForm.addEventListener('submit', async (e) => {
                         } catch (error) {
                             console.error('Verification Error:', error);
                             Swal.fire({
-                                text: 'Payment verification failed. Please contact support.',
+                                text: error.message||'Payment verification failed. Please contact support.',
                                 icon: 'error',
                             });
                         }

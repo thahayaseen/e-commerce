@@ -1,7 +1,7 @@
 const User = require('../../model/user_scema')
 const product_schema = require('../../model/product_schema');
 const cartschema = require('../../model/cart');
-const address_scema = require('../../model/address');
+const Address_scema = require('../../model/address');
 const orderchema = require('../../model/orders')
 const wishlist = require('../../model/wishlist')
 const passport = require('passport');
@@ -14,76 +14,91 @@ const PDFDocument = require('pdfkit');
 require('dotenv').config()
 const bcrypt = require('bcrypt')
 const fs = require('fs');
-const { sendPasswordResetOTP } = require('../../middleware/getotp');
+const { sendPasswordResetOTP, getotp } = require('../../middleware/getotp');
 // register and send otp 
 const signup = async (req, res, next) => {
     try {
-        const otp = Math.round(100000 + Math.random() * 90000)
-        const { name, email, password } = req.body
-        const exsist = await User.find({
-            $or: [
-                { user_name: name },
-                { email: email }
-            ]
-        })
-        console.log('exsist');
-        console.log(exsist);
+        const { name, email, password } = req.body;
+        const otp = Math.floor(100000 + Math.random() * 900000); // 6-digit OTP
 
-        if (exsist.length > 0) {
-            req.session.register = "User name or email already exist";
-            console.log('yess');
+        const existingUser = await User.findOne({
+            $or: [{ user_name: name }, { email }]
+        });
 
-            return res.redirect('/signup')
-        }
-        else {
-            function generateUsername(name) {
-                const baseUsername = name.toLowerCase().replace(/\s+/g, '');
-                const randomNumber = Math.floor(Math.random() * 1000);
-                return `${baseUsername}${randomNumber}`;
+        if (existingUser) {
+            // If user already exists but is not verified
+            if (!existingUser.verified) {
+                const now = new Date();
+                const otpSentTime = new Date(existingUser.updatedAt); // or createdAt if better
+                const diffInMinutes = (now - otpSentTime) / (1000 * 60);
+
+                if (diffInMinutes < 15) {
+                    req.session.register = "OTP already sent. Please wait before requesting a new one.";
+                    return res.redirect('/signup');
+                } else {
+                    // Resend OTP
+                    existingUser.uotp = otp;
+                    existingUser.updatedAt = new Date();
+                    await existingUser.save();
+
+                    getotp(existingUser.email, otp, existingUser.user_name);
+                    req.session.username = existingUser.name;
+                    req.session.email = existingUser.email;
+                    req.session.blocked = existingUser.blocked;
+
+                    console.log("OTP re-sent after 15 minutes.");
+                    return next();
+                }
             }
-            const saltRound = 10;
-            const hashed_pass = await bcrypt.hash(password, saltRound)
-            const userid = generateUsername(name)
-            const users = new User({
-                name: name,
-                user_name: userid,
-                email: email,
-                password: hashed_pass,
-                uotp: otp
-            })
-            const a = await users.save()
-            if (a) {
-                cart = new cartschema({ userid: a._id, product: [] });
-                await cart.save()
-                const cwishlist = new wishlistschema({
-                    userid: a._id,
-                    productid: []
-                })
-                await cwishlist.save()
-                userdata = new Wallet({
-                    userId: a._id,
-                    balance: 0,
-                    transactions: []
-                });
-                await userdata.save();
-                getotp(email, otp, userid)
-                req.session.username = name 
-                req.session.email = email
-                req.session.blocked = a.blocked
-                next()
-                console.log(a);
 
-                console.log("otp sented");
-
-
-            }
+            req.session.register = "Username or email already exists.";
+            return res.redirect('/signup');
         }
+
+        // If user doesn't exist, create new
+        function generateUsername(name) {
+            const base = name.toLowerCase().replace(/\s+/g, '');
+            const randomNum = Math.floor(Math.random() * 1000);
+            return `${base}${randomNum}`;
+        }
+
+        const saltRounds = 10;
+        const hashedPass = await bcrypt.hash(password, saltRounds);
+        const generatedUsername = generateUsername(name);
+
+        const newUser = new User({
+            name,
+            user_name: generatedUsername,
+            email,
+            password: hashedPass,
+            uotp: otp,
+            verified: false // make sure this field exists in your schema
+        });
+
+        const savedUser = await newUser.save();
+
+        // Create Cart, Wishlist, Wallet
+        await new cartschema({ userid: savedUser._id, product: [] }).save();
+        await new wishlistschema({ userid: savedUser._id, productid: [] }).save();
+        await new Wallet({ userId: savedUser._id, balance: 0, transactions: [] }).save();
+
+        // Send OTP
+        getotp(email, otp, generatedUsername);
+
+        // Store session
+        req.session.username = name;
+        req.session.email = email;
+        req.session.blocked = savedUser.blocked;
+
+        console.log("New user created and OTP sent.");
+        return next();
+
     } catch (error) {
-        console.log("error in signin" + error);
-        res.status(500).send('An error ocupied')
+        console.error("Signup error:", error);
+        res.status(500).send("An error occurred during signup.");
     }
+};
 
-}
 
 const blockuser = async (req, res, next) => {
     if (req.session.ulogin) {
@@ -115,10 +130,11 @@ const viewproduct = async (req, res, next) => {
         const id = req.params.ids;
 
         // Fetch the product by its ID
-        const productdata = await product_schema.findById(id).populate('category_id');
+        const productdata = await product_schema.findOne({ _id: id, unlist: false }).populate('category_id');
 
         if (!productdata) {
-            return res.status(404).json({ success: false, message: 'Product not found' });
+            res.redirect('/404')
+            return
         }
 
         // Get products from the same category, excluding the current product
@@ -143,7 +159,7 @@ const viewproduct = async (req, res, next) => {
         res.render('userside/product_over_view', {
             product: productdata,
             sameProducts: sameProducts,
-            cartcount:req.cartcount
+            cartcount: req.cartcount
 
         });
 
@@ -182,14 +198,17 @@ const cartitemspush = async (req, res) => {
         const productId = req.body.priductisdata
         const price = req.body.price
 
-        const quantity = req.body.quantity||1
+        const quantity = req.body.quantity || 1
         const userid = req.session.ulogin
         console.log(productId + ' ' + userid + " " + price);
 
         try {
             console.log(userid);
 
-
+const product=await product_schema.findById(productId)
+if(product.stock<=0){
+    return res.status(200).json({ success: false, message: 'Product outofstock' })
+}
             if (userid) {
                 let cart = await cartschema.findOne({ userid: userid });
 
@@ -201,7 +220,7 @@ const cartitemspush = async (req, res) => {
 
                 if (existingProductIndex > -1) {
 
-                    return res.status(200).json({ success: false,message:'Product alredy in cart' })
+                    return res.status(200).json({ success: false, message: 'Product alredy in cart' })
                 } else {
 
                     cart.product.push({ productid: productId, quantity: quantity, price: price });
@@ -247,11 +266,19 @@ const cartupdata = async (req, res) => {
     console.log(userid);
 
     const usercartdata = await cartschema.findOne({ userid: userid })
-    const product = await product_schema.findById(id)
+    const product = await product_schema.findOne({ _id: id })
     console.log(product.stock);
     console.log(number);
 
     if (usercartdata) {
+        if (product.unlist) {
+            res.status(200).json({
+                success: false,
+                unlist: true,
+                message: 'Product not available right now'
+            })
+            return
+        }
         if (product.stock >= number) {
             usercartdata.product[index].quantity = number;
             const toatlproductaprice = number * usercartdata.product[index].price
@@ -261,7 +288,7 @@ const cartupdata = async (req, res) => {
             res.status(200).json({ success: true, message: 'cart updated successfully', totalprice: toatlproductaprice, sumtoatal: summerytoatal })
         }
         else {
-            res.status(200).json({ success: false, message: "This is the maximum quantity" })
+            res.status(409).json({ success: false, message: "This is the maximum quantity" })
         }
     }
     // console.log(usercartdata.product[index]);
@@ -269,18 +296,30 @@ const cartupdata = async (req, res) => {
 }
 
 const cartitemdelete = async (req, res) => {
-    console.log('got')
-    const index = req.body.index
-    console.log(index);
+    console.log('got', req.body)
+    const productId = req.body.productId
+    // console.log(index);
     const userid = req.session.ulogin
-    const usercartdata = await cartschema.findOne({ userid: userid })
 
-    if (!usercartdata) {
+    const updatedCart = await cartschema.findOneAndUpdate(
+        { userid: userid },
+        {
+            $pull: {
+                product: {
+                    productid: productId // match nested productid field
+                }
+            }
+        },
+        { new: true }
+    );
+    console.log(updatedCart, 'caretdaga');
+
+    if (!updatedCart) {
         return res.status(200).json({ success: false, message: "please login before delete" })
     }
-    usercartdata.product.splice(index, 1)
 
-    await usercartdata.save()
+
+    await updatedCart.save()
     res.status(200).json({ success: true })
 }
 const addaddress = async (req, res) => {
@@ -290,8 +329,21 @@ const addaddress = async (req, res) => {
             const userid = req.session.ulogin
             const { fullName, addressLine1, addressLine2, city, state, zipCode, country, phoneNumber, addressType } = req.body
             console.log(phoneNumber + typeof phoneNumber)
-
-            const address = await new address_scema({
+            // ({ _id:userid,fullName: fullName })
+            console.log(fullName,'full name is ');
+            
+            const findAddress =await Address_scema.findOne({userid:userid,fullname:fullName})
+            console.log(findAddress,userid);
+            
+            if (findAddress) {
+                res.status(200).json({
+                    success: false,
+                    message: 'Alldredy exsists'
+                })
+                return
+            }
+            
+            const address = await new Address_scema({
                 userid: userid,
                 fullname: fullName,
                 addressline1: addressLine1,
@@ -311,7 +363,8 @@ const addaddress = async (req, res) => {
             console.log(ad);
             console.log(userdatas);
             res.status(200).json({
-                success: true
+                success: true,
+                address
             })
         } catch (error) {
             console.log('the error in posting address' + error);
@@ -332,7 +385,7 @@ async function updatestok(productdata, res) {
         if (product.stock < datas.quantity) {
             console.log('yse');
 
-            throw new Error('Insufficient stock for product |' + product.name + "| if money debited it will be refund within 24 hourse" );
+            throw new Error('Insufficient stock for product |' + product.name + "| if money debited it will be refund to your wallet within 24 hourse");
         }
         product.stock -= parseInt(datas.quantity);
         await product.save();
@@ -346,7 +399,7 @@ const deleteaddress = async (req, res) => {
     const userid = req.session.ulogin
     console.log(id);
 
-    await address_scema.deleteOne({ _id: id })
+    await Address_scema.deleteOne({ _id: id })
     const user = await User.findById(userid)
     filteredarray = user.address.filter(addressId => !addressId.equals(id))
     user.address = filteredarray
@@ -358,7 +411,7 @@ const deleteaddress = async (req, res) => {
 }
 const addressave = async (req, res) => {
     console.log(req.body);
-    const address = await address_scema.findById(req.body.id)
+    const address = await Address_scema.findById(req.body.id)
     Object.assign(address, req.body)
     console.log(address);
 
@@ -373,11 +426,19 @@ const addressave = async (req, res) => {
 
 const editname = async (req, res) => {
     const changedname = req.body.ename
-    const userid = req.session.ulogin
-    const udata = await User.findById(userid)
-    udata.name = changedname
-    const dataup = await udata.save()
-    dataup ? res.status(200).json({ success: true, message: 'username successfully changed' }) : res.state(200).json({ success: false, message: 'there is somthig issue in updateing user name' })
+    if (changedname.trim() == '') {
+        res.state(200).json({ success: false, message: 'Field cannot be emptry' })
+        return
+    }
+    else {
+        const userid = req.session.ulogin
+        const udata = await User.findById(userid)
+        console.log(udata, 'data');
+
+        udata.name = changedname
+        const dataup = await udata.save()
+        dataup ? res.status(200).json({ success: true, message: 'username successfully changed' }) : res.state(200).json({ success: false, message: 'there is somthig issue in updateing user name' })
+    }
 }
 
 const changepass = async (req, res) => {
@@ -447,7 +508,7 @@ const patchwishlist = async (req, res) => {
 const coupenapplaying = async (req, res) => {
     const cname = req.params.name
     console.log(cname);
-    
+
     const coupen = await coupencode.findOne({ code: cname })
     if (!coupen) {
         return res.status(200).json({ success: false, erromsg: 'Entered couponcode is invalid' })
@@ -475,10 +536,10 @@ const coupenapplaying = async (req, res) => {
         return res.status(200).json({ success: false, erromsg: `The coupon can apply between ${coupen.min} - ${coupen.max} ` })
     }
     const discount = (cart.totalprice * coupen.discount) / 100
-    const shipping=cart.shippingcharge
+    const shipping = cart.shippingcharge
 
 
-    return res.status(200).json({ success: true, coupon: coupen.code, discount, toatal: cart.totalprice,shipping })
+    return res.status(200).json({ success: true, coupon: coupen.code, discount, toatal: cart.totalprice, shipping })
 
 
 }
@@ -489,13 +550,13 @@ const sendreset = async (req, res) => {
         req.session.username = email;
         console.log('insideofir');
         console.log(email);
-        
+
 
         const user = await User.findOne({ email });
         if (!user) {
-        console.log('nouser');
+            console.log('nouser');
 
-            return res.status(404).json({success:false,message:'Email Not Fount'})
+            return res.status(404).json({ success: false, message: 'Email Not Fount' })
         }
 
 
@@ -508,12 +569,12 @@ const sendreset = async (req, res) => {
         await user.save();
 
         // Construct the reset link
-        const resetLink = process.env.DOMAIN+`/reset-password/${resetToken}`;
+        const resetLink = process.env.DOMAIN + `/reset-password/${resetToken}`;
 
         // Send the reset link to the user's email
         await sendPasswordResetOTP(email, resetLink, user.user_name);
 
-        return res.status(200).json({success:true,message:'Reset password token has been sented'})
+        return res.status(200).json({ success: true, message: 'Reset password token has been sented' })
     } catch (error) {
         console.error(error);
         res.status(500).send('Error sending reset email.');
@@ -566,4 +627,4 @@ const resetpasspost = async (req, res) => {
 }
 
 
-module.exports = { signup,   viewproduct,  blockuser, cartitemspush, cartupdata, cartitemdelete, addaddress,  deleteaddress,  editname, changepass, productstockdata, patchwishlist, removewish, coupenapplaying, sendreset, resetpage, resetpasspost, addressave,updatestok }     
+module.exports = { signup, viewproduct, blockuser, cartitemspush, cartupdata, cartitemdelete, addaddress, deleteaddress, editname, changepass, productstockdata, patchwishlist, removewish, coupenapplaying, sendreset, resetpage, resetpasspost, addressave, updatestok }     

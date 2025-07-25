@@ -134,7 +134,7 @@
                     <div class="row mt-3">
                         <div class="col-md-6">
                             <p><i class="fas fa-envelope me-2"></i> <%= user.email %></p>
-                            <p><i class="fas fa-map-marker-alt me-2"></i> New York, USA</p>
+                            <!-- <p><i class="fas fa-map-marker-alt me-2"></i> New York, USA</p> -->
                         </div>
                         <div class="col-md-6">
                             <p><i class="fas fa-calendar me-2"></i> <%= new Date(user.createdAt).toLocaleDateString('en-GB') %></p>
@@ -234,8 +234,23 @@
         const form = document.getElementById('profileedit');
         form.addEventListener('submit', (e) => {
             e.preventDefault();
-            const ename = document.getElementById('ename').value;
-
+            const ename = document.getElementById('ename').value.trim()
+if(ename==''){
+      Swal.fire({
+        icon: 'error',
+        title: 'Missing Field',
+        text: 'Please enter your current password.',
+        background: '#fff3cd',
+        color: '#856404',
+        iconColor: '#856404',
+        confirmButtonText: 'Okay',
+        confirmButtonColor: '#ffc107',
+        customClass: {
+            popup: 'rounded-lg',
+        },
+    });
+    return 
+}
             fetch('/userupdate', {
     method: 'PATCH',
     headers: {

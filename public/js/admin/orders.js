@@ -23,7 +23,10 @@ document.addEventListener('DOMContentLoaded', function() {
 
               const data = await response.json();
               if (data.success) {
-                  window.location.href = '/admin/orders';
+                console.log(e.target.innerText);
+                // e.target.innerText=action
+                e.target.value=action
+                //   window.location.href = '/admin/orders';
               } else {
                   throw new Error(data.message || 'Failed to update order');
               }
@@ -64,11 +67,13 @@ document.addEventListener('DOMContentLoaded', function() {
           if (!order) {
               throw new Error('No order data provided');
           }
+          console.log(order);
+          
 
           // Populate order summary
           const elements = {
-              orderId: order._id,
-              customerName: order.name,
+              orderId: order.orderid,
+              customerName: order.user.name,
               orderDate: new Date(order.createdAt).toLocaleDateString(),
               shippingAddress: formatAddress(order.shippingAddress)
           };
@@ -123,7 +128,7 @@ document.addEventListener('DOMContentLoaded', function() {
               let returnStatusHtml 
                   if(returnStatus){ 
                     returnStatusHtml =` <div class="mt-2">
-                          <span class="badge badge-${getProductStatusBadgeClass(returnStatus)} mr-2">
+                          <span class="badge badge-${getProductStatusBadgeClass(returnStatus) } mr-2 ">
                               ${returnStatus}
                           </span>
                           ${generateReturnButtons(returnStatus, order, productid, quantity)}
@@ -221,7 +226,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
   function generateReturnButtons(returnStatus, order, productid, quantity) {
       if (returnStatus !== 'Return requsted') {
-          return '<br> actions unavailable';
+          return '<br> ';
       }
 
       return `
@@ -281,6 +286,7 @@ document.addEventListener('DOMContentLoaded', function() {
               .then(res=>res.json())
               .then(res=>{
                 console.log(res.success);
+              
                 
                 if(res.success){
                     window.location.reload(true)
@@ -315,7 +321,9 @@ document.addEventListener('DOMContentLoaded', function() {
           notrequst: 'danger',
           'Return requsted': 'warning'
       };
-      return statusMap[status] || 'secondary';
+      console.log(` ${status=='notrequst'?'suu':''} form here`);
+      
+      return `${statusMap[status]?statusMap[status]:'secondary'}  `
   }
 
   function formatAddress(address) {
@@ -334,11 +342,12 @@ document.addEventListener('DOMContentLoaded', function() {
       } = address;
 
       return `
-          ${addressline1} <br>
+          ${addressline1} 
           ${addressline2}
-          ${city}, ${state} ${zipcode} <br>
-          ${phone} <br>
+          ${city}, ${state} ${zipcode} 
+          ${phone} 
           ${country}
+        ,
       `.trim();
   }
 });
