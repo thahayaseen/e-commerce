@@ -133,7 +133,7 @@ class OffersManager {
         errors.push("Discount value must be greater than 0")
         this.showFieldError(discountValueElement, "Discount value must be greater than 0")
         isValid = false
-      } else if (discountType === "percentage" && discountValue > 100) {
+      } else if (discountType === "percentage" && discountValue >= 100) {
         errors.push("Percentage discount cannot exceed 100%")
         this.showFieldError(discountValueElement, "Percentage discount cannot exceed 100%")
         isValid = false
@@ -280,17 +280,23 @@ class OffersManager {
         setTimeout(() => {
           window.location.reload()
         }, 1000)
-      } else {
-        toastr.error(result.message || "Failed to save offer")
-         setTimeout(() => {
-          window.location.reload()
-        }, 1000)
+      } else if (!result.success) {
+        console.log( result.failedProducts);
+        toastr.error(result.message)
+        if (result.failedProducts?.length) {
+         
+          setTimeout(() => {
+            window.location.reload()
+          }, 1000)
+        }else{
+
+        }
       }
     } catch (error) {
       console.error("Error saving offer:", error)
-       setTimeout(() => {
-          window.location.reload()
-        }, 1000)
+      setTimeout(() => {
+        window.location.reload()
+      }, 1000)
       toastr.error(error.message || "An unexpected error occurred")
     } finally {
       // Hide loading state
@@ -456,10 +462,10 @@ class OffersManager {
         <td>${this.escapeHtml(offer.applicationType)}</td>
         <td>
           ${new Date(offer.validUntil).toLocaleDateString("en-GB", {
-            day: "2-digit",
-            month: "short",
-            year: "numeric",
-          })}
+          day: "2-digit",
+          month: "short",
+          year: "numeric",
+        })}
         </td>
         <td>
           <div class="badge ${offer.isActive ? "badge-success" : "badge-danger"}">

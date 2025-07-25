@@ -21,6 +21,21 @@
     <link rel="stylesheet" href="/assets/css/style.css" />
     <link rel="stylesheet" href="/assets/css/offers-management.css" />
     <link rel="stylesheet" href="/assets/css/search-component.css" />
+    <style>
+      .offer-warning {
+        background-color: #fff3cd;
+        border: 1px solid #ffeaa7;
+        border-radius: 4px;
+        padding: 12px;
+        margin-bottom: 20px;
+        font-size: 14px;
+        color: #856404;
+      }
+      .offer-warning .warning-icon {
+        color: #f39c12;
+        margin-right: 8px;
+      }
+    </style>
   </head>
   <body>
     <div class="container-scroller">
@@ -185,6 +200,12 @@ const searchConfig = {
             </button>
           </div>
           <div class="modal-body">
+            <!-- Warning Message -->
+            <div class="offer-warning">
+              <i class="mdi mdi-information warning-icon"></i>
+              <strong>Important:</strong> After applying the offer, if the final product value is less than ₹100, the offer will be automatically skipped for that product.
+            </div>
+            
             <form id="offerForm">
               <div class="form-group">
                 <label>Offer Name <span class="text-danger">*</span></label>
