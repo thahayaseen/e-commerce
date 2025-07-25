@@ -1,0 +1,60 @@
+<!-- Reusable Search Component -->
+<div class="search-component mb-3" data-search-config='<%- JSON.stringify(searchConfig) %>'>
+  <div class="row">
+    <div class="col-md-6">
+      <div class="input-group">
+        <div class="input-group-prepend">
+          <span class="input-group-text">
+            <i class="mdi mdi-magnify"></i>
+          </span>
+        </div>
+        <input 
+          type="text" 
+          class="form-control search-input" 
+          placeholder="<%= searchConfig.placeholder || 'Search...' %>"
+          data-search-route="<%= searchConfig.route %>"
+          data-search-method="<%= searchConfig.method || 'GET' %>"
+        />
+        <div class="input-group-append">
+          <button class="btn btn-outline-secondary clear-search" type="button">
+            <i class="mdi mdi-close"></i>
+          </button>
+        </div>
+      </div>
+    </div>
+    
+    <% if (searchConfig.filters && searchConfig.filters.length > 0) { %>
+    <div class="col-md-6">
+      <div class="d-flex gap-2">
+        <% searchConfig.filters.forEach(filter => { %>
+        <div class="form-group mb-0">
+          <select class="form-control search-filter" data-filter="<%= filter.key %>">
+            <option value="">All <%= filter.label %></option>
+            <% filter.options.forEach(option => { %>
+            <option value="<%= option.value %>"><%= option.label %></option>
+            <% }) %>
+          </select>
+        </div>
+        <% }) %>
+      </div>
+    </div>
+    <% } %>
+  </div>
+  
+  <!-- Search Results Info -->
+  <div class="search-info mt-2" style="display: none;">
+    <small class="text-muted">
+      <span class="search-results-count">0</span> results found
+      <span class="search-query-display"></span>
+      <button class="btn btn-link btn-sm p-0 ml-2 reset-search">Reset</button>
+    </small>
+  </div>
+  
+  <!-- Loading indicator -->
+  <div class="search-loading text-center mt-2" style="display: none;">
+    <div class="spinner-border spinner-border-sm" role="status">
+      <span class="sr-only">Searching...</span>
+    </div>
+    <small class="ml-2">Searching...</small>
+  </div>
+</div>

@@ -1,0 +1,123 @@
+/* Updated checkbox styles for dark theme compatibility */
+.checkbox-group {
+  margin: 20px 0;
+  padding: 15px;
+  border-radius: 8px;
+  background: #2a2b2c; /* Darker background for dark theme */
+  border: 1px solid #404040;
+  display: none; /* Hidden by default */
+}
+
+#toast-container > div {
+  opacity: 1;
+  box-shadow: 0 0 12px rgba(0, 0, 0, 0.1);
+  border-radius: 4px;
+}
+
+#toast-container > .toast-success {
+  background-color: #28a745;
+}
+
+#toast-container > .toast-error {
+  background-color: #dc3545;
+}
+
+#toast-container > .toast-warning {
+  background-color: #ffc107;
+}
+
+#toast-container > .toast-info {
+  background-color: #17a2b8;
+}
+
+.checkbox-group h3 {
+  color: #ffffff;
+  font-size: 1.2rem;
+  margin-bottom: 15px;
+  font-weight: 500;
+}
+
+.checkbox-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 12px;
+}
+
+.checkbox-wrapper {
+  position: relative;
+  padding: 8px;
+}
+
+.checkbox-wrapper input[type="checkbox"] {
+  position: absolute;
+  opacity: 0;
+  cursor: pointer;
+  height: 0;
+  width: 0;
+}
+
+.checkbox-wrapper label {
+  display: flex;
+  align-items: center;
+  padding: 12px 15px;
+  background: #2d2d2d; /* Darker background for dark theme */
+  border: 2px solid #404040;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  color: #ffffff; /* Light text for dark theme */
+}
+
+.checkbox-wrapper label:before {
+  content: "";
+  width: 18px;
+  height: 18px;
+  margin-right: 10px;
+  border: 2px solid #666;
+  border-radius: 4px;
+  transition: all 0.2s ease;
+}
+
+.checkbox-wrapper input[type="checkbox"]:checked + label {
+  border-color: #4299e1;
+  background: #1a1a1a; /* Even darker when selected */
+}
+
+.checkbox-wrapper input[type="checkbox"]:checked + label:before {
+  background: #4299e1;
+  border-color: #4299e1;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='white' width='18px' height='18px'%3E%3Cpath d='M0 0h24v24H0z' fill='none'/%3E%3Cpath d='M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z'/%3E%3C/svg%3E");
+  background-size: 12px;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+.checkbox-wrapper input[type="checkbox"]:focus + label {
+  box-shadow: 0 0 0 3px rgba(66, 153, 225, 0.3);
+}
+
+.checkbox-wrapper label:hover {
+  border-color: #4299e1;
+  background: #353535; /* Slightly lighter on hover */
+}
+
+.form-control.is-invalid {
+  border-color: #dc3545;
+}
+
+.invalid-feedback {
+  display: block;
+  width: 100%;
+  margin-top: 0.25rem;
+  font-size: 0.875em;
+  color: #dc3545;
+}
+
+.text-danger {
+  color: #dc3545 !important;
+}
+
+.spinner-border-sm {
+  width: 1rem;
+  height: 1rem;
+}
