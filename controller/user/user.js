@@ -378,7 +378,6 @@ const addaddress = async (req, res) => {
     }
 }
 async function updatestok(productdata, res) {
-    console.log('sdfasdgasfgafg');
 
     for (const datas of productdata) {
         const product = await product_schema.findById(datas.productid);

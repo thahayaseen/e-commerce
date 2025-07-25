@@ -370,6 +370,7 @@ const placeorder = async (req, res) => {
 
 
             if (paymentmethods === 'onlinePayment') {
+console.log('online');
 
  
                 const order = new orderchema({
