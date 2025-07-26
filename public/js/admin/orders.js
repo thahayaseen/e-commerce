@@ -1,46 +1,59 @@
 
 document.addEventListener('DOMContentLoaded', function () {
     // Handle action buttons
-    const actionButtons = document.querySelectorAll('.actionbtn');
-    actionButtons.forEach(btn => {
-        btn.addEventListener('change', async (e) => {
-            try {
-                const action = btn.value;
-                const orderId = btn.dataset.id;
-                console.log(action);
 
-                if (!orderId) {
-                    throw new Error('Order ID is missing');
-                }
+   const actionButtons = document.querySelectorAll('.actionbtn');
 
-                const response = await fetch('/admin/orders', {
-                    method: 'PATCH',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({ action, orderId })
-                });
+actionButtons.forEach(btn => {
+  btn.addEventListener('change', async (e) => {
+    try {
+      const action = btn.value; // selected value
+      const orderId = btn.dataset.id;
 
-                const data = await response.json();
-                if (data.success) {
-                    console.log(e.target.innerText);
-                    // e.target.innerText=action
-                    e.target.value = action
-                    //   window.location.href = '/admin/orders';
-                } else {
-                    throw new Error(data.message || 'Failed to update order');
-                }
-            } catch (error) {
-                console.error('Error:', error);
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Oops...',
-                    text: `Failed to process update: ${error.message}`,
-                });
+      const statusOrder = ['Pending', 'Processing', 'Shipped', 'Delivered', 'Cancelled'];
+      const selectedIndex = statusOrder.indexOf(action);
 
-            }
+      if (!orderId) {
+        throw new Error('Order ID is missing');
+      }
+
+      // Send status update to server
+      const response = await fetch('/admin/orders', {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ action, orderId })
+      });
+
+      const data = await response.json();
+
+      if (data.success) {
+        // Update select value
+        btn.value = action;
+
+        // Remove previous statuses (optional: use reverse to remove next instead)
+        btn.querySelectorAll('option').forEach((option) => {
+          const optionIndex = statusOrder.indexOf(option.value);
+          if (optionIndex < selectedIndex && option.value !== action) {
+            option.remove();
+          }
         });
-    });
+
+      } else {
+        throw new Error(data.message || 'Failed to update order');
+      }
+    } catch (error) {
+      console.error('Error:', error);
+      Swal.fire({
+        icon: 'error',
+        title: 'Oops...',
+        text: `Failed to process update: ${error.message}`,
+      });
+    }
+  });
+});
+
 
     // Handle view order buttons
     document.querySelectorAll('.vieworder').forEach(button => {

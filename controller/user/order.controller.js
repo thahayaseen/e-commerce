@@ -163,6 +163,10 @@ const cancelitem = async (req, res) => {
         if (!orderdata) {
             return res.status(404).json({ success: false, message: "Order not found" });
         }
+        if(orderdata.status=='Delivered'){
+            return res.status(409).json({ success: false, message: "Order cannot be cancel due to item aldredy Delivered" });
+
+        }
         console.log(JSON.stringify(orderdata));
 
         const index = orderdata.products.findIndex(product => product._id == productid);

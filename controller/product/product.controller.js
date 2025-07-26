@@ -44,9 +44,15 @@ const returnadmin = async (req, res) => {
     else if (action === 'reject') {
         order.products[productindex].return = 'CannotReturn'
     }
+    const ttl = order.totalAmount - order.refund - (order.coupon?.discount ?? 0)
+    console.log('ttls is ',ttl);
+    
+    if (ttl == 0) {
+        order.status = 'Cancelled'
+    }
     await order.save()
     return res.status(200).json({ success: true, message: 'action initiated' })
     // order.products.findIndex(a=>)
 
 }
-module.exports = {    returnadmin,   }
+module.exports = { returnadmin, }

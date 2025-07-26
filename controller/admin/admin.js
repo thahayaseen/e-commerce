@@ -309,37 +309,54 @@ const categoryunlist = async (req, res, next) => {
 
 }
 const updateorder = async (req, res) => {
-    const { action, orderId } = req.body
-    const orderdata = await orders.findById(orderId)
-    if(action=='Cancelled'){
-         const wallet=await Wallet.findOne({userId:orderdata.user})
-         console.log(orderdata.totalAmount,orderdata.refund,orderdata?.coupon,'dataisss');
-         
-         const refund=(orderdata.totalAmount-orderdata.refund)-(orderdata?.coupon?orderdata.coupon.discount:0)
-         console.log(refund,orderdata);
-         
-        if(refund!==0){
-                wallet.balance +=refund
-            wallet.income+=refund
+    const { action, orderId } = req.body;
+    const statusOrder = ['Pending', 'Processing', 'Shipped', 'Delivered', 'Cancelled'];
+
+    const orderdata = await orders.findById(orderId);
+    if (!orderdata) {
+        return res.status(404).json({ success: false, message: 'Order not found' });
+    }
+
+    const currentStatusIndex = statusOrder.indexOf(orderdata.status);
+    const newStatusIndex = statusOrder.indexOf(action);
+
+    // Prevent going back or same status
+    if (newStatusIndex <= currentStatusIndex) {
+        return res.status(400).json({ 
+            success: false, 
+            message: `Cannot change status from '${orderdata.status}' to '${action}'`
+        });
+    }
+
+    if (action === 'Cancelled') {
+        const wallet = await Wallet.findOne({ userId: orderdata.user });
+        const refund = (orderdata.totalAmount - orderdata.refund) - (orderdata?.coupon ? orderdata.coupon.discount : 0);
+
+        if (refund !== 0) {
+            wallet.balance += refund;
+            wallet.income += refund;
             wallet.transactions.push({
                 type: 'credit',
-                amount:refund,
+                amount: refund,
                 date: new Date(),
-                description: `refund of ${orderdata.orderid}`
+                description: `Refund of ${orderdata.orderid}`
             });
-            await wallet.save()
-            orderdata.refund+=refund
+            await wallet.save();
+            orderdata.refund += refund;
         }
     }
-    if(action=="Delivered"){
-        orderdata.pstatus=true
-        orderdata.paymentStatus='Paid'
-    }
-    orderdata.status = action
-    await orderdata.save()
-    res.status(200).json({ success: true, message: 'the action changed success' })
 
-}
+    if (action === "Delivered") {
+        orderdata.pstatus = true;
+        orderdata.paymentStatus = 'Paid';
+    }
+
+    orderdata.status = action;
+    await orderdata.save();
+
+    res.status(200).json({ success: true, message: 'Order status updated successfully' });
+};
+
 const getiingorderdetials = async (req, res) => {
 
     const orderid = req.params.id
