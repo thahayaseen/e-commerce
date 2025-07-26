@@ -130,7 +130,25 @@
             margin-left: 8px;
         }
 
-        .disabled-controls {
+        /* Out of stock product styles */
+        .outofstock-product {
+            opacity: 0.6;
+            background-color: #fff3cd;
+            border-left: 4px solid #ffc107;
+        }
+
+        .outofstock-badge {
+            background-color: #ffc107;
+            color: #212529;
+            font-size: 0.75rem;
+            padding: 2px 8px;
+            border-radius: 12px;
+            display: inline-block;
+            margin-left: 8px;
+        }
+
+        /* Updated disabled controls - only disable plus button */
+        .disabled-plus {
             pointer-events: none;
             opacity: 0.5;
         }
@@ -141,6 +159,22 @@
             border-radius: 8px;
             padding: 12px;
             margin-bottom: 20px;
+        }
+
+        .stock-info {
+            font-size: 0.85rem;
+            color: #6c757d;
+            margin-top: 4px;
+        }
+
+        .stock-low {
+            color: #dc3545;
+            font-weight: 600;
+        }
+
+        .stock-zero {
+            color: #dc3545;
+            font-weight: 700;
         }
 
         @media (max-width: 768px) {
@@ -206,9 +240,15 @@
     <%
         // Check if there are any unlisted products
         let hasUnlistedProducts = false;
+        let outOfstock = false;
         cart.product.forEach(product => {
             if (product.productid.unlist === true) {
                 hasUnlistedProducts = true;
+            }
+        });
+        cart.product.forEach(product => {
+            if (product.productid.stock === 0 || product.productid.stock < product.quantity) {
+                outOfstock = true;
             }
         });
     %>
@@ -223,11 +263,26 @@
                     <strong>Notice:</strong> Some items in your cart are currently unavailable and have been marked for removal. Please remove these items to proceed with checkout.
                 </div>
                 <% } %>
+                <% if (outOfstock) { %>
+                <div class="checkout-warning">
+                    <i class="fas fa-exclamation-triangle text-warning me-2"></i>
+                    <strong>Notice:</strong> Some items in your cart are currently out of stock or exceed available quantity. Please adjust quantities or remove these items to proceed with checkout.
+                </div>
+                <% } %>
 
                 <div class="card mb-3">
                     <div class="card-body">
                         <% cart.product.forEach(product => { %>
-                        <div class="row mb-4 align-items-center <%= product.productid.unlist === true ? 'unlisted-product' : '' %>">
+                        <%
+                            let isOutOfStock = product.productid.stock === 0 || product.productid.stock < product.quantity;
+                            let productClass = '';
+                            if (product.productid.unlist === true) {
+                                productClass = 'unlisted-product';
+                            } else if (isOutOfStock) {
+                                productClass = 'outofstock-product';
+                            }
+                        %>
+                        <div class="row mb-4 align-items-center <%= productClass %>">
                             <div class="col-md-2">
                                 <img src="<%= product.productid.images[0] %>" alt="<%= product.productid.name %>" class="img-fluid rounded">
                             </div>
@@ -236,10 +291,37 @@
                                     <%= product.productid.name %>
                                     <% if (product.productid.unlist === true) { %>
                                         <span class="unlisted-badge">Unavailable</span>
+                                    <% } else if (product.productid.stock === 0) { %>
+                                        <span class="outofstock-badge">Out of Stock</span>
+                                    <% } else if (product.productid.stock < product.quantity) { %>
+                                        <span class="outofstock-badge">Insufficient Stock</span>
                                     <% } %>
                                 </h5>
+                                
                                 <% if (product.productid.unlist !== true) { %>
-                          
+                                    <div class="stock-info">
+                                        <% if (product.productid.stock === 0) { %>
+                                            <span class="stock-zero">
+                                                <i class="fas fa-times-circle me-1"></i>
+                                                Out of Stock
+                                            </span>
+                                        <% } else if (product.productid.stock < product.quantity) { %>
+                                            <span class="stock-low">
+                                                <i class="fas fa-exclamation-triangle me-1"></i>
+                                                Only <%= product.productid.stock %> left in stock (you have <%= product.quantity %> in cart)
+                                            </span>
+                                        <% } else if (product.productid.stock <= 5) { %>
+                                            <span class="stock-low">
+                                                <i class="fas fa-exclamation-circle me-1"></i>
+                                                Only <%= product.productid.stock %> left in stock
+                                            </span>
+                                        <% } else { %>
+                                            <span>
+                                                <i class="fas fa-check-circle text-success me-1"></i>
+                                                <%= product.productid.stock %> in stock
+                                            </span>
+                                        <% } %>
+                                    </div>
                                 <% } else { %>
                                 <p class="text-danger mb-1">
                                     <i class="fas fa-times-circle me-1"></i>
@@ -249,36 +331,22 @@
                                 
                             </div>
                             <div class="col-md-3">
-                                <% if (product.productid.unlist !== true) { %>
                                 <div class="input-group">
+                                    <!-- Minus button is always enabled for out of stock/unlisted items -->
                                     <button class="btn btn-outline-secondary minusbtn" type="button">
                                         <i class="fas fa-minus"></i>
                                     </button>
-                                    <span data-quntity="<%= product.quantity %>" data-productid="<%= product.productid._id %>" class="quantity-input quantityid py-2">
+                                    <span data-quntity="<%= product.quantity %>" data-stock="<%= product.productid.stock %>" data-productid="<%= product.productid._id %>" class="quantity-input quantityid py-2 <%= (product.productid.unlist === true || isOutOfStock) ? 'bg-light text-muted' : '' %>">
                                         <%= product.quantity %>
                                     </span>
-                                    <button class="btn btn-outline-secondary plusbtn" type="button">
+                                    <!-- Plus button is disabled for out of stock/unlisted items -->
+                                    <button class="btn btn-outline-secondary plusbtn <%= (product.productid.unlist === true || isOutOfStock) ? 'disabled-plus' : '' %>" type="button" <%= (product.productid.unlist === true || isOutOfStock) ? 'disabled' : '' %>>
                                         <i class="fas fa-plus"></i>
                                     </button>
                                 </div>
-                                <% } else { %>
-                                <div class="disabled-controls">
-                                    <div class="input-group">
-                                        <button class="btn btn-outline-secondary" type="button" disabled>
-                                            <i class="fas fa-minus"></i>
-                                        </button>
-                                        <span class="quantity-input py-2 bg-light text-muted">
-                                            <%= product.quantity %>
-                                        </span>
-                                        <button class="btn btn-outline-secondary" type="button" disabled>
-                                            <i class="fas fa-plus"></i>
-                                        </button>
-                                    </div>
-                                </div>
-                                <% } %>
                             </div>
                             <div class="col-md-3 text-end">
-                                <% if (product.productid.unlist !== true) { %>
+                                <% if (product.productid.unlist !== true && !isOutOfStock) { %>
                                 <p class="fw-bold mb-0">
                                     Total: ₹<span class="productprice"><%=Math.floor(product.price* product.quantity ) %></span>
                                 </p>
@@ -286,15 +354,21 @@
                                     Price: ₹<span><%= Math.floor(product.price) %></span>
                                 </p>
                                 <% } else { %>
-                                <p class="fw-bold mb-0 text-muted text-decoration-line-through">
+                                <p class="fw-bold mb-0 text-muted text-decoration-line-through productprice">
                                     Total: ₹<span><%=Math.floor(product.price* product.quantity ) %></span>
                                 </p>
                                 <p class="mb-1 text-danger small">
-                                    Item unavailable
+                                    <% if (product.productid.unlist === true) { %>
+                                        Item unavailable
+                                    <% } else if (product.productid.stock === 0) { %>
+                                        Out of stock
+                                    <% } else { %>
+                                        Insufficient stock
+                                    <% } %>
                                 </p>
                                 <% } %>
                                 <button class="btn btn-link text-muted p-0 hover-text-danger deletebtn" onclick="remove(event,'<%= product.productid._id %>')" data-productid="<%= product.productid._id %>">
-                                    <i class="fas fa-trash"></i> Removes
+                                    <i class="fas fa-trash"></i> Remove
                                 </button>
                             </div>
                         </div>
@@ -323,13 +397,26 @@
                             <span class="fw-bold toatals">₹<%= cart.totalprice.toFixed(2) %></span>
                         </div>
                         
-                        <% if (hasUnlistedProducts) { %>
+                        <% if (hasUnlistedProducts || outOfstock) { %>
                         <button class="btn btn-secondary w-100 py-2" disabled>
-                            <i class="fas fa-exclamation-triangle me-2"></i>Cannot Checkout - Remove Unavailable Items
+                            <i class="fas fa-exclamation-triangle me-2"></i>
+                            <% if (hasUnlistedProducts && outOfstock) { %>
+                                Cannot Checkout - Fix Cart Issues
+                            <% } else if (hasUnlistedProducts) { %>
+                                Cannot Checkout - Remove Unavailable Items
+                            <% } else { %>
+                                Cannot Checkout - Fix Stock Issues
+                            <% } %>
                         </button>
                         <p class="text-danger small mt-2 text-center">
                             <i class="fas fa-info-circle me-1"></i>
-                            Remove unavailable items to proceed
+                            <% if (hasUnlistedProducts && outOfstock) { %>
+                                Remove unavailable items and fix stock issues to proceed
+                            <% } else if (hasUnlistedProducts) { %>
+                                Remove unavailable items to proceed
+                            <% } else { %>
+                                Adjust quantities or remove out of stock items to proceed
+                            <% } %>
                         </p>
                         <% } else { %>
                         <a href="/checkout" class="btn btn-primary w-100 py-2">

@@ -256,44 +256,60 @@ if(product.stock<=0){
 
 
 const cartupdata = async (req, res) => {
-    const userid = req.session.ulogin
-    const { index, number } = req.body
-    console.log(index + '   ' + number)
-    const id = req.params.cartid
-    console.log(id)
+    try {
+        const userid = req.session.ulogin;
+        const { index, type } = req.body; // type should be 'increment' or 'decrement'
+        const id = req.params.cartid;
 
+        const usercartdata = await cartschema.findOne({ userid });
+        const product = await product_schema.findById(id);
 
-    console.log(userid);
+        if (!usercartdata || !product) {
+            return res.status(404).json({ success: false, message: 'Cart or product not found' });
+        }
 
-    const usercartdata = await cartschema.findOne({ userid: userid })
-    const product = await product_schema.findOne({ _id: id })
-    console.log(product.stock);
-    console.log(number);
-
-    if (usercartdata) {
         if (product.unlist) {
-            res.status(200).json({
+            return res.status(200).json({
                 success: false,
                 unlist: true,
-                message: 'Product not available right now'
-            })
-            return
+                message: 'Product not available right now',
+            });
         }
-        if (product.stock >= number) {
-            usercartdata.product[index].quantity = number;
-            const toatlproductaprice = number * usercartdata.product[index].price
 
-            await usercartdata.save()
-            const summerytoatal = usercartdata.totalprice
-            res.status(200).json({ success: true, message: 'cart updated successfully', totalprice: toatlproductaprice, sumtoatal: summerytoatal })
+        let currentQty = usercartdata.product[index].quantity;
+
+        if (type === 'increment') {
+            if (currentQty >= product.stock) {
+                return res.status(409).json({ success: false, message: "Cannot exceed available stock" });
+            }
+            currentQty += 1;
+        } else if (type === 'decrement') {
+            if (currentQty <= 1) {
+                return res.status(409).json({ success: false, message: "Quantity must be at least 1" });
+            }
+            currentQty -= 1;
+        } else {
+            return res.status(400).json({ success: false, message: "Invalid update type" });
         }
-        else {
-            res.status(409).json({ success: false, message: "This is the maximum quantity" })
-        }
+
+        // Update quantity
+        usercartdata.product[index].quantity = currentQty;
+        await usercartdata.save();
+
+        const totalProductPrice = currentQty * usercartdata.product[index].price;
+
+        res.status(200).json({
+            success: true,
+            message: 'Cart updated successfully',
+            totalprice: totalProductPrice,
+            sumtotal: usercartdata.totalprice,
+        });
+    } catch (error) {
+        console.error('Cart update error:', error);
+        res.status(500).json({ success: false, message: 'Server error' });
     }
-    // console.log(usercartdata.product[index]);
+};
 
-}
 
 const cartitemdelete = async (req, res) => {
     console.log('got', req.body)

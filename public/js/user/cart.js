@@ -8,6 +8,7 @@ const toatals = document.querySelector('.toatals');
 
 quantities.forEach((quantity, index) => {
     let number = parseInt(quantity.dataset.quntity);
+    let stock = parseInt(quantity.dataset.stock);
     let id = quantity.dataset.productid;
     let isLoading = false; // Flag to throttle
 
@@ -19,27 +20,47 @@ quantities.forEach((quantity, index) => {
         if (isLoading) return; // Throttle: don't allow if a request is in progress
         isLoading = true;
 
-        // Disable buttons during request
-        addbtn[index].disabled = true;
-        minusbtn[index].disabled = true;
+        // Disable buttons during request (only disable functional buttons)
+        const plusButton = addbtn[index];
+        const minusButton = minusbtn[index];
+        
+        // Only disable buttons that are not already disabled
+        if (!plusButton.disabled) plusButton.disabled = true;
+        if (!minusButton.disabled) minusButton.disabled = true;
 
         fetch(`/cart/update/${id}`, {
             method: 'PATCH',
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify({ index, number: increase ? number + 1 : number }),
+            body: JSON.stringify({ index, type: increase ? 'increment' : 'decrement' }),
         })
         .then(response => response.json())
         .then(data => {
             if (data.success) {
-                if (increase) number++;
-                else number--;
+                console.log(data);
+               
+                if (increase) {
+                    number++;
+                } else {
+                    number--;
+                    // If quantity becomes 0, remove the item entirely
+                    if (number === 0||stock==number) {
+                        window.location.href = '/cart'; // Refresh to show updated cart
+                        return;
+                    }
+                }
+                
+                console.log(Math.floor(data.totalprice));
+                console.log(toatalprice,index);
                 
                 toatalprice[index].textContent = Math.floor(data.totalprice);
-                summerytoatal.textContent = data.sumtoatal.toFixed();
-                toatals.textContent = data.sumtoatal.toFixed();
+                summerytoatal.textContent = data.sumtotal.toFixed();
+                toatals.textContent = data.sumtotal.toFixed();
                 quantity.textContent = number;
+                
+                // Update the data attribute
+                quantity.dataset.quntity = number;
             } else {
                 if (data.unlist) {
                     Swal.fire({
@@ -52,11 +73,18 @@ quantities.forEach((quantity, index) => {
                             window.location.reload();
                         }
                     });
+                } else if (data.outOfStock) {
+                    Swal.fire({
+                        icon: 'warning',
+                        title: 'Out of Stock',
+                        text: data.message || 'This product is currently out of stock.',
+                        confirmButtonText: 'OK'
+                    });
                 } else {
                     Swal.fire({
                         icon: 'error',
                         title: 'Unable to Update',
-                        text: data.message || 'This is the maximum quantity that you can take.'
+                        text: data.message || 'Unable to update quantity.'
                     });
                 }
             }
@@ -70,23 +98,62 @@ quantities.forEach((quantity, index) => {
             });
         })
         .finally(() => {
-            // Always re-enable buttons and reset loading state
+            // Re-enable buttons based on their original state
             isLoading = false;
-            addbtn[index].disabled = false;
-            minusbtn[index].disabled = false;
+            
+            // Check if buttons should be enabled based on product status
+            const productRow = quantity.closest('.row');
+            const isUnlisted = productRow.classList.contains('unlisted-product');
+            const isOutOfStock = productRow.classList.contains('outofstock-product');
+            
+            // Always enable minus button (unless it was specifically disabled for other reasons)
+            minusButton.disabled = false;
+            
+            // Only enable plus button if product is not unlisted or out of stock
+            if (!isUnlisted && !isOutOfStock) {
+                plusButton.disabled = false;
+            }
+            // If it's unlisted or out of stock, keep plus button disabled
         });
     };
 
     const plusButton = addbtn[index];
     const minusButton = minusbtn[index];
 
+    // Check if this product is unlisted or out of stock
+    const productRow = quantity.closest('.row');
+    const isUnlisted = productRow.classList.contains('unlisted-product');
+    const isOutOfStock = productRow.classList.contains('outofstock-product');
+
     minusButton.addEventListener('click', () => {
-        if (number > 1) {
+        // Allow minus button to work even for unlisted/out of stock items
+        // But still check if quantity is greater than 0
+        if (number > 0) {
             checkAndUpdateQuantity(false);
         }
     });
 
     plusButton.addEventListener('click', () => {
+        // Don't allow plus button for unlisted or out of stock items
+        if (isUnlisted) {
+            Swal.fire({
+                icon: 'warning',
+                title: 'Product Unavailable',
+                text: 'This product is currently unavailable and cannot be increased.'
+            });
+            return;
+        }
+        
+        if (isOutOfStock) {
+            Swal.fire({
+                icon: 'warning',
+                title: 'Out of Stock',
+                text: 'This product is out of stock or has insufficient stock.'
+            });
+            return;
+        }
+        
+        // Normal quantity increase logic for available products
         if (number < 5) {
             checkAndUpdateQuantity(true);
         } else {
@@ -100,7 +167,6 @@ quantities.forEach((quantity, index) => {
 
     updateDisplay();
 });
-
 
 // Optional: Add a function to handle unlisted products by hiding them
 function handleUnlistedProducts() {
