@@ -1,30 +1,46 @@
 if (coupons) {
   function renderCouponCards() {
-    const container = document.getElementById('couponContainer');
-    container.innerHTML = '';
-    coupons.forEach((coupon) => {
-      const expiryDate = new Date(coupon.expiryDate);
-      const formattedDate = expiryDate.toISOString().split('T')[0];
-      const card = `
-        <div class="col-md-4">
-          <div class="coupon-card">
-            <h3 class="coupon-code">${coupon.code}</h3>
-            <p class="coupon-discount">${coupon.discount}% Off</p>
-            <p class="coupon-expiry">Expires: ${formattedDate}</p>
-            <p><span class="coupon-status ${coupon.status ? 'status-active' : 'status-inactive'}">${coupon.status ? 'Active' : 'Inactive'}</span></p>
-            <div class="mt-3">
-              <button class="btn btn-info btn-sm" onclick="editCoupon('${coupon._id}')">
-                <i class="mdi mdi-pencil"></i> Edit
-              </button>
-              <button class="btn btn-danger btn-sm" onclick="deleteCoupon('${coupon._id}')">
-                <i class="mdi mdi-delete"></i> Delete
-              </button>
-            </div>
-          </div>
+   const container = document.getElementById('couponContainer');
+container.innerHTML = '';
+
+// Check if coupons array is empty
+if (!coupons || coupons.length === 0) {
+  container.innerHTML = `
+    <div class="col-12 text-center">
+      <div class="no-coupons-found">
+        <i class="mdi mdi-ticket-outline" style="font-size: 48px; color: #ccc; margin-bottom: 20px;"></i>
+        <h4 style="color: #666;">No Coupons Found</h4>
+        <p style="color: #999;">There are no coupons available at the moment.</p>
+      </div>
+    </div>
+  `;
+  return; // Exit the function early
+}
+
+// If coupons exist, display them
+coupons.forEach((coupon) => {
+  const expiryDate = new Date(coupon.expiryDate);
+  const formattedDate = expiryDate.toISOString().split('T')[0];
+  const card = `
+    <div class="col-md-4">
+      <div class="coupon-card">
+        <h3 class="coupon-code">${coupon.code}</h3>
+        <p class="coupon-discount">${coupon.discount}% Off</p>
+        <p class="coupon-expiry">Expires: ${formattedDate}</p>
+        <p><span class="coupon-status ${coupon.status ? 'status-active' : 'status-inactive'}">${coupon.status ? 'Active' : 'Inactive'}</span></p>
+        <div class="mt-3">
+          <button class="btn btn-info btn-sm" onclick="editCoupon('${coupon._id}')">
+            <i class="mdi mdi-pencil"></i> Edit
+          </button>
+          <button class="btn btn-danger btn-sm" onclick="deleteCoupon('${coupon._id}')">
+            <i class="mdi mdi-delete"></i> Delete
+          </button>
         </div>
-      `;
-      container.innerHTML += card;
-    });
+      </div>
+    </div>
+  `;
+  container.innerHTML += card;
+});
   }
 
   function addCoupon() {

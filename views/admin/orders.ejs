@@ -20,10 +20,10 @@
   <link rel="stylesheet" href="/assets/vendors/owl-carousel-2/owl.theme.default.min.css">
 
   <!-- croper js  -->
-
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.css">
 
-<style>.disabled-card {
+<style>
+.disabled-card {
   opacity: 0.5; /* Makes the card semi-transparent */
   pointer-events: none; /* Prevents interactions like clicks */
   background-color: #f8f9fa; /* Light background to indicate disabled state */
@@ -37,13 +37,29 @@
     position: absolute;
     top:0;
     right: 0;
-    
-    
-
-    
-    
 }
 
+.no-orders-found {
+  text-align: center;
+  padding: 60px 20px;
+  color: #6c757d;
+}
+
+.no-orders-found .mdi {
+  font-size: 4rem;
+  color: #dee2e6;
+  margin-bottom: 20px;
+}
+
+.no-orders-found h5 {
+  margin-bottom: 10px;
+  color: #495057;
+}
+
+.no-orders-found p {
+  margin-bottom: 0;
+  font-size: 0.9rem;
+}
 </style>
 
   <!-- Layout styles -->
@@ -115,6 +131,8 @@ const searchConfig = {
 }
 %>
 <%- include('./admin_parts/search-component', { searchConfig }) %>
+
+                    <% if (Orders && Orders.length > 0) { %>
                     <div class="table-responsive">
                       <table class="table table-hover">
                         <thead>
@@ -173,25 +191,38 @@ const searchConfig = {
                         </tbody>
                       </table>
                     </div>
+                    <% } else { %>
+                    <!-- No Orders Found State -->
+                    <div class="no-orders-found">
+                      <i class="mdi mdi-package-variant"></i>
+                      <h5>No Orders Found</h5>
+                      <p>There are currently no orders to display. Orders will appear here once customers start placing them.</p>
+                    </div>
+                    <% } %>
+
                   </div>
                 </div>
               </div>
             </div>
+
+            <% if (Orders && Orders.length > 0) { %>
             <div class="pagination">
-  <% if (pagination.currentPage > 1) { %>
-    <button class="btn btn-secondary pagination-btn" data-page="<%= pagination.currentPage - 1 %>" data-limit="<%= pagination.limit %>">
-      Previous
-    </button>
-  <% } %>
+              <% if (pagination.currentPage > 1) { %>
+                <button class="btn btn-secondary pagination-btn" data-page="<%= pagination.currentPage - 1 %>" data-limit="<%= pagination.limit %>">
+                  Previous
+                </button>
+              <% } %>
 
-  <span class="mx-5">Page <%= pagination.currentPage %> of <%= pagination.totalPages == 0 ? 1 : pagination.totalPages %></span>
+              <span class="mx-5">Page <%= pagination.currentPage %> of <%= pagination.totalPages == 0 ? 1 : pagination.totalPages %></span>
 
-  <% if (pagination.currentPage < pagination.totalPages) { %>
-    <button class="btn btn-secondary pagination-btn" data-page="<%= pagination.currentPage + 1 %>" data-limit="<%= pagination.limit %>">
-      Next
-    </button>
-  <% } %>
-</div>
+              <% if (pagination.currentPage < pagination.totalPages) { %>
+                <button class="btn btn-secondary pagination-btn" data-page="<%= pagination.currentPage + 1 %>" data-limit="<%= pagination.limit %>">
+                  Next
+                </button>
+              <% } %>
+            </div>
+            <% } %>
+
         </div>
       </div>
       <!-- Page body wrapper ends -->

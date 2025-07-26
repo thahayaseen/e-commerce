@@ -101,88 +101,109 @@ const searchConfig = {
   </div>
 </div>
             
-            <!-- Offers Table -->
-            <div class="row">
-              <div class="col-12 grid-margin">
-                <div class="card">
-                  <div class="card-body">
-                    <h4 class="card-title">Manage Offers</h4>
-                    <div class="table-responsive">
-                      <table class="table table-hover">
-                        <thead>
-                          <tr>
-                            <th>#</th>
-                            <th>Offer Name</th>
-                            <th>Type</th>
-                            <th>Discount</th>
-                            <th>Applied To</th>
-                            <th>Valid Until</th>
-                            <th>Status</th>
-                            <th>Actions</th>
-                          </tr>
-                        </thead>
-                        <tbody>
-                          <% offers.forEach((offer, index) => { %>
-                          <tr>
-                            <td><%= index + 1 + (pagination.currentPage - 1) * pagination.limit %></td>
-                            <td><%= offer.name %></td>
-                            <td><%= offer.discountType %></td>
-                            <td>
-                              <%= offer.discountType === 'percentage' ?
-                              offer.discountValue + '%' : '₹' +
-                              offer.discountValue %>
-                            </td>
-                            <td><%= offer.applicationType %></td>
-                            <td>
-                              <%= new
-                              Date(offer.validUntil).toLocaleDateString('en-GB',
-                              { day: '2-digit', month: 'short', year: 'numeric'
-                              }) %>
-                            </td>
-                            <td>
-                              <div
-                                class="badge <%= offer.isActive ? 'badge-success' : 'badge-danger' %>">
-                                <%= offer.isActive ? 'Active' : 'Inactive' %>
-                              </div>
-                            </td>
-                            <td>
-                              <button
-                                class="btn btn-info btn-sm edit-offer"
-                                data-id="<%= offer._id %>">
-                                <i class="mdi mdi-pencil"></i>
-                              </button>
-                              <button
-                                class="btn btn-danger btn-sm delete-offer"
-                                data-id="<%= offer._id %>">
-                                <i class="mdi mdi-delete"></i>
-                              </button>
-                            </td>
-                          </tr>
-                          <% }) %>
-                        </tbody>
-                      </table>
+           <!-- Offers Table -->
+<div class="row">
+  <div class="col-12 grid-margin">
+    <div class="card">
+      <div class="card-body">
+        <h4 class="card-title">Manage Offers</h4>
+        
+        <% if (offers && offers.length > 0) { %>
+          <!-- Table when offers exist -->
+          <div class="table-responsive">
+            <table class="table table-hover">
+              <thead>
+                <tr>
+                  <th>#</th>
+                  <th>Offer Name</th>
+                  <th>Type</th>
+                  <th>Discount</th>
+                  <th>Applied To</th>
+                  <th>Valid Until</th>
+                  <th>Status</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                <% offers.forEach((offer, index) => { %>
+                <tr>
+                  <td><%= index + 1 + (pagination.currentPage - 1) * pagination.limit %></td>
+                  <td><%= offer.name %></td>
+                  <td><%= offer.discountType %></td>
+                  <td>
+                    <%= offer.discountType === 'percentage' ?
+                    offer.discountValue + '%' : '₹' +
+                    offer.discountValue %>
+                  </td>
+                  <td><%= offer.applicationType %></td>
+                  <td>
+                    <%= new
+                    Date(offer.validUntil).toLocaleDateString('en-GB',
+                    { day: '2-digit', month: 'short', year: 'numeric'
+                    }) %>
+                  </td>
+                  <td>
+                    <div
+                      class="badge <%= offer.isActive ? 'badge-success' : 'badge-danger' %>">
+                      <%= offer.isActive ? 'Active' : 'Inactive' %>
                     </div>
-</div>
-</div>
-                </div>
-
-
-                    <div class="pagination">
-  <% if (pagination.currentPage > 1) { %>
-    <button class="btn btn-secondary pagination-btn" data-page="<%= pagination.currentPage - 1 %>" data-limit="<%= pagination.limit %>">
-      Previous
-    </button>
-  <% } %>
-
-  <span class="mx-5">Page <%= pagination.currentPage %> of <%= pagination.totalPages == 0 ? 1 : pagination.totalPages %></span>
-
-  <% if (pagination.currentPage < pagination.totalPages) { %>
-    <button class="btn btn-secondary pagination-btn" data-page="<%= pagination.currentPage + 1 %>" data-limit="<%= pagination.limit %>">
-      Next
-    </button>
-  <% } %>
-              </div>
+                  </td>
+                  <td>
+                    <button
+                      class="btn btn-info btn-sm edit-offer"
+                      data-id="<%= offer._id %>">
+                      <i class="mdi mdi-pencil"></i>
+                    </button>
+                    <button
+                      class="btn btn-danger btn-sm delete-offer"
+                      data-id="<%= offer._id %>">
+                      <i class="mdi mdi-delete"></i>
+                    </button>
+                  </td>
+                </tr>
+                <% }) %>
+              </tbody>
+            </table>
+          </div>
+        <% } else { %>
+          <!-- Empty state when no offers -->
+          <div class="text-center py-5">
+            <div class="no-offers-found">
+              <i class="mdi mdi-tag-outline" style="font-size: 64px; color: #ccc; margin-bottom: 20px;"></i>
+              <h4 style="color: #666; margin-bottom: 15px;">No Offers Found</h4>
+              <p style="color: #999; margin-bottom: 25px;">There are no offers available at the moment. Create your first offer to get started.</p>
+              <button
+                class="btn btn-primary"
+                data-toggle="modal"
+                data-target="#addOfferModal">
+                <i class="mdi mdi-plus"></i> Create First Offer
+              </button>
             </div>
+          </div>
+        <% } %>
+      </div>
+    </div>
+  </div>
+
+  <!-- Pagination - only show if offers exist -->
+  <% if (offers && offers.length > 0) { %>
+    <div class="pagination">
+      <% if (pagination.currentPage > 1) { %>
+        <button class="btn btn-secondary pagination-btn" data-page="<%= pagination.currentPage - 1 %>" data-limit="<%= pagination.limit %>">
+          Previous
+        </button>
+      <% } %>
+
+      <span class="mx-5">Page <%= pagination.currentPage %> of <%= pagination.totalPages == 0 ? 1 : pagination.totalPages %></span>
+
+      <% if (pagination.currentPage < pagination.totalPages) { %>
+        <button class="btn btn-secondary pagination-btn" data-page="<%= pagination.currentPage + 1 %>" data-limit="<%= pagination.limit %>">
+          Next
+        </button>
+      <% } %>
+    </div>
+  <% } %>
+</div>
           </div>
         </div>
          
