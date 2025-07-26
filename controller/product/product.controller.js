@@ -6,53 +6,68 @@ const orders = require('../../model/orders')
 
 
 const returnadmin = async (req, res) => {
-    const orderid = req.params.orderid
-    const product = req.params.product
-    const action = req.params.action
-    const order = await orders.findById(orderid).populate('products.productid')
-    const userid = order.user
-    const productindex = order.products.findIndex(a => a.productid._id == product)
-    const wallet = await Wallet.findOne({ userId: userid })
-    console.log(productindex);
-    const coupon = order.coupon.discount
-    let coupondiscount = (order.coupon.discount * 100) / order.totalAmount
-    const productprice = (order.products[productindex].price - order.products[productindex].discount) * order.products[productindex].quantity
-    let refundamount = (productprice - (productprice * coupondiscount) / 100)
-    // console.log(JSON.stringify(order));
-    console.log('coupon' + coupondiscount);
-    console.log('amount is ' + refundamount);
+    try {
+        const { orderid, product, action } = req.params;
 
-    console.log(orderid);
-    console.log(action);
-    // console.log(product);
-    if (action === 'accept') {
-        order.products[productindex].return = 'Returned'
-        order.products[productindex].status = false
-        wallet.balance += refundamount
-        console.log(wallet.balance);
-        wallet.income += refundamount
-        order.refund += refundamount
-        wallet.transactions.push({
-            type: 'credit',
-            amount: refundamount,
-            date: new Date(),
-            description: `refund of ${order.products[productindex].productid.name}`
-        });
-        wallet.save()
+        const order = await orders.findById(orderid).populate('products.productid');
+        if (!order) return res.status(404).json({ success: false, message: 'Order not found' });
 
-    }
-    else if (action === 'reject') {
-        order.products[productindex].return = 'CannotReturn'
-    }
-    const ttl = order.totalAmount - order.refund - (order.coupon?.discount ?? 0)
-    console.log('ttls is ',ttl);
-    
-    if (ttl == 0) {
-        order.status = 'Cancelled'
-    }
-    await order.save()
-    return res.status(200).json({ success: true, message: 'action initiated' })
-    // order.products.findIndex(a=>)
+        const userId = order.user;
+        const wallet = await Wallet.findOne({ userId });
+        if (!wallet) return res.status(404).json({ success: false, message: 'Wallet not found' });
 
-}
+        const productIndex = order.products.findIndex(p => String(p.productid._id) === String(product));
+        if (productIndex === -1) return res.status(404).json({ success: false, message: 'Product not found in order' });
+
+        const productItem = order.products[productIndex];
+
+        // Calculate coupon discount percentage
+        const couponDiscountValue = order.coupon?.discount ?? 0;
+        const couponDiscountPercentage = order.totalAmount > 0
+            ? (couponDiscountValue * 100) / order.totalAmount
+            : 0;
+
+        // Calculate product price and refund amount
+        const productTotalPrice = (productItem.price - productItem.discount) * productItem.quantity;
+        const refundAmount = productTotalPrice - (productTotalPrice * couponDiscountPercentage) / 100;
+
+        console.log(`Refunding ₹${refundAmount.toFixed(2)} for product: ${productItem.productid.name}`);
+
+        if (action === 'accept') {
+            productItem.return = 'Returned';
+            productItem.status = false;
+
+            wallet.balance += refundAmount;
+            wallet.income += refundAmount;
+            order.refund += refundAmount;
+
+            wallet.transactions.push({
+                type: 'credit',
+                amount: refundAmount,
+                date: new Date(),
+                description: `Refund for ${productItem.productid.name}`
+            });
+
+            await wallet.save();
+        } else if (action === 'reject') {
+            productItem.return = 'CannotReturn';
+        }
+
+        // Check if the order total minus refund and coupon discount is zero or less
+        const remainingPayable = order.totalAmount - order.refund - couponDiscountValue;
+        console.log('Remaining total after refund:', remainingPayable);
+
+        if (remainingPayable <= 0) {
+            order.status = 'Cancelled';
+        }
+
+        await order.save();
+
+        return res.status(200).json({ success: true, message: 'Action completed successfully' });
+    } catch (err) {
+        console.error('Error in returnadmin:', err);
+        return res.status(500).json({ success: false, message: 'Internal server error' });
+    }
+};
+
 module.exports = { returnadmin, }
