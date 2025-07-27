@@ -165,13 +165,7 @@ class OffersManager {
       }
     }
 
-    // Minimum purchase amount validation
-    const minPurchaseAmount = Number.parseFloat(formData.minPurchaseAmount)
-    if (formData.minPurchaseAmount && !isNaN(minPurchaseAmount) && minPurchaseAmount < 0) {
-      errors.push("Minimum purchase amount cannot be negative")
-      this.showFieldError(document.querySelector('[name="minPurchaseAmount"]'), "Cannot be negative")
-      isValid = false
-    }
+   
 
     return { isValid, errors }
   }
@@ -353,7 +347,7 @@ class OffersManager {
     }
 
     // Handle optional fields
-    document.querySelector('input[name="minPurchaseAmount"]').value = offer.minPurchaseAmount || ""
+
     document.querySelector('input[name="isActive"]').checked = offer.isActive !== false
 
     // Handle selected items
