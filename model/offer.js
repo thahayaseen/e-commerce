@@ -2,7 +2,7 @@ const mongoose=require('mongoose')
 
 const offer=mongoose.Schema({
     name:{
-        type:String,
+        type:String,,trim:true
 
     },
     applicationType:{

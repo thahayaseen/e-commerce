@@ -3,7 +3,7 @@ const mongoose=require('mongoose')
 
 const coupen=mongoose.Schema({
     code:{
-        type:String
+        type:String,trim:true
     },
     discount:{
         type:Number
