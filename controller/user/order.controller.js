@@ -159,103 +159,85 @@ const cancelitem = async (req, res) => {
         console.log(req.body);
         const { orderid, productid } = req.body;
 
-        let orderdata = await orderchema.findOne({ orderid: orderid }).populate('products.productid')
+        const orderdata = await orderchema.findOne({ orderid: orderid }).populate('products.productid');
         if (!orderdata) {
             return res.status(404).json({ success: false, message: "Order not found" });
         }
-        if(orderdata.status=='Delivered'){
-            return res.status(409).json({ success: false, message: "Order cannot be cancel due to item aldredy Delivered" });
 
+        if (orderdata.status === 'Delivered') {
+            return res.status(409).json({ success: false, message: "Order cannot be cancelled as item is already Delivered" });
         }
-        console.log(JSON.stringify(orderdata));
 
         const index = orderdata.products.findIndex(product => product._id == productid);
         if (index === -1) {
             return res.status(404).json({ success: false, message: "Product not found in order" });
         }
-        if (orderdata.status == 'Shipped') {
-            return res.status(200).json({ success: false, message: 'Cannot cancel shipped Product' })
+
+        if (orderdata.status === 'Shipped') {
+            return res.status(200).json({ success: false, message: 'Cannot cancel shipped Product' });
         }
-        // Update product status to false
+
+        // Cancel the product
         orderdata.products[index].status = false;
 
-        let percentage = 0;
+        const price = orderdata.products[index].price;
+        const discount = orderdata.products[index].discount;
+        const quantity = orderdata.products[index].quantity;
+
         let refundprice = 0;
 
+        // Rounding helper
+        const roundToTwo = (num) => Math.round((num + Number.EPSILON) * 100) / 100;
+
         if (orderdata.coupon && orderdata.coupon.couponcode) {
-            console.log('coupon exsist');
+            const percentage = orderdata.coupon.discount / orderdata.totalAmount;
 
-            percentage = (orderdata.coupon.discount * 100) / orderdata.totalAmount;
-            refundprice = ((orderdata.products[index].price - orderdata.products[index].discount) * orderdata.products[index].quantity)
-                - (((orderdata.products[index].price - orderdata.products[index].discount) * percentage / 100)
-                    * orderdata.products[index].quantity);
+            refundprice = roundToTwo(
+                (price - discount) * quantity * (1 - percentage)
+            );
         } else {
-            console.log('quantity ' + orderdata.products[index].quantity);
-            refundprice = (orderdata.products[index].price - orderdata.products[index].discount) * orderdata.products[index].quantity;
-        }
-        let count = 0;
-
-        for (const orders of orderdata.products) {
-            console.log(orders.status);
-            count += !orders.status ? 1 : -1;
-        }
-        console.log(Object.values);
-
-        console.log(count);
-        console.log('length is ' + orderdata.products.length);
-        console.log(count - orderdata.products.length == 0);
-
-        // Check if count is exactly zero
-        if (count - orderdata.products.length == 0) {
-            console.log('last one');
-            refundprice += orderdata.shippingcharg;
+            refundprice = roundToTwo((price - discount) * quantity);
         }
 
-        if (orderdata.paymentStatus == 'Paid') {
+        // Check if all items are cancelled
+        const allCancelled = orderdata.products.every(p => p.status === false);
+        if (allCancelled) {
+            refundprice = roundToTwo(refundprice + orderdata.shippingcharg);
+            orderdata.status = 'Cancelled';
+        }
 
+        // Refund to wallet if paid
+        if (orderdata.paymentStatus === 'Paid') {
+            const wallet = await Wallet.findOne({ userId: orderdata.user });
 
-            const wallet = await Wallet.findOne({ userId: orderdata.user })
-            wallet.balance += refundprice
-            wallet.income += refundprice
+            wallet.balance = roundToTwo(wallet.balance + refundprice);
+            wallet.income = roundToTwo(wallet.income + refundprice);
             wallet.transactions.push({
                 type: 'credit',
                 amount: refundprice,
                 date: new Date(),
-                description: `refund of ${orderdata.products[index].productid.name}`
+                description: `Refund for ${orderdata.products[index].productid.name}`
             });
-            await wallet.save()
-            orderdata.refund = orderdata.refund
-            orderdata.refund += refundprice;
-
+            await wallet.save();
         }
-        else {
-            orderdata.refund += refundprice;
 
-        }
-        if (count - orderdata.products.length == 0) {
-            console.log('yes');
-            orderdata.status = 'Cancelled'
+        orderdata.refund = roundToTwo(orderdata.refund + refundprice);
 
+        const updated = await orderdata.save();
+        console.log('Updated refund in database:', updated.refund);
 
-        }
-        else {
-            console.log('no');
-
-        }
-        // const change = true;
-        const change = await orderdata.save();
-        console.log('Updated refund in database:', change.refund);
-
-        if (change) {
+        if (updated) {
             res.status(201).json({ success: true });
         } else {
             res.status(204).json({ success: false, message: "Refund not processed" });
         }
+
     } catch (error) {
         console.error("Error processing cancellation:", error);
         res.status(500).json({ success: false, message: "Internal server error" });
     }
 };
+
 const cancelorder = async (req, res) => {
     const userid = req.session.ulogin
     const orderid = req.params.id;

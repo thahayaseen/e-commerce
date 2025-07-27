@@ -217,10 +217,10 @@
                                         
                                         %>
 
-                                        <span class="original-price"><%=total?'₹'+total :'Order cancelled'%></span>
+                                        <span class="original-price"><%=total?'₹'+total.toFixed(2) :'Order cancelled'%></span>
                                     </td>
                                     <td>
-                                        <% if(order.coupon && order.coupon.discount) { %>
+                                        <% if(order.coupon && order.coupon.discount) { %>`
                                             <span class="product-offer">
                                                 Coupon: ₹<%=order.coupon.discount%> OFF
                                             </span>
@@ -231,7 +231,10 @@
                                             <% } %>
                                     </td>
 
-                                    <td class="final-price">₹<%=(order.totalAmount+order.shippingcharg - order.coupon.discount-order.refund)%></td>
+                                  <td class="final-price">
+  ₹<%= (order.totalAmount + order.shippingcharg - (order.coupon ? order.coupon.discount : 0) - order.refund).toFixed(2) %>
+</td>
+
                                     <td>
                                         <% if (order.status === 'Delivered') { %>
                                             <span class="badge badge-success">Delivered</span>
