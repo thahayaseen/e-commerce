@@ -54,7 +54,7 @@ const formatCoupon = (coupon, order, products) => {
     }
   })
 
-  return `${coupon.couponcode ? coupon.couponcode : "No Coupon"}(-${coupon.couponcode ? toataldiscount : 0}Rs)`
+  return `${coupon.couponcode ? coupon.couponcode : "No Coupon"}(-${coupon.couponcode ? toataldiscount.toFixed(2) : 0}Rs)`
 }
 
 const calculateStats = (data) => {
