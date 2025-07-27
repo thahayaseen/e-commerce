@@ -317,57 +317,10 @@
         </form>
     </div>
     
-<div class="container mx-auto reiviewsecrtion  mt-10">
-        <h2 class="text-2xl font-semibold mb-4">User Reviews</h2>
-    
-        <!-- Review 1 -->
-        <div class="flex items-start space-x-4 mb-6">
-            <img src="https://cdn.pixabay.com/photo/2016/11/08/15/21/user-1808597_1280.png" alt="User Logo" class="w-1 h-1 rounded-full">
-            <div>
-                <h4 class="text-lg font-semibold">John Doe</h4>
-                <div class="flex space-x-1 text-yellow-500">
-                    <i class="fas fa-star"></i>
-                    <i class="fas fa-star"></i>
-                    <i class="fas fa-star"></i>
-                    <i class="fas fa-star"></i>
-                    <i class="fas fa-star-half-alt"></i>
-                </div>
-                <p class="text-gray-700 mt-2">I recently purchased this PC, and overall, I am quite impressed with its performance. The speed is great, and it handles gaming and video editing smoothly. I highly recommend it for power users.</p>
-            </div>
-        </div>
-    
-        <!-- Review 2 -->
-        <div class="flex items-start space-x-4">
-            <img src="https://cdn.pixabay.com/photo/2014/04/02/17/07/user-307993_1280.png" alt="User Logo" class="w-12 h-12 rounded-full">
-            <div>
-                <h4 class="text-lg font-semibold">Jane Smith</h4>
-                <div class="flex space-x-1 text-yellow-500">
-                    <i class="fas fa-star"></i>
-                    <i class="fas fa-star"></i>
-                    <i class="fas fa-star"></i>
-                    <i class="fas fa-star"></i>
-                    <i class="fas fa-star"></i>
-                </div>
-                <p class="text-gray-700 mt-2">Amazing PC! It's super fast and handles my day-to-day tasks with ease. I've been using it for work and gaming, and the experience has been fantastic. The design is sleek too!</p>
-            </div>
-        </div>
-    </div>
+
 
     </section>
-    <section class="mt-16">
-        <h2 class="text-2xl font-bold text-gray-900 mb-8">Related Products</h2>
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            <% sameProducts.forEach(product => { %>
-                <a href="/product/<%= product._id %>" class="related-product block bg-white rounded-lg overflow-hidden">
-                    <img src="<%= product.images[0] %>" alt="<%= product.name %>" class="w-full h-48 object-cover">
-                    <div class="p-4">
-                        <h3 class="font-semibold text-gray-900"><%= product.name %></h3>
-                        <p class="text-lg font-bold text-indigo-600 mt-2">₹<%= product.price %></p>
-                    </div>
-                </a>
-            <% }); %>
-        </div>
-    </section>
+
  <footer id="footer" class="bg-gray-800 py-8">
         <div class="container mx-auto px-4">
             <div class="flex flex-col md:flex-row justify-between items-center pb-6">
