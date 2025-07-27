@@ -1,87 +1,96 @@
 <!DOCTYPE html>
 <html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <title>Product Management</title>
 
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-  <title>Product Management</title>
+    <link
+      rel="stylesheet"
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/@mdi/font/css/materialdesignicons.min.css" />
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.css"
+      rel="stylesheet" />
 
-  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@mdi/font/css/materialdesignicons.min.css">
-<link href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="/assets/css/style.css" />
+    <style>
+      /* Set the container background to white */
+      .cropper-container {
+        background-color: white; /* Or any color you prefer */
+      }
+    </style>
+  </head>
 
-
-  <link rel="stylesheet" href="/assets/css/style.css">
-  <style>
-    /* Set the container background to white */
-.cropper-container {
-    background-color: white; /* Or any color you prefer */
-}
-
-  </style>
-</head>
-
-<body>
-  <div class="container-scroller">
-    <div class="sidebar bg-light">
-      <%- include('./admin_parts/sidebar') %>
-    </div>
-
-    <div class="container-fluid page-body-wrapper">
-      <div class="header">
-        <%- include("./admin_parts/hedder") %>
+  <body>
+    <div class="container-scroller">
+      <div class="sidebar bg-light">
+        <%- include('./admin_parts/sidebar') %>
       </div>
 
-      <div class="main-panel">
-        <div class="content-wrapper">
-          <div class="page-header">
-            <h3 class="page-title">Product Management</h3>
-          </div>
- <%
-const searchConfig = {
-  route: '/admin/product',
-  method: 'GET',
-  placeholder: 'Search product by name...',
-  debounceDelay: 300,
-  filters: [
-  ],
-  additionalParams: {
-    limit: 50
-  }
-}
-%>
-<%- include('./admin_parts/search-component', { searchConfig }) %>
-          <div class="row mb-3">
-            <div class="col-12">
-              <button class="btn btn-primary" data-toggle="modal" data-target="#addProductModal">Add Product</button>
-            </div>
-          </div>
+      <div class="container-fluid page-body-wrapper">
+        <div class="header"><%- include("./admin_parts/hedder") %></div>
 
-          <div class="row">
-            <div class="col-12 grid-margin">
-              <div class="card">
-                <div class="card-body">
-                  <h4 class="card-title">Manage Products</h4>
-                  <div class="table-responsive">
-                    <table class="table table-hover">
-                      <thead>
-                        <tr>
-                          <th>#</th>
-                          <th>Product Name</th>
-                          <th>Category Name</th>
-                          <th>Price</th>
-                          <th>Offer</th>
-                          <th>Stock</th>
-                          <th>Status</th>
-                          <th>Action</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        <% Products.forEach((Product, index)=> { %>
+        <div class="main-panel">
+          <div class="content-wrapper">
+            <div class="page-header">
+              <h3 class="page-title">Product Management</h3>
+            </div>
+            <% const searchConfig = { route: '/admin/product', method: 'GET',
+            placeholder: 'Search product by name...', debounceDelay: 300,
+            filters: [ ], additionalParams: { limit: 50 } } %> <%-
+            include('./admin_parts/search-component', { searchConfig }) %>
+
+            <div class="row mb-3">
+              <div class="col-12">
+                <button
+                  class="btn btn-primary"
+                  data-toggle="modal"
+                  data-target="#addProductModal">
+                  Add Product
+                </button>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col-12 grid-margin">
+                <div class="card">
+                  <div class="card-body">
+                    <h4 class="card-title">Manage Products</h4>
+                    <div class="table-responsive">
+                      <table class="table table-hover">
+                        <thead>
                           <tr>
-                            <td><%= index + 1 + (pagination.currentPage - 1) * pagination.limit %></td>
-                            <td style="max-width: 200px; word-wrap: break-word; white-space: normal;">
-                              <p style="line-height: 1.5;"><%= Product.name %></p>
+                            <th>#</th>
+                            <th>Product Name</th>
+                            <th>Category Name</th>
+                            <th>Price</th>
+                            <th>Offer</th>
+                            <th>Stock</th>
+                            <th>Status</th>
+                            <th>Action</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <% Products.forEach((Product, index)=> { %>
+                          <tr>
+                            <td>
+                              <%= index + 1 + (pagination.currentPage - 1) *
+                              pagination.limit %>
+                            </td>
+                            <td
+                              style="
+                                max-width: 200px;
+                                word-wrap: break-word;
+                                white-space: normal;
+                              ">
+                              <p style="line-height: 1.5">
+                                <%= Product.name %>
+                              </p>
                             </td>
                             <td><%=Product.category_id.name%></td>
                             <td>₹<%= Product.price %></td>
@@ -89,210 +98,378 @@ const searchConfig = {
                             <td><%= Product.stock %></td>
                             <td>
                               <% if (Product.stock > 0) { %>
-                                <label class="badge badge-success">In Stock</label>
+                              <label class="badge badge-success"
+                                >In Stock</label
+                              >
                               <% } else { %>
-                                <label class="badge badge-danger">Out of Stock</label>
+                              <label class="badge badge-danger"
+                                >Out of Stock</label
+                              >
                               <% } %>
                             </td>
                             <td>
-                              <button class="btn btn-info btn-md edit-btn" data-id="<%= Product._id %>"
-                                data-name="<%= Product.name %>" data-category="<%=Product.category_id._id%>"
-                                data-description="<%= Product.description %>" data-price="<%= Product.price %>"
-                                data-stock="<%=Product.stock%>" data-offer="<%=Product.offer  %>" data-offer="<%=Product.offer%>"
-                                data-images='<%= JSON.stringify(Product.images) %>'>
+                              <button
+                                class="btn btn-info btn-md edit-btn"
+                                data-id="<%= Product._id %>"
+                                data-name="<%= Product.name %>"
+                                data-category="<%=Product.category_id._id%>"
+                                data-description="<%= Product.description %>"
+                                data-price="<%= Product.price %>"
+                                data-stock="<%=Product.stock%>"
+                                data-offer="<%=Product.offer  %>"
+                                data-offer="<%=Product.offer%>"
+                                data-images="<%= JSON.stringify(Product.images) %>">
                                 Edit
                               </button>
-                              <button class="btn btn-md <%= Product.unlist ? 'btn-danger' : 'btn-success' %> unlist-btn"
+                              <button
+                                class="btn btn-md <%= Product.unlist ? 'btn-danger' : 'btn-success' %> unlist-btn"
                                 data-id="<%= Product._id %>">
                                 <%= Product.unlist ? 'Unlist' : 'Listed' %>
                               </button>
                             </td>
                           </tr>
-                        <% }) %>
-                      </tbody>
-                    </table>
+                          <% }) %>
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="pagination">
+              <% if (pagination.currentPage > 1) { %>
+              <button
+                class="btn btn-secondary pagination-btn"
+                data-page="<%= pagination.currentPage - 1 %>"
+                data-limit="<%= pagination.limit %>">
+                Previous
+              </button>
+              <% } %>
+
+              <span class="mx-5"
+                >Page <%= pagination.currentPage %> of <%= pagination.totalPages
+                == 0 ? 1 : pagination.totalPages %></span
+              >
+
+              <% if (pagination.currentPage < pagination.totalPages) { %>
+              <button
+                class="btn btn-secondary pagination-btn"
+                data-page="<%= pagination.currentPage + 1 %>"
+                data-limit="<%= pagination.limit %>">
+                Next
+              </button>
+              <% } %>
+            </div>
+
+            <!-- Edit Product Modal -->
+            <div
+              class="modal fade"
+              id="editProductModal"
+              tabindex="-1"
+              role="dialog"
+              aria-labelledby="editProductModalLabel"
+              aria-hidden="true">
+              <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <h5 class="modal-title" id="editProductModalLabel">
+                      Edit Product
+                    </h5>
+                  </div>
+                  <div class="modal-body">
+                    <form
+                      class="forms-sample"
+                      id="editProductForm"
+                      enctype="multipart/form-data">
+                      <div class="form-group">
+                        <label for="productName">Product Name</label>
+                        <input
+                          type="text"
+                          class="form-control bg-dark text-light"
+                          id="productName"
+                          name="productName"
+                          placeholder="Product Name" />
+                      </div>
+                      <div class="form-group">
+                        <label for="productCategory">Category</label>
+                        <select
+                          class="form-control bg-dark text-light"
+                          id="productCategory"
+                          name="productCategory">
+                          <option value="">Select Category</option>
+                          <% categories.forEach(category => { %>
+                          <option value="<%= category._id %>">
+                            <%= category.name %>
+                          </option>
+                          <% }) %>
+                        </select>
+                      </div>
+                      <div class="form-group">
+                        <label for="productDescription">Description</label>
+                        <textarea
+                          class="form-control bg-dark text-light"
+                          id="productDescription"
+                          name="productDescription"
+                          rows="4"
+                          placeholder="Product Description"></textarea>
+                      </div>
+                      <div class="form-row">
+                        <div class="form-group col-md-6">
+                          <label for="productPrice">Price</label>
+                          <input
+                            type="number"
+                            min="0"
+                            class="form-control bg-dark text-light"
+                            id="productprice"
+                            name="productPrice"
+                            placeholder="Product Price" />
+                        </div>
+                        <div class="form-group col-md-6">
+                          <label for="productStock">Stock</label>
+                          <input
+                            type="number"
+                            min="0"
+                            class="form-control bg-dark text-light"
+                            id="productStock"
+                            name="productStock"
+                            placeholder="Product Stock" />
+                        </div>
+                      </div>
+                      <div class="form-group">
+                        <label for="productOffer">Offer (%)</label>
+                        <input
+                          type="number"
+                          min="0"
+                          max="99"
+                          class="form-control bg-dark text-light"
+                          id="productOffer"
+                          name="productOffer"
+                          placeholder="Offer Percentage (0-99)" />
+                      </div>
+                      <div class="form-group">
+                        <label for="productImages">Upload New Images</label>
+                        <input
+                          type="file"
+                          class="form-control-file bg-dark text-light"
+                          id="productImageInput"
+                          name="productImages"
+                          accept="image/*"
+                          multiple />
+                      </div>
+                      <div class="form-group">
+                        <label for="currentImages">Crop Uploaded Images</label>
+                        <div id="cropperContainer" class="d-flex flex-wrap">
+                          <img
+                            id="cropperImage"
+                            src=""
+                            alt="Image to crop"
+                            style="
+                              max-width: 300px;
+                              max-height: 300px;
+                              display: none;
+                            " />
+                        </div>
+                        <div id="cropControls" style="display: none">
+                          <button
+                            type="button"
+                            class="btn btn-success"
+                            id="saveCroppedImage">
+                            Save Cropped Image
+                          </button>
+                        </div>
+                      </div>
+                      <div
+                        id="croppedImagesPreview"
+                        class="d-flex flex-wrap"></div>
+                      <div class="form-group">
+                        <label for="currentImages" class="d-none"
+                          >Current Images</label
+                        >
+                        <div id="currentImages" class="d-flex flex-wrap"></div>
+                      </div>
+                      <button type="submit" class="btn btn-primary mr-2">
+                        Submit
+                      </button>
+                      <button
+                        type="reset"
+                        class="btn btn-secondary"
+                        data-dismiss="modal">
+                        Cancel
+                      </button>
+                    </form>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Add Product Modal -->
+            <div
+              class="modal fade"
+              id="addProductModal"
+              tabindex="-1"
+              role="dialog"
+              aria-labelledby="addProductModalLabel"
+              aria-hidden="true">
+              <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <h5 class="modal-title" id="addProductModalLabel">
+                      Add Product
+                    </h5>
+                  </div>
+                  <div class="modal-body">
+                    <form
+                      class="forms-sample"
+                      id="addProductForm"
+                      enctype="multipart/form-data">
+                      <div class="form-group">
+                        <label for="newProductName">Product Name</label>
+                        <input
+                          type="text"
+                          class="form-control bg-dark text-light"
+                          id="newProductName"
+                          name="newProductName"
+                          placeholder="Product Name"
+                          required />
+                      </div>
+                      <div class="form-group">
+                        <label for="newProductCategory">Category</label>
+                        <select
+                          class="form-control bg-dark text-light"
+                          id="newProductCategory"
+                          name="newProductCategory"
+                          required>
+                          <option value="">Select Category</option>
+                          <% categories.forEach(category => { %>
+                          <option value="<%= category._id %>">
+                            <%= category.name %>
+                          </option>
+                          <% }) %>
+                        </select>
+                      </div>
+                      <div class="form-group">
+                        <label for="newProductDescription">Description</label>
+                        <textarea
+                          class="form-control bg-dark text-light"
+                          id="newProductDescription"
+                          name="newProductDescription"
+                          rows="4"
+                          placeholder="Product Description"
+                          required></textarea>
+                      </div>
+                      <div class="form-row">
+                        <div class="form-group col-md-6">
+                          <label for="newProductPrice">Price</label>
+                          <input
+                            type="number"
+                            class="form-control bg-dark text-light"
+                            min="0"
+                            id="newProductPrice"
+                            name="newProductPrice"
+                            placeholder="Product Price"
+                            required />
+                        </div>
+                        <div class="form-group col-md-6">
+                          <label for="newProductStock">Stock</label>
+                          <input
+                            type="number"
+                            class="form-control bg-dark text-light"
+                            min="0"
+                            id="newProductStock"
+                            name="newProductStock"
+                            placeholder="Product Stock"
+                            required />
+                        </div>
+                      </div>
+                      <div class="form-group">
+                        <label for="newProductOffer">Offer (%)</label>
+                        <input
+                          type="number"
+                          class="form-control bg-dark text-light"
+                          min="0"
+                          max="99"
+                          id="newProductOffer"
+                          name="newProductOffer"
+                          placeholder="Offer Percentage (0-99)" />
+                      </div>
+                      <div class="form-group">
+                        <label for="newProductImages">Upload Images</label>
+                        <input
+                          type="file"
+                          id="addproductImageInput"
+                          multiple
+                          accept="image/*"
+                          required />
+                      </div>
+                      <div id="addcropControls" style="display: none">
+                        <img
+                          id="addcropperImage"
+                          style="display: none; width: 100%; height: auto" />
+                        <button
+                          type="button"
+                          id="nextButton"
+                          class="btn btn-secondary">
+                          Next Image
+                        </button>
+                        <button
+                          type="submit"
+                          id="addproductbtn"
+                          class="btn btn-primary mr-2"
+                          style="display: none">
+                          <span id="addbtn-text">Add Product</span>
+                          <span
+                            id="addbtn-spinner"
+                            class="spinner-border spinner-border-sm ms-2 d-none"
+                            role="status"
+                            aria-hidden="true"></span>
+                        </button>
+                      </div>
+                      <button
+                        type="reset"
+                        class="btn btn-secondary"
+                        data-dismiss="modal">
+                        Cancel
+                      </button>
+                    </form>
                   </div>
                 </div>
               </div>
             </div>
           </div>
-
-      <div class="pagination">
-  <% if (pagination.currentPage > 1) { %>
-    <button class="btn btn-secondary pagination-btn" data-page="<%= pagination.currentPage - 1 %>" data-limit="<%= pagination.limit %>">
-      Previous
-    </button>
-  <% } %>
-
-  <span class="mx-5">Page <%= pagination.currentPage %> of <%= pagination.totalPages == 0 ? 1 : pagination.totalPages %></span>
-
-  <% if (pagination.currentPage < pagination.totalPages) { %>
-    <button class="btn btn-secondary pagination-btn" data-page="<%= pagination.currentPage + 1 %>" data-limit="<%= pagination.limit %>">
-      Next
-    </button>
-  <% } %>
-</div>
-
-
-          <!-- Edit Product Modal -->
-          <div class="modal fade" id="editProductModal" tabindex="-1" role="dialog" aria-labelledby="editProductModalLabel" aria-hidden="true">
-            <div class="modal-dialog" role="document">
-              <div class="modal-content">
-                <div class="modal-header">
-                  <h5 class="modal-title" id="editProductModalLabel">Edit Product</h5>
-                </div>
-                <div class="modal-body">
-                  <form class="forms-sample" id="editProductForm" enctype="multipart/form-data">
-                    <div class="form-group">
-                      <label for="productName">Product Name</label>
-                      <input type="text" class="form-control bg-dark text-light" id="productName" name="productName" placeholder="Product Name">
-                    </div>
-                    <div class="form-group">
-                      <label for="productCategory">Category</label>
-                      <select class="form-control bg-dark text-light" id="productCategory" name="productCategory">
-                        <option value="">Select Category</option>
-                        <% categories.forEach(category => { %>
-                          <option value="<%= category._id %>"><%= category.name %></option>
-                        <% }) %>
-                      </select>
-                    </div>
-                    <div class="form-group">
-                      <label for="productDescription">Description</label>
-                      <textarea class="form-control bg-dark text-light" id="productDescription" name="productDescription" rows="4" placeholder="Product Description"></textarea>
-                    </div>
-                    <div class="form-row">
-                      <div class="form-group col-md-6">
-                        <label for="productPrice">Price</label>
-                        <input type="number" min="0" class="form-control bg-dark text-light" id="productprice" name="productPrice" placeholder="Product Price">
-                      </div>
-                      <div class="form-group col-md-6">
-                        <label for="productStock">Stock</label>
-                        <input type="number" min="0" class="form-control bg-dark text-light" id="productStock" name="productStock" placeholder="Product Stock">
-                      </div>
-                    </div>
-                    <div class="form-group">
-                      <label for="productOffer">Offer (%)</label>
-                      <input type="number" min="0" max="99" class="form-control bg-dark text-light" id="productOffer" name="productOffer" placeholder="Offer Percentage (0-99)">
-                    </div>
-                    <div class="form-group">
-                      <label for="productImages">Upload New Images</label>
-                      <input type="file" class="form-control-file bg-dark text-light" id="productImageInput" name="productImages" accept="image/*" multiple>
-                    </div>
-                    <div class="form-group">
-                      <label for="currentImages">Crop Uploaded Images</label>
-                      <div id="cropperContainer" class="d-flex flex-wrap">
-                        <img id="cropperImage" src="" alt="Image to crop" style="max-width: 300px; max-height: 300px; display: none;" />
-                      </div>
-                      <div id="cropControls" style="display:none;">
-                        <button type="button" class="btn btn-success" id="saveCroppedImage">Save Cropped Image</button>
-                      </div>
-                    </div>
-                    <div id="croppedImagesPreview" class="d-flex flex-wrap"></div>
-                    <div class="form-group">
-                      <label for="currentImages" class="d-none">Current Images</label>
-                      <div id="currentImages" class="d-flex flex-wrap"></div>
-                    </div>
-                    <button type="submit" class="btn btn-primary mr-2">Submit</button>
-                    <button type="reset" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-                  </form>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <!-- Add Product Modal -->
-          <div class="modal fade" id="addProductModal" tabindex="-1" role="dialog" aria-labelledby="addProductModalLabel" aria-hidden="true">
-            <div class="modal-dialog" role="document">
-              <div class="modal-content">
-                <div class="modal-header">
-                  <h5 class="modal-title" id="addProductModalLabel">Add Product</h5>
-                </div>
-                <div class="modal-body">
-                  <form class="forms-sample" id="addProductForm" enctype="multipart/form-data">
-                    <div class="form-group">
-                      <label for="newProductName">Product Name</label>
-                      <input type="text" class="form-control bg-dark text-light" id="newProductName" name="newProductName" placeholder="Product Name" required>
-                    </div>
-                    <div class="form-group">
-                      <label for="newProductCategory">Category</label>
-                      <select class="form-control bg-dark text-light" id="newProductCategory" name="newProductCategory" required>
-                        <option value="">Select Category</option>
-                        <% categories.forEach(category => { %>
-                          <option value="<%= category._id %>"><%= category.name %></option>
-                        <% }) %>
-                      </select>
-                    </div>
-                    <div class="form-group">
-                      <label for="newProductDescription">Description</label>
-                      <textarea class="form-control bg-dark text-light" id="newProductDescription" name="newProductDescription" rows="4" placeholder="Product Description" required></textarea>
-                    </div>
-                    <div class="form-row">
-                      <div class="form-group col-md-6">
-                        <label for="newProductPrice">Price</label>
-                        <input type="number" class="form-control bg-dark text-light" min="0" id="newProductPrice" name="newProductPrice" placeholder="Product Price" required>
-                      </div>
-                      <div class="form-group col-md-6">
-                        <label for="newProductStock">Stock</label>
-                        <input type="number" class="form-control bg-dark text-light" min="0" id="newProductStock" name="newProductStock" placeholder="Product Stock" required>
-                      </div>
-                    </div>
-                    <div class="form-group">
-                      <label for="newProductOffer">Offer (%)</label>
-                      <input type="number" class="form-control bg-dark text-light" min="0" max="99" id="newProductOffer" name="newProductOffer" placeholder="Offer Percentage (0-99)">
-                    </div>
-                    <div class="form-group">
-                      <label for="newProductImages">Upload Images</label>
-                      <input type="file" id="addproductImageInput" multiple accept="image/*" required>
-                    </div>
-                    <div id="addcropControls" style="display: none;">
-                      <img id="addcropperImage" style="display: none; width: 100%; height: auto;" />
-                      <button type="button" id="nextButton" class="btn btn-secondary">Next Image</button>
-                      <button type="submit" id="addproductbtn" class="btn btn-primary mr-2" style="display: none;">Add Product</button>
-                    </div>
-                    <button type="reset" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-                  </form>
-                </div>
-              </div>
-            </div>
-          </div>
-
         </div>
       </div>
     </div>
-  </div>
 
+    <script>
+      document.querySelectorAll(".pagination-btn").forEach((btn) => {
+        btn.addEventListener("click", () => {
+          const newPage = btn.getAttribute("data-page");
+          const limit = btn.getAttribute("data-limit");
 
-<script>
-  document.querySelectorAll('.pagination-btn').forEach(btn => {
-    btn.addEventListener('click', () => {
-      const newPage = btn.getAttribute('data-page');
-      const limit = btn.getAttribute('data-limit');
+          const params = new URLSearchParams(window.location.search);
 
-      const params = new URLSearchParams(window.location.search);
+          // Update only page and limit
+          params.set("page", newPage);
+          params.set("limit", limit);
 
-      // Update only page and limit
-      params.set('page', newPage);
-      params.set('limit', limit);
+          // Redirect with updated URL
+          window.location.search = params.toString();
+        });
+      });
+    </script>
 
-      // Redirect with updated URL
-      window.location.search = params.toString();
-    });
-  });
-</script>
-
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.js"></script>
-  <script src="/js/admin/product.js"></script>
-  <!-- In your HTML head -->
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.js"></script>
+    <script src="/js/admin/product.js"></script>
+    <!-- In your HTML head -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="/js/admin/search-component.js"></script>
 
-  <script src="/assets/vendors/js/vendor.bundle.base.js"></script>
-  <script src="/assets/vendors/chart.js/Chart.min.js"></script>
-  <script src="/assets/vendors/progressbar.js/progressbar.min.js"></script>
-  <script src="/assets/vendors/jvectormap/jquery-jvectormap.min.js"></script>
-  <script src="/assets/vendors/jvectormap/jquery-jvectormap-world-mill-en.js"></script>
-  <script src="/assets/vendors/owl-carousel-2/owl.carousel.min.js"></script>
-  
-</body>
-
+    <script src="/assets/vendors/js/vendor.bundle.base.js"></script>
+    <script src="/assets/vendors/chart.js/Chart.min.js"></script>
+    <script src="/assets/vendors/progressbar.js/progressbar.min.js"></script>
+    <script src="/assets/vendors/jvectormap/jquery-jvectormap.min.js"></script>
+    <script src="/assets/vendors/jvectormap/jquery-jvectormap-world-mill-en.js"></script>
+    <script src="/assets/vendors/owl-carousel-2/owl.carousel.min.js"></script>
+  </body>
 </html>

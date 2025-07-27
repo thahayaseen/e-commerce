@@ -146,54 +146,63 @@ document.addEventListener('DOMContentLoaded', function () {
 
     addform.action = "/admin/product/add";
 
-    addbtn.addEventListener('click', (e) => {
-        e.preventDefault();
+//    const addbtn = document.getElementById('addproductbtn');
+const spinner = document.getElementById('addbtn-spinner');
+const btnText = document.getElementById('addbtn-text');
 
-        // Perform validation
-        let isValid = validateForm();
-        if (!isValid) return;
+addbtn.addEventListener('click', (e) => {
+    e.preventDefault();
 
-        const formdata = new FormData(addform);
-        console.log(croppedImages);
+    let isValid = validateForm();
+    if (!isValid) return;
 
-        croppedImages.forEach((image, index) => {
-            formdata.append('addimage', image, `croppedImage${index}.jpg`);
-        });
-
-        fetch(addform.action, {
-            method: 'POST',
-            body: formdata,
-        })
-            .then(res => res.json())
-            .then((res) => {
-                console.log(res);
-                if (res.success === true) {
-
-                    window.location.reload(true)
-                } if (res.success === false) {
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'Already Exists',
-                        text: res.message,
-                        background: '#f8d7da',
-                        color: '#721c24',
-                        iconColor: '#721c24',
-                        customClass: {
-                            popup: 'rounded-lg',
-                        },
-                    });
-                }
-            })
-            .catch(err => {
-                console.log(err)
-
-
-
-
-            }
-
-            );
+    const formdata = new FormData(addform);
+    croppedImages.forEach((image, index) => {
+        formdata.append('addimage', image, `croppedImage${index}.jpg`);
     });
+
+    // Show spinner and disable button
+    spinner.classList.remove('d-none');
+    addbtn.disabled = true;
+
+    fetch(addform.action, {
+        method: 'POST',
+        body: formdata,
+    })
+        .then(res => res.json())
+        .then((res) => {
+            spinner.classList.add('d-none');
+            addbtn.disabled = false;
+
+            if (res.success === true) {
+                window.location.reload(true);
+            } else {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Already Exists',
+                    text: res.message,
+                    background: '#f8d7da',
+                    color: '#721c24',
+                    iconColor: '#721c24',
+                    customClass: {
+                        popup: 'rounded-lg',
+                    },
+                });
+            }
+        })
+        .catch(err => {
+            console.error(err);
+            spinner.classList.add('d-none');
+            addbtn.disabled = false;
+
+            Swal.fire({
+                icon: 'error',
+                title: 'Something went wrong!',
+                text: 'Please try again later.',
+            });
+        });
+});
+
 
     // Validation
     function validateForm() {

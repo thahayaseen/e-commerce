@@ -78,7 +78,7 @@ coupons.forEach((coupon) => {
             icon: 'error',
             timer: 1600,
             timerProgressBar: true,
-            willClose: () => window.location.href = '/admin/coupon'
+            // willClose: () => window.location.href = '/admin/coupon'
           });
         }
       })

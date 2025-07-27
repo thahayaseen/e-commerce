@@ -506,7 +506,7 @@ const coupenrender = async (req, res) => {
             return
         }
 
-        const { q, status, limit = 1, page = 1 } = req.query
+        const { q, status, limit = 6, page = 1 } = req.query
 
         // Build search query
         const searchQuery = {}
@@ -599,7 +599,7 @@ const offerpage = async (req, res) => {
             return
         }
         const products = await product_schema.find()
-        const { q, discountType, applicationType, status, limit = 1, page = 1 } = req.query
+        const { q, discountType, applicationType, status, limit = 6, page = 1 } = req.query
 
         // Build search query
         const searchQuery = {}
@@ -667,7 +667,7 @@ const datatoedit = async (req, res) => {
         return res.status(200).json(offerdatas)
     } catch (error) {
         console.log('error in fetchinf offer ' + error);
-
+res.status(409).json({message:error.message})
     }
 }
 

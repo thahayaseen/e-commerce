@@ -63,6 +63,9 @@ const accses = async (req, res, next) => {
         if (!detials) {
             return res.status(404).json({ message: 'user not found' })
         }
+        if(detials.isadmin){
+            throw new Error('Cannot block an admin')
+        }
         detials.blocked = !detials.blocked
         await detials.save()
 
@@ -75,6 +78,7 @@ const accses = async (req, res, next) => {
     }
     catch (error) {
         console.log(error);
+        res.status(409).json({success:false,message:error.message})
 
     }
 }

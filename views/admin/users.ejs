@@ -7,11 +7,18 @@
       name="viewport"
       content="width=device-width, initial-scale=1, shrink-to-fit=no" />
     <title>User Managment Admin</title>
-
+<style>
+  .toast-error {
+    background-color: #dc3545 !important;
+    color: white;
+  }
+</style>
     <!-- Bootstrap CSS -->
     <link
       rel="stylesheet"
       href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" />
+<!-- Inside <head> -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
 
     <!-- Plugins CSS -->
     <link
@@ -207,6 +214,10 @@
     });
   });
 </script>
+<!-- Before closing </body> -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+
     <!-- clicking actions  -->
     <script src="/js/admin/users.js"></script>
     <!-- Plugins JS -->

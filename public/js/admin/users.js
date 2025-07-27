@@ -1,4 +1,22 @@
 const btns = document.querySelectorAll('.accses');
+
+
+    toastr.options = {
+      closeButton: true,
+      progressBar: true,
+      positionClass: "toast-top-right",
+      timeOut: 3000,
+      extendedTimeOut: 1000,
+      preventDuplicates: true,
+      newestOnTop: true,
+      showEasing: "swing",
+      hideEasing: "linear",
+      showMethod: "fadeIn",
+      hideMethod: "fadeOut",
+    }
+  
+
+
 let  currentBtn
 btns.forEach((btn) => {
     btn.addEventListener('click', function () {
@@ -31,6 +49,9 @@ document.getElementById('confirmButton').addEventListener('click', () => {
     })
     .then((res) => res.json())
     .then((res) => {
+if(!res.success){
+    throw new Error(res.message)
+}
         if (res.success) {
             // Toggle the button text and class based on res.udata (new status)
             if (res.udata === false) {
@@ -55,7 +76,10 @@ document.getElementById('confirmButton').addEventListener('click', () => {
         }
     })
     .catch((error) => {
+        console.log('hererer');
+        
         console.error('There was a problem with the fetch operation:', error);
+        toastr.error(error.message)
     });
 
     // Close the modal

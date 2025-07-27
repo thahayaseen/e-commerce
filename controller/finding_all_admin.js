@@ -7,7 +7,7 @@ const alluser = async (req, res, next) => {
     try {
         const filter = req.query.search
         const page = parseInt(req.query.page) || 1
-        const limit = parseInt(req.query.limit) || 2
+        const limit = parseInt(req.query.limit) || 6
         const skip = (page - 1) * limit;
         let filterobjs = {}
         if (typeof filter == 'string' && filter.length > 0) {

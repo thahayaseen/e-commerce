@@ -277,21 +277,19 @@ class OffersManager {
       } else if (!result.success) {
         console.log( result.failedProducts);
         toastr.error(result.message)
-        if (result.failedProducts?.length) {
+
          
           setTimeout(() => {
             window.location.reload()
           }, 1000)
-        }else{
-
-        }
+      
       }
     } catch (error) {
       console.error("Error saving offer:", error)
+      toastr.error(error.message || "An unexpected error occurred")
       setTimeout(() => {
         window.location.reload()
       }, 1000)
-      toastr.error(error.message || "An unexpected error occurred")
     } finally {
       // Hide loading state
       saveButton.disabled = false

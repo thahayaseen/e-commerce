@@ -4,63 +4,73 @@ const Product = require('../../model/product_schema');
 const offerschema = require('../../model/offer')
 
 const offers = async (req, res) => {
-    // console.log(req.body);
-    const offdata = await offerschema.find({ name: req.body.name })
-    console.log(offdata);
+    const offdata = await offerschema.find({ name: req.body.name });
 
+    let data = req.body;
 
-    let data = req.body
+    // Convert string to array if sent as JSON string
+    if (data.selectedItems && typeof data.selectedItems === 'string') {
+        data.selectedItems = JSON.parse(data.selectedItems);
+    }
+
+    // Convert string to boolean if needed
+    const isActive = req.body.isActive === 'true';
+    console.log(data, 'data is ');
+    const validform = new Date(data.validFrom)
+    // Convert expiryDate to Date object
+    const expiryDate = new Date(data.validUntil);
+    const currentDate = new Date();
+    console.log(expiryDate < currentDate, expiryDate, currentDate);
+
+    // If updating existing offer
     if (data.offerid) {
-        const offerdatas = await offerschema.findById(data.offerid)
+        const offerdatas = await offerschema.findById(data.offerid);
         if (offerdatas) {
-            data.selectedItems = JSON.parse(data.selectedItems)
-            console.log(data);
-            console.log(data.selectedItems);
-            console.log('sdfassfa');
+            Object.assign(offerdatas, data);
 
-            Object.assign(offerdatas, data)
-            console.log(req.body.isActive == 'false');
-
-            if (req.body.isActive == 'false') {
-                offerdatas.isActive = false
-                offerdesaable(data.selectedItems, data.applicationType, offerdatas)
-                console.log('disabling');
-                await offerdatas.save()
-
-                return res.status(200).json({ success: true, message: 'The Offer Updated successfully' })
-
+            // If offer expired, disable and don't apply
+            if (expiryDate < currentDate|| currentDate< validform) {
+                offerdatas.isActive = false;
+                offerdesaable(data.selectedItems, data.applicationType, offerdatas);
+                await offerdatas.save();
+                return res.status(200).json({ success: false, message: 'Offer has not startd or expired. Disabled it.' });
             }
-            offerdatas.isActive = true
-            await offerdatas.save()
-            offerapplayinproduct(data.selectedItems, data.applicationType, offerdatas)
-            return res.status(200).json({ success: true, message: 'The Offer Updated successfully' })
+
+            if (!isActive) {
+                offerdatas.isActive = false;
+                offerdesaable(data.selectedItems, data.applicationType, offerdatas);
+                await offerdatas.save();
+                return res.status(200).json({ success: true, message: 'The Offer Updated and Disabled Successfully' });
+            }
+
+            offerdatas.isActive = true;
+            await offerdatas.save();
+            offerapplayinproduct(data.selectedItems, data.applicationType, offerdatas);
+            return res.status(200).json({ success: true, message: 'The Offer Updated successfully' });
         }
-
-
     }
+
+    // New offer — check if already exists
     if (offdata.length > 0) {
-        return res.status(200).json({ success: false, message: 'offer aldredy exsist' })
+        return res.status(200).json({ success: false, message: 'Offer already exists' });
     }
-    // data.name
-    // console.log(data.name);
 
+    // If offer already expired, don't create
+    if (expiryDate < currentDate) {
+        return res.status(200).json({ success: false, message: 'Cannot create offer. Expiry date has already passed.' });
+    }
 
-    data.selectedItems = JSON.parse(data.selectedItems)
+    const offerdata = new offerschema(data);
+    await offerdata.save();
 
-    // console.log(data);
+    const result = await offerapplayinproduct(data.selectedItems, data.applicationType, offerdata);
+    if (!result.success) {
+        return res.status(200).json(result);
+    }
 
+    return res.status(200).json({ success: true, message: 'The Offer Created Successfully' });
+};
 
-    const offerdata = await new offerschema(data)
-    await offerdata.save()
-   const datas=await offerapplayinproduct(data.selectedItems, data.applicationType, offerdata)
-   if(!datas.success){
-   return res.status(200).json(datas)
-   }
-
-    return res.status(200).json({ success: true, message: 'The Offer Created Successfully' })
-
-
-}
 const offerapplayinproduct = async (selected, type, offer) => {
     let pdatas = [];
 
@@ -224,4 +234,4 @@ const deleteoffers = async (req, res) => {
         res.status(500).json({ success: false, message: 'Failed to delete offer' });
     }
 };
-module.exports = {   offers, deleteoffers }
+module.exports = { offers, deleteoffers }
