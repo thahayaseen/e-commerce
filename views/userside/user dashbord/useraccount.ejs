@@ -368,18 +368,28 @@ if (newPassword !== confirmPassword) {
         })
         .then(res=>res.json())
         .then(res=>{
-            res.success?
-        (Swal.fire('The password has been successfully changed').then((result) => {
-            if (result.isConfirmed) { 
-                const modalElement = document.getElementById('editProfileModal');
-                const modalInstance = bootstrap.Modal.getInstance(modalElement);
-                modalInstance.hide(); 
+            if(res.success){
+                Swal.fire({
+  icon: 'success',
+  title: 'The password has been successfully changed',
+  confirmButtonText: 'OK'
+}).then(() => {
+  // Close the Bootstrap modal
+  const modalElement = document.getElementById('editProfileModal');
+  if (modalElement) {
+    const modalInstance = bootstrap.Modal.getInstance(modalElement) 
+                          || new bootstrap.Modal(modalElement); // fallback
+    modalInstance.hide();
+  }
 
-              
-                window.location.reload(true);
+  // Reload the page
+  window.location.reload(true);
+});
+
+            }else{
+                  Swal.fire(res.message || 'Something went wrong');
             }
-        })):
-        Swal.fire(res.message)})
+       })
     })
     </script>
 
