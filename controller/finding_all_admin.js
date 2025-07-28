@@ -13,7 +13,7 @@ const alluser = async (req, res, next) => {
         if (typeof filter == 'string' && filter.length > 0) {
             filterobjs['user_name'] = new RegExp(`${filter}`, 'i')
         }
-        const user = await User.find(filterobjs).sort({createdAt:-1}).skip(skip).limit(limit)
+        const user = await User.find(filterobjs).sort({ createdAt: -1 }).skip(skip).limit(limit)
         console.log(user, filter, filterobjs);
 
         const totalProducts = await User.countDocuments(filterobjs);
@@ -140,7 +140,7 @@ const adproducts = async (req, res, next) => {
         // Get paginated and filtered products
         const products = await Product.find(searchQuery)
             .populate('category_id')
-            .sort({ name: 1 }) // you can adjust sorting as needed
+            .sort({  createdAt: -1 }) // you can adjust sorting as needed
             .skip(skip)
             .limit(limit);
 
@@ -186,7 +186,7 @@ const categorydatas = async (req, res, next) => {
         // Fetch filtered & paginated categories
         const categ = await categories
             .find(searchQuery)
-            .sort({ name: 1 })
+            .sort({ createdAt: -1 })
             .skip(skip)
             .limit(limit);
 
