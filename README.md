@@ -2,7 +2,7 @@
 
 A dynamic and responsive **e-commerce website** built using **Node.js, Express.js, EJS templating**, and **MongoDB** for backend, with **Bootstrap** for frontend styling. The platform supports user authentication, product management, cart, wishlist, checkout via Razorpay, order tracking, and admin features.
 
-> Live Preview: *(Add deployment link here, if hosted)*  
+ 
 > GitHub Repo: [thahayaseen/e-commerce](https://github.com/thahayaseen/e-commerce)
 
 ---
