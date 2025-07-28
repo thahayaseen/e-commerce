@@ -65,59 +65,61 @@ function validateForm(event) {
 
 // coupon code 
 let cname
-let  rate
-let discountprice=0
-const coupon=document.getElementById('apply')
-const applaysubmit=document.getElementById('applysubmit')
+let rate
+let discountprice = 0
+const coupon = document.getElementById('apply')
+const applaysubmit = document.getElementById('applysubmit')
 // add coupon 
-applaysubmit.addEventListener('click',(e)=>{
+applaysubmit.addEventListener('click', (e) => {
     e.preventDefault()
-    const code=coupon.value
+    const code = coupon.value
 
-    fetch(`/applaycoupon/${code}`,{
-        method:'GET'
+    fetch(`/applaycoupon/${code}`, {
+        method: 'GET'
     })
-    .then(res=>res.json())
-    .then(res=>{
-        
-        if(res.success==false){
-            document.getElementById('applayerror').innerText=res.erromsg
-           return console.log(res.erromsg);
-            
-        }
-        if(res.success){
-            document.querySelector('.discount-charge').classList.remove('d-none')
-            document.getElementById('applayerror').innerText=''
+        .then(res => res.json())
+        .then(res => {
 
-            document.querySelector('.discount-charge').classList.add('d-flex')
-             rate=res.toatal-res.discount+res.shipping
-            discountprice=res.discount
-            cname=res.coupon
-            console.log(rate);
-            
-            document.getElementById('total').innerText=rate
-            document.getElementById('coupondiscount').innerText='-'+res.discount
-        }
-    })
+            if (res.success == false) {
+                document.getElementById('applayerror').innerText = res.erromsg
+                return console.log(res.erromsg);
 
-    
+            }
+            if (res.success) {
+                document.querySelector('.discount-charge').classList.remove('d-none')
+                document.getElementById('applayerror').innerText = ''
+
+                document.querySelector('.discount-charge').classList.add('d-flex')
+                rate = res.toatal - res.discount + res.shipping
+                discountprice = res.discount.toFixed(2)
+                cname = res.coupon
+                console.log(rate);
+
+                document.getElementById('total').innerText = rate.toFixed(2)
+                document.getElementById('coupondiscount').innerText = '-' + res.discount.toFixed(2)
+            }
+        })
+
+
 })
 // remove coupon 
-document.getElementById('removecoupon').addEventListener('click',e=>{
+document.getElementById('removecoupon').addEventListener('click', e => {
     e.preventDefault()
-    rate+=discountprice
-    discountprice   =0
-   document.querySelector('.discount-charge').classList.remove('d-flex')
-   document.querySelector('.discount-charge').classList.add('d-none')
-   document.getElementById('total').innerText=rate
+    rate += discountprice
+    discountprice = 0
+    document.querySelector('.discount-charge').classList.remove('d-flex')
+    document.querySelector('.discount-charge').classList.add('d-none')
+    document.getElementById('total').innerText = rate
 
-//    document.getElementById('coupondiscount').innerText=
+    //    document.getElementById('coupondiscount').innerText=
 
 })
-
+const overlay = document.getElementById('loadingOverlay');
 // New address form submission
 address.addEventListener('submit', async function (e) {
     e.preventDefault()
+    overlay.classList.add('show');
+
     const isValid = validateForm()
     if (isValid) {
         const data = new FormData(this)
@@ -136,16 +138,24 @@ address.addEventListener('submit', async function (e) {
         })
             .then(res => res.json())
             .then(res => {
+                overlay.classList.remove('show');
                 if (res.success) {
                     window.location.href = '/checkout'
                 }
-                if(!res.success){
-                        Swal.fire({
-            icon: 'error',
-            title: 'Oops...',
-            text: res.message,
-        });
+                if (!res.success) {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Oops...',
+                        text: res.message,
+                    });
                 }
+            }).catch(err=>{
+                 overlay.classList.remove('show');
+                   Swal.fire({
+                        icon: 'error',
+                        title: 'Oops...',
+                        text: res.message,
+                    });
             })
     }
 })
@@ -210,14 +220,14 @@ paymentForm.addEventListener('submit', async (e) => {
         });
         const response = await fetch('/orders', {
             method: 'POST',
-            headers: {'Content-Type': 'application/json'},
+            headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(formData)
         });
-        
+
         const data = await response.json();
         Swal.close()
 
-        
+
         if (data.success) {
             if (data.razorpay) {
                 // Initialize Razorpay with order data from backend
@@ -243,14 +253,14 @@ paymentForm.addEventListener('submit', async (e) => {
 
                             const verifyResult = await verifyResponse.json();
                             if (verifyResult.success) {
-                                window.location.href='/orderplaced'
+                                window.location.href = '/orderplaced'
                             } else {
                                 throw new Error('Payment verification failed');
                             }
                         } catch (error) {
                             console.error('Verification Error:', error);
                             Swal.fire({
-                                text: error.message||'Payment verification failed. Please contact support.',
+                                text: error.message || 'Payment verification failed. Please contact support.',
                                 icon: 'error',
                             });
                         }
@@ -268,73 +278,73 @@ paymentForm.addEventListener('submit', async (e) => {
                 const rzp = new Razorpay(options);
                 rzp.on('payment.failed', async function (response) {
                     console.log(response);
-                    fetch('/payment-failed/'+data.orderId,{
-                        method:'PATCH',
-                        headers:{
-                            'Content-Type':'applaycoupon/json'
+                    fetch('/payment-failed/' + data.orderId, {
+                        method: 'PATCH',
+                        headers: {
+                            'Content-Type': 'applaycoupon/json'
                         }
-                        
+
                     })
-                   await  Swal.fire({
-                    title: 'Payment Failed!',
-                    text: 'Your payment could not be processed. Please try again.',
-                    icon: 'error',
-                   
-                    confirmButtonText: 'Go to Orders',
-                    
-                    allowOutsideClick: false,
-                    allowEscapeKey: false,
-                    allowEnterKey: false,
-                }).then((result) => {
-                    if (result.isConfirmed) {
-                        // Redirect to orders page
-                        window.location.href = '/user/orders';
-                    } 
-                });
-                
+                    await Swal.fire({
+                        title: 'Payment Failed!',
+                        text: 'Your payment could not be processed. Please try again.',
+                        icon: 'error',
+
+                        confirmButtonText: 'Go to Orders',
+
+                        allowOutsideClick: false,
+                        allowEscapeKey: false,
+                        allowEnterKey: false,
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            // Redirect to orders page
+                            window.location.href = '/user/orders';
+                        }
+                    });
+
                 });
                 rzp.open();
-            } 
-            else if(data.cod==true){
-               
-                
-          window.location.href='/orderplaced'
             }
-            else{
-                window.location.href='/orderplaced'
+            else if (data.cod == true) {
+
+
+                window.location.href = '/orderplaced'
             }
-        } 
-        else if(data.reson=='nobalence'){
-             return   Swal.fire({
-                    text: "Insufficient balance!",
-                    icon: 'error',
-                    timer: 3000, 
-                    showConfirmButton: false,  
-                    confirmButtonText: 'Go to Orders',
-                    
-                    allowOutsideClick: false,
-                    allowEscapeKey: false,
-                    allowEnterKey: false,
-                })
+            else {
+                window.location.href = '/orderplaced'
+            }
         }
-       
-        else if(data.success=='cartempty'){
-          return  window.location.href='/'
+        else if (data.reson == 'nobalence') {
+            return Swal.fire({
+                text: "Insufficient balance!",
+                icon: 'error',
+                timer: 3000,
+                showConfirmButton: false,
+                confirmButtonText: 'Go to Orders',
+
+                allowOutsideClick: false,
+                allowEscapeKey: false,
+                allowEnterKey: false,
+            })
         }
-        
-        else if(data.success==false){
-            if(data.re){
-                return window.location.href='/'
+
+        else if (data.success == 'cartempty') {
+            return window.location.href = '/'
+        }
+
+        else if (data.success == false) {
+            if (data.re) {
+                return window.location.href = '/'
             }
             console.log('nooo');
-            
+
             Swal.fire({
                 text: data.message,
                 icon: 'error',
-                timer: 3000, 
-                showConfirmButton: false,  
+                timer: 3000,
+                showConfirmButton: false,
                 confirmButtonText: 'Go to Orders',
-                    
+
                 allowOutsideClick: false,
                 allowEscapeKey: false,
                 allowEnterKey: false,
@@ -342,20 +352,20 @@ paymentForm.addEventListener('submit', async (e) => {
                 if (result.isConfirmed) {
                     // Redirect to orders page
                     window.location.href = '/user/orders';
-                } 
+                }
             })
         }
-        
+
         else {
-            throw new Error('Order placement failed due to the product you selected outofstock or unavailable' );
+            throw new Error('Order placement failed due to the product you selected outofstock or unavailable');
         }
     } catch (error) {
         console.error('Error:', error);
         Swal.fire({
-            text: 'There was an error processing your request. Please try again.'+error,
+            text: 'There was an error processing your request. Please try again.' + error,
             icon: 'error',
             confirmButtonText: 'Go to Orders',
-                    
+
             allowOutsideClick: false,
             allowEscapeKey: false,
             allowEnterKey: false,
@@ -363,7 +373,7 @@ paymentForm.addEventListener('submit', async (e) => {
             if (result.isConfirmed) {
                 // Redirect to orders page
                 window.location.href = '/';
-            } 
+            }
         })
     }
 });
