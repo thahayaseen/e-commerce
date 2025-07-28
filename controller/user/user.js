@@ -27,7 +27,7 @@ const signup = async (req, res, next) => {
 
         if (existingUser) {
             // If user already exists but is not verified
-            if (!existingUser.verified) {
+            if (!existingUser.varify) {
                 const now = new Date();
                 const otpSentTime = new Date(existingUser.updatedAt); // or createdAt if better
                 const diffInMinutes = (now - otpSentTime) / (1000 * 60);
