@@ -13,7 +13,7 @@ const alluser = async (req, res, next) => {
         if (typeof filter == 'string' && filter.length > 0) {
             filterobjs['user_name'] = new RegExp(`${filter}`, 'i')
         }
-        const user = await User.find(filterobjs).skip(skip).limit(limit)
+        const user = await User.find(filterobjs).sort({createdAt:-1}).skip(skip).limit(limit)
         console.log(user, filter, filterobjs);
 
         const totalProducts = await User.countDocuments(filterobjs);

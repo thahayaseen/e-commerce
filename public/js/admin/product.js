@@ -4,12 +4,15 @@ let imagedata = '';
 // import Cropper from 'cropperjs';
 
 
-// Handle unlist button clicks
 unlistButtons.forEach((btn) => {
     btn.addEventListener('click', async function () {
         const productId = this.getAttribute('data-id');
-        const currentStatus = this.textContent.toLowerCase();
-        const confirmationMessage = currentStatus === 'listed'
+        const currentText = this.textContent.trim().toLowerCase();
+
+        // Determine action based on current text
+        const isCurrentlyListed = currentText === 'listed';
+
+        const confirmationMessage = isCurrentlyListed
             ? {
                 title: 'Unlist Product?',
                 text: 'Are you sure you want to unlist this product?',
@@ -32,36 +35,40 @@ unlistButtons.forEach((btn) => {
 
         if (!result.isConfirmed) return;
 
+        this.disabled = true;
 
-        //  product status
+        // Send PATCH request
         fetch(`/admin/product/unlist/${productId}`, { method: 'PATCH' })
             .then(response => {
-                if (!response.ok) {
-                    throw new Error('Network response was not ok');
-                }
+                if (!response.ok) throw new Error('Network error');
                 return response.json();
             })
             .then(data => {
                 if (data.success) {
-                    // Toggle the button text and class based on newStatus
+                    // Toggle button label and class
                     if (data.newStatus === false) {
                         this.textContent = 'Listed';
                         this.classList.remove('btn-danger');
                         this.classList.add('btn-success');
                     } else {
-                        this.textContent = 'Unlist';
+                        this.textContent = 'Unlisted';
                         this.classList.remove('btn-success');
                         this.classList.add('btn-danger');
                     }
                 } else {
-                    console.error('Failed to update product status');
+                    Swal.fire('Error', 'Failed to update product status.', 'error');
                 }
             })
-            .catch(error => {
-                console.error('There was a problem with the fetch operation:', error);
+            .catch(err => {
+                console.error(err);
+                Swal.fire('Error', 'Something went wrong.', 'error');
+            })
+            .finally(() => {
+                this.disabled = false;
             });
     });
 });
+
 
 // Add product
 document.addEventListener('DOMContentLoaded', function () {

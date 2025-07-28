@@ -264,7 +264,7 @@ const useredit = async (req, res, next) => {
 
     const { CategoryName, ProductDescription } = req.body
 
-    const cnames = CategoryName.toUpperCase()
+    const cnames = CategoryName.toLowerCase()
 
     const uniqcategory = await categories.findOne({ name: cnames })
 
