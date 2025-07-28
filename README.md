@@ -53,7 +53,7 @@ A dynamic and responsive **e-commerce website** built using **Node.js, Express.j
 | Payment   | Razorpay                            |
 | Image     | Cloudinary                          |
 | Email     | Nodemailer (Gmail SMTP)             |
-| Hosting   | *(You can add EC2/VPS info here)*   |
+| Hosting   | EC2   |
 
 ---
 
@@ -134,9 +134,8 @@ e-commerce/
 
 ## 📸 Screenshots
 
-> *(Add screenshots or demo GIFs showing homepage, cart, admin panel, etc. You can host them in the repo or link externally)*
+<img width="1873" height="971" alt="Screenshot 2025-07-29 002212" src="https://github.com/user-attachments/assets/6d91dc1e-528b-4726-bbc5-af2a21f93f13" />
 
----
 
 ## ✨ Roadmap / Future Improvements
 
