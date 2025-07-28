@@ -102,6 +102,8 @@ const signup = async (req, res, next) => {
 
 const blockuser = async (req, res, next) => {
     if (req.session.ulogin) {
+        console.log('herea');
+        
         const userdata = req.session.ulogin
         const data = await User.findById(userdata)
         if (!data) {
@@ -110,7 +112,7 @@ const blockuser = async (req, res, next) => {
             return res.redirect('/signin')
         }
         if (!data.blocked) {
-            console.log(data);
+            console.log(data,'bls');
 
             return next()
         }

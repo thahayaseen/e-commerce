@@ -61,15 +61,15 @@ router.get('/glogin',
 );
 
 //cart section product
-router.get('/cart', cartrender)
-router.post('/cart', cartitemspush)
+router.get('/cart',blockuser, cartrender)
+router.post('/cart',blockuser, cartitemspush)
 router.patch('/cart/update/:cartid', cartupdata)
 router.delete('/cart/delete', cartitemdelete)
 
 //checkout page 
-router.get('/checkout', checkout)
-router.post('/orders', placeorder)
-router.get('/orderplaced', placedorder)
+router.get('/checkout',blockuser, checkout)
+router.post('/orders',blockuser, placeorder)
+router.get('/orderplaced',blockuser, placedorder)
 //addres edit and update
 router.post('/address', addaddress)
 router.patch('/address/update', addressave)
